@@ -42,6 +42,7 @@ get.CCLE.EIF.Proteomics <- function (EIF) {
     mutate_if(is.character, as.factor) %>%
     #select(!!paste0(EIF,".pro") := EIF)
     rename(!!paste0(EIF,".pro") := EIF) # rename with dynamic variables
+  return(CCLE.EIF.Proteomics)
   }
 
 protein.RNA.scatter.plot <- function(df, x, y){
@@ -81,7 +82,6 @@ protein.RNA.scatter.plot <- function(df, x, y){
 ######################################
 #### RNA protein correlation CCLE ####
 ######################################
-
 plot.EIF.cor.CCLE <- function (EIF){
   get.CCLE.EIF.RNAseq(EIF) %>%
     full_join(CCLE.Anno,
@@ -95,9 +95,9 @@ plot.EIF.cor.CCLE <- function (EIF){
     na.omit(.) %>%
     protein.RNA.scatter.plot(df = ., x = EIF, y = "CCLE")
 }
-plot.EIF.cor.CCLE("EIF4A1")
+#plot.EIF.cor.CCLE("EIF4A1")
 
-lapply(c("EIF4G1","EIF4A1","EIF4E","EIF4EBP1","PABPC1"), plot.EIF.cor.CCLE)
+#lapply(c("EIF4G1","EIF4A1","EIF4E","EIF4EBP1","PABPC1"), plot.EIF.cor.CCLE)
 
 
 ######################################
@@ -143,14 +143,12 @@ plot.EIF.cor.LUAD <- function(EIF) {
   }
 
 
-
-
-
-
 ## Heatmap of correlation analysis ##
 
 # prepare RNA-seq related dataset from TCGA and GTEx----------------------------
-get.TCGA.GTEX.RNAseq <- function() {
+# RNA-seq data were import in 4-DEG.R
+if (!exists("TCGA.GTEX.RNAseq")){
+  get.TCGA.GTEX.RNAseq <- function() {
   TCGA.pancancer <- data.table::fread(
     file.path(data.file.directory,
               "TcgaTargetGtex_RSEM_Hugo_norm_count"),
@@ -169,8 +167,9 @@ get.TCGA.GTEX.RNAseq <- function() {
   colnames(TCGA.pancancer_transpose) <- rownames(TCGA.pancancer)
   return (TCGA.pancancer_transpose)
 }
-TCGA.GTEX.RNAseq <- get.TCGA.GTEX.RNAseq()
+  TCGA.GTEX.RNAseq <- get.TCGA.GTEX.RNAseq()}
 
+if (!exists("TCGA.GTEX.sampletype")){
 TCGA.GTEX.sampletype <- readr::read_tsv(
   file.path(data.file.directory,
             "TcgaTargetGTEX_phenotype.txt")) %>% {
@@ -187,13 +186,16 @@ TCGA.GTEX.sampletype <- readr::read_tsv(
                        "primary.disease" = "primary disease or tissue",
                        "primary.site" = "_primary_site",
                        "study" = "_study")}
+}
 
+if (!exists("TCGA.GTEX.RNAseq.sampletype")){
 TCGA.GTEX.RNAseq.sampletype <- merge(TCGA.GTEX.RNAseq,
                                      TCGA.GTEX.sampletype,
                                      by    = "row.names",
                                      all.x = TRUE) %>% {
                                        remove_rownames(.) %>%
                                          column_to_rownames(var = 'Row.names')}
+}
 
 EIF.correlation <- function(df, y) {
   TCGA.GTEX.tumor <- df[
@@ -633,8 +635,8 @@ plot.Venn.all <- function(x) {
 
 
 # Run master functions ---------------------------------------------------------
-lapply(c("EIF4G1","EIF4A1","EIF4E","EIF4EBP1","PABPC1"), plot.EIF.cor.LUAD)
+#lapply(c("EIF4G1","EIF4A1","EIF4E","EIF4EBP1","PABPC1"), plot.EIF.cor.LUAD)
 
-plot.Venn.all(x = "All")
-plot.Venn.all(x = "Lung")
+#plot.Venn.all(x = "All")
+#plot.Venn.all(x = "Lung")
 

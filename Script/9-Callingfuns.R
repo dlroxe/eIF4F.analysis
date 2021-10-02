@@ -1,10 +1,4 @@
-source("~/github/eIF4F.analysis/R/2-load.R")
-source("~/github/eIF4F.analysis/R/3-CNV.R")
-source("~/github/eIF4F.analysis/R/4-DEG.R")
-source("~/github/eIF4F.analysis/R/5-Survival.R")
-source("~/github/eIF4F.analysis/R/6-PCA.R")
-source("~/github/eIF4F.analysis/R/7-Correlation.R")
-source("~/github/eIF4F.analysis/R/8-Proteincorr.R")
+library(eIF4F.analysis)
 
 # run master functions in 3-CNV.R ----------------------------------------------
 plot.bargraph.CNV.TCGA(c("TP53", "EIF4A1","EIF4A2",

@@ -389,22 +389,22 @@ plot.boxgraph.CNVratio.TCGA <- function(EIF) {
 
 
 # run master functions  --------------------------------------------------------
-plot.bargraph.CNV.TCGA(c("TP53", "EIF4A1","EIF4A2",
-                         "EIF4E", "EIF4E2", "EIF4E3",
-                         "MYC", "EIF3D", "EIF4EBP1",
-                         "EIF4G1","EIF4G2", "EIF4G3",
-                         "PABPC1", "MKNK1", "MKNK2"))
+#plot.bargraph.CNV.TCGA(c("TP53", "EIF4A1","EIF4A2",
+#                         "EIF4E", "EIF4E2", "EIF4E3",
+#                         "MYC", "EIF3D", "EIF4EBP1",
+#                         "EIF4G1","EIF4G2", "EIF4G3",
+#                         "PABPC1", "MKNK1", "MKNK2"))
 
-plot.matrix.CNVcorr.TCGA(c("TP53", "EIF4A1","EIF4A2",
-                           "EIF4E", "EIF4E2", "EIF4E3",
-                           "MYC", "EIF3D", "EIF4EBP1",
-                           "EIF4G1", "EIF4G2", "EIF4G3",
-                           "PABPC1", "MKNK1", "MKNK2"))
+#plot.matrix.CNVcorr.TCGA(c("TP53", "EIF4A1","EIF4A2",
+#                           "EIF4E", "EIF4E2", "EIF4E3",
+#                           "MYC", "EIF3D", "EIF4EBP1",
+#                           "EIF4G1", "EIF4G2", "EIF4G3",
+#                           "PABPC1", "MKNK1", "MKNK2"))
 
 
-plot.boxgraph.CNVratio.TCGA(c("TP53", "EIF4A1","EIF4A2",
-                              "EIF4E", "EIF4E2", "EIF4E3",
-                              "MYC", "EIF3D", "EIF4EBP1",
-                              "EIF4G1","EIF4G2", "EIF4G3",
-                              "PABPC1", "MKNK1", "MKNK2"))
+#plot.boxgraph.CNVratio.TCGA(c("TP53", "EIF4A1","EIF4A2",
+#                              "EIF4E", "EIF4E2", "EIF4E3",
+#                              "MYC", "EIF3D", "EIF4EBP1",
+#                              "EIF4G1","EIF4G2", "EIF4G3",
+#                              "PABPC1", "MKNK1", "MKNK2"))
 

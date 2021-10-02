@@ -1,3 +1,4 @@
+if (!exists("LUAD.Proteomics")){
 LUAD.Proteomics <- read_excel(
   file.path(data.file.directory, "Protein.xlsx"),
   col_names = FALSE) %>%
@@ -7,6 +8,7 @@ LUAD.Proteomics <- read_excel(
   t(.) %>%
   as.data.frame(.) %>%
   mutate_at(vars(-Type, -Sample),funs(as.numeric)) # exclude two columns convert character to number
+}
 
 Scatter.plot <- function(df, x, y, z){
   p1 <- ggscatter(df,
@@ -259,6 +261,6 @@ plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
 
 
 # Run master functions ---------------------------------------------------------
-EIF.pro.correlation()
-plot.EIF4.CPTAC.pro.LUAD(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "AKT1", "MTOR", "EIF4B", "EIF4H"))
+#EIF.pro.correlation()
+#plot.EIF4.CPTAC.pro.LUAD(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "AKT1", "MTOR", "EIF4B", "EIF4H"))
 
