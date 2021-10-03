@@ -149,21 +149,21 @@ biplot <- function(res.pca, df, x, y, color, folder) {
     theme_classic() +
     theme(
       plot.background = element_blank(),
-      plot.title = black_bold_16(),
+      plot.title = black_bold_16,
       panel.background = element_rect(
         fill = "transparent",
         color = "black",
         size = 1
         ),
-      axis.title.x = black_bold_16(),
-      axis.title.y = black_bold_16(),
-      axis.text.x = black_bold_16(),
-      axis.text.y = black_bold_16(),
+      axis.title.x = black_bold_16,
+      axis.title.y = black_bold_16,
+      axis.text.x = black_bold_16,
+      axis.text.y = black_bold_16,
       legend.title = element_blank(),
       legend.position = c(0, 0),
       legend.justification = c(0, 0),
       legend.background = element_blank(),
-      legend.text = black_bold_16()
+      legend.text = black_bold_16
       )
   print(biplot)
   ggplot2::ggsave(
@@ -187,16 +187,16 @@ biplot <- function(res.pca, df, x, y, color, folder) {
     theme_classic() +
     theme(
       plot.background = element_blank(),
-      plot.title = black_bold_16(),
+      plot.title = black_bold_16,
       panel.background = element_rect(
         fill = "transparent",
         color = "black",
         size = 1
         ),
-      axis.title.x = black_bold_16(),
-      axis.title.y = black_bold_16(),
-      axis.text.x = black_bold_16(),
-      axis.text.y = black_bold_16()
+      axis.title.x = black_bold_16,
+      axis.title.y = black_bold_16,
+      axis.text.x = black_bold_16,
+      axis.text.y = black_bold_16
       )
   print(eig)
 
@@ -260,16 +260,16 @@ biplot <- function(res.pca, df, x, y, color, folder) {
         theme_minimal() +
         theme(
           plot.background = element_blank(),
-          plot.title = black_bold_16(),
+          plot.title = black_bold_16,
           panel.background = element_rect(
             fill = "transparent",
             color = "black",
             size = 1
           ),
           axis.title.x = element_blank(),
-          axis.title.y = black_bold_16(),
-          axis.text.x = black_bold_16_45(),
-          axis.text.y = black_bold_16()
+          axis.title.y = black_bold_16,
+          axis.text.x = black_bold_16_45,
+          axis.text.y = black_bold_16
         )
     }
     lapply(c(1, 2), contribplot)
@@ -299,21 +299,21 @@ selected.biplot <- function(res.pca, df, x, y, color) {
     theme_classic() +
     theme(
       plot.background = element_blank(),
-      plot.title = black_bold_16(),
+      plot.title = black_bold_16,
       panel.background = element_rect(
         fill = "transparent",
         color = "black",
         size = 1
       ),
-      axis.title.x = black_bold_16(),
-      axis.title.y = black_bold_16(),
-      axis.text.x = black_bold_16(),
-      axis.text.y = black_bold_16(),
+      axis.title.x = black_bold_16,
+      axis.title.y = black_bold_16,
+      axis.text.x = black_bold_16,
+      axis.text.y = black_bold_16,
       legend.title = element_blank(),
       legend.position = c(0, 0),
       legend.justification = c(0, 0),
       legend.background = element_blank(),
-      legend.text = black_bold_16()
+      legend.text = black_bold_16
     )
   print(biplot)
   ggplot2::ggsave(
@@ -334,7 +334,7 @@ plot.PCA.TCGA.GTEX <- function(EIF.list) {
            "primary.disease",
            "primary.site",
            "study") %>%
-    as.data.frame(.) %>%
+    #as.tibble(.) %>%
     filter(EIF4E != 0 &
              study %in% c("TCGA", "GTEX") &
              sample.type %in% c("Metastatic",
@@ -448,7 +448,7 @@ plot.PCA.TCGA.GTEX.tumor <- function(EIF.list, tissue) {
            "primary.disease",
            "primary.site",
            "study") %>%
-    as.data.frame(.) %>%
+    #as.data.frame(.) %>%
     filter(EIF4E != 0 &
              study %in% c("TCGA", "GTEX") &
              sample.type %in% c("Metastatic",
@@ -479,7 +479,7 @@ plot.PCA.CPTAC.LUAD <- function(EIF.list) {
   CPTAC.LUAD.Proteomics.Sample.subset <- CPTAC.LUAD.Proteomics.sampletype %>%
     select(all_of(EIF.list),
            "Type") %>%
-    as.data.frame(.) %>%
+    #as.data.frame(.) %>%
     mutate_if(is.character, as.factor)  %>%
     filter(!is.na(Type))%>%
     remove_rownames()

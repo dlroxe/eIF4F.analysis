@@ -36,7 +36,7 @@ get.CCLE.EIF.Proteomics <- function (EIF) {
     column_to_rownames(var = 'Gene_Symbol') %>%
     select(contains("TenPx"), -contains("_Peptides")) %>%
     t(.) %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
     mutate(Celline = sub("\\_.*", "", row.names(.)),
            Type = sub(".*_ *(.*?) *_.*", "\\1", row.names(.)))%>%
     mutate_if(is.character, as.factor) %>%
@@ -57,14 +57,14 @@ protein.RNA.scatter.plot <- function(df, x, y){
                   ylab = "RNA expression")+
     theme_bw() +
     theme(
-      plot.title = black_bold_12(),
-      axis.title.x = black_bold_12(),
-      axis.title.y = black_bold_12(),
-      axis.text.x = black_bold_12(),
-      axis.text.y = black_bold_12(),
+      plot.title = black_bold_12,
+      axis.title.x = black_bold_12,
+      axis.title.y = black_bold_12,
+      axis.text.x = black_bold_12,
+      axis.text.y = black_bold_12,
       panel.grid = element_blank(),
       legend.position = "none",
-      strip.text = black_bold_12(),
+      strip.text = black_bold_12,
       strip.background = element_rect(fill = "white")
     )
   print(p1)
@@ -106,22 +106,22 @@ plot.EIF.cor.CCLE <- function (EIF){
 LUAD.Proteomics <- read_excel(
   file.path(data.file.directory, "Protein.xlsx"),
   col_names = FALSE) %>%
-  as.data.frame(.) %>%
+  #as.data.frame(.) %>%
   mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
   column_to_rownames(var = '...1') %>%
   t(.) %>%
-  as.data.frame(.) %>%
+  as_tibble(.) %>%
   mutate_at(vars(-Type, -Sample),funs(as.numeric)) # exclude two columns convert character to number
 
 
 LUAD.RNAseq <- read_excel(
   file.path(data.file.directory, "RNA.xlsx"),
   col_names = FALSE) %>%
-  as.data.frame(.) %>%
+  #as_tibble(.) %>%
   mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
   column_to_rownames(var = '...1') %>%
   t(.) %>%
-  as.data.frame(.) %>%
+  as_tibble(.) %>%
   mutate_at(vars(-Type, -Sample),funs(as.numeric)) # exclude two columns convert character to number
 
 
@@ -154,7 +154,7 @@ if (!exists("TCGA.GTEX.RNAseq")){
               "TcgaTargetGtex_RSEM_Hugo_norm_count"),
     data.table = FALSE
   )  %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
     distinct(., sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
     remove_rownames(.) %>%
@@ -173,7 +173,7 @@ if (!exists("TCGA.GTEX.sampletype")){
 TCGA.GTEX.sampletype <- readr::read_tsv(
   file.path(data.file.directory,
             "TcgaTargetGTEX_phenotype.txt")) %>% {
-              as.data.frame(.) %>%
+              as_tibble(.) %>%
                 distinct(., sample, .keep_all = TRUE) %>%
                 #na.omit(.) %>%
                 remove_rownames() %>%
@@ -388,20 +388,20 @@ CORs.bargraph <- function(df, x, CORs, coord_flip.ylim) {
     guides(fill = guide_legend(reverse = TRUE)) + # Flip ordering of legend without altering ordering in plot
     theme_bw() +
     theme(
-      plot.title = black_bold_18(),
-      axis.title.x = black_bold_18(),
+      plot.title = black_bold_18,
+      axis.title.x = black_bold_18,
       axis.title.y = element_blank(),
-      axis.text.x = black_bold_18(),
-      axis.text.y = black_bold_18(),
+      axis.text.x = black_bold_18,
+      axis.text.y = black_bold_18,
       axis.line.x = element_line(color = "black"),
       axis.line.y = element_line(color = "black"),
       panel.grid = element_blank(),
       legend.title = element_blank(),
-      legend.text = black_bold_18(),
+      legend.text = black_bold_18,
       legend.position = "top",
       legend.justification = "left",
       legend.box = "horizontal",
-      strip.text = black_bold_18()
+      strip.text = black_bold_18
     )
   print(p1)
   ggplot2::ggsave(
@@ -547,16 +547,16 @@ pathway.dotplot <- function(df, p, x) {
     ) +
       theme_bw() +
       theme(
-        plot.title = black_bold_16(),
-        axis.title = black_bold_16(),
-        axis.text.x = black_bold_16(),
-        axis.text.y = black_bold_16(),
+        plot.title = black_bold_16,
+        axis.title = black_bold_16,
+        axis.text.x = black_bold_16,
+        axis.text.y = black_bold_16,
         axis.line.x = element_line(color = "black"),
         axis.line.y = element_line(color = "black"),
         panel.grid = element_blank(),
-        legend.title = black_bold_16(),
-        legend.text = black_bold_16(),
-        strip.text = black_bold_16()
+        legend.title = black_bold_16,
+        legend.text = black_bold_16,
+        strip.text = black_bold_16
       )
     print(p1)
     ggplot2::ggsave(

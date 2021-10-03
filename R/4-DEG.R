@@ -5,7 +5,7 @@ get.TCGA.GTEX.RNAseq <- function() {
               "TcgaTargetGtex_RSEM_Hugo_norm_count"),
     data.table = FALSE
   )  %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
     distinct(., sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
     remove_rownames(.) %>%
@@ -22,7 +22,7 @@ TCGA.GTEX.RNAseq <- get.TCGA.GTEX.RNAseq()
 TCGA.GTEX.sampletype <- readr::read_tsv(
   file.path(data.file.directory,
             "TcgaTargetGTEX_phenotype.txt")) %>% {
-              as.data.frame(.) %>%
+              as_tibble(.) %>%
                 distinct(., sample, .keep_all = TRUE) %>%
                 remove_rownames() %>%
                 column_to_rownames(var = 'sample') %>%
@@ -92,19 +92,19 @@ RNAseq.grouped.boxplot <- function(df) {
       ) +
     theme_bw() +
     theme(
-      plot.title = black_bold_12(),
+      plot.title = black_bold_12,
       axis.title.x = element_blank(),
-      axis.title.y = black_bold_12(),
-      axis.text.x = black_bold_12_45(),
-      axis.text.y = black_bold_12(),
+      axis.title.y = black_bold_12,
+      axis.text.x = black_bold_12_45,
+      axis.text.y = black_bold_12,
       panel.grid = element_blank(),
       legend.title = element_blank(),
-      legend.text = black_bold_12(),
+      legend.text = black_bold_12,
       legend.position = c(0, 0.95),
       legend.direction = "horizontal",
       legend.justification = c(0, 1),
       legend.box = "horizontal",
-      strip.text = black_bold_12()
+      strip.text = black_bold_12
     )
   print(p1)
 
@@ -168,18 +168,18 @@ RNAseq.boxplot <- function(df) {
     coord_flip() +
     theme_bw() +
     theme(
-      plot.title = black_bold_12(),
-      axis.title.x = black_bold_12(),
+      plot.title = black_bold_12,
+      axis.title.x = black_bold_12,
       axis.title.y = element_blank(),
-      axis.text.x = black_bold_12(),
-      axis.text.y = black_bold_12(),
+      axis.text.x = black_bold_12,
+      axis.text.y = black_bold_12,
       panel.grid = element_blank(),
       legend.title = element_blank(),
-      legend.text = black_bold_12(),
+      legend.text = black_bold_12,
       legend.position = "top",
       legend.justification = "left",
       legend.box = "horizontal",
-      strip.text = black_bold_12()
+      strip.text = black_bold_12
     )
   #geom_signif(comparisons=list(c("Tumor", "Normal")))
   print(p1)
@@ -272,16 +272,16 @@ violinplot <- function(df) {
     scale_fill_manual(values = c("#56B4E9", "#009E73", "#D55E00")) + # for color-blind palettes
     theme_bw() +
     theme(
-      plot.title = black_bold_16(),
+      plot.title = black_bold_16,
       axis.title.x = element_blank(),
-      axis.title.y.right = black_bold_16_right(),
-      axis.text.x = black_bold_16_90(),
-      axis.text.y = black_bold_16_90(),
+      axis.title.y.right = black_bold_16_right,
+      axis.text.x = black_bold_16_90,
+      axis.text.y = black_bold_16_90,
       axis.line.x = element_line(color = "black"),
       axis.line.y = element_line(color = "black"),
       panel.grid = element_blank(),
       legend.position = "none",
-      strip.text = black_bold_16()
+      strip.text = black_bold_16
     ) +
     stat_compare_means(
       comparisons = list(
@@ -312,7 +312,7 @@ RNAratio.EIF.gene <- function(x){
            "primary.disease",
            "primary.site",
            "study") %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
     filter(EIF4E != 0 & !is.na(primary.site)) %>%
     mutate(sum = log2(2**EIF4E + 2**EIF4EBP1 - 1),
            #minus = log2(2**EIF4E - 2**EIF4EBP1 + 1),
@@ -408,19 +408,19 @@ RNAratio.boxplot <- function(df, dashline, ylimit, filename) {
     coord_flip(ylim = ylimit) +
     theme_bw() +
     theme(
-      plot.title = black_bold_12(),
-      axis.title.x = black_bold_12(),
+      plot.title = black_bold_12,
+      axis.title.x = black_bold_12,
       axis.title.y = element_blank(),
-      axis.text.x = black_bold_12(),
-      axis.text.y = black_bold_12(),
+      axis.text.x = black_bold_12,
+      axis.text.y = black_bold_12,
       panel.grid = element_blank(),
       legend.title = element_blank(),
       legend.position = "top",
       legend.justification = "left",
       legend.box = "horizontal",
-      legend.text = black_bold_12(),
+      legend.text = black_bold_12,
       #strip.background = element_blank(),
-      strip.text.x = black_bold_12()
+      strip.text.x = black_bold_12
     )
   print(p1)
   ggplot2::ggsave(
@@ -440,7 +440,7 @@ plot.boxgraph.RNAseq.TCGA <- function(EIF) {
            "primary.disease",
            "primary.site",
            "study") %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
     melt(.,id = c("sample.type",
                   "primary.disease",
                   "primary.site",
@@ -511,7 +511,7 @@ plot.cormatrix.RNAseq <- function (EIF) {
            "primary.disease",
            "primary.site",
            "study") %>%
-    as.data.frame(.)
+    as_tibble(.)
 
   plot.cor <- function(x){
     EIF.TCGA.RNAseq.subset <- TCGA.GTEX.RNAseq.sampletype.subset %>%

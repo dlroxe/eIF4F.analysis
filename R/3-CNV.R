@@ -5,7 +5,8 @@ get.TCGA.CNV <- function() {
               "Gistic2_CopyNumber_Gistic2_all_thresholded.by_genes"),
     data.table = FALSE
   )  %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
+    #as.data.frame(.) %>%
     distinct(., Sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
     remove_rownames(.) %>%
@@ -26,7 +27,8 @@ get.TCGA.CNV.value <- function() {
               "Gistic2_CopyNumber_Gistic2_all_data_by_genes"),
     data.table = FALSE
   )  %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
+    #as.data.frame(.) %>%
     distinct(., Sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
     remove_rownames() %>%
@@ -47,7 +49,8 @@ get.TCGA.CNV.ratio <- function() {
               "broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena"),
     data.table = FALSE
   )  %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
+    #as.data.frame(.) %>%
     distinct(., sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
     remove_rownames() %>%
@@ -65,7 +68,8 @@ TCGA.CNV.ratio <- get.TCGA.CNV.ratio() # CNV ration between tumor and NATs
 TCGA.sampletype <- readr::read_tsv(
   file.path(data.file.directory,
             "TCGA_phenotype_denseDataOnlyDownload.tsv")) %>% {
-              as.data.frame(.) %>%
+              as_tibble(.) %>%
+              #as.data.frame(.) %>%
                 distinct(., sample, .keep_all = TRUE) %>%
                 na.omit(.) %>%
                 remove_rownames(.) %>%
@@ -99,7 +103,8 @@ CNV.all.cancer <- function (df) {
     mutate_if(is.character, as.factor)
 
   CNV.sum <- table(TCGA.CNV.anno.subset.long[, c("CNV", "variable")]) %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
+    #as.data.frame(.) %>%
     mutate(CNV = factor(CNV, levels = c("-2", "-1", "0", "1", "2")))
 
   # reorder stack bars by the frequency of duplication.
@@ -129,18 +134,18 @@ CNV.sum.barplot <- function(data) {
     coord_flip() +
     theme_bw() +
     theme(
-      plot.title = black_bold_16(),
-      axis.title.x = black_bold_16(),
-      axis.title.y = element_blank(),
-      axis.text.x = black_bold_16(),
-      axis.text.y = black_bold_16(),
-      panel.grid = element_blank(),
+      plot.title = black_bold_16,
+      axis.title.x = black_bold_16,
+      axis.title.y = element_blank,
+      axis.text.x = black_bold_16,
+      axis.text.y = black_bold_16,
+      panel.grid = element_blank,
       legend.title = element_blank(),
-      legend.text = black_bold_16(),
+      legend.text = black_bold_16,
       legend.position = "top",
       legend.justification = "left",
       legend.box = "horizontal",
-      strip.text = black_bold_16()
+      strip.text = black_bold_16
     ) +
     guides(fill = guide_legend(reverse = TRUE)) + # Flip ordering of legend without altering ordering in plot
     scale_fill_manual(
@@ -172,7 +177,8 @@ CNV.ind.cancer <- function (df, x){
     mutate_if(is.character, as.factor)
 
   CNV.sum <- table(TCGA.CNV.anno.subset.long[, c("CNV", "primary.disease")]) %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
+    #as.data.frame(.) %>%
     mutate(CNV = factor(CNV, levels = c("-2", "-1", "0", "1", "2"))) %>%
     mutate(primary.disease = forcats::fct_rev(primary.disease))
 
@@ -197,18 +203,18 @@ CNV.barplot <- function(df) {
     coord_flip() +
     theme_bw() +
     theme(
-      plot.title = black_bold_12(),
-      axis.title.x = black_bold_12(),
+      plot.title = black_bold_12,
+      axis.title.x = black_bold_12,
       axis.title.y = element_blank(),
-      axis.text.x = black_bold_12(),
-      axis.text.y = black_bold_12(),
+      axis.text.x = black_bold_12,
+      axis.text.y = black_bold_12,
       panel.grid = element_blank(),
       legend.title = element_blank(),
-      legend.text = black_bold_12(),
+      legend.text = black_bold_12,
       legend.position = "top",
       legend.justification = "left",
       legend.box = "horizontal",
-      strip.text = black_bold_12()
+      strip.text = black_bold_12
     ) +
     scale_y_continuous(labels = scales::percent_format()) +
     guides(fill = guide_legend(reverse = TRUE)) + # Flip ordering of legend without altering ordering in plot
@@ -320,18 +326,18 @@ CNVratio.boxplot <- function(df) {
     coord_flip() +
     theme_bw() +
     theme(
-      plot.title = black_bold_12(),
-      axis.title.x = black_bold_12(),
+      plot.title = black_bold_12,
+      axis.title.x = black_bold_12,
       axis.title.y = element_blank(),
-      axis.text.x = black_bold_12(),
-      axis.text.y = black_bold_12(),
+      axis.text.x = black_bold_12,
+      axis.text.y = black_bold_12,
       panel.grid = element_blank(),
       legend.title = element_blank(),
-      legend.text = black_bold_12(),
+      legend.text = black_bold_12,
       legend.position = "none",
       legend.justification = "left",
       legend.box = "horizontal",
-      strip.text = black_bold_12()
+      strip.text = black_bold_12
     )
   print(p1)
   ggplot2::ggsave(

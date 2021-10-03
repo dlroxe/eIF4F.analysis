@@ -8,7 +8,7 @@ get.TCGA.RNAseq <- function() {
   TCGA.RNAseq <- TCGA.pancancer[
     !duplicated(TCGA.pancancer$sample),
     !duplicated(colnames(TCGA.pancancer))]%>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
     #na.omit(.) %>%
     remove_rownames() %>%
     column_to_rownames(var = 'sample')
@@ -38,21 +38,22 @@ TCGA.OS <- data.table::fread(
 TCGA.sampletype <- readr::read_tsv(
   file.path(data.file.directory,
             "TCGA_phenotype_denseDataOnlyDownload.tsv")) %>% {
-  as.data.frame(.) %>%
-  distinct(., sample, .keep_all = TRUE) %>%
-  select("sample",
-         "sample_type",
-         "_primary_disease") %>%
-  rename(rn = sample,
-         sample.type = sample_type,
-         primary.disease = `_primary_disease`)}
+              as_tibble(.) %>%
+              distinct(., sample, .keep_all = TRUE) %>%
+              select("sample",
+                     "sample_type",
+                     "_primary_disease") %>%
+              rename(rn = sample,
+                     sample.type = sample_type,
+                     primary.disease = `_primary_disease`)
+              }
 
 ## combine OS, sample type and RNAseq data ##
 TCGA.RNAseq.OS.sampletype <- list(TCGA.RNAseq, TCGA.OS, TCGA.sampletype) %>%
   reduce(full_join, by = "rn") %>%
   remove_rownames(.) %>%
-  column_to_rownames(var = 'rn')
-
+  column_to_rownames(var = 'rn')  %>%
+  filter(sample.type != "Solid Tissue Normal")
 
 # Survival analysis and plotting -----------------------------------------------
 ##  KM survival analyses
@@ -75,15 +76,15 @@ KM.curve <- function(gene, data, cutoff, tumor) {
     }+
     theme_bw() +
     theme(
-      plot.title = black_bold_16(),
-      axis.title = black_bold_16(),
-      axis.text = black_bold_16(),
+      plot.title = black_bold_16,
+      axis.title = black_bold_16,
+      axis.text = black_bold_16,
       #axis.line.x = element_line(color = "black"),
       #axis.line.y = element_line(color = "black"),
       panel.grid = element_blank(),
-      strip.text = black_bold_16(),
-      legend.text = black_bold_16(),
-      legend.title = black_bold_16(),
+      strip.text = black_bold_16,
+      legend.text = black_bold_16,
+      legend.title = black_bold_16,
       legend.position = c(0.9, 0.98),
       legend.justification = c(1, 1)
     ) +
@@ -228,7 +229,7 @@ univariable.analysis <- function(df, covariate_names) {
     rownames_to_column()
 
   data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
-    as.data.frame() %>%
+    #as.data.frame(.) %>%
     mutate(across(7:11, round, 3)) %>%
     mutate(across(4:6, round, 2)) %>%
     mutate(np = nrow(df)) %>%
@@ -257,14 +258,13 @@ multivariable.analysis <- function(df, covariate_names) {
                    data = df) %>%
     cox.zph() %>%
     print() %>%
-    as.data.frame(.) %>%
+    as.data.frame(.) %>% # do not use as_tibble here, cause errors
     select("p") %>%
     rename("pinteraction" = "p") %>%
     rownames_to_column() %>%
     filter(rowname != "GLOBAL") # remove the global test result for graph
 
   data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
-    as.data.frame() %>%
     mutate(across(7:11, round, 3)) %>%
     mutate(across(4:6, round, 2)) %>%
     mutate(np = nrow(df)) %>%
@@ -284,7 +284,6 @@ multivariable.analysis <- function(df, covariate_names) {
 # master functions to call Survival analysis and plotting ----------------------
 plot.km.EIF.tumor <- function(EIF, cutoff, tumor) {
   df <- TCGA.RNAseq.OS.sampletype %>%
-    filter(sample.type != "Solid Tissue Normal") %>%
     select(all_of(EIF),
            "OS",
            "OS.time",
@@ -294,7 +293,7 @@ plot.km.EIF.tumor <- function(EIF, cutoff, tumor) {
     filter(if (tumor != "All") primary.disease == tumor else TRUE) %>%
     drop_na(.) %>%
     #na.omit(.) %>%
-    as.data.frame(.) %>%
+    as_tibble(.) %>%
     rename(RNAseq = EIF) %>%
     mutate(Group = case_when(
       RNAseq < quantile(RNAseq, cutoff) ~ "Bottom %",
@@ -341,9 +340,6 @@ plot.coxph.EIF.tumor <- function(EIF, tumor) {
                 else c(0.4, 0.8, 1.2, 1.6, 2.4, 2.8, 3.2),
                 x.range = if(tumor == "All") c(0.6, 1.8)
                 else c(0.4, 3.2))
-
-
-
 
 }
 
