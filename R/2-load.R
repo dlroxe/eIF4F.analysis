@@ -1,140 +1,88 @@
-#### Library Preparation ####
-library(AnnotationDbi)
-library(car)
-library(clusterProfiler)
-library(circlize) ## for color options
-library(ComplexHeatmap)
-library(corrplot)
-library(data.table)
-library(dendextend)
-library(descr)
-library(dplyr)
-library(EnvStats)
-library(eulerr)
-library(facetscales)
-library(factoextra)
-library(FactoMineR)
-library(forcats) # change the order of x-axis
-library(forestmodel)
-library(forestplot)
-library(Hmisc)
-library(ggfortify)
-library(ggplot2)
-library(ggpubr)
-library(ggsignif)
-library(ggthemes) ## color-blind options
-library(gplots)
-library(gridExtra)
-library(igraph)
-#library(KEGG.db)
-library(lemon) ## coord_capped_cart(bottom='both', left='both')
-library(limma)
-library(missMDA)
-library(nortest) # test for normal distribution
-library(org.Hs.eg.db)
-library(pca3d)
-library(RColorBrewer)
-library(ReactomePA)
-library(readr)
-library(readxl)
-library(reshape2)
-library(rgl)
-library(scales) # Log scaling of the y axis
-library(survival)
-library(survivalAnalysis)
-library(tidyverse)
-library(vcd)
-library(vip)
+## Library Preparation ---------------------------------------------------------
+requiredPackages <- c("AnnotationDbi", "base", "BiocGenerics", "circlize",
+                      "clusterProfiler","ComplexHeatmap", "corrplot",
+                      "data.table", "data.table", "dplyr", "EnvStats", "eulerr",
+                      "factoextra", "FactoMineR", "forcats","forestplot",
+                      "ggfortify","ggplot2", "ggpubr", "graphics", "grDevices",
+                      "grid", "lattice", "limma", "missMDA", "org.Hs.eg.db",
+                      "purrr", "RColorBrewer", "ReactomePA", "readr", "readxl",
+                      "reshape2", "scales", "stats", "stats4", "stringr", "survival",
+                      "survivalAnalysis", "tibble", "tidyr")
 
-#### Directory Preparation ####
+
+ipak <- function(pkg){
+  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+  if (length(new.pkg))
+    install.packages(new.pkg, dependencies = TRUE)
+  sapply(pkg, require, character.only = TRUE)
+}
+
+ipak(requiredPackages)
+
+## Directory Preparation -------------------------------------------------------
 data.file.directory <- "~/Downloads/Test"
 output.directory <- "~/Documents/EIF_output"
 
 
-#### Format Preparation ####
-black_bold_tahoma_7 <- function() {
-  return <- (
-    element_text(
-      color = "black",
-      face = "bold",
-      size = 7
-    ))
-}
-
-black_bold_12 <- function() {
-  return(
-    element_text(
-      color = "black",
-      face = "bold",
-      size = 12
-    )
+## Format Preparation ----------------------------------------------------------
+black_bold_tahoma_7 <- element_text(
+  color = "black",
+  face = "bold",
+  size = 7
   )
-}
 
-black_bold_12_45 <- function() {
-  return(
-    element_text(
+black_bold_12 <- element_text(
+  color = "black",
+  face = "bold",
+  size = 12
+  )
+
+black_bold_12_45 <- element_text(
+  color = "black",
+  face = "bold",
+  size = 12,
+  angle = 45,
+  hjust = 1
+  )
+
+
+black_bold_16 <- element_text(
+  color = "black",
+  face = "bold",
+  size = 16
+  )
+
+black_bold_16_right <- element_text(
       color = "black",
       face = "bold",
-      size = 12,
-      angle = 45,
-      hjust = 1
+      size = 16,
+      angle = 90
     )
-  )
-}
 
-black_bold_16 <- function() {
-  return(
-    element_text(
-      color = "black",
-      face = "bold",
-      size = 16
-    )
-  )
-}
-
-black_bold_16_right <- function() {
-  return(
-    element_text(
-    color = "black",
-    face = "bold",
-    size = 16,
-    angle = 90
-  ))
-}
-
-black_bold_16_45 <- function() {
-  return(
-    element_text(
+black_bold_16_45 <- element_text(
       color = "black",
       face = "bold",
       size = 16,
       angle = 45,
       hjust = 1
     )
-  )
-}
 
-black_bold_16_90 <- function() {
-  return(element_text(
+
+black_bold_16_90 <- element_text(
     color = "black",
     face = "bold",
     size = 16,
     angle = 90,
     hjust = 1,
     vjust = 0.5
-  ))
-}
+  )
 
-black_bold_18 <- function() {
-  return(
-    element_text(
+black_bold_18 <- element_text(
       color = "black",
       face = "bold",
       size = 18
     )
-  )
-}
+
 
 color <- function() {
   qual_col_pals <- brewer.pal.info[brewer.pal.info$category == "qual", ]
@@ -145,6 +93,4 @@ color <- function() {
   ))
 }
 col_vector <- color()
-
-
 

@@ -136,10 +136,10 @@ CNV.sum.barplot <- function(data) {
     theme(
       plot.title = black_bold_16,
       axis.title.x = black_bold_16,
-      axis.title.y = element_blank,
+      axis.title.y = element_blank(),
       axis.text.x = black_bold_16,
       axis.text.y = black_bold_16,
-      panel.grid = element_blank,
+      panel.grid = element_blank(),
       legend.title = element_blank(),
       legend.text = black_bold_16,
       legend.position = "top",
