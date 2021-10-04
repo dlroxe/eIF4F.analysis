@@ -103,8 +103,8 @@ CNV.all.cancer <- function (df) {
     mutate_if(is.character, as.factor)
 
   CNV.sum <- table(TCGA.CNV.anno.subset.long[, c("CNV", "variable")]) %>%
-    as_tibble(.) %>%
-    #as.data.frame(.) %>%
+    #tibble(.) %>%
+    as.data.frame(.) %>%
     mutate(CNV = factor(CNV, levels = c("-2", "-1", "0", "1", "2")))
 
   # reorder stack bars by the frequency of duplication.
@@ -177,8 +177,8 @@ CNV.ind.cancer <- function (df, x){
     mutate_if(is.character, as.factor)
 
   CNV.sum <- table(TCGA.CNV.anno.subset.long[, c("CNV", "primary.disease")]) %>%
-    as_tibble(.) %>%
-    #as.data.frame(.) %>%
+    #tibble(.) %>%
+    as.data.frame(.) %>%
     mutate(CNV = factor(CNV, levels = c("-2", "-1", "0", "1", "2"))) %>%
     mutate(primary.disease = forcats::fct_rev(primary.disease))
 
@@ -360,7 +360,7 @@ plot.bargraph.CNV.TCGA <- function(EIF) {
 
   #stacked bar plots for CNV status in combined TCGA tumors
   CNV.all.cancer(TCGA.CNV.sampletype.subset) %>%
-    CNV.sum.barplot()
+    CNV.sum.barplot(.)
 
   #stacked bar plots for CNV status in each TCGA tumor type
   EIF.CNV.ind.cancer <- lapply(EIF,
