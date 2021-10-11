@@ -1,28 +1,30 @@
-if (!exists("LUAD.Proteomics")){
+if (!exists("LUAD.Proteomics")) {
   LUAD.Proteomics <- read_excel(
     file.path(data.file.directory, "Protein.xlsx"),
-    col_names = FALSE) %>%
-    #as.data.frame(.) %>%
+    col_names = FALSE
+  ) %>%
+    # as.data.frame(.) %>%
     mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
-    column_to_rownames(var = '...1') %>%
+    column_to_rownames(var = "...1") %>%
     t(.) %>%
     as_tibble(.) %>%
-    mutate_at(vars(-Type, -Sample),funs(as.numeric)) # exclude two columns convert character to number
-  }
+    mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
+}
 
-.Scatter.plot <- function(df, x, y, z){
+.Scatter.plot <- function(df, x, y, z) {
   p1 <- ggscatter(df,
-                  x = x,
-                  y = y, #color = "black",
-                  add = "reg.line", #conf.int = TRUE,
-                  add.params = list(color = "black", fill = "lightgray"),
-                  cor.coef = TRUE,
-                  cor.method = "pearson",
-                  color = z,
-                  xlab = paste(x, "protein expression)"),
-                  ylab = paste(y, "protein expression)")) +
+    x = x,
+    y = y, # color = "black",
+    add = "reg.line", # conf.int = TRUE,
+    add.params = list(color = "black", fill = "lightgray"),
+    cor.coef = TRUE,
+    cor.method = "pearson",
+    color = z,
+    xlab = paste(x, "protein expression)"),
+    ylab = paste(y, "protein expression)")
+  ) +
     # scale_y_continuous(breaks= scales::pretty_breaks())+
-    #scale_y_continuous(
+    # scale_y_continuous(
     #  breaks = get_breaks(by = 1, from = -1),
     #  limits = c(-1, 2)) + # for 3G
     # Add correlation coefficient
@@ -97,20 +99,25 @@ EIF.pro.correlation <- function() {
 
 ## Boxplots for phosphor-proteomics --------------------------------------------
 CPTAC.LUAD.Sampletype <- read_excel(
-  file.path(data.file.directory,
-            "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx")
-    )
+  file.path(
+    data.file.directory,
+    "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"
+  )
+)
 
 CPTAC.LUAD.Clinic <- read_excel(
-  file.path(data.file.directory,
-            "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"),
+  file.path(
+    data.file.directory,
+    "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"
+  ),
   sheet = 2
-  )
+)
 
 CPTAC.LUAD.Clinic.Sampletype <- merge(CPTAC.LUAD.Clinic,
-                                      CPTAC.LUAD.Sampletype,
-                                      by.x = "case_id",
-                                      by.y = "Participant ID (case_id)") %>%
+  CPTAC.LUAD.Sampletype,
+  by.x = "case_id",
+  by.y = "Participant ID (case_id)"
+) %>%
   select("tumor_stage_pathological", "Aliquot (Specimen Label)", "Type") %>%
   rename("Sample" = "Aliquot (Specimen Label)") %>%
   mutate(tumor_stage_pathological = case_when(
@@ -118,27 +125,29 @@ CPTAC.LUAD.Clinic.Sampletype <- merge(CPTAC.LUAD.Clinic,
     tumor_stage_pathological %in% c("Stage I", "Stage IA", "Stage IB") ~ "Stage I",
     tumor_stage_pathological %in% c("Stage II", "Stage IIA", "Stage IIB") ~ "Stage II",
     tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~ "Stage III",
-    tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"))
+    tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"
+  ))
 
-.get.EIF.CPTAC.LUAD.Proteomics <- function (x) {
+.get.EIF.CPTAC.LUAD.Proteomics <- function(x) {
   LUAD.Proteomics %>%
-    select_if(names(.) %in% c(x, 'Sample'))
-    #select(all_of(x), "Sample")
-    }
+    select_if(names(.) %in% c(x, "Sample"))
+  # select(all_of(x), "Sample")
+}
 
-.get.EIF.CPTAC.LUAD.Phos <- function (x) {
+.get.EIF.CPTAC.LUAD.Phos <- function(x) {
   read_excel(file.path(data.file.directory, "Phos.xlsx"),
-             col_names = FALSE) %>%
+    col_names = FALSE
+  ) %>%
     filter(...1 %in% c(x, "Sample")) %>%
-    #as.data.frame(.) %>%
+    # as.data.frame(.) %>%
     mutate(phosname = paste(...1, ...2)) %>%
-    column_to_rownames(var = 'phosname') %>%
-    select(-c(...1,...2)) %>%
+    column_to_rownames(var = "phosname") %>%
+    select(-c(...1, ...2)) %>%
     t(.) %>%
     as_tibble(.) %>%
-    mutate_at(vars(-`Sample na`), funs(as.numeric))%>%
+    mutate_at(vars(-`Sample na`), funs(as.numeric)) %>%
     rename("Sample" = "Sample na")
-  }
+}
 
 .protein.boxplot <- function(df, x) {
   hline <- summarise(group_by(df, Gene, Type), MD = 2**median(normalize)) %>%
@@ -146,17 +155,17 @@ CPTAC.LUAD.Clinic.Sampletype <- merge(CPTAC.LUAD.Clinic,
     filter(Gene == x & Type == "Tumor") %>%
     select(., MD) %>%
     as.numeric(.) %>%
-  #hline <- dataMedian$MD[dataMedian$Gene == x & dataMedian$Type == "Tumor"] %>%
+    # hline <- dataMedian$MD[dataMedian$Gene == x & dataMedian$Type == "Tumor"] %>%
     round(., digits = 3)
   p2 <- ggplot(
-    data = df[df$Gene == x,],
+    data = df[df$Gene == x, ],
     aes(
       x = tumor_stage_pathological,
       y = 2**normalize
     )
   ) +
     geom_boxplot(
-      data = df[df$Gene == x,],
+      data = df[df$Gene == x, ],
       aes(fill = Gene),
       # alpha         = 0,
       # size     = .75,
@@ -164,16 +173,18 @@ CPTAC.LUAD.Clinic.Sampletype <- merge(CPTAC.LUAD.Clinic,
       outlier.shape = NA,
       position = position_dodge(width = .9)
     ) +
-    geom_hline(yintercept = hline,
-               colour = "dark red",
-               linetype = "dashed") +
+    geom_hline(
+      yintercept = hline,
+      colour = "dark red",
+      linetype = "dashed"
+    ) +
     annotate("text",
-             label = hline,
-             x = "Stage IV",
-             y = hline,
-             vjust = -1,
-             size = 4,
-             colour = "dark red"
+      label = hline,
+      x = "Stage IV",
+      y = hline,
+      vjust = -1,
+      size = 4,
+      colour = "dark red"
     ) +
     stat_n_text(
       size = 4,
@@ -182,19 +193,21 @@ CPTAC.LUAD.Clinic.Sampletype <- merge(CPTAC.LUAD.Clinic,
       hjust = 0.5
     ) +
     labs(x = NULL, y = "Normalized peptide ratio") +
-    #coord_cartesian(ylim = c(0, 3)) +
-    #scale_y_continuous(breaks = seq(0, 3, by = 1)) +
-    #coord_cartesian(ylim = c(-0.5, 7.5)) +
-    #scale_y_continuous(breaks = seq(0, 7.5, by = 1)) +
-    #coord_cartesian(ylim = c(-1, 15)) +
-    #scale_y_continuous(breaks = seq(-1, 15, by = 2)) +
-    scale_x_discrete(limits = c("Normal",
-                                "Stage I",
-                                "Stage II",
-                                "Stage III",
-                                "Stage IV")) +
+    # coord_cartesian(ylim = c(0, 3)) +
+    # scale_y_continuous(breaks = seq(0, 3, by = 1)) +
+    # coord_cartesian(ylim = c(-0.5, 7.5)) +
+    # scale_y_continuous(breaks = seq(0, 7.5, by = 1)) +
+    # coord_cartesian(ylim = c(-1, 15)) +
+    # scale_y_continuous(breaks = seq(-1, 15, by = 2)) +
+    scale_x_discrete(limits = c(
+      "Normal",
+      "Stage I",
+      "Stage II",
+      "Stage III",
+      "Stage IV"
+    )) +
     scale_fill_discrete(drop = F) +
-    #ggplot2::facet_grid(. ~ Gene) +
+    # ggplot2::facet_grid(. ~ Gene) +
     facet_wrap(~Gene) +
     theme_bw() +
     theme(
@@ -216,9 +229,9 @@ CPTAC.LUAD.Clinic.Sampletype <- merge(CPTAC.LUAD.Clinic,
       ),
       method = "t.test",
       label = "p.signif",
-      #label.y = c(2.4, 2.7, 3),
-      #label.y = c(5, 6, 7),
-      #label.y = c(12.4, 13.6, 14.8),
+      # label.y = c(2.4, 2.7, 3),
+      # label.y = c(5, 6, 7),
+      # label.y = c(12.4, 13.6, 14.8),
       size = 4
     )
   print(p2)
@@ -235,12 +248,14 @@ CPTAC.LUAD.Clinic.Sampletype <- merge(CPTAC.LUAD.Clinic,
 plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
   EIF.CPTAC.LUAD.Proteomics <- .get.EIF.CPTAC.LUAD.Proteomics(EIF_list)
   EIF.CPTAC.LUAD.Phos <- .get.EIF.CPTAC.LUAD.Phos(EIF_list)
-  EIF.LUAD.Phos.Proteomics.Sampletype <- list(EIF.CPTAC.LUAD.Phos,
-                                              EIF.CPTAC.LUAD.Proteomics,
-                                              CPTAC.LUAD.Clinic.Sampletype) %>%
+  EIF.LUAD.Phos.Proteomics.Sampletype <- list(
+    EIF.CPTAC.LUAD.Phos,
+    EIF.CPTAC.LUAD.Proteomics,
+    CPTAC.LUAD.Clinic.Sampletype
+  ) %>%
     reduce(full_join, by = "Sample") %>%
     pivot_longer(
-      cols = -c("Sample","tumor_stage_pathological","Type"),
+      cols = -c("Sample", "tumor_stage_pathological", "Type"),
       names_to = "Gene",
       values_to = "value",
       values_drop_na = TRUE
@@ -248,21 +263,22 @@ plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
     mutate_if(is.character, as.factor) %>%
     na.omit(.)
 
-  EIF.LUAD.Phos.Proteomics.Sampletype.Normalization <- group_by(
-    filter(EIF.LUAD.Phos.Proteomics.Sampletype, Type == "Normal"), Gene
-    ) %>%
-    summarise(NAT.mean = median(value)) %>%
-    left_join(EIF.LUAD.Phos.Proteomics.Sampletype, ., by = "Gene") %>% #right_join is possible with the dev dplyr
+  EIF.LUAD.Phos.Proteomics.Sampletype.Normalization <- EIF.LUAD.Phos.Proteomics.Sampletype %>%
+    filter(Type == "Normal") %>%
     group_by(Gene) %>%
-    mutate(normalize = value - NAT.mean) #%>%
+    # group_by(Gene) %>%
+    summarise(NAT.mean = median(value)) %>%
+    left_join(EIF.LUAD.Phos.Proteomics.Sampletype, ., by = "Gene") %>% # right_join is possible with the dev dplyr
+    # group_by(Gene) %>%
+    mutate(normalize = value - NAT.mean) # %>%
 
   lapply(sort(unique(EIF.LUAD.Phos.Proteomics.Sampletype.Normalization$Gene)),
-         .protein.boxplot,
-         df = EIF.LUAD.Phos.Proteomics.Sampletype.Normalization)
+    .protein.boxplot,
+    df = EIF.LUAD.Phos.Proteomics.Sampletype.Normalization
+  )
 }
 
 
 # Run master functions ---------------------------------------------------------
-#EIF.pro.correlation()
-#plot.EIF4.CPTAC.pro.LUAD(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "AKT1", "MTOR", "EIF4B", "EIF4H"))
-
+# EIF.pro.correlation()
+# plot.EIF4.CPTAC.pro.LUAD(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "AKT1", "MTOR", "EIF4B", "EIF4H"))
