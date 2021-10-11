@@ -2,7 +2,7 @@
 requiredPackages <- c(
   "AnnotationDbi", "base", "BiocGenerics", "circlize",
   "clusterProfiler", "ComplexHeatmap", "corrplot",
-  "data.table", "data.table", "dplyr", "EnvStats", "eulerr",
+  "data.table", "dplyr", "EnvStats", "eulerr",
   "factoextra", "FactoMineR", "forcats", "forestplot",
   "ggfortify", "ggplot2", "ggpubr", "graphics", "grDevices",
   "grid", "lattice", "limma", "missMDA", "org.Hs.eg.db",
