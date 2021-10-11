@@ -1,7 +1,7 @@
 # prepare RNA-seq related dataset from TCGA and GTEx ---------------------------
 # RNA-seq data were import in 4-DEG.R
 if (!exists("TCGA.GTEX.RNAseq")){
-  get.TCGA.GTEX.RNAseq <- function() {
+  .get.TCGA.GTEX.RNAseq <- function() {
   TCGA.pancancer <- data.table::fread(
     file.path(data.file.directory,
               "TcgaTargetGtex_RSEM_Hugo_norm_count"),
@@ -19,7 +19,7 @@ if (!exists("TCGA.GTEX.RNAseq")){
   colnames(TCGA.pancancer_transpose) <- rownames(TCGA.pancancer)
   return (TCGA.pancancer_transpose)
 }
-  TCGA.GTEX.RNAseq <- get.TCGA.GTEX.RNAseq()
+  TCGA.GTEX.RNAseq <- .get.TCGA.GTEX.RNAseq()
   }
 
 if (!exists("TCGA.GTEX.sampletype")){
@@ -52,7 +52,7 @@ TCGA.GTEX.RNAseq.sampletype <- merge(TCGA.GTEX.RNAseq,
 
 
 ### CPTAC data
-CPTAC.LUAD.Proteomics <- function() {
+.CPTAC.LUAD.Proteomics <- function() {
   CPTAC.LUAD.Proteomics <- fread(
     file.path(data.file.directory,
               "CPTAC3_Lung_Adeno_Carcinoma_Proteome.tmt10.tsv"),
@@ -69,7 +69,7 @@ CPTAC.LUAD.Proteomics <- function() {
                                            rownames(CPTAC.LUAD.Proteomics.t))
   return (CPTAC.LUAD.Proteomics.t)
 }
-CPTAC.LUAD.Proteomics <- CPTAC.LUAD.Proteomics()
+CPTAC.LUAD.Proteomics <- .CPTAC.LUAD.Proteomics()
 
 
 CPTAC.LUAD.sampletype <- read_excel(
@@ -98,7 +98,7 @@ CPTAC.LUAD.Proteomics.sampletype <- merge(CPTAC.LUAD.Proteomics,
 
 
 # functions for analyses and plotting  -----------------------------------------
-standardPCA <- function (df) {
+.standardPCA <- function (df) {
   res.pca <- PCA(df %>% select_if(is.numeric), # remove column with characters
                  #df[1:(length(df)-4)],
                  scale.unit = TRUE,
@@ -107,7 +107,7 @@ standardPCA <- function (df) {
   return(res.pca)
 }
 
-imputePCA <- function (df){
+.imputePCA <- function (df){
   #Impute the missing values of a dataset with the Principal Components Analysis model
   nb <- missMDA::estim_ncpPCA(
     df %>% select_if(is.numeric),
@@ -124,7 +124,7 @@ imputePCA <- function (df){
   return(res.pca)
 }
 
-biplot <- function(res.pca, df, x, y, color, folder) {
+.biplot <- function(res.pca, df, x, y, color, folder) {
   biplot <- fviz_pca_biplot(res.pca,
                             axes = c(1, 2),
                             labelsize = 5,
@@ -276,7 +276,7 @@ biplot <- function(res.pca, df, x, y, color, folder) {
 
 }
 
-selected.biplot <- function(res.pca, df, x, y, color) {
+.selected.biplot <- function(res.pca, df, x, y, color) {
   selected.samples <- df %>%
     filter(sample.type == x)
   biplot <- fviz_pca_biplot(res.pca,
@@ -359,8 +359,8 @@ plot.PCA.TCGA.GTEX <- function(EIF.list) {
     }
 
   df.subset <-sampletype.subset ("Primary Tumor (TCGA)")
-  res.pca <- standardPCA (df.subset)
-  biplot(res.pca = res.pca,
+  res.pca <- .standardPCA (df.subset)
+  .biplot(res.pca = res.pca,
          df = df.subset,
          x = "Primary Tumor (TCGA)",
          y = "primary.disease",
@@ -368,8 +368,8 @@ plot.PCA.TCGA.GTEX <- function(EIF.list) {
          folder = "TCGA")
 
   df.subset <-sampletype.subset ("Metastatic Tumor (TCGA)")
-  res.pca <- standardPCA (df.subset)
-  biplot(res.pca = res.pca,
+  res.pca <- .standardPCA (df.subset)
+  .biplot(res.pca = res.pca,
          df = df.subset,
          x = "Metastatic Tumor (TCGA)",
          y = "primary.disease",
@@ -377,8 +377,8 @@ plot.PCA.TCGA.GTEX <- function(EIF.list) {
          folder = "TCGA")
 
   df.subset <-sampletype.subset ("Healthy Tissue (GTEx)")
-  res.pca <- standardPCA (df.subset)
-  biplot(res.pca = res.pca,
+  res.pca <- .standardPCA (df.subset)
+  .biplot(res.pca = res.pca,
          df = df.subset,
          x = "Healthy Tissue (GTEx)",
          y = "primary.site",
@@ -387,53 +387,53 @@ plot.PCA.TCGA.GTEX <- function(EIF.list) {
 
 
   df.subset <-sampletype.subset ("All")
-  res.pca <- standardPCA (df.subset)
-  biplot(res.pca = res.pca,
+  res.pca <- .standardPCA (df.subset)
+  .biplot(res.pca = res.pca,
          df = df.subset,
          x = "All",
          y = "sample.type",
          color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
          folder = "All")
 
-  selected.biplot(res.pca = res.pca,
+  .selected.biplot(res.pca = res.pca,
                   df = df.subset,
                   x = "Healthy Tissue (GTEx)",
                   y = "sample.type",
                   color = "#D55E00")
-  selected.biplot(res.pca = res.pca,
+  .selected.biplot(res.pca = res.pca,
                   df = df.subset,
                   x = "Healthy Tissue (GTEx)",
                   y = "primary.site",
                   color = col_vector)
 
-  selected.biplot(res.pca = res.pca,
+  .selected.biplot(res.pca = res.pca,
                   df = df.subset,
                   x = "Primary Tumor (TCGA)",
                   y = "sample.type",
                   color = "#009E73")
-  selected.biplot(res.pca = res.pca,
+  .selected.biplot(res.pca = res.pca,
                   df = df.subset,
                   x = "Primary Tumor (TCGA)",
                   y = "primary.disease",
                   color = col_vector)
 
-  selected.biplot(res.pca = res.pca,
+  .selected.biplot(res.pca = res.pca,
                   df = df.subset,
                   x = "Metastatic Tumor (TCGA)",
                   y = "sample.type",
                   color = "#CC79A7")
-  selected.biplot(res.pca = res.pca,
+  .selected.biplot(res.pca = res.pca,
                   df = df.subset,
                   x = "Metastatic Tumor (TCGA)",
                   y = "primary.disease",
                   color = col_vector)
 
-  selected.biplot(res.pca = res.pca,
+  .selected.biplot(res.pca = res.pca,
                   df = df.subset,
                   x = "Adjacent Normal Tissue (TCGA)",
                   y = "sample.type",
                   color = "#0072B2")
-  selected.biplot(res.pca = res.pca,
+  .selected.biplot(res.pca = res.pca,
                   df = df.subset,
                   x = "Adjacent Normal Tissue (TCGA)",
                   y = "primary.disease",
@@ -466,8 +466,8 @@ plot.PCA.TCGA.GTEX.tumor <- function(EIF.list, tissue) {
                                            "Metastatic Tumor (TCGA)",
                                            "Adjacent Normal Tissue (TCGA)"))) %>%
     filter(primary.site == tissue)
-  res.pca <- standardPCA (TCGA.GTEX.sampletype.subset)
-  biplot(res.pca = res.pca,
+  res.pca <- .standardPCA (TCGA.GTEX.sampletype.subset)
+  .biplot(res.pca = res.pca,
               df = TCGA.GTEX.sampletype.subset,
               x = "All",
               y = "sample.type",
@@ -484,9 +484,9 @@ plot.PCA.CPTAC.LUAD <- function(EIF.list) {
     filter(!is.na(Type))%>%
     remove_rownames()
 
-  res.pca <- imputePCA (CPTAC.LUAD.Proteomics.Sample.subset)
+  res.pca <- .imputePCA (CPTAC.LUAD.Proteomics.Sample.subset)
 
-  biplot(res.pca = res.pca,
+  .biplot(res.pca = res.pca,
               df = CPTAC.LUAD.Proteomics.Sample.subset,
               x = "LUAD(CPTAC)",
               y = "Type",

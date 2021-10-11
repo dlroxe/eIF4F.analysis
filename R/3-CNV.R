@@ -1,5 +1,5 @@
 # prepare CNV related datasets from TCGA ---------------------------------------
-get.TCGA.CNV <- function() {
+.get.TCGA.CNV <- function() {
   TCGA.pancancer <- data.table::fread(
     file.path(data.file.directory,
               "Gistic2_CopyNumber_Gistic2_all_thresholded.by_genes"),
@@ -19,9 +19,9 @@ get.TCGA.CNV <- function() {
   colnames(TCGA.pancancer_transpose) <- rownames(TCGA.pancancer)
   return (TCGA.pancancer_transpose)
 }
-TCGA.CNV <- get.TCGA.CNV()  # CNV data with threshold
+TCGA.CNV <- .get.TCGA.CNV()  # CNV data with threshold
 
-get.TCGA.CNV.value <- function() {
+.get.TCGA.CNV.value <- function() {
   TCGA.pancancer <- fread(
     file.path(data.file.directory,
               "Gistic2_CopyNumber_Gistic2_all_data_by_genes"),
@@ -41,9 +41,9 @@ get.TCGA.CNV.value <- function() {
   colnames(TCGA.pancancer_transpose) <- rownames(TCGA.pancancer)
   return (TCGA.pancancer_transpose)
 }
-TCGA.CNV.value <- get.TCGA.CNV.value() # CNV data with numeric value
+TCGA.CNV.value <- .get.TCGA.CNV.value() # CNV data with numeric value
 
-get.TCGA.CNV.ratio <- function() {
+.get.TCGA.CNV.ratio <- function() {
   TCGA.pancancer <- fread(
     file.path(data.file.directory,
               "broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena"),
@@ -63,7 +63,7 @@ get.TCGA.CNV.ratio <- function() {
   colnames(TCGA.pancancer_transpose) <- rownames(TCGA.pancancer)
   return (TCGA.pancancer_transpose)
 }
-TCGA.CNV.ratio <- get.TCGA.CNV.ratio() # CNV ration between tumor and NATs
+TCGA.CNV.ratio <- .get.TCGA.CNV.ratio() # CNV ration between tumor and NATs
 
 TCGA.sampletype <- readr::read_tsv(
   file.path(data.file.directory,
@@ -95,7 +95,7 @@ TCGA.CNVratio.sampletype <- merge(TCGA.CNV.ratio,
 
 
 # CNV data analysis and plotting -----------------------------------------------
-CNV.all.cancer <- function (df) {
+.CNV.all.cancer <- function (df) {
   TCGA.CNV.anno.subset.long <- melt(df,
                                     id = c("sample.type",
                                            "primary.disease"),
@@ -113,7 +113,8 @@ CNV.all.cancer <- function (df) {
                              levels = Freq.sum[order(Freq.sum$`1`),]$variable)
   return (CNV.sum)
 }
-CNV.sum.barplot <- function(data) {
+
+.CNV.sum.barplot <- function(data) {
   p1 <- ggplot(data,
                aes(fill = CNV,
                    y = Freq,
@@ -166,7 +167,9 @@ CNV.sum.barplot <- function(data) {
   )
 }
 
-CNV.ind.cancer <- function (df, x){
+
+
+.CNV.ind.cancer <- function (df, x){
   TCGA.CNV.anno.subset.long <- df %>%
     select(all_of(x),
            "sample.type",
@@ -185,7 +188,8 @@ CNV.ind.cancer <- function (df, x){
   output <- list(CNV.sum, x)
   return(output)
   }
-CNV.barplot <- function(df) {
+
+.CNV.barplot <- function(df) {
   p1 <- ggplot(
     df[[1]],
     aes(
@@ -242,7 +246,9 @@ CNV.barplot <- function(df) {
   )
 }
 
-matrix.plot <- function(df) {
+
+
+.matrix.plot <- function(df) {
   # correlation plot
   M = cor(df)
   testRes = corrplot::cor.mtest(df, conf.level = 0.95)
@@ -286,7 +292,9 @@ matrix.plot <- function(df) {
   dev.off()
 }
 
-CNVratio.tumor <- function(df, x) {
+
+
+.CNVratio.tumor <- function(df, x) {
   CNVratio.data <- df %>%
     select(all_of(x), "sample.type", "primary.disease") %>%
     melt(.,id = c("sample.type","primary.disease"), value.name = "CNV") %>%
@@ -294,7 +302,8 @@ CNVratio.tumor <- function(df, x) {
     mutate(primary.disease = forcats::fct_rev(primary.disease))
   output <- list(CNVratio.data, x)
   return(output)}
-CNVratio.boxplot <- function(df) {
+
+.CNVratio.boxplot <- function(df) {
   p1 <- ggplot(
     data = df[[1]],
     aes(
@@ -359,15 +368,15 @@ plot.bargraph.CNV.TCGA <- function(EIF) {
     select(all_of(EIF), "sample.type", "primary.disease")
 
   #stacked bar plots for CNV status in combined TCGA tumors
-  CNV.all.cancer(TCGA.CNV.sampletype.subset) %>%
-    CNV.sum.barplot(.)
+  .CNV.all.cancer(TCGA.CNV.sampletype.subset) %>%
+    .CNV.sum.barplot(.)
 
   #stacked bar plots for CNV status in each TCGA tumor type
   EIF.CNV.ind.cancer <- lapply(EIF,
-                               CNV.ind.cancer,
+                               .CNV.ind.cancer,
                                df = TCGA.CNV.sampletype.subset)
 
-  lapply(EIF.CNV.ind.cancer, CNV.barplot)
+  lapply(EIF.CNV.ind.cancer, .CNV.barplot)
 
 }
 
@@ -375,7 +384,7 @@ plot.bargraph.CNV.TCGA <- function(EIF) {
 plot.matrix.CNVcorr.TCGA <- function(EIF) {
   TCGA.CNVvalue.subset <- TCGA.CNV.value %>%
     select(all_of(EIF)) %>%
-    matrix.plot()
+    .matrix.plot()
 }
 
 # boxplot for EIF ratios in tumors vs adjacent normals
@@ -386,10 +395,10 @@ plot.boxgraph.CNVratio.TCGA <- function(EIF) {
            "primary.disease")
 
   EIF.CNVratio.ind.cancer <- lapply(EIF,
-                                    CNVratio.tumor,
+                                    .CNVratio.tumor,
                                     df = TCGA.CNVratio.sampletype.subset)
 
-  lapply(EIF.CNVratio.ind.cancer, CNVratio.boxplot)
+  lapply(EIF.CNVratio.ind.cancer, .CNVratio.boxplot)
   }
 
 

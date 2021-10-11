@@ -10,7 +10,7 @@ if (!exists("LUAD.Proteomics")){
     mutate_at(vars(-Type, -Sample),funs(as.numeric)) # exclude two columns convert character to number
   }
 
-Scatter.plot <- function(df, x, y, z){
+.Scatter.plot <- function(df, x, y, z){
   p1 <- ggscatter(df,
                   x = x,
                   y = y, #color = "black",
@@ -56,43 +56,43 @@ Scatter.plot <- function(df, x, y, z){
 EIF.pro.correlation <- function() {
   LUAD.Pro <- LUAD.Proteomics[LUAD.Proteomics$Type %in% "Tumor", ]
 
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF4G1", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF4A1", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF4E", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF4G1", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF4A1", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF4E", z = "dark blue")
 
   ## cell division
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "CKAP2", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "CKAP2", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "CKAP2", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "CKAP2", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "CKAP2", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "CKAP2", z = "dark blue")
 
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "CCNA2", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "CCNA2", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "CCNA2", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "CCNA2", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "CCNA2", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "CCNA2", z = "dark blue")
 
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "ERCC6L", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "ERCC6L", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "ERCC6L", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "ERCC6L", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "ERCC6L", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "ERCC6L", z = "dark blue")
 
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "MCM7", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "MCM7", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "MCM7", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "MCM7", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "MCM7", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "MCM7", z = "dark blue")
 
   ## translation
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "RPS2", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "RPS2", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "RPS2", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "RPS2", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "RPS2", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "RPS2", z = "dark blue")
 
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3B", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF3B", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3B", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3B", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF3B", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3B", z = "dark blue")
 
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3G", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF3G", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3G", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3G", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF3G", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3G", z = "dark blue")
 
-  Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF2S3", z = "dark green")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF2S3", z = "dark red")
-  Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF2S3", z = "dark blue")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF2S3", z = "dark green")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF2S3", z = "dark red")
+  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF2S3", z = "dark blue")
 }
 
 ## Boxplots for phosphor-proteomics --------------------------------------------
@@ -120,13 +120,13 @@ CPTAC.LUAD.Clinic.Sampletype <- merge(CPTAC.LUAD.Clinic,
     tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~ "Stage III",
     tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"))
 
-get.EIF.CPTAC.LUAD.Proteomics <- function (x) {
+.get.EIF.CPTAC.LUAD.Proteomics <- function (x) {
   LUAD.Proteomics %>%
     select_if(names(.) %in% c(x, 'Sample'))
     #select(all_of(x), "Sample")
     }
 
-get.EIF.CPTAC.LUAD.Phos <- function (x) {
+.get.EIF.CPTAC.LUAD.Phos <- function (x) {
   read_excel(file.path(data.file.directory, "Phos.xlsx"),
              col_names = FALSE) %>%
     filter(...1 %in% c(x, "Sample")) %>%
@@ -140,7 +140,7 @@ get.EIF.CPTAC.LUAD.Phos <- function (x) {
     rename("Sample" = "Sample na")
   }
 
-protein.boxplot <- function(df, x) {
+.protein.boxplot <- function(df, x) {
   hline <- summarise(group_by(df, Gene, Type), MD = 2**median(normalize)) %>%
     ungroup(.) %>%
     filter(Gene == x & Type == "Tumor") %>%
@@ -233,8 +233,8 @@ protein.boxplot <- function(df, x) {
 }
 
 plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
-  EIF.CPTAC.LUAD.Proteomics <- get.EIF.CPTAC.LUAD.Proteomics(EIF_list)
-  EIF.CPTAC.LUAD.Phos <- get.EIF.CPTAC.LUAD.Phos(EIF_list)
+  EIF.CPTAC.LUAD.Proteomics <- .get.EIF.CPTAC.LUAD.Proteomics(EIF_list)
+  EIF.CPTAC.LUAD.Phos <- .get.EIF.CPTAC.LUAD.Phos(EIF_list)
   EIF.LUAD.Phos.Proteomics.Sampletype <- list(EIF.CPTAC.LUAD.Phos,
                                               EIF.CPTAC.LUAD.Proteomics,
                                               CPTAC.LUAD.Clinic.Sampletype) %>%
@@ -257,7 +257,7 @@ plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
     mutate(normalize = value - NAT.mean) #%>%
 
   lapply(sort(unique(EIF.LUAD.Phos.Proteomics.Sampletype.Normalization$Gene)),
-         protein.boxplot,
+         .protein.boxplot,
          df = EIF.LUAD.Phos.Proteomics.Sampletype.Normalization)
 }
 

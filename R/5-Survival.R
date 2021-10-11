@@ -1,6 +1,6 @@
 # prepare RNA-seq related dataset from TCGA and GTEx----------------------------
 ## prepare TCGA RNA-seq dataset
-get.TCGA.RNAseq <- function() {
+.get.TCGA.RNAseq <- function() {
   TCGA.pancancer <- fread(
     file.path(data.file.directory,
               "EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena"),
@@ -21,7 +21,7 @@ get.TCGA.RNAseq <- function() {
   TCGA.RNAseq_transpose$rn <- colnames(TCGA.RNAseq)
   return (TCGA.RNAseq_transpose)
 }
-TCGA.RNAseq <- get.TCGA.RNAseq()
+TCGA.RNAseq <- .get.TCGA.RNAseq()
 
 ## get OS data ##
 TCGA.OS <- data.table::fread(
@@ -57,7 +57,7 @@ TCGA.RNAseq.OS.sampletype <- list(TCGA.RNAseq, TCGA.OS, TCGA.sampletype) %>%
 
 # Survival analysis and plotting -----------------------------------------------
 ##  KM survival analyses
-KM.curve <- function(gene, data, cutoff, tumor) {
+.KM.curve <- function(gene, data, cutoff, tumor) {
   km <- survival::survfit(SurvObj ~ data$Group, data = data, conf.type = "log-log")
   stats <- survival::survdiff(SurvObj ~ data$Group, data = data, rho = 0) # rho = 0 log-rank
   p.val <- (1 - pchisq(stats$chisq, length(stats$n) - 1)) %>%
@@ -73,7 +73,7 @@ KM.curve <- function(gene, data, cutoff, tumor) {
     color = strata) +
     {if(tumor == "All") labs(title = paste0("All TCGA cancer studies (", nrow(data), " cases)"))
     else labs(title = paste0(tumor, "studies (", nrow(data), " cases)"))
-    }+
+    } +
     theme_bw() +
     theme(
       plot.title = black_bold_16,
@@ -120,7 +120,7 @@ KM.curve <- function(gene, data, cutoff, tumor) {
 }
 
 ## Cox regression model and forest plot
-forest.graph <- function (data, output.file, plot.title, x.tics, x.range){
+.forest.graph <- function (data, output.file, plot.title, x.tics, x.range){
   tabletext1 <- cbind(
     c("Gene", data$factor.id),
     c("No. of\nPatients", data$np),
@@ -205,7 +205,7 @@ forest.graph <- function (data, output.file, plot.title, x.tics, x.range){
   dev.off()
   }
 
-univariable.analysis <- function(df, covariate_names) {
+.univariable.analysis <- function(df, covariate_names) {
   # Multiple Univariate Analyses
   res.cox <- map(covariate_names, function(gene) {
     survivalAnalysis::analyse_multivariate(df,
@@ -245,7 +245,7 @@ univariable.analysis <- function(df, covariate_names) {
   return(data1)
 }
 
-multivariable.analysis <- function(df, covariate_names) {
+.multivariable.analysis <- function(df, covariate_names) {
   res.cox <- survivalAnalysis::analyse_multivariate(
     df,
     vars(OS.time, OS),
@@ -299,7 +299,7 @@ plot.km.EIF.tumor <- function(EIF, cutoff, tumor) {
       RNAseq < quantile(RNAseq, cutoff) ~ "Bottom %",
       RNAseq > quantile(RNAseq, (1-cutoff)) ~ "Top %")) %>%
     mutate(SurvObj = Surv(OS.time, OS == 1))
-  KM.curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)
+  .KM.curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)
 }
 
 plot.coxph.EIF.tumor <- function(EIF, tumor) {
@@ -316,9 +316,9 @@ plot.coxph.EIF.tumor <- function(EIF, tumor) {
     #na.omit(.) %>%
     as.data.frame(.)
 
-  univariable.result <- univariable.analysis(df = df1,
+  univariable.result <- .univariable.analysis(df = df1,
                                            covariate_names = EIF)
-  forest.graph (data = univariable.result,
+  .forest.graph(data = univariable.result,
                 output.file = if(tumor == "All") file.path(output.directory, "Cox", "EIFUniCox.pdf")
                 else paste0(output.directory, "/Cox/", tumor, "EIFUniCox.pdf"),
                 plot.title = if(tumor == "All") "Univariable Cox proportional-hazards regression analysis (all tumor types)"
@@ -329,9 +329,9 @@ plot.coxph.EIF.tumor <- function(EIF, tumor) {
                 else c(0.4, 2.8))
 
 
-  multivariable.result <- multivariable.analysis(df = df1,
+  multivariable.result <- .multivariable.analysis(df = df1,
                                                covariate_names = EIF)
-  forest.graph (data = multivariable.result,
+  .forest.graph(data = multivariable.result,
                 output.file = if(tumor == "All") file.path(output.directory, "Cox", "EIFmultiCox.pdf")
                 else paste0(output.directory, "/Cox/", tumor, "EIFmultiCox.pdf"),
                 plot.title = if(tumor == "All") "Multivariable Cox proportional-hazards regression analysis (all tumor types)"
