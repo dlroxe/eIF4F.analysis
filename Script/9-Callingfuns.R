@@ -1,10 +1,6 @@
 library(eIF4F.analysis)
 
-initialize.data <- function() {
-  initialize.cnv.data()
-}
-
-initialize.data()
+initialize.data <- initialize.cnv.data()
 
 # run master functions in 3-CNV.R ----------------------------------------------
 plot.bargraph.CNV.TCGA(c(

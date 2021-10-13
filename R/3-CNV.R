@@ -8,29 +8,10 @@ TCGA.CNV.sampletype <- NULL
 TCGA.CNVratio.sampletype <- NULL
 TCGA.sampletype <- NULL
 
-initialize.cnv.data() <- function() {
+initialize.cnv.data <- function() {
   TCGA.CNV <<- .get.TCGA.CNV()
   TCGA.CNV.value <<- .get.TCGA.CNV.value()
   TCGA.CNV.ratio <<- .get.TCGA.CNV.ratio()
-
-  TCGA.CNV.sampletype <<- merge(TCGA.CNV,
-                                TCGA.sampletype,
-                                by    = "row.names",
-                                all.x = TRUE) %>%
-    filter(sample.type != "Solid Tissue Normal") %>%
-    {
-      remove_rownames(.) %>%
-        column_to_rownames(., var = "Row.names")
-    }
-
-  TCGA.CNVratio.sampletype <<- merge(TCGA.CNV.ratio,
-                                     TCGA.sampletype,
-                                     by    = "row.names",
-                                     all.x = TRUE) %>%
-    {
-      remove_rownames(.) %>%
-        column_to_rownames(var = "Row.names")
-    }
 
   TCGA.sampletype <<- readr::read_tsv(file.path(
     data.file.directory,
@@ -44,8 +25,31 @@ initialize.cnv.data() <- function() {
         remove_rownames(.) %>%
         column_to_rownames(., var = "sample") %>%
         select("sample_type", "_primary_disease") %>%
-        dplyr::rename("sample.type" = "sample_type",
-                      "primary.disease" = "_primary_disease")
+        dplyr::rename(
+          "sample.type" = "sample_type",
+          "primary.disease" = "_primary_disease"
+        )
+    }
+
+  TCGA.CNV.sampletype <<- merge(TCGA.CNV,
+    TCGA.sampletype,
+    by    = "row.names",
+    all.x = TRUE
+  ) %>%
+    filter(sample.type != "Solid Tissue Normal") %>%
+    {
+      remove_rownames(.) %>%
+        column_to_rownames(., var = "Row.names")
+    }
+
+  TCGA.CNVratio.sampletype <<- merge(TCGA.CNV.ratio,
+    TCGA.sampletype,
+    by    = "row.names",
+    all.x = TRUE
+  ) %>%
+    {
+      remove_rownames(.) %>%
+        column_to_rownames(var = "Row.names")
     }
 }
 
@@ -121,9 +125,12 @@ initialize.cnv.data() <- function() {
 # CNV data analysis and plotting -----------------------------------------------
 .CNV.all.cancer <- function(df) {
   TCGA.CNV.anno.subset.long <- melt(df,
-                                    id = c("sample.type",
-                                           "primary.disease"),
-                                    value.name = "CNV") %>%
+    id = c(
+      "sample.type",
+      "primary.disease"
+    ),
+    value.name = "CNV"
+  ) %>%
     mutate_if(is.character, as.factor)
 
   CNV.sum <-
@@ -135,24 +142,34 @@ initialize.cnv.data() <- function() {
   # reorder stack bars by the frequency of duplication.
   Freq.sum <- dcast(CNV.sum, variable ~ CNV, mean)
   CNV.sum$variable <- factor(CNV.sum$variable,
-                             levels = Freq.sum[order(Freq.sum$`1`),]$variable)
+    levels = Freq.sum[order(Freq.sum$`1`), ]$variable
+  )
   return(CNV.sum)
 }
 
 .CNV.sum.barplot <- function(data) {
-  p1 <- ggplot(data,
-               aes(fill = CNV,
-                   y = Freq,
-                   x = variable)) +
-    geom_bar(stat = "identity",
-             position = "fill") +
+  p1 <- ggplot(
+    data,
+    aes(
+      fill = CNV,
+      y = Freq,
+      x = variable
+    )
+  ) +
+    geom_bar(
+      stat = "identity",
+      position = "fill"
+    ) +
     geom_col() +
     geom_text(aes(label = paste0(Freq / 100, "%")),
-              position = position_stack(vjust = 0.5),
-              size = 4) +
+      position = position_stack(vjust = 0.5),
+      size = 4
+    ) +
     # scale_y_continuous(labels = scales::percent_format())+
-    labs(x = "Tumor types (TCGA pan cancer atlas 2018)",
-         y = "All TCGA tumors combined") +
+    labs(
+      x = "Tumor types (TCGA pan cancer atlas 2018)",
+      y = "All TCGA tumors combined"
+    ) +
     coord_flip() +
     theme_bw() +
     theme(
@@ -195,13 +212,18 @@ initialize.cnv.data() <- function() {
 
 .CNV.ind.cancer <- function(df, x) {
   TCGA.CNV.anno.subset.long <- df %>%
-    select(all_of(x),
-           "sample.type",
-           "primary.disease") %>%
+    select(
+      all_of(x),
+      "sample.type",
+      "primary.disease"
+    ) %>%
     melt(.,
-         id = c("sample.type",
-                "primary.disease"),
-         value.name = "CNV") %>%
+      id = c(
+        "sample.type",
+        "primary.disease"
+      ),
+      value.name = "CNV"
+    ) %>%
     mutate_if(is.character, as.factor)
 
   CNV.sum <-
@@ -216,16 +238,20 @@ initialize.cnv.data() <- function() {
 }
 
 .CNV.barplot <- function(df) {
-  p1 <- ggplot(df[[1]],
-               aes(
-                 fill = CNV,
-                 order = as.numeric(CNV),
-                 y = Freq,
-                 x = primary.disease
-               )) +
+  p1 <- ggplot(
+    df[[1]],
+    aes(
+      fill = CNV,
+      order = as.numeric(CNV),
+      y = Freq,
+      x = primary.disease
+    )
+  ) +
     geom_bar(stat = "identity", position = "fill") +
-    labs(x = "Tumor types (TCGA pan cancer atlas 2018)",
-         y = paste0("Percentages of ", df[[2]], " CNVs")) +
+    labs(
+      x = "Tumor types (TCGA pan cancer atlas 2018)",
+      y = paste0("Percentages of ", df[[2]], " CNVs")
+    ) +
     coord_flip() +
     theme_bw() +
     theme(
@@ -254,9 +280,11 @@ initialize.cnv.data() <- function() {
         "Gain\n 3",
         "Amp\n 3+"
       ),
-      values = c("darkblue", "blue",
-                 "lightgreen", "red",
-                 "darkred")
+      values = c(
+        "darkblue", "blue",
+        "lightgreen", "red",
+        "darkred"
+      )
     )
   print(p1)
   ggplot2::ggsave(
@@ -319,8 +347,9 @@ initialize.cnv.data() <- function() {
   CNVratio.data <- df %>%
     select(all_of(x), "sample.type", "primary.disease") %>%
     melt(.,
-         id = c("sample.type", "primary.disease"),
-         value.name = "CNV") %>%
+      id = c("sample.type", "primary.disease"),
+      value.name = "CNV"
+    ) %>%
     mutate_if(is.character, as.factor) %>%
     mutate(primary.disease = forcats::fct_rev(primary.disease))
   output <- list(CNVratio.data, x)
@@ -328,18 +357,22 @@ initialize.cnv.data() <- function() {
 }
 
 .CNVratio.boxplot <- function(df) {
-  p1 <- ggplot(data = df[[1]],
-               aes(
-                 y = 2 ** CNV,
-                 x = primary.disease,
-                 # x = f.ordered1,
-                 color = primary.disease
-               )) +
+  p1 <- ggplot(
+    data = df[[1]],
+    aes(
+      y = 2**CNV,
+      x = primary.disease,
+      # x = f.ordered1,
+      color = primary.disease
+    )
+  ) +
     # ylim(0, 3) +
     geom_hline(yintercept = 1, linetype = "dashed") +
-    stat_n_text(size = 5,
-                fontface = "bold",
-                hjust = 0) +
+    stat_n_text(
+      size = 5,
+      fontface = "bold",
+      hjust = 0
+    ) +
     geom_boxplot(
       alpha = .01,
       outlier.colour = NA,
@@ -347,8 +380,10 @@ initialize.cnv.data() <- function() {
       # width    = 1,
       position = position_dodge(width = .9)
     ) +
-    labs(x = "primary disease",
-         y = paste(df[[2]], "CNV ratio", "(tumor/normal)")) +
+    labs(
+      x = "primary disease",
+      y = paste(df[[2]], "CNV ratio", "(tumor/normal)")
+    ) +
     # scale_color_manual(values = col_vector) +
     coord_flip() +
     theme_bw() +
@@ -391,8 +426,9 @@ plot.bargraph.CNV.TCGA <- function(EIF) {
 
   # stacked bar plots for CNV status in each TCGA tumor type
   EIF.CNV.ind.cancer <- lapply(EIF,
-                               .CNV.ind.cancer,
-                               df = TCGA.CNV.sampletype.subset)
+    .CNV.ind.cancer,
+    df = TCGA.CNV.sampletype.subset
+  )
 
   lapply(EIF.CNV.ind.cancer, .CNV.barplot)
 }
@@ -407,13 +443,16 @@ plot.matrix.CNVcorr.TCGA <- function(EIF) {
 # boxplot for EIF ratios in tumors vs adjacent normals
 plot.boxgraph.CNVratio.TCGA <- function(EIF) {
   TCGA.CNVratio.sampletype.subset <- TCGA.CNVratio.sampletype %>%
-    select(all_of(EIF),
-           "sample.type",
-           "primary.disease")
+    select(
+      all_of(EIF),
+      "sample.type",
+      "primary.disease"
+    )
 
   EIF.CNVratio.ind.cancer <- lapply(EIF,
-                                    .CNVratio.tumor,
-                                    df = TCGA.CNVratio.sampletype.subset)
+    .CNVratio.tumor,
+    df = TCGA.CNVratio.sampletype.subset
+  )
 
   lapply(EIF.CNVratio.ind.cancer, .CNVratio.boxplot)
 }
