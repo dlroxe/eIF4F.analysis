@@ -1,71 +1,46 @@
-# prepare RNA-seq related dataset from TCGA and GTEx ---------------------------
+# prepare CPTAC proteomics dataset
 # RNA-seq data were import in 4-DEG.R
-if (!exists("TCGA.GTEX.RNAseq")) {
-  .get.TCGA.GTEX.RNAseq <- function() {
-    TCGA.pancancer <- data.table::fread(
-      file.path(
-        data.file.directory,
-        "TcgaTargetGtex_RSEM_Hugo_norm_count"
-      ),
-      data.table = FALSE
-    ) %>%
-      as.data.frame(.) %>%
-      distinct(., sample, .keep_all = TRUE) %>%
-      na.omit(.) %>%
-      remove_rownames(.) %>%
-      column_to_rownames(var = "sample")
-    # transpose function from the data.table library keeps numeric values as numeric.
-    TCGA.pancancer_transpose <- data.table::transpose(TCGA.pancancer)
-    # get row and colnames in order
-    rownames(TCGA.pancancer_transpose) <- colnames(TCGA.pancancer)
-    colnames(TCGA.pancancer_transpose) <- rownames(TCGA.pancancer)
-    return(TCGA.pancancer_transpose)
-  }
-  TCGA.GTEX.RNAseq <- .get.TCGA.GTEX.RNAseq()
-}
+#CPTAC.LUAD.Proteomics <- NULL
+#CPTAC.LUAD.sampletype <- NULL
+#CPTAC.LUAD.Proteomics.sampletype <- NULL
 
-if (!exists("TCGA.GTEX.sampletype")) {
-  TCGA.GTEX.sampletype <- readr::read_tsv(
+initialize.proteomics.data <- function() {
+  CPTAC.LUAD.Proteomics <<- .CPTAC.LUAD.Proteomics()
+
+  CPTAC.LUAD.sampletype <<- read_excel(
     file.path(
       data.file.directory,
-      "TcgaTargetGTEX_phenotype.txt"
+      "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"
     )
   ) %>%
     {
       as.data.frame(.) %>%
-        distinct(., sample, .keep_all = TRUE) %>%
-        # na.omit(.) %>%
-        remove_rownames() %>%
-        column_to_rownames(var = "sample") %>%
-        select(
-          "_sample_type",
-          "primary disease or tissue",
-          "_primary_site",
-          "_study"
-        ) %>%
-        rename(
-          "sample.type" = "_sample_type",
-          "primary.disease" = "primary disease or tissue",
-          "primary.site" = "_primary_site",
-          "study" = "_study"
-        )
+        select("Aliquot (Specimen Label)", "Type","Participant ID (case_id)") %>%
+        distinct(., `Aliquot (Specimen Label)`, .keep_all = TRUE) #%>%
+        #remove_rownames() %>%
+        #column_to_rownames(var = "Aliquot (Specimen Label)")
     }
-}
-
-if (!exists("TCGA.GTEX.RNAseq.sampletype")) {
-  TCGA.GTEX.RNAseq.sampletype <- merge(TCGA.GTEX.RNAseq,
-    TCGA.GTEX.sampletype,
-    by    = "row.names",
-    all.x = TRUE
+  CPTAC.LUAD.Proteomics.sampletype <<- merge(CPTAC.LUAD.Proteomics,
+                                            CPTAC.LUAD.sampletype,
+                                            by.x = "row.names",
+                                            by.y = "Aliquot (Specimen Label)",
+                                            #by    = "row.names",
+                                            all.x = TRUE
   ) %>%
-    {
-      remove_rownames(.) %>%
-        column_to_rownames(var = "Row.names")
-    }
+    remove_rownames() %>%
+    column_to_rownames(var = "Row.names")%>%
+    mutate(Type = factor(Type,
+                         levels = c(
+                           "Normal",
+                           "Tumor"
+                         ),
+                         labels = c(
+                           "Adjacent Normal Tissue (CPTAC)",
+                           "Primary Tumor (CPTAC)"
+                         )
+    ))
 }
 
-
-### CPTAC data
 .CPTAC.LUAD.Proteomics <- function() {
   CPTAC.LUAD.Proteomics <- fread(
     file.path(
@@ -88,41 +63,6 @@ if (!exists("TCGA.GTEX.RNAseq.sampletype")) {
   )
   return(CPTAC.LUAD.Proteomics.t)
 }
-CPTAC.LUAD.Proteomics <- .CPTAC.LUAD.Proteomics()
-
-
-CPTAC.LUAD.sampletype <- read_excel(
-  file.path(
-    data.file.directory,
-    "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"
-  )
-) %>%
-  {
-    as.data.frame(.) %>%
-      select("Aliquot (Specimen Label)", "Type") %>%
-      distinct(., `Aliquot (Specimen Label)`, .keep_all = TRUE) %>%
-      remove_rownames() %>%
-      column_to_rownames(var = "Aliquot (Specimen Label)") %>%
-      mutate(Type = factor(Type,
-        levels = c(
-          "Normal",
-          "Tumor"
-        ),
-        labels = c(
-          "Adjacent Normal Tissue (CPTAC)",
-          "Primary Tumor (CPTAC)"
-        )
-      ))
-  }
-
-
-CPTAC.LUAD.Proteomics.sampletype <- merge(CPTAC.LUAD.Proteomics,
-  CPTAC.LUAD.sampletype,
-  by    = "row.names",
-  all.x = TRUE
-) %>%
-  remove_rownames() %>%
-  column_to_rownames(var = "Row.names")
 
 
 # functions for analyses and plotting  -----------------------------------------
@@ -584,28 +524,4 @@ plot.PCA.CPTAC.LUAD <- function(EIF.list) {
 
 
 
-# Run master functions ---------------------------------------------------------
-# plot.PCA.TCGA.GTEX(c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1",
-#                     "PABPC1", "MKNK1", "MKNK2"))
 
-# plot.PCA.TCGA.GTEX(c(
-#  "EIF4G1","EIF4A1","EIF4E", "EIF4EBP1",
-#  "PABPC1", "MKNK1", "MKNK2",
-#  "EIF4B", "EIF4H",
-#  "MYC", "JUN"
-# ))
-
-# plot.PCA.TCGA.GTEX(c("EIF4G1", "EIF4G2","EIF4G3",
-#                     "EIF4A1","EIF4A2",
-#                     "EIF4E", "EIF4E2", "EIF4E3",
-#                     "EIF4EBP1", "EIF4EBP2","MTOR",
-#                     "EIF3C","EIF3D","EIF3E","PABPC1",
-#                     "MKNK1", "MKNK2",
-#                     "TP53","MYC"))
-
-# plot.PCA.TCGA.GTEX.tumor(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
-#                           "PABPC1", "MKNK1", "MKNK2"),
-#                         "Lung")
-
-# plot.PCA.CPTAC.LUAD(c("EIF4E", "EIF4G1", "EIF4A1", "PABPC1",
-#                      "MKNK1", "MKNK2", "EIF4EBP1"))

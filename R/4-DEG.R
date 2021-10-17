@@ -1,4 +1,48 @@
 # prepare RNA-seq related dataset from TCGA and GTEx----------------------------
+#TCGA.GTEX.RNAseq <- NULL
+#TCGA.GTEX.sampletype <- NULL
+#TCGA.GTEX.RNAseq.sampletype <- NULL
+
+initialize.RNAseq.data <- function() {
+  TCGA.GTEX.RNAseq <<- .get.TCGA.GTEX.RNAseq()
+
+  TCGA.GTEX.sampletype <<- readr::read_tsv(
+    file.path(
+      data.file.directory,
+      "TcgaTargetGTEX_phenotype.txt"
+    )
+  ) %>%
+    {
+      as_tibble(.) %>%
+        distinct(., sample, .keep_all = TRUE) %>%
+        remove_rownames() %>%
+        column_to_rownames(var = "sample") %>%
+        select(
+          "_sample_type",
+          "primary disease or tissue",
+          "_primary_site",
+          "_study"
+        ) %>%
+        rename(
+          "sample.type" = "_sample_type",
+          "primary.disease" = "primary disease or tissue",
+          "primary.site" = "_primary_site",
+          "study" = "_study"
+        )
+    }
+
+  TCGA.GTEX.RNAseq.sampletype <<- merge(TCGA.GTEX.RNAseq,
+                                       TCGA.GTEX.sampletype,
+                                       by    = "row.names",
+                                       all.x = TRUE
+  ) %>%
+    {
+      remove_rownames(.) %>%
+        column_to_rownames(var = "Row.names")
+    }
+
+}
+
 .get.TCGA.GTEX.RNAseq <- function() {
   TCGA.pancancer <- data.table::fread(
     file.path(
@@ -19,42 +63,6 @@
   colnames(TCGA.pancancer_transpose) <- rownames(TCGA.pancancer)
   return(TCGA.pancancer_transpose)
 }
-TCGA.GTEX.RNAseq <- .get.TCGA.GTEX.RNAseq()
-
-TCGA.GTEX.sampletype <- readr::read_tsv(
-  file.path(
-    data.file.directory,
-    "TcgaTargetGTEX_phenotype.txt"
-  )
-) %>%
-  {
-    as_tibble(.) %>%
-      distinct(., sample, .keep_all = TRUE) %>%
-      remove_rownames() %>%
-      column_to_rownames(var = "sample") %>%
-      select(
-        "_sample_type",
-        "primary disease or tissue",
-        "_primary_site",
-        "_study"
-      ) %>%
-      rename(
-        "sample.type" = "_sample_type",
-        "primary.disease" = "primary disease or tissue",
-        "primary.site" = "_primary_site",
-        "study" = "_study"
-      )
-  }
-
-TCGA.GTEX.RNAseq.sampletype <- merge(TCGA.GTEX.RNAseq,
-  TCGA.GTEX.sampletype,
-  by    = "row.names",
-  all.x = TRUE
-) %>%
-  {
-    remove_rownames(.) %>%
-      column_to_rownames(var = "Row.names")
-  }
 
 
 # Differential expression analysis and plotting --------------------------------
@@ -218,6 +226,7 @@ TCGA.GTEX.RNAseq.sampletype <- merge(TCGA.GTEX.RNAseq,
     useDingbats = FALSE
   )
 }
+
 
 
 .RNAseq.tumortype <- function(df) {
@@ -634,21 +643,3 @@ plot.cormatrix.RNAseq <- function(EIF) {
 }
 
 
-
-# Run master functions ---------------------------------------------------------
-# plot.boxgraph.RNAseq.TCGA(c("EIF4G1","EIF4G2","EIF4G3","PABPC1",
-#                            "EIF4A1","EIF4A2","EIF4B","EIF4H",
-#                            "EIF4E","EIF4E2","EIF4E3",
-#                            "EIF4EBP1","EIF3D"))
-
-# plot.RNAratio.TCGA(c("EIF4E","EIF4E2","EIF4E3","EIF4EBP1",
-#                     "EIF4G1","EIF4G2","EIF4G3","EIF3D",#
-#                     "EIF4A1","EIF4A2"))
-
-# plot.cormatrix.RNAseq(c("EIF4G1", "EIF4G2","EIF4G3",
-#                        "EIF4A1","EIF4A2",
-#                        "EIF4E", "EIF4E2", "EIF4E3",
-#                        "EIF4EBP1", "EIF4EBP2","MTOR",
-#                        "EIF3C","EIF3D","EIF3E","PABPC1",
-#                        "MKNK1", "MKNK2",
-#                        "TP53","MYC"))

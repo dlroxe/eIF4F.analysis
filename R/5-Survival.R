@@ -1,5 +1,55 @@
-# prepare RNA-seq related dataset from TCGA and GTEx----------------------------
-## prepare TCGA RNA-seq dataset
+# prepare TCGA survival and RNA-seq dataset-------------------------------------
+#TCGA.RNAseq <- NULL
+#TCGA.OS <- NULL
+#TCGA.sampletype <- NULL
+#TCGA.RNAseq.OS.sampletype <- NULL
+
+initialize.survival.data <- function() {
+  TCGA.RNAseq <<- .get.TCGA.RNAseq()
+  ## get OS data ##
+  TCGA.OS <<- data.table::fread(
+    file.path(
+      data.file.directory,
+      "Survival_SupplementalTable_S1_20171025_xena_sp"
+    ),
+    data.table = FALSE
+  ) %>%
+    {
+      distinct(., sample, .keep_all = TRUE) %>%
+        # remove_rownames() %>%
+        # column_to_rownames(var = 'sample') %>%
+        select("sample", "OS", "OS.time") %>%
+        rename(rn = sample)
+    }
+  ## get sample type data ##
+  TCGA.sampletype <<- readr::read_tsv(
+    file.path(
+      data.file.directory,
+      "TCGA_phenotype_denseDataOnlyDownload.tsv"
+    )
+  ) %>%
+    {
+      as_tibble(.) %>%
+        distinct(., sample, .keep_all = TRUE) %>%
+        select(
+          "sample",
+          "sample_type",
+          "_primary_disease"
+        ) %>%
+        rename(
+          rn = sample,
+          sample.type = sample_type,
+          primary.disease = `_primary_disease`
+        )
+    }
+  ## combine OS, sample type and RNAseq data ##
+  TCGA.RNAseq.OS.sampletype <<- list(TCGA.RNAseq, TCGA.OS, TCGA.sampletype) %>%
+    reduce(full_join, by = "rn") %>%
+    remove_rownames(.) %>%
+    column_to_rownames(var = "rn") %>%
+    filter(sample.type != "Solid Tissue Normal")
+}
+
 .get.TCGA.RNAseq <- function() {
   TCGA.pancancer <- fread(
     file.path(
@@ -25,52 +75,7 @@
   TCGA.RNAseq_transpose$rn <- colnames(TCGA.RNAseq)
   return(TCGA.RNAseq_transpose)
 }
-TCGA.RNAseq <- .get.TCGA.RNAseq()
 
-## get OS data ##
-TCGA.OS <- data.table::fread(
-  file.path(
-    data.file.directory,
-    "Survival_SupplementalTable_S1_20171025_xena_sp"
-  ),
-  data.table = FALSE
-) %>%
-  {
-    distinct(., sample, .keep_all = TRUE) %>%
-      # remove_rownames() %>%
-      # column_to_rownames(var = 'sample') %>%
-      select("sample", "OS", "OS.time") %>%
-      rename(rn = sample)
-  }
-
-## get sample type data ##
-TCGA.sampletype <- readr::read_tsv(
-  file.path(
-    data.file.directory,
-    "TCGA_phenotype_denseDataOnlyDownload.tsv"
-  )
-) %>%
-  {
-    as_tibble(.) %>%
-      distinct(., sample, .keep_all = TRUE) %>%
-      select(
-        "sample",
-        "sample_type",
-        "_primary_disease"
-      ) %>%
-      rename(
-        rn = sample,
-        sample.type = sample_type,
-        primary.disease = `_primary_disease`
-      )
-  }
-
-## combine OS, sample type and RNAseq data ##
-TCGA.RNAseq.OS.sampletype <- list(TCGA.RNAseq, TCGA.OS, TCGA.sampletype) %>%
-  reduce(full_join, by = "rn") %>%
-  remove_rownames(.) %>%
-  column_to_rownames(var = "rn") %>%
-  filter(sample.type != "Solid Tissue Normal")
 
 # Survival analysis and plotting -----------------------------------------------
 ##  KM survival analyses
@@ -417,54 +422,3 @@ plot.coxph.EIF.tumor <- function(EIF, tumor) {
 }
 
 
-# Run master functions ---------------------------------------------------------
-# lapply(c("EIF4G1","EIF4G2", "EIF4G3",
-#         "EIF4A1","EIF4A2",
-#         "EIF4E", "EIF4E2", "EIF4E3",
-#         "EIF3D", "EIF3E",
-#         "EIF4EBP1", "EIF4EBP2",
-#         "EIF4H", "EIF4B", "MYC",
-#         "PABPC1", "MKNK1", "MKNK2"),
-#       plot.km.EIF.tumor, cutoff = 0.2, tumor = "All")
-
-# lapply(c("EIF4G1","EIF4G2", "EIF4G3",
-#         "EIF4A1","EIF4A2",
-#         "EIF4E", "EIF4E2", "EIF4E3",
-#         "EIF3D", "EIF3E","EIF4EBP1", "EIF4EBP2",
-#         "EIF4H", "EIF4B", "MYC",
-#         "PABPC1", "MKNK1", "MKNK2"),
-#       plot.km.EIF.tumor, cutoff =  0.2,
-#       tumor = "lung adenocarcinoma"
-# )
-
-# plot.km.EIF.tumor(EIF = "EIF4E",
-#                  cutoff =  0.3,
-#                  tumor = "lung adenocarcinoma")
-
-# plot.km.EIF.tumor(EIF = "EIF4E",
-#                  cutoff =  0.2,
-#                  tumor = "skin cutaneous melanoma")
-
-# plot.km.EIF.tumor(EIF = "EIF4E",
-#                  cutoff =  0.3,
-#                  tumor = "All")
-
-# plot.coxph.EIF.tumor(c(
-#  "EIF4E", "EIF4E2", "EIF4E3",
-#  "EIF4G1", "EIF4G2", "EIF4G3",
-#  "EIF4A1", "EIF4A2", "EIF3D",
-#  "EIF3E", "EIF4EBP1", "EIF4EBP2", #"PABPC1",
-#  "MKNK1", "MKNK2", "EIF4B", "EIF4H",
-#  "MTOR", #"RPS6KB1",
-#  "MYC"
-# ), "All")
-
-# plot.coxph.EIF.tumor(c(
-#  "EIF4E", "EIF4E2", "EIF4E3",
-#  "EIF4G1", "EIF4G2", "EIF4G3",
-#  "EIF4A1", "EIF4A2", "EIF3D",
-#  "EIF3E", "EIF4EBP1", "EIF4EBP2", #"PABPC1",
-#  "MKNK1", "MKNK2", "EIF4B", "EIF4H",
-#  "MTOR", #"RPS6KB1",
-#  "MYC"
-# ), "lung adenocarcinoma")

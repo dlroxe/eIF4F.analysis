@@ -1,28 +1,60 @@
-CCLE.RNAseq <- fread(
-  file.path(
-    data.file.directory,
-    "CCLE_expression_full.csv"
-  ),
-  data.table = FALSE
-)
+# prepare RNA proteomics datasets from CCLE and CPTAC LUAD
+#CCLE.RNAseq <- NULL
+#CCLE.Anno <- NULL
+#CCLE.Proteomics <- NULL
+#LUAD.Proteomics <- NULL
+#LUAD.RNAseq <- NULL
 
-CCLE.Anno <- fread(
-  file.path(
-    data.file.directory,
-    "sample_info.csv"
-  ),
-  data.table = FALSE
-) %>% select(1, 2)
+initialize.RNApro.data <- function() {
+  CCLE.RNAseq <<- fread(
+    file.path(
+      data.file.directory,
+      "CCLE_expression_full.csv"
+    ),
+    data.table = FALSE
+  )
 
-CCLE.EIF.Proteomics <- fread(
-  file.path(
-    data.file.directory,
-    "protein_quant_current_normalized.csv"
-  ),
-  data.table = FALSE
-)
+  CCLE.Anno <<- fread(
+    file.path(
+      data.file.directory,
+      "sample_info.csv"
+    ),
+    data.table = FALSE
+  ) %>% select(1, 2)
+
+  CCLE.Proteomics <<- fread(
+    file.path(
+      data.file.directory,
+      "protein_quant_current_normalized.csv"
+    ),
+    data.table = FALSE
+  )
+
+  LUAD.Proteomics <<- read_excel(
+    file.path(data.file.directory, "Protein.xlsx"),
+    col_names = FALSE
+  ) %>%
+    # as.data.frame(.) %>%
+    mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
+    column_to_rownames(var = "...1") %>%
+    t(.) %>%
+    as_tibble(.) %>%
+    mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
+
+  LUAD.RNAseq <<- read_excel(
+    file.path(data.file.directory, "RNA.xlsx"),
+    col_names = FALSE
+  ) %>%
+    # as_tibble(.) %>%
+    mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
+    column_to_rownames(var = "...1") %>%
+    t(.) %>%
+    as_tibble(.) %>%
+    mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
+}
 
 
+### select EIF expression plotting ---------------------------------------------
 .get.CCLE.EIF.RNAseq <- function(EIF) {
   CCLE.RNAseq <- CCLE.RNAseq %>%
     rename("DepMap_ID" = "V1") %>%
@@ -30,7 +62,7 @@ CCLE.EIF.Proteomics <- fread(
 }
 
 .get.CCLE.EIF.Proteomics <- function(EIF) {
-  CCLE.EIF.Proteomics <- CCLE.EIF.Proteomics %>%
+  CCLE.EIF.Proteomics <- CCLE.Proteomics %>%
     filter(Gene_Symbol == EIF)
   if (nrow(CCLE.EIF.Proteomics) > 1) {
     df <- CCLE.EIF.Proteomics %>%
@@ -46,7 +78,7 @@ CCLE.EIF.Proteomics <- fread(
     column_to_rownames(var = "Gene_Symbol") %>%
     select(contains("TenPx"), -contains("_Peptides")) %>%
     t(.) %>%
-    as_tibble(.) %>%
+    as.data.frame(.) %>%
     mutate(
       Celline = sub("\\_.*", "", row.names(.)),
       Type = sub(".*_ *(.*?) *_.*", "\\1", row.names(.))
@@ -64,7 +96,7 @@ CCLE.EIF.Proteomics <- fread(
     add = "reg.line", # conf.int = TRUE,
     cor.coef = TRUE,
     cor.method = "pearson",
-    title = x,
+    title = paste(x,"(", y, ")"),
     xlab = "Protein expresion",
     ylab = "RNA expression"
   ) +
@@ -91,59 +123,25 @@ CCLE.EIF.Proteomics <- fread(
   )
 }
 
-## Figure 5 ##
-######################################
-#### RNA protein correlation CCLE ####
-######################################
+
+## RNA protein correlation CCLE-------------------------------------------------
 plot.EIF.cor.CCLE <- function(EIF) {
-  .get.CCLE.EIF.RNAseq(EIF) %>%
-    full_join(CCLE.Anno,
-      by = "DepMap_ID"
-    ) %>%
+  x <- .get.CCLE.EIF.RNAseq(EIF) %>%
+    full_join(CCLE.Anno, by = "DepMap_ID") %>%
     na.omit(.) %>%
     select(-DepMap_ID) %>%
     rename(
       "Celline" = "stripped_cell_line_name",
       !!paste0(EIF, ".rna") := contains(EIF)
     ) %>%
-    full_join(.get.CCLE.EIF.Proteomics(EIF),
-      by = "Celline"
-    ) %>%
+    full_join(.get.CCLE.EIF.Proteomics(EIF), by = "Celline") %>%
     na.omit(.) %>%
     .protein.RNA.scatter.plot(df = ., x = EIF, y = "CCLE")
 }
-# plot.EIF.cor.CCLE("EIF4A1")
-
-# lapply(c("EIF4G1","EIF4A1","EIF4E","EIF4EBP1","PABPC1"), plot.EIF.cor.CCLE)
 
 
-######################################
-#### RNA protein correlation LUAD ####
-######################################
-LUAD.Proteomics <- read_excel(
-  file.path(data.file.directory, "Protein.xlsx"),
-  col_names = FALSE
-) %>%
-  # as.data.frame(.) %>%
-  mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
-  column_to_rownames(var = "...1") %>%
-  t(.) %>%
-  as_tibble(.) %>%
-  mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
 
-
-LUAD.RNAseq <- read_excel(
-  file.path(data.file.directory, "RNA.xlsx"),
-  col_names = FALSE
-) %>%
-  # as_tibble(.) %>%
-  mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
-  column_to_rownames(var = "...1") %>%
-  t(.) %>%
-  as_tibble(.) %>%
-  mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
-
-
+## RNA protein correlation LUAD-------------------------------------------------
 plot.EIF.cor.LUAD <- function(EIF) {
   EIF.LUAD.Proteomics <- LUAD.Proteomics %>%
     select(all_of(EIF), "Type", "Sample") %>%
@@ -164,74 +162,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
 
 
 ## Heatmap of correlation analysis ##
-
-# prepare RNA-seq related dataset from TCGA and GTEx----------------------------
 # RNA-seq data were import in 4-DEG.R
-if (!exists("TCGA.GTEX.RNAseq")) {
-  .get.TCGA.GTEX.RNAseq <- function() {
-    TCGA.pancancer <- data.table::fread(
-      file.path(
-        data.file.directory,
-        "TcgaTargetGtex_RSEM_Hugo_norm_count"
-      ),
-      data.table = FALSE
-    ) %>%
-      as_tibble(.) %>%
-      distinct(., sample, .keep_all = TRUE) %>%
-      na.omit(.) %>%
-      remove_rownames(.) %>%
-      column_to_rownames(var = "sample")
-
-    # transpose function from the data.table library keeps numeric values as numeric.
-    TCGA.pancancer_transpose <- data.table::transpose(TCGA.pancancer)
-    # get row and colnames in order
-    rownames(TCGA.pancancer_transpose) <- colnames(TCGA.pancancer)
-    colnames(TCGA.pancancer_transpose) <- rownames(TCGA.pancancer)
-    return(TCGA.pancancer_transpose)
-  }
-  TCGA.GTEX.RNAseq <- .get.TCGA.GTEX.RNAseq()
-}
-
-if (!exists("TCGA.GTEX.sampletype")) {
-  TCGA.GTEX.sampletype <- readr::read_tsv(
-    file.path(
-      data.file.directory,
-      "TcgaTargetGTEX_phenotype.txt"
-    )
-  ) %>%
-    {
-      as_tibble(.) %>%
-        distinct(., sample, .keep_all = TRUE) %>%
-        # na.omit(.) %>%
-        remove_rownames() %>%
-        column_to_rownames(var = "sample") %>%
-        select(
-          "_sample_type",
-          "primary disease or tissue",
-          "_primary_site",
-          "_study"
-        ) %>%
-        rename(
-          "sample.type" = "_sample_type",
-          "primary.disease" = "primary disease or tissue",
-          "primary.site" = "_primary_site",
-          "study" = "_study"
-        )
-    }
-}
-
-if (!exists("TCGA.GTEX.RNAseq.sampletype")) {
-  TCGA.GTEX.RNAseq.sampletype <- merge(TCGA.GTEX.RNAseq,
-    TCGA.GTEX.sampletype,
-    by    = "row.names",
-    all.x = TRUE
-  ) %>%
-    {
-      remove_rownames(.) %>%
-        column_to_rownames(var = "Row.names")
-    }
-}
-
 .EIF.correlation <- function(df, y) {
   TCGA.GTEX.tumor <- df[
     df$sample.type %in% y,
@@ -655,7 +586,7 @@ if (!exists("TCGA.GTEX.RNAseq.sampletype")) {
 
 
 
-### find posCOR and negCOR in the overlapping CORs from all cancer cases
+## find posCOR and negCOR in the overlapping CORs from all cancer cases
 plot.Venn.all <- function(x) {
   TCGA.GTEX.RNAseq.sampletype <- TCGA.GTEX.RNAseq.sampletype %>%
     filter(if (x != "All") primary.site == x else TRUE) %>%
@@ -736,8 +667,3 @@ plot.Venn.all <- function(x) {
 }
 
 
-# Run master functions ---------------------------------------------------------
-# lapply(c("EIF4G1","EIF4A1","EIF4E","EIF4EBP1","PABPC1"), plot.EIF.cor.LUAD)
-
-# plot.Venn.all(x = "All")
-# plot.Venn.all(x = "Lung")

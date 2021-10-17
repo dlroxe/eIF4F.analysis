@@ -1,12 +1,12 @@
 # prepare CNV related datasets from TCGA ---------------------------------------
 
 # TODO: document these variables more comprehensively
-TCGA.CNV <- NULL # CNV data with threshold
-TCGA.CNV.value <- NULL # CNV data with numeric value
-TCGA.CNV.ratio <- NULL # CNV ration between tumor and NATs
-TCGA.CNV.sampletype <- NULL
-TCGA.CNVratio.sampletype <- NULL
-TCGA.sampletype <- NULL
+#TCGA.CNV <- NULL # CNV data with threshold
+#TCGA.CNV.value <- NULL # CNV data with numeric value
+#TCGA.CNV.ratio <- NULL # CNV ratios between tumor and NATs
+#TCGA.CNV.sampletype <- NULL
+#TCGA.CNVratio.sampletype <- NULL
+#TCGA.sampletype <- NULL
 
 initialize.cnv.data <- function() {
   TCGA.CNV <<- .get.TCGA.CNV()

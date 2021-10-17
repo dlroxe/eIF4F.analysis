@@ -1,7 +1,15 @@
 library(eIF4F.analysis)
 
-initialize.data <- initialize.cnv.data()
+initialize.data <- function() {
+  initialize.cnv.data()
+  initialize.RNAseq.data()
+  initialize.survival.data()
+  initialize.proteomics.data()
+  initialize.RNApro.data()
+  initialize.phosphoproteomics.data()
+}
 
+initialize.data()
 # run master functions in 3-CNV.R ----------------------------------------------
 plot.bargraph.CNV.TCGA(c(
   "TP53", "EIF4A1", "EIF4A2",
