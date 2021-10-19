@@ -8,8 +8,12 @@ initialize.data <- function() {
   initialize.RNApro.data()
   initialize.phosphoproteomics.data()
 }
-
 initialize.data()
+
+loadLibraries()
+
+initialize.format()
+
 # run master functions in 3-CNV.R ----------------------------------------------
 plot.bargraph.CNV.TCGA(c(
   "TP53", "EIF4A1", "EIF4A2",

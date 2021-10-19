@@ -11,24 +11,23 @@ initialize.RNAseq.data <- function() {
       data.file.directory,
       "TcgaTargetGTEX_phenotype.txt"
     )
-  ) %>%
-    {
+  ) %>% {
       as_tibble(.) %>%
         distinct(., sample, .keep_all = TRUE) %>%
         remove_rownames() %>%
         column_to_rownames(var = "sample") %>%
-        select(
+      dplyr::select(
           "_sample_type",
           "primary disease or tissue",
           "_primary_site",
           "_study"
         ) %>%
-        rename(
+      dplyr::rename(
           "sample.type" = "_sample_type",
           "primary.disease" = "primary disease or tissue",
           "primary.site" = "_primary_site",
           "study" = "_study"
-        )
+      )
     }
 
   TCGA.GTEX.RNAseq.sampletype <<- merge(TCGA.GTEX.RNAseq,
