@@ -1,8 +1,4 @@
 # prepare TCGA survival and RNA-seq dataset-------------------------------------
-#TCGA.RNAseq <- NULL
-#TCGA.OS <- NULL
-#TCGA.sampletype <- NULL
-#TCGA.RNAseq.OS.sampletype <- NULL
 
 initialize.survival.data <- function() {
   TCGA.RNAseq <<- .get.TCGA.RNAseq()
@@ -15,10 +11,10 @@ initialize.survival.data <- function() {
     data.table = FALSE
   ) %>%
     {
-      distinct(., sample, .keep_all = TRUE) %>%
+      dplyr::distinct(., sample, .keep_all = TRUE) %>%
         # remove_rownames() %>%
         # column_to_rownames(var = 'sample') %>%
-        select("sample", "OS", "OS.time") %>%
+        dplyr::select("sample", "OS", "OS.time") %>%
         rename(rn = sample)
     }
   ## get sample type data ##
@@ -30,8 +26,8 @@ initialize.survival.data <- function() {
   ) %>%
     {
       as_tibble(.) %>%
-        distinct(., sample, .keep_all = TRUE) %>%
-        select(
+        dplyr::distinct(., sample, .keep_all = TRUE) %>%
+        dplyr::select(
           "sample",
           "sample_type",
           "_primary_disease"
@@ -45,9 +41,9 @@ initialize.survival.data <- function() {
   ## combine OS, sample type and RNAseq data ##
   TCGA.RNAseq.OS.sampletype <<- list(TCGA.RNAseq, TCGA.OS, TCGA.sampletype) %>%
     reduce(full_join, by = "rn") %>%
-    remove_rownames(.) %>%
-    column_to_rownames(var = "rn") %>%
-    filter(sample.type != "Solid Tissue Normal")
+    tibble::remove_rownames(.) %>%
+    tibble::column_to_rownames(var = "rn") %>%
+    dplyr::filter(sample.type != "Solid Tissue Normal")
 }
 
 .get.TCGA.RNAseq <- function() {
@@ -64,8 +60,8 @@ initialize.survival.data <- function() {
   ] %>%
     as_tibble(.) %>%
     # na.omit(.) %>%
-    remove_rownames() %>%
-    column_to_rownames(var = "sample")
+    tibble::remove_rownames(.) %>%
+    tibble::column_to_rownames(var = "sample")
   # transpose function from the data.table library keeps numeric values as numeric.
   TCGA.RNAseq_transpose <- data.table::transpose(TCGA.RNAseq)
   # get row and colnames in order
@@ -254,9 +250,9 @@ initialize.survival.data <- function() {
       slice(1)
   }) %>%
     bind_rows() %>%
-    select("p") %>%
+    dplyr::select("p") %>%
     rename("pinteraction" = "p") %>%
-    rownames_to_column()
+    tibble::rownames_to_column()
 
   data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
     # as.data.frame(.) %>%
@@ -297,10 +293,10 @@ initialize.survival.data <- function() {
     cox.zph() %>%
     print() %>%
     as.data.frame(.) %>% # do not use as_tibble here, cause errors
-    select("p") %>%
+    dplyr::select("p") %>%
     rename("pinteraction" = "p") %>%
     rownames_to_column() %>%
-    filter(rowname != "GLOBAL") # remove the global test result for graph
+    dplyr::filter(rowname != "GLOBAL") # remove the global test result for graph
 
   data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
     mutate(across(7:11, round, 3)) %>%
@@ -326,7 +322,7 @@ initialize.survival.data <- function() {
 # master functions to call Survival analysis and plotting ----------------------
 plot.km.EIF.tumor <- function(EIF, cutoff, tumor) {
   df <- TCGA.RNAseq.OS.sampletype %>%
-    select(
+    dplyr::select(
       all_of(EIF),
       "OS",
       "OS.time",
@@ -334,7 +330,7 @@ plot.km.EIF.tumor <- function(EIF, cutoff, tumor) {
       "primary.disease"
     ) %>%
     # drop_na(EIF) %>%
-    filter(if (tumor != "All") primary.disease == tumor else TRUE) %>%
+    dplyr::filter(if (tumor != "All") primary.disease == tumor else TRUE) %>%
     drop_na(.) %>%
     # na.omit(.) %>%
     as_tibble(.) %>%
@@ -349,8 +345,8 @@ plot.km.EIF.tumor <- function(EIF, cutoff, tumor) {
 
 plot.coxph.EIF.tumor <- function(EIF, tumor) {
   df1 <- TCGA.RNAseq.OS.sampletype %>%
-    filter(sample.type != "Solid Tissue Normal") %>%
-    select(
+    dplyr::filter(sample.type != "Solid Tissue Normal") %>%
+    dplyr::select(
       all_of(EIF),
       "OS",
       "OS.time",
@@ -358,7 +354,7 @@ plot.coxph.EIF.tumor <- function(EIF, tumor) {
       "primary.disease"
     ) %>%
     # drop_na(EIF) %>%
-    filter(if (tumor != "All") primary.disease == tumor else TRUE) %>%
+    dplyr::filter(if (tumor != "All") primary.disease == tumor else TRUE) %>%
     drop_na(.) %>%
     # na.omit(.) %>%
     as.data.frame(.)
@@ -420,5 +416,3 @@ plot.coxph.EIF.tumor <- function(EIF, tumor) {
     }
   )
 }
-
-

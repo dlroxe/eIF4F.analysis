@@ -1,26 +1,24 @@
 # prepare phosphoproteomics datasets from CPTAC LUAD
-#CPTAC.LUAD.Phos <- NULL
-#CPTAC.LUAD.Clinic <- NULL
-#CPTAC.LUAD.Clinic.Sampletype <- NULL
 
 initialize.phosphoproteomics.data <- function() {
   CPTAC.LUAD.Phos <<- read_excel(file.path(data.file.directory, "Phos.xlsx"),
-                                 col_names = FALSE
+    col_names = FALSE
   )
 
 
   CPTAC.LUAD.Clinic <<- read_excel(file.path(
     data.file.directory,
-    "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"),
-    sheet = 2
+    "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"
+  ),
+  sheet = 2
   )
 
   CPTAC.LUAD.Clinic.Sampletype <<- merge(CPTAC.LUAD.Clinic,
-                                         CPTAC.LUAD.sampletype,
-                                         by.x = "case_id",
-                                         by.y = "Participant ID (case_id)"
+    CPTAC.LUAD.sampletype,
+    by.x = "case_id",
+    by.y = "Participant ID (case_id)"
   ) %>%
-    select("tumor_stage_pathological", "Aliquot (Specimen Label)", "Type") %>%
+    dplyr::select("tumor_stage_pathological", "Aliquot (Specimen Label)", "Type") %>%
     rename("Sample" = "Aliquot (Specimen Label)") %>%
     mutate(tumor_stage_pathological = case_when(
       Type == "Normal" ~ "Normal",
@@ -33,15 +31,15 @@ initialize.phosphoproteomics.data <- function() {
 
 .Scatter.plot <- function(df, x, y, z) {
   p1 <- ggscatter(df,
-                  x = x,
-                  y = y, # color = "black",
-                  add = "reg.line", # conf.int = TRUE,
-                  add.params = list(color = "black", fill = "lightgray"),
-                  cor.coef = TRUE,
-                  cor.method = "pearson",
-                  color = z,
-                  xlab = paste(x, "protein expression)"),
-                  ylab = paste(y, "protein expression)")
+    x = x,
+    y = y, # color = "black",
+    add = "reg.line", # conf.int = TRUE,
+    add.params = list(color = "black", fill = "lightgray"),
+    cor.coef = TRUE,
+    cor.method = "pearson",
+    color = z,
+    xlab = paste(x, "protein expression)"),
+    ylab = paste(y, "protein expression)")
   ) +
     # scale_y_continuous(breaks= scales::pretty_breaks())+
     # scale_y_continuous(
@@ -76,17 +74,17 @@ initialize.phosphoproteomics.data <- function() {
 
 .get.EIF.CPTAC.LUAD.Proteomics <- function(x) {
   LUAD.Proteomics %>%
-    select_if(names(.) %in% c(x, "Sample"))
+    dplyr::select_if(names(.) %in% c(x, "Sample"))
   # select(all_of(x), "Sample")
 }
 
 .get.EIF.CPTAC.LUAD.Phos <- function(x) {
   CPTAC.LUAD.Phos %>%
-    filter(...1 %in% c(x, "Sample")) %>%
+    dplyr::filter(...1 %in% c(x, "Sample")) %>%
     # as.data.frame(.) %>%
     mutate(phosname = paste(...1, ...2)) %>%
-    column_to_rownames(var = "phosname") %>%
-    select(-c(...1, ...2)) %>%
+    tibble::column_to_rownames(var = "phosname") %>%
+    dplyr::select(-c(...1, ...2)) %>%
     t(.) %>%
     as_tibble(.) %>%
     mutate_at(vars(-`Sample na`), funs(as.numeric)) %>%
@@ -98,8 +96,8 @@ initialize.phosphoproteomics.data <- function() {
 .protein.boxplot <- function(df, x) {
   hline <- summarise(group_by(df, Gene, Type), MD = 2**median(normalize)) %>%
     ungroup(.) %>%
-    filter(Gene == x & Type == "Tumor") %>%
-    select(., MD) %>%
+    dplyr::filter(Gene == x & Type == "Tumor") %>%
+    dplyr::select(., MD) %>%
     as.numeric(.) %>%
     # hline <- dataMedian$MD[dataMedian$Gene == x & dataMedian$Type == "Tumor"] %>%
     round(., digits = 3)
@@ -253,7 +251,7 @@ plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
     na.omit(.)
 
   EIF.LUAD.Phos.Proteomics.Sampletype.Normalization <- EIF.LUAD.Phos.Proteomics.Sampletype %>%
-    filter(Type == "Normal") %>%
+    dplyr::filter(Type == "Normal") %>%
     group_by(Gene) %>%
     # group_by(Gene) %>%
     summarise(NAT.mean = median(value)) %>%
@@ -266,4 +264,3 @@ plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
     df = EIF.LUAD.Phos.Proteomics.Sampletype.Normalization
   )
 }
-

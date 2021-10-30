@@ -1,7 +1,4 @@
 # prepare RNA-seq related dataset from TCGA and GTEx----------------------------
-#TCGA.GTEX.RNAseq <- NULL
-#TCGA.GTEX.sampletype <- NULL
-#TCGA.GTEX.RNAseq.sampletype <- NULL
 
 initialize.RNAseq.data <- function() {
   TCGA.GTEX.RNAseq <<- .get.TCGA.GTEX.RNAseq()
@@ -11,35 +8,35 @@ initialize.RNAseq.data <- function() {
       data.file.directory,
       "TcgaTargetGTEX_phenotype.txt"
     )
-  ) %>% {
+  ) %>%
+    {
       as_tibble(.) %>%
-        distinct(., sample, .keep_all = TRUE) %>%
-        remove_rownames() %>%
-        column_to_rownames(var = "sample") %>%
-      dplyr::select(
+        dplyr::distinct(., sample, .keep_all = TRUE) %>%
+        tibble::remove_rownames(.) %>%
+        tibble::column_to_rownames(var = "sample") %>%
+        dplyr::select(
           "_sample_type",
           "primary disease or tissue",
           "_primary_site",
           "_study"
         ) %>%
-      dplyr::rename(
+        dplyr::rename(
           "sample.type" = "_sample_type",
           "primary.disease" = "primary disease or tissue",
           "primary.site" = "_primary_site",
           "study" = "_study"
-      )
+        )
     }
 
   TCGA.GTEX.RNAseq.sampletype <<- merge(TCGA.GTEX.RNAseq,
-                                       TCGA.GTEX.sampletype,
-                                       by    = "row.names",
-                                       all.x = TRUE
+    TCGA.GTEX.sampletype,
+    by    = "row.names",
+    all.x = TRUE
   ) %>%
     {
-      remove_rownames(.) %>%
-        column_to_rownames(var = "Row.names")
+      tibble::remove_rownames(.) %>%
+        tibble::column_to_rownames(var = "Row.names")
     }
-
 }
 
 .get.TCGA.GTEX.RNAseq <- function() {
@@ -51,10 +48,10 @@ initialize.RNAseq.data <- function() {
     data.table = FALSE
   ) %>%
     as_tibble(.) %>%
-    distinct(., sample, .keep_all = TRUE) %>%
+    dplyr::distinct(., sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
-    remove_rownames(.) %>%
-    column_to_rownames(var = "sample")
+    tibble::remove_rownames(.) %>%
+    tibble::column_to_rownames(var = "sample")
   # transpose function from the data.table library keeps numeric values as numeric.
   TCGA.pancancer_transpose <- data.table::transpose(TCGA.pancancer)
   # get row and colnames in order
@@ -67,11 +64,11 @@ initialize.RNAseq.data <- function() {
 # Differential expression analysis and plotting --------------------------------
 .RNAseq.all.gene <- function(df) {
   df <- df %>%
-    filter(study == "TCGA" & sample.type != "Solid Tissue Normal")
+    dplyr::filter(study == "TCGA" & sample.type != "Solid Tissue Normal")
   # order the EIF genes according to the order of the expression means
   order <- df %>%
-    # filter out category equal to 'Lung Adenocarcinoma'
-    filter(primary.disease == "Lung Adenocarcinoma") %>%
+    # dplyr::filter out category equal to 'Lung Adenocarcinoma'
+    dplyr::filter(primary.disease == "Lung Adenocarcinoma") %>%
     # use the same groups as in the ggplot
     group_by(variable) %>%
     # calculate the means
@@ -146,13 +143,13 @@ initialize.RNAseq.data <- function() {
 
 .RNAseq.ind.gene <- function(df, x) {
   df <- df %>%
-    filter(study == "TCGA") %>%
+    dplyr::filter(study == "TCGA") %>%
     droplevels() %>%
     mutate(sample.type = case_when(
       sample.type != "Solid Tissue Normal" ~ "Tumor",
       sample.type == "Solid Tissue Normal" ~ "Normal"
     )) %>%
-    filter(variable == x) %>%
+    dplyr::filter(variable == x) %>%
     mutate(primary.disease = forcats::fct_rev(primary.disease))
   output <- list(df, x)
   return(output)
@@ -230,9 +227,9 @@ initialize.RNAseq.data <- function() {
 
 .RNAseq.tumortype <- function(df) {
   TCGA.GTEX.RNAseq.sampletype.subset <- df %>%
-    filter(study == "TCGA") %>%
+    dplyr::filter(study == "TCGA") %>%
     mutate_if(is.character, as.factor) %>%
-    filter(sample.type %in% c(
+    dplyr::filter(sample.type %in% c(
       "Metastatic",
       "Primary Tumor",
       "Solid Tissue Normal"
@@ -242,13 +239,13 @@ initialize.RNAseq.data <- function() {
 
 .RNAratio.tumortype <- function(df, x) {
   RNAratio.data <- df %>%
-    filter(sample.type %in% c(
+    dplyr::filter(sample.type %in% c(
       "Metastatic",
       "Primary Tumor",
       "Solid Tissue Normal"
     )) %>%
     droplevels() %>%
-    select(
+    dplyr::select(
       all_of(x),
       "sample.type",
       "primary.disease",
@@ -355,7 +352,7 @@ initialize.RNAseq.data <- function() {
 
 .RNAratio.EIF.gene <- function(x) {
   TCGA.RNAratio.sampletype.subset <- TCGA.GTEX.RNAseq.sampletype %>%
-    select(
+    dplyr::select(
       all_of(x),
       "sample.type",
       "primary.disease",
@@ -363,7 +360,7 @@ initialize.RNAseq.data <- function() {
       "study"
     ) %>%
     as_tibble(.) %>%
-    filter(EIF4E != 0 & !is.na(primary.site)) %>%
+    dplyr::filter(EIF4E != 0 & !is.na(primary.site)) %>%
     # calculate the ratio of mRNA counts
     mutate(
       sum = log2(2**EIF4E + 2**EIF4EBP1 - 1),
@@ -388,7 +385,7 @@ initialize.RNAseq.data <- function() {
       `EIF4G1:\nEIF4E+EIF4EBP1` = EIF4G1 - sum,
       `EIF4A1:\nEIF4E+EIF4EBP1` = EIF4G1 - sum
     ) %>%
-    select(
+    dplyr::select(
       "EIF4A1:\nEIF4E", "EIF4A1:\nEIF4E2",
       "EIF4A2:\nEIF4E", "EIF4A2:\nEIF4E2",
       "EIF4G1:\nEIF4E", "EIF4G1:\nEIF4E2",
@@ -411,13 +408,13 @@ initialize.RNAseq.data <- function() {
 
 .RNAratio.selected <- function(df, x) {
   RNAratio.data <- df %>%
-    filter(study == "TCGA") %>%
+    dplyr::filter(study == "TCGA") %>%
     droplevels() %>%
     mutate(sample.type = case_when(
       sample.type != "Solid Tissue Normal" ~ "Tumor",
       sample.type == "Solid Tissue Normal" ~ "NAT"
     )) %>%
-    select(
+    dplyr::select(
       all_of(x),
       "sample.type",
       "primary.disease",
@@ -506,7 +503,7 @@ initialize.RNAseq.data <- function() {
 # master functions to call DEG gene analysis and plotting ----------------------
 plot.boxgraph.RNAseq.TCGA <- function(EIF) {
   TCGA.GTEX.RNAseq.sampletype.subset <- TCGA.GTEX.RNAseq.sampletype %>%
-    select(
+    dplyr::select(
       all_of(EIF),
       "sample.type",
       "primary.disease",
@@ -594,51 +591,3 @@ plot.RNAratio.TCGA <- function(EIF) {
   )) %>%
     .violinplot()
 }
-
-## this function was not reported in the paper.
-plot.cormatrix.RNAseq <- function(EIF) {
-  TCGA.GTEX.RNAseq.sampletype.subset <- TCGA.GTEX.RNAseq.sampletype %>%
-    select(
-      all_of(EIF),
-      "sample.type",
-      "primary.disease",
-      "primary.site",
-      "study"
-    ) %>%
-    as_tibble(.)
-
-  plot.cor <- function(x) {
-    EIF.TCGA.RNAseq.subset <- TCGA.GTEX.RNAseq.sampletype.subset %>%
-      filter(sample.type != "Solid Tissue Normal" & study == x) %>%
-      select(all_of(EIF))
-
-    M <- cor(EIF.TCGA.RNAseq.subset)
-    testRes <- corrplot::cor.mtest(EIF.TCGA.RNAseq.subset, conf.level = 0.95)
-
-    # pdf(file.path(output.directory, "CNV", "EIFCNVcormatrix.pdf"),
-    #    width = 9,
-    #    height = 9,
-    #    useDingbats = FALSE
-    # )
-    corrplot(
-      M,
-      method      = "color",
-      title = paste("correlation (", x, ")"),
-      tl.cex      = 1,
-      number.cex  = 1,
-      addgrid.col = "gray",
-      addCoef.col = "black",
-      tl.col      = "black",
-      # type        = "lower",
-      order       = "FPC",
-      # order = 'hclust',
-      tl.srt = 45,
-      p.mat       = testRes$p,
-      sig.level   = 0.05, # insig = "blank"
-    )
-  }
-  plot.cor("GTEX")
-  plot.cor("TCGA")
-}
-
-

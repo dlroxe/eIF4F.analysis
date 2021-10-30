@@ -1,10 +1,4 @@
 # prepare RNA proteomics datasets from CCLE and CPTAC LUAD
-#CCLE.RNAseq <- NULL
-#CCLE.Anno <- NULL
-#CCLE.Proteomics <- NULL
-#LUAD.Proteomics <- NULL
-#LUAD.RNAseq <- NULL
-
 initialize.RNApro.data <- function() {
   CCLE.RNAseq <<- fread(
     file.path(
@@ -20,7 +14,7 @@ initialize.RNApro.data <- function() {
       "sample_info.csv"
     ),
     data.table = FALSE
-  ) %>% select(1, 2)
+  ) %>% dplyr::select(1, 2)
 
   CCLE.Proteomics <<- fread(
     file.path(
@@ -36,7 +30,7 @@ initialize.RNApro.data <- function() {
   ) %>%
     # as.data.frame(.) %>%
     mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
-    column_to_rownames(var = "...1") %>%
+    tibble::column_to_rownames(var = "...1") %>%
     t(.) %>%
     as_tibble(.) %>%
     mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
@@ -47,7 +41,7 @@ initialize.RNApro.data <- function() {
   ) %>%
     # as_tibble(.) %>%
     mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
-    column_to_rownames(var = "...1") %>%
+    tibble::column_to_rownames(var = "...1") %>%
     t(.) %>%
     as_tibble(.) %>%
     mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
@@ -58,25 +52,25 @@ initialize.RNApro.data <- function() {
 .get.CCLE.EIF.RNAseq <- function(EIF) {
   CCLE.RNAseq <- CCLE.RNAseq %>%
     rename("DepMap_ID" = "V1") %>%
-    select("DepMap_ID", starts_with((!!paste(EIF, "(ENSG"))))
+    dplyr::select("DepMap_ID", starts_with((!!paste(EIF, "(ENSG"))))
 }
 
 .get.CCLE.EIF.Proteomics <- function(EIF) {
   CCLE.EIF.Proteomics <- CCLE.Proteomics %>%
-    filter(Gene_Symbol == EIF)
+    dplyr::filter(Gene_Symbol == EIF)
   if (nrow(CCLE.EIF.Proteomics) > 1) {
     df <- CCLE.EIF.Proteomics %>%
-      select(contains("_Peptides")) %>%
+      dplyr::select(contains("_Peptides")) %>%
       mutate(sum = rowSums(., na.rm = T))
     name <- rownames(df[df$sum == max(df$sum), ]) # for the maximum value
     CCLE.EIF.Proteomics <- CCLE.EIF.Proteomics %>%
-      filter(row.names(CCLE.EIF.Proteomics) == name)
+      dplyr::filter(row.names(CCLE.EIF.Proteomics) == name)
   } else {
     TRUE
   }
   CCLE.EIF.Proteomics <- CCLE.EIF.Proteomics %>%
-    column_to_rownames(var = "Gene_Symbol") %>%
-    select(contains("TenPx"), -contains("_Peptides")) %>%
+    tibble::column_to_rownames(var = "Gene_Symbol") %>%
+    dplyr::select(contains("TenPx"), -contains("_Peptides")) %>%
     t(.) %>%
     as.data.frame(.) %>%
     mutate(
@@ -96,7 +90,7 @@ initialize.RNApro.data <- function() {
     add = "reg.line", # conf.int = TRUE,
     cor.coef = TRUE,
     cor.method = "pearson",
-    title = paste(x,"(", y, ")"),
+    title = paste(x, "(", y, ")"),
     xlab = "Protein expresion",
     ylab = "RNA expression"
   ) +
@@ -129,7 +123,7 @@ plot.EIF.cor.CCLE <- function(EIF) {
   x <- .get.CCLE.EIF.RNAseq(EIF) %>%
     full_join(CCLE.Anno, by = "DepMap_ID") %>%
     na.omit(.) %>%
-    select(-DepMap_ID) %>%
+    dplyr::select(-DepMap_ID) %>%
     rename(
       "Celline" = "stripped_cell_line_name",
       !!paste0(EIF, ".rna") := contains(EIF)
@@ -144,12 +138,12 @@ plot.EIF.cor.CCLE <- function(EIF) {
 ## RNA protein correlation LUAD-------------------------------------------------
 plot.EIF.cor.LUAD <- function(EIF) {
   EIF.LUAD.Proteomics <- LUAD.Proteomics %>%
-    select(all_of(EIF), "Type", "Sample") %>%
-    filter(Type == "Tumor")
+    dplyr::select(all_of(EIF), "Type", "Sample") %>%
+    dplyr::filter(Type == "Tumor")
 
   EIF.LUAD.RNAseq <- LUAD.RNAseq %>%
-    select(all_of(EIF), "Type", "Sample") %>%
-    filter(Type == "Tumor")
+    dplyr::select(all_of(EIF), "Type", "Sample") %>%
+    dplyr::filter(Type == "Tumor")
 
   df <- merge(EIF.LUAD.Proteomics,
     EIF.LUAD.RNAseq,
@@ -287,7 +281,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
 .Venn.plot <- function(df, x, z, CORs) {
   b <- limma::vennCounts(df)
   colnames(b) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1", "Counts")
-  vennDiagram(b)
+  limma::vennDiagram(b)
   ## eulerr generates area-proportional Euler diagrams that display set
   ## relationships (intersections, unions, and disjoints) with circles or ellipses.
   pos.Venn2 <- eulerr::euler(
@@ -343,11 +337,11 @@ plot.EIF.cor.LUAD <- function(EIF) {
 
 .count.CORs.tumor.normal <- function(df1, df2) {
   EIF.cor.counts.tumor <- df1 %>%
-    add_column(label = "tumor") %>%
+    tibble::add_column(label = "tumor") %>%
     tibble::rownames_to_column(., "gene")
 
   EIF.cor.counts.normal <- df2 %>%
-    add_column(label = "normal") %>%
+    tibble::add_column(label = "normal") %>%
     tibble::rownames_to_column(., "gene")
 
   EIF.cor <- rbind(EIF.cor.counts.tumor,
@@ -463,7 +457,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
 .Heatmap.pathway <- function(df, x) {
   # DF_scaled = t(scale(t(DF)))
   ## Creating heatmap with three clusters (See the ComplexHeatmap documentation for more options
-  ht1 <- Heatmap(df,
+  ht1 <- ComplexHeatmap::Heatmap(df,
     name = paste("Correlation Coefficient Heatmap", x),
     heatmap_legend_param = list(
       labels_gp = gpar(font = 15),
@@ -554,7 +548,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
 }
 
 .pathway.dotplot <- function(df, p, x) {
-  p1 <- dotplot(df,
+  p1 <- clusterProfiler::dotplot(df,
     title = paste("The Most Enriched", p, "Pathways"),
     showCategory = 8,
     font.size = 18,
@@ -589,7 +583,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
 ## find posCOR and negCOR in the overlapping CORs from all cancer cases
 plot.Venn.all <- function(x) {
   TCGA.GTEX.RNAseq.sampletype <- TCGA.GTEX.RNAseq.sampletype %>%
-    filter(if (x != "All") primary.site == x else TRUE) %>%
+    dplyr::filter(if (x != "All") primary.site == x else TRUE) %>%
     na.omit(.) %>%
     # mutate_if(is.character, as.factor) %>%
     mutate_at(c(
@@ -600,7 +594,7 @@ plot.Venn.all <- function(x) {
     ), factor)
 
   all.tumor.type <- TCGA.GTEX.RNAseq.sampletype %>%
-    select(sample.type) %>%
+    dplyr::select(sample.type) %>%
     mutate_if(is.character, as.factor) %>%
     {
       levels(.$sample.type)
@@ -665,5 +659,3 @@ plot.Venn.all <- function(x) {
   .pathway.dotplot(df = ck.KEGG, p = "KEGG", x = x)
   .pathway.dotplot(df = ck.REACTOME, p = "REACTOME", x = x)
 }
-
-

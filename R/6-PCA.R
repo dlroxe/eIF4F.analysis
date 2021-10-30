@@ -1,8 +1,4 @@
-# prepare CPTAC proteomics dataset
-# RNA-seq data were import in 4-DEG.R
-#CPTAC.LUAD.Proteomics <- NULL
-#CPTAC.LUAD.sampletype <- NULL
-#CPTAC.LUAD.Proteomics.sampletype <- NULL
+# prepare CPTAC proteomics dataset----------------------------------------------
 
 initialize.proteomics.data <- function() {
   CPTAC.LUAD.Proteomics <<- .CPTAC.LUAD.Proteomics()
@@ -15,29 +11,29 @@ initialize.proteomics.data <- function() {
   ) %>%
     {
       as.data.frame(.) %>%
-        select("Aliquot (Specimen Label)", "Type","Participant ID (case_id)") %>%
-        distinct(., `Aliquot (Specimen Label)`, .keep_all = TRUE) #%>%
-        #remove_rownames() %>%
-        #column_to_rownames(var = "Aliquot (Specimen Label)")
+        dplyr::select("Aliquot (Specimen Label)", "Type", "Participant ID (case_id)") %>%
+        dplyr::distinct(., `Aliquot (Specimen Label)`, .keep_all = TRUE) # %>%
+      # remove_rownames() %>%
+      # column_to_rownames(var = "Aliquot (Specimen Label)")
     }
   CPTAC.LUAD.Proteomics.sampletype <<- merge(CPTAC.LUAD.Proteomics,
-                                            CPTAC.LUAD.sampletype,
-                                            by.x = "row.names",
-                                            by.y = "Aliquot (Specimen Label)",
-                                            #by    = "row.names",
-                                            all.x = TRUE
+    CPTAC.LUAD.sampletype,
+    by.x = "row.names",
+    by.y = "Aliquot (Specimen Label)",
+    # by    = "row.names",
+    all.x = TRUE
   ) %>%
-    remove_rownames() %>%
-    column_to_rownames(var = "Row.names")%>%
+    tibble::remove_rownames(.) %>%
+    tibble::column_to_rownames(var = "Row.names") %>%
     mutate(Type = factor(Type,
-                         levels = c(
-                           "Normal",
-                           "Tumor"
-                         ),
-                         labels = c(
-                           "Adjacent Normal Tissue (CPTAC)",
-                           "Primary Tumor (CPTAC)"
-                         )
+      levels = c(
+        "Normal",
+        "Tumor"
+      ),
+      labels = c(
+        "Adjacent Normal Tissue (CPTAC)",
+        "Primary Tumor (CPTAC)"
+      )
     ))
 }
 
@@ -49,10 +45,10 @@ initialize.proteomics.data <- function() {
     ),
     data.table = FALSE
   ) %>%
-    remove_rownames() %>%
-    column_to_rownames(var = "Gene") %>%
-    select(-contains("Unshared")) %>%
-    select(c(1:(length(.) - 6)))
+    tibble::remove_rownames(.) %>%
+    tibble::column_to_rownames(var = "Gene") %>%
+    dplyr::select(-contains("Unshared")) %>%
+    dplyr::select(c(1:(length(.) - 6)))
   CPTAC.LUAD.Proteomics.t <- data.table::transpose(CPTAC.LUAD.Proteomics)
   rownames(CPTAC.LUAD.Proteomics.t) <- colnames(CPTAC.LUAD.Proteomics)
   colnames(CPTAC.LUAD.Proteomics.t) <- rownames(CPTAC.LUAD.Proteomics)
@@ -67,7 +63,7 @@ initialize.proteomics.data <- function() {
 
 # functions for analyses and plotting  -----------------------------------------
 .standardPCA <- function(df) {
-  res.pca <- PCA(df %>% select_if(is.numeric), # remove column with characters
+  res.pca <- PCA(df %>% dplyr::select_if(is.numeric), # remove column with characters
     # df[1:(length(df)-4)],
     scale.unit = TRUE,
     ncp = 10,
@@ -79,12 +75,12 @@ initialize.proteomics.data <- function() {
 .imputePCA <- function(df) {
   # Impute the missing values of a dataset with the Principal Components Analysis model
   nb <- missMDA::estim_ncpPCA(
-    df %>% select_if(is.numeric),
+    df %>% dplyr::select_if(is.numeric),
     # CPTAC.LUAD.Proteomics.Sample[1:(length(CPTAC.LUAD.Proteomics.Sample) - 1)],
     ncp.max = 5
   ) # estimate the number of dimensions to impute
   res.comp <- missMDA::imputePCA(
-    df %>% select_if(is.numeric),
+    df %>% dplyr::select_if(is.numeric),
     # CPTAC.LUAD.Proteomics.Sample[1:(length(CPTAC.LUAD.Proteomics.Sample) - 1)],
     ncp = nb$ncp
   )
@@ -258,7 +254,7 @@ initialize.proteomics.data <- function() {
 
 .selected.biplot <- function(res.pca, df, x, y, color) {
   selected.samples <- df %>%
-    filter(sample.type == x)
+    dplyr::filter(sample.type == x)
   biplot <- fviz_pca_biplot(res.pca,
     axes = c(1, 2),
     labelsize = 5,
@@ -309,7 +305,7 @@ initialize.proteomics.data <- function() {
 # master functions to call PCA gene analysis and plotting ----------------------
 plot.PCA.TCGA.GTEX <- function(EIF.list) {
   TCGA.GTEX.sampletype.subset <- TCGA.GTEX.RNAseq.sampletype %>%
-    select(
+    dplyr::select(
       all_of(EIF.list),
       "sample.type",
       "primary.disease",
@@ -317,7 +313,7 @@ plot.PCA.TCGA.GTEX <- function(EIF.list) {
       "study"
     ) %>%
     # as.tibble(.) %>%
-    filter(EIF4E != 0 &
+    dplyr::filter(EIF4E != 0 &
       study %in% c("TCGA", "GTEX") &
       sample.type %in% c(
         "Metastatic",
@@ -343,7 +339,7 @@ plot.PCA.TCGA.GTEX <- function(EIF.list) {
 
   sampletype.subset <- function(x) {
     TCGA.GTEX.sampletype.subset %>%
-      filter(if (x != "All") sample.type == x else TRUE) %>%
+      dplyr::filter(if (x != "All") sample.type == x else TRUE) %>%
       droplevels()
   }
 
@@ -455,7 +451,7 @@ plot.PCA.TCGA.GTEX <- function(EIF.list) {
 
 plot.PCA.TCGA.GTEX.tumor <- function(EIF.list, tissue) {
   TCGA.GTEX.sampletype.subset <- TCGA.GTEX.RNAseq.sampletype %>%
-    select(
+    dplyr::select(
       all_of(EIF.list),
       "sample.type",
       "primary.disease",
@@ -463,7 +459,7 @@ plot.PCA.TCGA.GTEX.tumor <- function(EIF.list, tissue) {
       "study"
     ) %>%
     # as.data.frame(.) %>%
-    filter(EIF4E != 0 &
+    dplyr::filter(EIF4E != 0 &
       study %in% c("TCGA", "GTEX") &
       sample.type %in% c(
         "Metastatic",
@@ -486,7 +482,7 @@ plot.PCA.TCGA.GTEX.tumor <- function(EIF.list, tissue) {
         "Adjacent Normal Tissue (TCGA)"
       )
     )) %>%
-    filter(primary.site == tissue)
+    dplyr::filter(primary.site == tissue)
   res.pca <- .standardPCA(TCGA.GTEX.sampletype.subset)
   .biplot(
     res.pca = res.pca,
@@ -500,14 +496,14 @@ plot.PCA.TCGA.GTEX.tumor <- function(EIF.list, tissue) {
 
 plot.PCA.CPTAC.LUAD <- function(EIF.list) {
   CPTAC.LUAD.Proteomics.Sample.subset <- CPTAC.LUAD.Proteomics.sampletype %>%
-    select(
+    dplyr::select(
       all_of(EIF.list),
       "Type"
     ) %>%
     # as.data.frame(.) %>%
     mutate_if(is.character, as.factor) %>%
-    filter(!is.na(Type)) %>%
-    remove_rownames()
+    dplyr::filter(!is.na(Type)) %>%
+    tibble::remove_rownames(.)
 
   res.pca <- .imputePCA(CPTAC.LUAD.Proteomics.Sample.subset)
 
@@ -520,8 +516,3 @@ plot.PCA.CPTAC.LUAD <- function(EIF.list) {
     folder = "Lung"
   )
 }
-
-
-
-
-

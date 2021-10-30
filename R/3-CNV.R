@@ -1,13 +1,10 @@
 # prepare CNV related datasets from TCGA ---------------------------------------
 
-# TODO: document these variables more comprehensively
-#TCGA.CNV <- NULL # CNV data with threshold
-#TCGA.CNV.value <- NULL # CNV data with numeric value
-#TCGA.CNV.ratio <- NULL # CNV ratios between tumor and NATs
-#TCGA.CNV.sampletype <- NULL
-#TCGA.CNVratio.sampletype <- NULL
-#TCGA.sampletype <- NULL
-
+#' Read all CNV related datasets from TCGA
+#'
+#' @return TCGA CNV related datasets: including threshold, value and ratio data
+#' @export
+#' @examples
 initialize.cnv.data <- function() {
   TCGA.CNV <<- .get.TCGA.CNV()
   TCGA.CNV.value <<- .get.TCGA.CNV.value()
@@ -18,17 +15,15 @@ initialize.cnv.data <- function() {
     "TCGA_phenotype_denseDataOnlyDownload.tsv"
   )) %>%
     {
-      as_tibble(.) %>%
-        # as.data.frame(.) %>%
-        distinct(., sample, .keep_all = TRUE) %>%
+      #as_tibble(.) %>%
+        as.data.frame(.) %>%
+        dplyr::distinct(., sample, .keep_all = TRUE) %>%
         na.omit(.) %>%
-        remove_rownames(.) %>%
-        column_to_rownames(., var = "sample") %>%
-        select("sample_type", "_primary_disease") %>%
-        dplyr::rename(
-          "sample.type" = "sample_type",
-          "primary.disease" = "_primary_disease"
-        )
+        tibble::remove_rownames(.) %>%
+        tibble::column_to_rownames(., var = "sample") %>%
+        dplyr::select("sample_type", "_primary_disease") %>%
+        rename("sample.type" = "sample_type",
+               "primary.disease" = "_primary_disease")
     }
 
   TCGA.CNV.sampletype <<- merge(TCGA.CNV,
@@ -36,10 +31,10 @@ initialize.cnv.data <- function() {
     by    = "row.names",
     all.x = TRUE
   ) %>%
-    filter(sample.type != "Solid Tissue Normal") %>%
+    dplyr::filter(sample.type != "Solid Tissue Normal") %>%
     {
-      remove_rownames(.) %>%
-        column_to_rownames(., var = "Row.names")
+      tibble::remove_rownames(.) %>%
+        tibble::column_to_rownames(., var = "Row.names")
     }
 
   TCGA.CNVratio.sampletype <<- merge(TCGA.CNV.ratio,
@@ -48,11 +43,16 @@ initialize.cnv.data <- function() {
     all.x = TRUE
   ) %>%
     {
-      remove_rownames(.) %>%
-        column_to_rownames(var = "Row.names")
+      tibble::remove_rownames(.) %>%
+        tibble::column_to_rownames(var = "Row.names")
     }
 }
 
+#' Read CNV threshold dataset from TCGA
+#'
+#' @return CNV threshold dataset
+#'
+#' @examples
 .get.TCGA.CNV <- function() {
   TCGA.pancancer <- data.table::fread(
     file.path(
@@ -63,10 +63,10 @@ initialize.cnv.data <- function() {
   ) %>%
     as_tibble(.) %>%
     # as.data.frame(.) %>%
-    distinct(., Sample, .keep_all = TRUE) %>%
+    dplyr::distinct(., Sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
-    remove_rownames(.) %>%
-    column_to_rownames(var = "Sample")
+    tibble::remove_rownames(.) %>%
+    tibble::column_to_rownames(var = "Sample")
 
   # transpose function from the data.table library keeps numeric values as numeric.
   TCGA.pancancer_transpose <- data.table::transpose(TCGA.pancancer)
@@ -76,6 +76,11 @@ initialize.cnv.data <- function() {
   return(TCGA.pancancer_transpose)
 }
 
+#' Read CNV value dataset from TCGA
+#'
+#' @return CNV value dataset
+#'
+#' @examples
 .get.TCGA.CNV.value <- function() {
   TCGA.pancancer <- fread(
     file.path(
@@ -86,10 +91,10 @@ initialize.cnv.data <- function() {
   ) %>%
     as_tibble(.) %>%
     # as.data.frame(.) %>%
-    distinct(., Sample, .keep_all = TRUE) %>%
+    dplyr::distinct(., Sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
-    remove_rownames() %>%
-    column_to_rownames(var = "Sample")
+    tibble::remove_rownames(.) %>%
+    tibble::column_to_rownames(var = "Sample")
 
   # transpose function from the data.table library keeps numeric values as numeric.
   TCGA.pancancer_transpose <- data.table::transpose(TCGA.pancancer)
@@ -109,10 +114,10 @@ initialize.cnv.data <- function() {
   ) %>%
     as_tibble(.) %>%
     # as.data.frame(.) %>%
-    distinct(., sample, .keep_all = TRUE) %>%
+    dplyr::distinct(., sample, .keep_all = TRUE) %>%
     na.omit(.) %>%
-    remove_rownames() %>%
-    column_to_rownames(var = "sample")
+    tibble::remove_rownames(.) %>%
+    tibble::column_to_rownames(var = "sample")
 
   # transpose function from the data.table library keeps numeric values as numeric.
   TCGA.pancancer_transpose <- data.table::transpose(TCGA.pancancer)
@@ -148,7 +153,7 @@ initialize.cnv.data <- function() {
 }
 
 .CNV.sum.barplot <- function(data) {
-  p1 <- ggplot(
+  p1 <- ggplot2::ggplot(
     data,
     aes(
       fill = CNV,
@@ -212,7 +217,7 @@ initialize.cnv.data <- function() {
 
 .CNV.ind.cancer <- function(df, x) {
   TCGA.CNV.anno.subset.long <- df %>%
-    select(
+    dplyr::select(
       all_of(x),
       "sample.type",
       "primary.disease"
@@ -345,7 +350,7 @@ initialize.cnv.data <- function() {
 
 .CNVratio.tumor <- function(df, x) {
   CNVratio.data <- df %>%
-    select(all_of(x), "sample.type", "primary.disease") %>%
+    dplyr::select(all_of(x), "sample.type", "primary.disease") %>%
     melt(.,
       id = c("sample.type", "primary.disease"),
       value.name = "CNV"
@@ -418,7 +423,7 @@ initialize.cnv.data <- function() {
 plot.bargraph.CNV.TCGA <- function(EIF) {
   # combine CNV data with annotation data
   TCGA.CNV.sampletype.subset <- TCGA.CNV.sampletype %>%
-    select(all_of(EIF), "sample.type", "primary.disease")
+    dplyr::select(all_of(EIF), "sample.type", "primary.disease")
 
   # stacked bar plots for CNV status in combined TCGA tumors
   .CNV.all.cancer(TCGA.CNV.sampletype.subset) %>%
@@ -436,14 +441,14 @@ plot.bargraph.CNV.TCGA <- function(EIF) {
 # correlation matrix for CNV values in combined TCGA tumors
 plot.matrix.CNVcorr.TCGA <- function(EIF) {
   TCGA.CNVvalue.subset <- TCGA.CNV.value %>%
-    select(all_of(EIF)) %>%
+    dplyr::select(all_of(EIF)) %>%
     .matrix.plot()
 }
 
 # boxplot for EIF ratios in tumors vs adjacent normals
 plot.boxgraph.CNVratio.TCGA <- function(EIF) {
   TCGA.CNVratio.sampletype.subset <- TCGA.CNVratio.sampletype %>%
-    select(
+    dplyr::select(
       all_of(EIF),
       "sample.type",
       "primary.disease"
