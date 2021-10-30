@@ -1,29 +1,3 @@
-## Library Preparation ---------------------------------------------------------
-requiredPackages <- c(
-  "AnnotationDbi", "base", "BiocGenerics", "circlize",
-  "clusterProfiler", "ComplexHeatmap", "corrplot",
-  "data.table", "dplyr", "EnvStats", "eulerr",
-  "factoextra", "FactoMineR", "forcats", "forestplot",
-  "ggfortify", "ggplot2", "ggpubr", "graphics", "grDevices",
-  "grid", "lattice", "limma", "missMDA", "org.Hs.eg.db",
-  "purrr", "RColorBrewer", "ReactomePA", "readr", "readxl",
-  "reshape2", "scales", "stats", "stats4", "stringr", "survival",
-  "survivalAnalysis", "tibble", "tidyr"
-)
-
-ipak <- function(pkg) {
-  new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
-  if (length(new.pkg)) {
-    install.packages(new.pkg, dependencies = TRUE)
-  }
-  sapply(pkg, require, character.only = TRUE)
-}
-
-
-loadLibraries <- function() {
-  ipak(requiredPackages)
-}
-
 ## Directory Preparation -------------------------------------------------------
 data.file.directory <- "~/Downloads/Test"
 output.directory <- "~/Documents/EIF_output"
@@ -89,7 +63,7 @@ initialize.format <- function() {
     size = 18
   )
 
-col_vector <<- color()
+  col_vector <<- color()
 }
 
 color <- function() {
@@ -100,5 +74,3 @@ color <- function() {
     rownames(qual_col_pals)
   ))
 }
-
-
