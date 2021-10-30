@@ -1,0 +1,19 @@
+---
+title: "eIF4F_analysis"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{eIF4F_analysis}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(eIF4F.analysis)
+```
