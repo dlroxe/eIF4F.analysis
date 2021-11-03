@@ -7,8 +7,17 @@
 .get.TCGA.CNV.value()
 }
 \value{
-CNV value dataset
+a data frame that contains CNV value data for each tumor
 }
 \description{
-Read CNV value dataset from TCGA
+This function reads the unthreshold CNV value data from TCGA "Gistic2_CopyNumber_Gistic2_all_data_by_genes".
 }
+\details{
+The function also removes possible duplicated tumor samples and samples with NAs in the dataset.
+
+It should not be used directly, only inside \code{\link{initialize.cnv.data}} function.
+}
+\examples{
+\dontrun{.get.TCGA.CNV.value()}
+}
+\keyword{internal}

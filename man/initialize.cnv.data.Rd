@@ -7,8 +7,22 @@
 initialize.cnv.data()
 }
 \value{
-TCGA CNV related datasets: including threshold, value and ratio data
+TCGA.CNV: the threshold CNV data generated from \code{\link{.get.TCGA.CNV}}
+
+TCGA.CNV.value: the CNV value data generated from \code{\link{.get.TCGA.CNV.value}}
+
+TCGA.CNV.ratio: the CNV ratio data generated from \code{\link{.get.TCGA.CNV.ratio}}
+
+TCGA.sampletype: the annotation data from the "TCGA_phenotype_denseDataOnlyDownload.tsv"
+dataset with selection of sample.type and primary.disease columns.
+
+TCGA.CNV.sampletype: the merged dataset from TCGA.CNV and TCGA.sampletype. “Solid Tissue Normal” samples are excluded.
+
+TCGA.CNVratio.sampletype: the merged dataset from TCGA.CNV.ratio and TCGA.sampletype.
 }
 \description{
-Read all CNV related datasets from TCGA
+This function reads all CNV related datasets from TCGA
+}
+\examples{
+\dontrun{initialize.cnv.data()}
 }

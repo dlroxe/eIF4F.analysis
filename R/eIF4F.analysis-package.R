@@ -37,12 +37,14 @@
 #' @import survivalAnalysis
 #' @import tibble
 #' @import tidyr
+#' @importFrom dplyr distinct filter select select_if mutate mutate_at mutate_if
+#' summarise rename group_by
+#' @importFrom forcats fct_rev
+#' @importFrom rlang .data %||% set_names sym expr enexpr quo enquo parse_expr
+#' @importFrom reshape2 melt dcast
 #' @keywords internal
 "_PACKAGE"
 
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
-
-
-
