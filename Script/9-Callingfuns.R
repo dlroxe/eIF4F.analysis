@@ -13,29 +13,11 @@ initialize.data()
 initialize.format()
 
 # run master functions in 3-CNV.R ----------------------------------------------
-plot.bargraph.CNV.TCGA(c(
-  "TP53", "EIF4A1", "EIF4A2",
-  "EIF4E", "EIF4E2", "EIF4E3",
-  "MYC", "EIF3D", "EIF4EBP1",
-  "EIF4G1", "EIF4G2", "EIF4G3",
-  "PABPC1", "MKNK1", "MKNK2"
-))
+plot.bargraph.CNV.TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 
-plot.matrix.CNVcorr.TCGA(c(
-  "TP53", "EIF4A1", "EIF4A2",
-  "EIF4E", "EIF4E2", "EIF4E3",
-  "MYC", "EIF3D", "EIF4EBP1",
-  "EIF4G1", "EIF4G2", "EIF4G3",
-  "PABPC1", "MKNK1", "MKNK2"
-))
+plot.matrix.CNVcorr.TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 
-plot.boxgraph.CNVratio.TCGA(c(
-  "TP53", "EIF4A1", "EIF4A2",
-  "EIF4E", "EIF4E2", "EIF4E3",
-  "MYC", "EIF3D", "EIF4EBP1",
-  "EIF4G1", "EIF4G2", "EIF4G3",
-  "PABPC1", "MKNK1", "MKNK2"
-))
+plot.boxgraph.CNVratio.TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 
 # Run master functions in 4-DEG.R ----------------------------------------------
 plot.boxgraph.RNAseq.TCGA(c(
@@ -45,26 +27,22 @@ plot.boxgraph.RNAseq.TCGA(c(
   "EIF4EBP1", "EIF3D"
 ))
 
-plot.RNAratio.TCGA(c(
-  "EIF4E", "EIF4E2", "EIF4E3", "EIF4EBP1",
-  "EIF4G1", "EIF4G2", "EIF4G3", "EIF3D", #
-  "EIF4A1", "EIF4A2"
-))
+plot.boxgraph.RNAratio.TCGA("EIF4G1", "EIF4A1","EIF4E")
 
 # Run master functions in 5-Survival.R -----------------------------------------
-plot.km.EIF.tumor(
+plot.km.RNAseq.TCGA(
   EIF = "EIF4E",
   cutoff = 0.3,
   tumor = "lung adenocarcinoma"
 )
 
-plot.km.EIF.tumor(
+plot.km.RNAseq.TCGA(
   EIF = "EIF4E",
-  cutoff = 0.3,
+  cutoff = 0.2,
   tumor = "All"
 )
 
-plot.coxph.EIF.tumor(c(
+plot.coxph.RNAseq.TCGA(c(
   "EIF4E", "EIF4E2", "EIF4E3",
   "EIF4G1", "EIF4G2", "EIF4G3",
   "EIF4A1", "EIF4A2", "EIF3D",
@@ -74,7 +52,7 @@ plot.coxph.EIF.tumor(c(
   "MYC"
 ), "All")
 
-plot.coxph.EIF.tumor(c(
+plot.coxph.RNAseq.TCGA(c(
   "EIF4E", "EIF4E2", "EIF4E3",
   "EIF4G1", "EIF4G2", "EIF4G3",
   "EIF4A1", "EIF4A2", "EIF3D",

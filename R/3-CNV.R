@@ -1,31 +1,34 @@
 # prepare CNV related datasets from TCGA ---------------------------------------
 
 #' Read all CNV related datasets from TCGA
-#' @description This function reads all CNV related datasets from TCGA
-#' @return
-#' TCGA.CNV: the threshold CNV data generated from \code{\link{.get.TCGA.CNV}}
+#'
+#' @description This function reads all CNV related datasets from TCGA and generates three global variables.
 #'
 #' TCGA.CNV.value: the CNV value data generated from \code{\link{.get.TCGA.CNV.value}}
 #'
-#' TCGA.CNV.ratio: the CNV ratio data generated from \code{\link{.get.TCGA.CNV.ratio}}
+#' TCGA.CNV.sampletype: the merged dataset from TCGA.CNV, the threshold CNV data generated from \code{\link{.get.TCGA.CNV}},
+#' and TCGA.sampletype, the annotation data from the "TCGA_phenotype_denseDataOnlyDownload.tsv"
+#' dataset with selection of sample.type and primary.disease columns. “Solid Tissue Normal” samples are excluded.
 #'
-#' TCGA.sampletype: the annotation data from the "TCGA_phenotype_denseDataOnlyDownload.tsv"
-#' dataset with selection of sample.type and primary.disease columns.
+#' TCGA.CNVratio.sampletype: the merged dataset from TCGA.CNV.ratio, the CNV ratio data generated from \code{\link{.get.TCGA.CNV.ratio}},
+#' and TCGA.sampletype.
 #'
-#' TCGA.CNV.sampletype: the merged dataset from TCGA.CNV and TCGA.sampletype. “Solid Tissue Normal” samples are excluded.
-#'
-#' TCGA.CNVratio.sampletype: the merged dataset from TCGA.CNV.ratio and TCGA.sampletype.
 #' @importFrom dplyr distinct filter select select_if mutate mutate_at summarise rename group_by all_of
 #' @importFrom tibble remove_rownames column_to_rownames
 #' @importFrom data.table fread transpose
+#'
 #' @export
+#'
 #' @examples \dontrun{initialize.cnv.data()}
+#'
 initialize.cnv.data <- function() {
-  TCGA.CNV <<- .get.TCGA.CNV()
   TCGA.CNV.value <<- .get.TCGA.CNV.value()
-  TCGA.CNV.ratio <<- .get.TCGA.CNV.ratio()
 
-  TCGA.sampletype <<- readr::read_tsv(file.path(
+  TCGA.CNV <- .get.TCGA.CNV()
+
+  TCGA.CNV.ratio <- .get.TCGA.CNV.ratio()
+
+  TCGA.sampletype <- readr::read_tsv(file.path(
     data.file.directory,
     "TCGA_phenotype_denseDataOnlyDownload.tsv"
   )) %>%
@@ -158,11 +161,13 @@ initialize.cnv.data <- function() {
 }
 
 # CNV data analysis and plotting -----------------------------------------------
+
 #' Calculates the frequency of CNV status in all TCGA cancer types combined
 #' @description This function calculates the frequency of each CNV status across tumors in all TCGA cancer types for every EIF4F gene.
 #' @details It should not be used directly, only inside \code{\link{plot.bargraph.CNV.TCGA}} function.
 #' @param df \code{TCGA.CNV.sampletype.subset} generated inside \code{\link{plot.bargraph.CNV.TCGA}}
 #' @return a summary table ranking the EIF4F gene by the frequencies of duplication (CNV threshold labeled as “1” in the dataset)
+#' @importFrom reshape2 dcast melt
 #' @examples \dontrun{.CNV.all.cancer(TCGA.CNV.sampletype.subset)}
 #' @keywords internal
 .CNV.all.cancer <- function(df) {
@@ -267,6 +272,7 @@ initialize.cnv.data <- function() {
 #' @param df \code{TCGA.CNV.sampletype.subset} generated inside \code{\link{plot.bargraph.CNV.TCGA}}
 #' @param x one gene from the input argument of \code{\link{plot.bargraph.CNV.TCGA}}
 #' @return a list with the summary table of CNV in individual TCGA cancer types and gene name
+#' @importFrom forcats fct_rev
 #' @examples \dontrun{lapply(EIF,.CNV.ind.cancer,df = TCGA.CNV.sampletype.subset)}
 #' @keywords internal
 .CNV.ind.cancer <- function(df, x) {
@@ -370,6 +376,8 @@ initialize.cnv.data <- function() {
 #' It should not be used directly, only inside \code{\link{plot.matrix.CNVcorr.TCGA}} function.
 #' @param df output of \code{TCGA.CNV.value \%>\% select(all_of(EIF))} generated inside \code{\link{plot.matrix.CNVcorr.TCGA}}
 #' @return stacked bar plots for CNV status of each gene in an individual cancer type.
+#' @importFrom corrplot cor.mtest corrplot
+#' @importFrom grDevices dev.off
 #' @examples \dontrun{TCGA.CNV.value %>% dplyr::select(all_of(EIF)) %>% .matrix.plot()}
 #' @keywords internal
 .matrix.plot <- function(df) {
@@ -521,6 +529,9 @@ initialize.cnv.data <- function() {
 #' @return stacked bar plots for grouped CNV status of \code{EIF} in TCGA tumors
 #' @export
 #' @examples \dontrun{plot.bargraph.CNV.TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))}
+#' @examples \dontrun{plot.bargraph.CNV.TCGA(c("TP53", "EIF4A1", "EIF4A2","EIF4E",
+#' "EIF4E2", "EIF4E3", "MYC", "EIF3D", "EIF4EBP1", "EIF4G1", "EIF4G2", "EIF4G3",
+#' "PABPC1", "MKNK1", "MKNK2"))}
 plot.bargraph.CNV.TCGA <- function(EIF) {
   # combine CNV data with annotation data
   TCGA.CNV.sampletype.subset <- TCGA.CNV.sampletype %>%

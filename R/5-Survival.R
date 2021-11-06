@@ -1,9 +1,28 @@
 # prepare TCGA survival and RNA-seq dataset-------------------------------------
-
+#' Read RNA-seq and survival datasets from TCGA
+#'
+#' @description This function reads RNA-seq and survival datasets from TCGA
+#'
+#' TCGA.RNAseq: the RNAseq data from TCGA generated from \code{\link{.get.TCGA.RNAseq}}
+#'
+#' TCGA.OS: the annotation data from the "Survival_SupplementalTable_S1_20171025_xena_sp"
+#' dataset with selection of OS and OS.time columns.
+#'
+#' TCGA.sampletype: the annotation data from the "TCGA_phenotype_denseDataOnlyDownload.tsv"
+#' dataset with selection of sample.type and primary.disease columns.
+#'
+#' TCGA.RNAseq.OS.sampletype: the merged dataset from TCGA.RNAseq, TCGA.OS and TCGA.sampletype
+#'
+#' @importFrom purrr reduce
+#'
+#' @export
+#'
+#' @examples \dontrun{initialize.survival.data()}
+#'
 initialize.survival.data <- function() {
-  TCGA.RNAseq <<- .get.TCGA.RNAseq()
+  TCGA.RNAseq <- .get.TCGA.RNAseq()
   ## get OS data ##
-  TCGA.OS <<- data.table::fread(
+  TCGA.OS <- data.table::fread(
     file.path(
       data.file.directory,
       "Survival_SupplementalTable_S1_20171025_xena_sp"
@@ -18,11 +37,12 @@ initialize.survival.data <- function() {
         rename(rn = sample)
     }
   ## get sample type data ##
-  TCGA.sampletype <<- readr::read_tsv(
+  TCGA.sampletype <- readr::read_tsv(
     file.path(
       data.file.directory,
       "TCGA_phenotype_denseDataOnlyDownload.tsv"
-    )
+    ),
+    show_col_types = FALSE
   ) %>%
     {
       as_tibble(.) %>%
@@ -46,6 +66,15 @@ initialize.survival.data <- function() {
     dplyr::filter(sample.type != "Solid Tissue Normal")
 }
 
+#' Read the RNAseq data from TCGA
+#' @description This function reads the RNAseq data from TCGA
+#' "EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena".
+#' @details The function also removes possible duplicated tumor samples and samples with NAs in the dataset.
+#'
+#' It should not be used directly, only inside \code{\link{initialize.survival.data}} function.
+#' @return a data frame that contains the RNAseq data from TCGA
+#' @examples \dontrun{.get.TCGA.RNAseq()}
+#' @keywords internal
 .get.TCGA.RNAseq <- function() {
   TCGA.pancancer <- fread(
     file.path(
@@ -75,6 +104,19 @@ initialize.survival.data <- function() {
 
 # Survival analysis and plotting -----------------------------------------------
 ##  KM survival analyses
+#' Kaplan Meier survival analyses of gene expression
+#' @description This function correlate the gene expression within tumor samples with patient overall survival time from TCGA tumors.
+#' @details It should not be used directly, only inside \code{\link{plot.km.RNAseq.TCGA}} function.
+#' @param gene gene name, passed \code{EIF} argument from \code{\link{plot.km.RNAseq.TCGA}}
+#' @param data \code{df} generated inside \code{\link{plot.km.RNAseq.TCGA}}
+#' @param cutoff percentage of gene expression
+#' @param tumor all tumor types or specific type
+#' @return a KM plot
+#' @importFrom reshape2 dcast melt
+#' @importFrom survival survfit survdiff
+#' @importFrom stats pchisq
+#' @examples \dontrun{.KM.curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)}
+#' @keywords internal
 .KM.curve <- function(gene, data, cutoff, tumor) {
   km <- survival::survfit(SurvObj ~ data$Group, data = data, conf.type = "log-log")
   stats <- survival::survdiff(SurvObj ~ data$Group, data = data, rho = 0) # rho = 0 log-rank
@@ -143,6 +185,137 @@ initialize.survival.data <- function() {
 }
 
 ## Cox regression model and forest plot
+#' Univariable Cox-PH analyses of gene expression
+#' @description This function generates univariable regression model of
+#' the gene expression within tumor samples and patient overall survival time TCGA.
+#' @details It should not be used directly, only inside \code{\link{plot.coxph.RNAseq.TCGA}} function.
+#' @param gene gene names, passed \code{EIF} argument from \code{\link{plot.coxph.RNAseq.TCGA}}
+#' @param data \code{df1} generated inside \code{\link{plot.coxph.RNAseq.TCGA}}
+#' @param covariate_names gene names from the input arguement of \code{\link{plot.coxph.RNAseq.TCGA}}
+#' @return a table of univariable Cox-PH
+#' @importFrom dplyr across arrange bind_rows desc full_join slice vars
+#' @importFrom stats as.formula
+#' @importFrom survival coxph cox.zph
+#' @importFrom survivalAnalysis analyse_multivariate
+#' @importFrom purrr map
+#' @examples \dontrun{.univariable.analysis(df = df1, covariate_names = EIF)}
+#' @keywords internal
+.univariable.analysis <- function(df, covariate_names) {
+  # Multiple Univariate Analyses
+  res.cox <- map(covariate_names, function(gene) {
+    survivalAnalysis::analyse_multivariate(df,
+      vars(OS.time, OS),
+      covariates = list(gene)
+    ) %>%
+      with(summaryAsFrame)
+  }) %>%
+    bind_rows()
+
+  # To test for the proportional-hazards (PH) assumption
+  test.ph <- map(covariate_names, function(x) {
+    coxph(as.formula(paste("Surv(OS.time, OS)~", x)),
+      data = df
+    ) %>%
+      cox.zph() %>%
+      print() %>%
+      as.data.frame(.) %>%
+      slice(1)
+  }) %>%
+    bind_rows() %>%
+    dplyr::select("p") %>%
+    rename("pinteraction" = "p") %>%
+    tibble::rownames_to_column()
+
+  data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
+    # as.data.frame(.) %>%
+    mutate(across(7:11, round, 3)) %>%
+    mutate(across(4:6, round, 2)) %>%
+    mutate(np = nrow(df)) %>%
+    mutate(HRCI = paste0(HR, " (", Lower_CI, "-", Upper_CI, ")")) %>%
+    mutate(p = case_when(
+      p < 0.001 ~ "<0.001",
+      # p > 0.05 ~ paste(p,"*"),
+      TRUE ~ as.character(p)
+    )) %>%
+    mutate(pinteraction = case_when(
+      pinteraction < 0.001 ~ "<0.001",
+      pinteraction > 0.05 ~ paste(pinteraction, "*"),
+      TRUE ~ as.character(pinteraction)
+    )) %>%
+    arrange(desc(HR))
+
+  return(data1)
+}
+
+
+#' Multivariable Cox-PH analyses of gene expression
+#' @description This function generates univariable regression model of
+#' the gene expression within tumor samples and patient overall survival time TCGA.
+#' @details It should not be used directly, only inside \code{\link{plot.coxph.RNAseq.TCGA}} function.
+#' @param gene gene names, passed \code{EIF} argument from \code{\link{plot.coxph.RNAseq.TCGA}}
+#' @param data \code{df1} generated inside \code{\link{plot.coxph.RNAseq.TCGA}}
+#' @param covariate_names gene names from the input argument of \code{\link{plot.coxph.RNAseq.TCGA}}
+#' @return a table of multivariable Cox-PH
+#' @importFrom dplyr across arrange bind_rows desc full_join slice vars
+#' @importFrom stats as.formula
+#' @importFrom survival coxph cox.zph
+#' @importFrom survivalAnalysis analyse_multivariate
+#' @importFrom purrr map
+#' @examples \dontrun{.univariable.analysis(df = df1, covariate_names = EIF)}
+#' @keywords internal
+.multivariable.analysis <- function(df, covariate_names) {
+  res.cox <- survivalAnalysis::analyse_multivariate(
+    df,
+    vars(OS.time, OS),
+    covariates = covariate_names
+  ) %>%
+    with(summaryAsFrame) #  to extract an element from a list
+
+  # To test for the proportional-hazards (PH) assumption
+  test.ph <- coxph(as.formula(paste(
+    "Surv(OS.time, OS)~",
+    paste(covariate_names, collapse = "+")
+  )),
+  data = df
+  ) %>%
+    cox.zph() %>%
+    print() %>%
+    as.data.frame(.) %>% # do not use as_tibble here, cause errors
+    dplyr::select("p") %>%
+    rename("pinteraction" = "p") %>%
+    rownames_to_column() %>%
+    dplyr::filter(rowname != "GLOBAL") # remove the global test result for graph
+
+  data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
+    mutate(across(7:11, round, 3)) %>%
+    mutate(across(4:6, round, 2)) %>%
+    mutate(np = nrow(df)) %>%
+    mutate(HRCI = paste0(HR, " (", Lower_CI, "-", Upper_CI, ")")) %>%
+    mutate(p = case_when(
+      p < 0.001 ~ "<0.001",
+      # p > 0.05 ~ paste(p,"*"),
+      TRUE ~ as.character(p)
+    )) %>%
+    mutate(pinteraction = case_when(
+      pinteraction < 0.001 ~ "<0.001",
+      pinteraction > 0.05 ~ paste(pinteraction, "*"),
+      TRUE ~ as.character(pinteraction)
+    )) %>%
+    arrange(desc(HR))
+
+  return(data1)
+}
+
+
+#' Forest plots of COX-PH results
+#' @description This function should not be used directly, only inside \code{\link{plot.coxph.RNAseq.TCGA}} function.
+#' @param data output dataset generated from \code{\link{.univariable.analysis}} or \code{\link{.multivariable.analysis}} function
+#' @param output.file output file name
+#' @param plot.title title name of the forest graph
+#' @param x.tics tics for x axis
+#' @param x.range range for x axis
+#' @importFrom forestplot forestplot fpTxtGp fpColors
+#' @keywords internal
 .forest.graph <- function(data, output.file, plot.title, x.tics, x.range) {
   tabletext1 <- cbind(
     c("Gene", data$factor.id),
@@ -228,99 +401,25 @@ initialize.survival.data <- function() {
   dev.off()
 }
 
-.univariable.analysis <- function(df, covariate_names) {
-  # Multiple Univariate Analyses
-  res.cox <- map(covariate_names, function(gene) {
-    survivalAnalysis::analyse_multivariate(df,
-      vars(OS.time, OS),
-      covariates = list(gene)
-    ) %>%
-      with(summaryAsFrame)
-  }) %>%
-    bind_rows()
-
-  # To test for the proportional-hazards (PH) assumption
-  test.ph <- map(covariate_names, function(x) {
-    coxph(as.formula(paste("Surv(OS.time, OS)~", x)),
-      data = df
-    ) %>%
-      cox.zph() %>%
-      print() %>%
-      as.data.frame(.) %>%
-      slice(1)
-  }) %>%
-    bind_rows() %>%
-    dplyr::select("p") %>%
-    rename("pinteraction" = "p") %>%
-    tibble::rownames_to_column()
-
-  data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
-    # as.data.frame(.) %>%
-    mutate(across(7:11, round, 3)) %>%
-    mutate(across(4:6, round, 2)) %>%
-    mutate(np = nrow(df)) %>%
-    mutate(HRCI = paste0(HR, " (", Lower_CI, "-", Upper_CI, ")")) %>%
-    mutate(p = case_when(
-      p < 0.001 ~ "<0.001",
-      # p > 0.05 ~ paste(p,"*"),
-      TRUE ~ as.character(p)
-    )) %>%
-    mutate(pinteraction = case_when(
-      pinteraction < 0.001 ~ "<0.001",
-      pinteraction > 0.05 ~ paste(pinteraction, "*"),
-      TRUE ~ as.character(pinteraction)
-    )) %>%
-    arrange(desc(HR))
-
-  return(data1)
-}
-
-.multivariable.analysis <- function(df, covariate_names) {
-  res.cox <- survivalAnalysis::analyse_multivariate(
-    df,
-    vars(OS.time, OS),
-    covariates = covariate_names
-  ) %>%
-    with(summaryAsFrame) #  to extract an element from a list
-
-  # To test for the proportional-hazards (PH) assumption
-  test.ph <- coxph(as.formula(paste(
-    "Surv(OS.time, OS)~",
-    paste(covariate_names, collapse = "+")
-  )),
-  data = df
-  ) %>%
-    cox.zph() %>%
-    print() %>%
-    as.data.frame(.) %>% # do not use as_tibble here, cause errors
-    dplyr::select("p") %>%
-    rename("pinteraction" = "p") %>%
-    rownames_to_column() %>%
-    dplyr::filter(rowname != "GLOBAL") # remove the global test result for graph
-
-  data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
-    mutate(across(7:11, round, 3)) %>%
-    mutate(across(4:6, round, 2)) %>%
-    mutate(np = nrow(df)) %>%
-    mutate(HRCI = paste0(HR, " (", Lower_CI, "-", Upper_CI, ")")) %>%
-    mutate(p = case_when(
-      p < 0.001 ~ "<0.001",
-      # p > 0.05 ~ paste(p,"*"),
-      TRUE ~ as.character(p)
-    )) %>%
-    mutate(pinteraction = case_when(
-      pinteraction < 0.001 ~ "<0.001",
-      pinteraction > 0.05 ~ paste(pinteraction, "*"),
-      TRUE ~ as.character(pinteraction)
-    )) %>%
-    arrange(desc(HR))
-
-  return(data1)
-}
-
 
 # master functions to call Survival analysis and plotting ----------------------
-plot.km.EIF.tumor <- function(EIF, cutoff, tumor) {
+#' Survival analyses of TCGA patients with expression of \code{EIF} in their tumors by Kaplan Meier method
+#' @description This function generates a Kaplan Meier plot to compare the expression of one gene in TCGA cancer types.
+#' @details  This function first selects RNAseq of the query gene,
+#' survival data and cancer types from the dataset \code{TCGA.RNAseq.OS.sampletype} prepared from \code{\link{initialize.survival.data}}.
+#'
+#' With the subset data \code{df}, it compares the survival data from patients with top or bottom percents of gene expression,
+#' and plot the results as a KM curve plot with \code{\link{.KM.curve}}
+#' @param EIF gene name
+#' @param cutoff percentage of gene expression for patient stratification
+#' @param tumor all tumor types or specific type
+#' @return KM curve plots for TCGA patients with expression of \code{EIF} in their tumors
+#' @importFrom survival Surv
+#' @importFrom stats quantile
+#' @export
+#' @examples \dontrun{plot.km.EIF.tumor(EIF = "EIF4E", cutoff = 0.2, tumor = "lung adenocarcinoma")}
+#' @examples \dontrun{plot.km.EIF.tumor(EIF = "EIF4G1", cutoff = 0.3, tumor = "All")}
+plot.km.RNAseq.TCGA <- function(EIF, cutoff, tumor) {
   df <- TCGA.RNAseq.OS.sampletype %>%
     dplyr::select(
       all_of(EIF),
@@ -343,7 +442,26 @@ plot.km.EIF.tumor <- function(EIF, cutoff, tumor) {
   .KM.curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)
 }
 
-plot.coxph.EIF.tumor <- function(EIF, tumor) {
+#' Survival analyses of TCGA patients with expression of \code{EIF} in their tumors by Cox-PH method
+#' @description This function makes regression models between the gene expression within tumor samples and patient overall survival time.
+#' @details  This function first selects RNAseq of the query gene,
+#' survival data and cancer types from the dataset \code{TCGA.RNAseq.OS.sampletype} prepared from \code{\link{initialize.survival.data}}.
+#'
+#' With the subset data \code{df1}, it makes univariable regression models with \code{\link{.univariable.analysis}}
+#' and multivariable regression models with \code{\link{.multivariable.analysis}}.
+#'
+#' It plots the results as a forest graph with \code{\link{.forest.graph}}
+#' @param EIF gene name
+#' @param tumor all tumor types or specific type
+#' @return forest graph showing the relation between survival of TCGA patients and expression of \code{EIF} in their tumors
+#' @export
+#' @examples \dontrun{plot.coxph.RNAseq.TCGA(c("EIF4E", "EIF4E2", "EIF4E3",
+#' "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E", "EIF4EBP1",
+#' "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"), "All")}
+#' @examples \dontrun{plot.coxph.RNAseq.TCGA(c("EIF4E", "EIF4E2", "EIF4E3",
+#' "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E", "EIF4EBP1",
+#' "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"), "lung adenocarcinoma")}
+plot.coxph.RNAseq.TCGA <- function(EIF, tumor) {
   df1 <- TCGA.RNAseq.OS.sampletype %>%
     dplyr::filter(sample.type != "Solid Tissue Normal") %>%
     dplyr::select(

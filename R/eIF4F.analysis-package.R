@@ -11,7 +11,6 @@
 #' @import factoextra
 #' @import FactoMineR
 #' @import forcats
-#' @import forestplot
 #' @import ggfortify
 #' @import ggpubr
 #' @import ggplot2
@@ -33,8 +32,6 @@
 #' @import stats
 #' @import stats4
 #' @import stringr
-#' @import survival
-#' @import survivalAnalysis
 #' @import tibble
 #' @import tidyr
 #' @importFrom dplyr distinct filter select select_if mutate mutate_at mutate_if
