@@ -1,20 +1,32 @@
 # prepare phosphoproteomics datasets from CPTAC LUAD
-
-initialize.phosphoproteomics.data <- function() {
-  CPTAC.LUAD.Phos <<- read_excel(file.path(data.file.directory, "Phos.xlsx"),
+CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
+initialize_phosphoproteomics_data <- function() {
+  CPTAC_LUAD_Phos <<- read_excel(file.path(data.file.directory, "Phos.xlsx"),
     col_names = FALSE
   )
 
 
-  CPTAC.LUAD.Clinic <<- read_excel(file.path(
+  CPTAC_LUAD_Clinic <- read_excel(file.path(
     data.file.directory,
     "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"
   ),
   sheet = 2
   )
 
-  CPTAC.LUAD.Clinic.Sampletype <<- merge(CPTAC.LUAD.Clinic,
-    CPTAC.LUAD.sampletype,
+  CPTAC_LUAD_sampletype <- read_excel(
+    file.path(
+      data.file.directory,
+      "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"
+    )
+  ) %>%
+    as.data.frame() %>%
+        dplyr::select("Aliquot (Specimen Label)", "Type", "Participant ID (case_id)") %>%
+        dplyr::distinct(.data$`Aliquot (Specimen Label)`, .keep_all = TRUE) # %>%
+      # remove_rownames() %>%
+      # column_to_rownames(var = "Aliquot (Specimen Label)")
+
+  CPTAC_LUAD_Clinic_Sampletype <<- merge(CPTAC_LUAD_Clinic,
+    CPTAC_LUAD_sampletype,
     by.x = "case_id",
     by.y = "Participant ID (case_id)"
   ) %>%
@@ -73,44 +85,44 @@ initialize.phosphoproteomics.data <- function() {
 }
 
 .get.EIF.CPTAC.LUAD.Proteomics <- function(x) {
-  LUAD.Proteomics %>%
-    dplyr::select_if(names(.) %in% c(x, "Sample"))
-  # select(all_of(x), "Sample")
+  CPTAC_LUAD_Proteomics %>%
+  #  dplyr::select_if(names(.) %in% c(x, "Sample"))
+    select(any_of(x), "Sample")
 }
 
 .get.EIF.CPTAC.LUAD.Phos <- function(x) {
-  CPTAC.LUAD.Phos %>%
-    dplyr::filter(...1 %in% c(x, "Sample")) %>%
+  CPTAC_LUAD_Phos %>%
+    dplyr::filter(.data$...1 %in% c(x, "Sample")) %>%
     # as.data.frame(.) %>%
-    mutate(phosname = paste(...1, ...2)) %>%
+    mutate(phosname = paste(.data$...1, .data$...2)) %>%
     tibble::column_to_rownames(var = "phosname") %>%
-    dplyr::select(-c(...1, ...2)) %>%
-    t(.) %>%
-    as_tibble(.) %>%
-    mutate_at(vars(-`Sample na`), funs(as.numeric)) %>%
+    dplyr::select(-c(.data$...1, .data$...2)) %>%
+    t() %>%
+    as_tibble() %>%
+    mutate_at(vars(-.data$`Sample na`), funs(as.numeric)) %>%
     rename("Sample" = "Sample na")
 }
 
 
 # Boxplot for phosphor-proteomics across clinic data----------------------------
 .protein.boxplot <- function(df, x) {
-  hline <- summarise(group_by(df, Gene, Type), MD = 2**median(normalize)) %>%
-    ungroup(.) %>%
-    dplyr::filter(Gene == x & Type == "Tumor") %>%
-    dplyr::select(., MD) %>%
-    as.numeric(.) %>%
+  hline <- summarise(group_by(df, .data$Gene, .data$Type), MD = 2**median(.data$normalize)) %>%
+    ungroup() %>%
+    dplyr::filter(.data$Gene == x & .data$Type == "Tumor") %>%
+    dplyr::select(.data$MD) %>%
+    as.numeric() %>%
     # hline <- dataMedian$MD[dataMedian$Gene == x & dataMedian$Type == "Tumor"] %>%
-    round(., digits = 3)
+    round(digits = 3)
   p2 <- ggplot(
     data = df[df$Gene == x, ],
-    aes(
-      x = tumor_stage_pathological,
-      y = 2**normalize
+    aes_(
+      x = ~ tumor_stage_pathological,
+      y = ~ 2**normalize
     )
   ) +
     geom_boxplot(
       data = df[df$Gene == x, ],
-      aes(fill = Gene),
+      aes_(fill = ~ Gene),
       # alpha         = 0,
       # size     = .75,
       # width    = 1,
@@ -191,7 +203,7 @@ initialize.phosphoproteomics.data <- function() {
 
 # protein-protein correlation LUAD ---------------------------------------------
 EIF.pro.correlation <- function() {
-  LUAD.Pro <- LUAD.Proteomics[LUAD.Proteomics$Type %in% "Tumor", ]
+  LUAD.Pro <- CPTAC_LUAD_Proteomics[CPTAC_LUAD_Proteomics$Type %in% "Tumor", ]
 
   .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF4G1", z = "dark red")
   .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF4A1", z = "dark green")
@@ -238,7 +250,7 @@ plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
   EIF.LUAD.Phos.Proteomics.Sampletype <- list(
     EIF.CPTAC.LUAD.Phos,
     EIF.CPTAC.LUAD.Proteomics,
-    CPTAC.LUAD.Clinic.Sampletype
+    CPTAC_LUAD_Clinic_Sampletype
   ) %>%
     reduce(full_join, by = "Sample") %>%
     pivot_longer(
@@ -251,13 +263,13 @@ plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
     na.omit(.)
 
   EIF.LUAD.Phos.Proteomics.Sampletype.Normalization <- EIF.LUAD.Phos.Proteomics.Sampletype %>%
-    dplyr::filter(Type == "Normal") %>%
-    group_by(Gene) %>%
+    dplyr::filter(.data$Type == "Normal") %>%
+    group_by(.data$Gene) %>%
     # group_by(Gene) %>%
-    summarise(NAT.mean = median(value)) %>%
+    summarise(NAT.mean = median(.data$value)) %>%
     left_join(EIF.LUAD.Phos.Proteomics.Sampletype, ., by = "Gene") %>% # right_join is possible with the dev dplyr
     # group_by(Gene) %>%
-    mutate(normalize = value - NAT.mean) # %>%
+    mutate(normalize = .data$value - .data$NAT.mean) # %>%
 
   lapply(sort(unique(EIF.LUAD.Phos.Proteomics.Sampletype.Normalization$Gene)),
     .protein.boxplot,

@@ -1,6 +1,7 @@
 # prepare RNA proteomics datasets from CCLE and CPTAC LUAD
-initialize.RNApro.data <- function() {
-  CCLE.RNAseq <<- fread(
+CCLE_RNAseq <- CCLE_Anno <- CCLE_Proteomics <- CPTAC_LUAD_Proteomics <- CPTAC_LUAD_RNAseq <- NULL
+initialize_proteomics_data <- function() {
+  CCLE_RNAseq <<- fread(
     file.path(
       data.file.directory,
       "CCLE_expression_full.csv"
@@ -8,7 +9,7 @@ initialize.RNApro.data <- function() {
     data.table = FALSE
   )
 
-  CCLE.Anno <<- fread(
+  CCLE_Anno <<- fread(
     file.path(
       data.file.directory,
       "sample_info.csv"
@@ -16,7 +17,7 @@ initialize.RNApro.data <- function() {
     data.table = FALSE
   ) %>% dplyr::select(1, 2)
 
-  CCLE.Proteomics <<- fread(
+  CCLE_Proteomics <<- fread(
     file.path(
       data.file.directory,
       "protein_quant_current_normalized.csv"
@@ -24,40 +25,41 @@ initialize.RNApro.data <- function() {
     data.table = FALSE
   )
 
-  LUAD.Proteomics <<- read_excel(
+  CPTAC_LUAD_Proteomics <<- read_excel(
     file.path(data.file.directory, "Protein.xlsx"),
     col_names = FALSE
   ) %>%
     # as.data.frame(.) %>%
-    mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
+    mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
     tibble::column_to_rownames(var = "...1") %>%
-    t(.) %>%
-    as_tibble(.) %>%
-    mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
+    t() %>%
+    as_tibble() %>%
+    mutate_at(vars(-.data$Type, -.data$Sample), ~ suppressWarnings(as.numeric(.))) # exclude two columns convert character to number
 
-  LUAD.RNAseq <<- read_excel(
+  CPTAC_LUAD_RNAseq <<- read_excel(
     file.path(data.file.directory, "RNA.xlsx"),
     col_names = FALSE
   ) %>%
     # as_tibble(.) %>%
-    mutate(...1 = make.unique(...1)) %>% # relabel the duplicates
+    mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
     tibble::column_to_rownames(var = "...1") %>%
-    t(.) %>%
-    as_tibble(.) %>%
-    mutate_at(vars(-Type, -Sample), funs(as.numeric)) # exclude two columns convert character to number
+    t() %>%
+    as_tibble() %>%
+    mutate_at(vars(-.data$Type, -.data$Sample), ~ suppressWarnings(as.numeric(.))) # exclude two columns convert character to number
 }
 
 
 ### select EIF expression plotting ---------------------------------------------
 .get.CCLE.EIF.RNAseq <- function(EIF) {
-  CCLE.RNAseq <- CCLE.RNAseq %>%
+  .CCLE_EIF_RNAseq <- CCLE_RNAseq %>%
     rename("DepMap_ID" = "V1") %>%
     dplyr::select("DepMap_ID", starts_with((!!paste(EIF, "(ENSG"))))
+  return(.CCLE_EIF_RNAseq)
 }
 
 .get.CCLE.EIF.Proteomics <- function(EIF) {
-  CCLE.EIF.Proteomics <- CCLE.Proteomics %>%
-    dplyr::filter(Gene_Symbol == EIF)
+  CCLE.EIF.Proteomics <- CCLE_Proteomics %>%
+    dplyr::filter(.data$Gene_Symbol == EIF)
   if (nrow(CCLE.EIF.Proteomics) > 1) {
     df <- CCLE.EIF.Proteomics %>%
       dplyr::select(contains("_Peptides")) %>%
@@ -71,8 +73,8 @@ initialize.RNApro.data <- function() {
   CCLE.EIF.Proteomics <- CCLE.EIF.Proteomics %>%
     tibble::column_to_rownames(var = "Gene_Symbol") %>%
     dplyr::select(contains("TenPx"), -contains("_Peptides")) %>%
-    t(.) %>%
-    as.data.frame(.) %>%
+    t() %>%
+    as.data.frame() %>%
     mutate(
       Celline = sub("\\_.*", "", row.names(.)),
       Type = sub(".*_ *(.*?) *_.*", "\\1", row.names(.))
@@ -120,30 +122,28 @@ initialize.RNApro.data <- function() {
 
 ## RNA protein correlation CCLE-------------------------------------------------
 plot.EIF.cor.CCLE <- function(EIF) {
-  x <- .get.CCLE.EIF.RNAseq(EIF) %>%
-    full_join(CCLE.Anno, by = "DepMap_ID") %>%
-    na.omit(.) %>%
-    dplyr::select(-DepMap_ID) %>%
+  .df <- .get.CCLE.EIF.RNAseq(EIF) %>%
+    full_join(CCLE_Anno, by = "DepMap_ID") %>%
+    na.omit() %>%
+    dplyr::select(-.data$DepMap_ID) %>%
     rename(
       "Celline" = "stripped_cell_line_name",
       !!paste0(EIF, ".rna") := contains(EIF)
     ) %>%
     full_join(.get.CCLE.EIF.Proteomics(EIF), by = "Celline") %>%
-    na.omit(.) %>%
-    .protein.RNA.scatter.plot(df = ., x = EIF, y = "CCLE")
+    na.omit()
+  .protein.RNA.scatter.plot(df = .df, x = EIF, y = "CCLE")
 }
-
-
 
 ## RNA protein correlation LUAD-------------------------------------------------
 plot.EIF.cor.LUAD <- function(EIF) {
-  EIF.LUAD.Proteomics <- LUAD.Proteomics %>%
+  EIF.LUAD.Proteomics <- CPTAC_LUAD_Proteomics %>%
     dplyr::select(all_of(EIF), "Type", "Sample") %>%
-    dplyr::filter(Type == "Tumor")
+    dplyr::filter(.data$Type == "Tumor")
 
-  EIF.LUAD.RNAseq <- LUAD.RNAseq %>%
+  EIF.LUAD.RNAseq <- CPTAC_LUAD_RNAseq %>%
     dplyr::select(all_of(EIF), "Type", "Sample") %>%
-    dplyr::filter(Type == "Tumor")
+    dplyr::filter(.data$Type == "Tumor")
 
   df <- merge(EIF.LUAD.Proteomics,
     EIF.LUAD.RNAseq,
@@ -155,12 +155,12 @@ plot.EIF.cor.LUAD <- function(EIF) {
 }
 
 
-## Heatmap of correlation analysis ##
+## Heatmap of correlation analysis----------------------------------------------
 # RNA-seq data were import in 4-DEG.R
-.EIF.correlation <- function(df, y) {
+.EIF_correlation <- function(df, y) {
   TCGA.GTEX.tumor <- df[
     df$sample.type %in% y,
-  ] %>% na.omit(.) # select tumor or healthy samples
+  ] %>% na.omit() # select tumor or healthy samples
   Gene.ID <- names(df) %>%
     .[!. %in% c(
       "Row.names",
@@ -278,7 +278,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
   return(output)
 }
 
-.Venn.plot <- function(df, x, z, CORs) {
+.Venn_plot <- function(df, x, z, CORs) {
   b <- limma::vennCounts(df)
   colnames(b) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1", "Counts")
   limma::vennDiagram(b)
@@ -335,29 +335,29 @@ plot.EIF.cor.LUAD <- function(EIF) {
 
 
 
-.count.CORs.tumor.normal <- function(df1, df2) {
+.count_CORs_tumor_normal <- function(df1, df2) {
   EIF.cor.counts.tumor <- df1 %>%
     tibble::add_column(label = "tumor") %>%
-    tibble::rownames_to_column(., "gene")
+    tibble::rownames_to_column(var = "gene")
 
   EIF.cor.counts.normal <- df2 %>%
     tibble::add_column(label = "normal") %>%
-    tibble::rownames_to_column(., "gene")
+    tibble::rownames_to_column(var = "gene")
 
   EIF.cor <- rbind(EIF.cor.counts.tumor,
     EIF.cor.counts.normal,
     make.row.names = F
   ) %>%
-    mutate(label = factor(label,
+    mutate(label = factor(.data$label,
       levels = c("tumor", "normal"),
       labels = c("Tumors", "Healthy tissues")
     )) %>%
-    mutate(gene = factor(gene,
+    mutate(gene = factor(.data$gene,
       levels = c("EIF4EBP1", "EIF4A1", "EIF4G1", "EIF4E")
     ))
 }
 
-.CORs.bargraph <- function(df, x, CORs, coord_flip.ylim) {
+.CORs_bargraph <- function(df, x, CORs, coord_flip.ylim) {
   p1 <- ggplot(
     data = df,
     aes(
@@ -411,7 +411,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
 
 
 
-.EIF.cor.normal.tumor <- function(df1, df2) {
+.EIF_cor_normal_tumor <- function(df1, df2) {
   cor.data <- cbind(
     setNames(
       data.frame(df1[1:8]),
@@ -454,7 +454,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
   return(DF)
 }
 
-.Heatmap.pathway <- function(df, x) {
+.Heatmap_pathway <- function(df, x) {
   # DF_scaled = t(scale(t(DF)))
   ## Creating heatmap with three clusters (See the ComplexHeatmap documentation for more options
   ht1 <- ComplexHeatmap::Heatmap(df,
@@ -526,7 +526,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
 
 
 
-.get.cluster.pathway.data <- function(df1, df2) {
+.get_cluster_pathway_data <- function(df1, df2) {
   cluster.geneID.list <- function(x) {
     c1 <- t(t(row.names(df1[row_order(df2)[[x]], ])))
     c1 <- as.data.frame(c1)
@@ -547,7 +547,7 @@ plot.EIF.cor.LUAD <- function(EIF) {
   return(cluster.data)
 }
 
-.pathway.dotplot <- function(df, p, x) {
+.pathway_dotplot <- function(df, p, x) {
   p1 <- clusterProfiler::dotplot(df,
     title = paste("The Most Enriched", p, "Pathways"),
     showCategory = 8,
@@ -582,9 +582,9 @@ plot.EIF.cor.LUAD <- function(EIF) {
 
 ## find posCOR and negCOR in the overlapping CORs from all cancer cases
 plot.Venn.all <- function(x) {
-  TCGA.GTEX.RNAseq.sampletype <- TCGA.GTEX.RNAseq.sampletype %>%
-    dplyr::filter(if (x != "All") primary.site == x else TRUE) %>%
-    na.omit(.) %>%
+  TCGA_GTEX_RNAseq_sampletype <- TCGA_GTEX_RNAseq_sampletype %>%
+    dplyr::filter(if (x != "All") .data$primary.site == x else TRUE) %>%
+    na.omit() %>%
     # mutate_if(is.character, as.factor) %>%
     mutate_at(c(
       "sample.type",
@@ -593,8 +593,8 @@ plot.Venn.all <- function(x) {
       "study"
     ), factor)
 
-  all.tumor.type <- TCGA.GTEX.RNAseq.sampletype %>%
-    dplyr::select(sample.type) %>%
+  all.tumor.type <- TCGA_GTEX_RNAseq_sampletype %>%
+    dplyr::select(.data$sample.type) %>%
     mutate_if(is.character, as.factor) %>%
     {
       levels(.$sample.type)
@@ -602,46 +602,46 @@ plot.Venn.all <- function(x) {
     .[!. %in% c("Cell Line", "Normal Tissue", "Solid Tissue Normal")]
 
 
-  EIF.cor.tumor <- .EIF.correlation(
-    df = TCGA.GTEX.RNAseq.sampletype,
+  EIF.cor.tumor <- .EIF_correlation(
+    df = TCGA_GTEX_RNAseq_sampletype,
     y = all.tumor.type
   )
-  .Venn.plot(df = EIF.cor.tumor[[3]], x = x, z = "tumor", CORs = "posCOR")
-  .Venn.plot(df = EIF.cor.tumor[[4]], x = x, z = "tumor", CORs = "negCOR")
+  .Venn_plot(df = EIF.cor.tumor[[3]], x = x, z = "tumor", CORs = "posCOR")
+  .Venn_plot(df = EIF.cor.tumor[[4]], x = x, z = "tumor", CORs = "negCOR")
 
 
-  EIF.cor.normal <- .EIF.correlation(
-    df = TCGA.GTEX.RNAseq.sampletype,
+  EIF.cor.normal <- .EIF_correlation(
+    df = TCGA_GTEX_RNAseq_sampletype,
     y = c("Normal Tissue")
   )
-  .Venn.plot(df = EIF.cor.normal[[3]], x = x, z = "normal", CORs = "posCOR")
-  .Venn.plot(df = EIF.cor.normal[[4]], x = x, z = "normal", CORs = "negCOR")
+  .Venn_plot(df = EIF.cor.normal[[3]], x = x, z = "normal", CORs = "posCOR")
+  .Venn_plot(df = EIF.cor.normal[[4]], x = x, z = "normal", CORs = "negCOR")
 
 
-  EIF.cor <- .count.CORs.tumor.normal(
+  EIF.cor <- .count_CORs_tumor_normal(
     df1 = EIF.cor.tumor[[2]],
     df2 = EIF.cor.normal[[2]]
   )
-  .CORs.bargraph(
+  .CORs_bargraph(
     df = EIF.cor, x = x,
     CORs = "posCORs",
     coord_flip.ylim = 14000
   )
-  .CORs.bargraph(
+  .CORs_bargraph(
     df = EIF.cor, x = x,
     CORs = "negCORs",
     coord_flip.ylim = 14000
   )
 
 
-  DF <- .EIF.cor.normal.tumor(
+  DF <- .EIF_cor_normal_tumor(
     df1 = EIF.cor.tumor[[1]],
     df2 = EIF.cor.normal[[1]]
   )
-  ht1 <- .Heatmap.pathway(df = DF, x = x)
+  ht1 <- .Heatmap_pathway(df = DF, x = x)
 
 
-  cluster.data <- .get.cluster.pathway.data(df1 = DF, df2 = ht1)
+  cluster.data <- .get_cluster_pathway_data(df1 = DF, df2 = ht1)
   ck.GO <- compareCluster(
     geneCluster = cluster.data,
     fun = "enrichGO",
@@ -655,7 +655,7 @@ plot.Venn.all <- function(x) {
     geneCluster = cluster.data,
     fun = "enrichPathway"
   )
-  .pathway.dotplot(df = ck.GO, p = "GO", x = x)
-  .pathway.dotplot(df = ck.KEGG, p = "KEGG", x = x)
-  .pathway.dotplot(df = ck.REACTOME, p = "REACTOME", x = x)
+  .pathway_dotplot(df = ck.GO, p = "GO", x = x)
+  .pathway_dotplot(df = ck.KEGG, p = "KEGG", x = x)
+  .pathway_dotplot(df = ck.REACTOME, p = "REACTOME", x = x)
 }

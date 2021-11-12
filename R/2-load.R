@@ -4,7 +4,26 @@ output.directory <- "~/Documents/EIF_output"
 
 
 ## Format Preparation ----------------------------------------------------------
-initialize.format <- function() {
+#utils::globalVariables(c("black_bold_tahoma_7", "black_bold_12", "black_bold_12_45",
+#                         "black_bold_16", "black_bold_16_right", "black_bold_16_45",
+#                         "black_bold_16_90", "black_bold_18", "black_bold_tahoma_7"))
+black_bold_tahoma_7 <- black_bold_12 <- black_bold_12_45 <- black_bold_16 <- NULL
+black_bold_16_right <- black_bold_16_45 <- black_bold_16_90 <- black_bold_18 <- NULL
+col_vector <- NULL
+#' Set format for plots
+#'
+#' @description This function set up the font type, size and color for ggplots.
+#'
+#'
+#' @export
+#'
+#' @examples \dontrun{initialize_format()}
+#'
+initialize_format <- function() {
+  # due to NSE notes in R CMD check
+  #black_bold_tahoma_7 <- black_bold_12 <- black_bold_12_45 <- black_bold_16 <- NULL
+  #black_bold_16_right <- black_bold_16_45 <- black_bold_16_90 <- black_bold_18 <- NULL
+
   black_bold_tahoma_7 <<- element_text(
     color = "black",
     face = "bold",

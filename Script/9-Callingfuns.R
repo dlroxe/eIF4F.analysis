@@ -1,48 +1,47 @@
 library(eIF4F.analysis)
 
-initialize.data <- function() {
-  initialize.cnv.data()
-  initialize.RNAseq.data()
-  initialize.survival.data()
-  initialize.proteomics.data()
-  initialize.RNApro.data()
-  initialize.phosphoproteomics.data()
+initialize_data <- function() {
+  initialize_cnv_data()
+  initialize_RNAseq_data()
+  initialize_survival_data()
+  initialize_proteomics_data()
+  initialize_phosphoproteomics_data()
 }
-initialize.data()
+initialize_data()
 
-initialize.format()
+initialize_format()
 
 # run master functions in 3-CNV.R ----------------------------------------------
-plot.bargraph.CNV.TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
+plot_bargraph_CNV_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 
-plot.matrix.CNVcorr.TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
+plot_matrix_CNVcorr_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 
-plot.boxgraph.CNVratio.TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
+plot_boxgraph_CNVratio_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 
 # Run master functions in 4-DEG.R ----------------------------------------------
-plot.boxgraph.RNAseq.TCGA(c(
+plot_boxgraph_RNAseq_TCGA(c(
   "EIF4G1", "EIF4G2", "EIF4G3", "PABPC1",
   "EIF4A1", "EIF4A2", "EIF4B", "EIF4H",
   "EIF4E", "EIF4E2", "EIF4E3",
   "EIF4EBP1", "EIF3D"
 ))
 
-plot.boxgraph.RNAratio.TCGA("EIF4G1", "EIF4A1","EIF4E")
+plot_boxgraph_RNAratio_TCGA("EIF4G1", "EIF4A1","EIF4E")
 
 # Run master functions in 5-Survival.R -----------------------------------------
-plot.km.RNAseq.TCGA(
+plot_KM_RNAseq_TCGA(
   EIF = "EIF4E",
   cutoff = 0.3,
   tumor = "lung adenocarcinoma"
 )
 
-plot.km.RNAseq.TCGA(
+plot_KM_RNAseq_TCGA(
   EIF = "EIF4E",
   cutoff = 0.2,
   tumor = "All"
 )
 
-plot.coxph.RNAseq.TCGA(c(
+plot_CoxPH_RNAseq_TCGA(c(
   "EIF4E", "EIF4E2", "EIF4E3",
   "EIF4G1", "EIF4G2", "EIF4G3",
   "EIF4A1", "EIF4A2", "EIF3D",
@@ -52,7 +51,7 @@ plot.coxph.RNAseq.TCGA(c(
   "MYC"
 ), "All")
 
-plot.coxph.RNAseq.TCGA(c(
+plot_CoxPH_RNAseq_TCGA(c(
   "EIF4E", "EIF4E2", "EIF4E3",
   "EIF4G1", "EIF4G2", "EIF4G3",
   "EIF4A1", "EIF4A2", "EIF3D",
@@ -64,18 +63,18 @@ plot.coxph.RNAseq.TCGA(c(
 
 
 # Run master functions in 6-PCA.R ----------------------------------------------
-plot.PCA.TCGA.GTEX(c(
+plot_PCA_TCGA_GTEX(c(
   "EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1",
   "PABPC1", "MKNK1", "MKNK2"
 ))
 
-plot.PCA.TCGA.GTEX.tumor(
+plot_PCA_TCGA_GTEX_tumor(
   c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
     "PABPC1", "MKNK1", "MKNK2"),
   "Lung"
 )
 
-plot.PCA.CPTAC.LUAD(c(
+plot_PCA_CPTAC_LUAD(c(
   "EIF4E", "EIF4G1", "EIF4A1", "PABPC1",
   "MKNK1", "MKNK2", "EIF4EBP1"
 ))
