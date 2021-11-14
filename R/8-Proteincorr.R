@@ -1,19 +1,37 @@
 # prepare phosphoproteomics datasets from CPTAC LUAD
 CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
+#' Read all phosphoproteomics related datasets from CPTAC LUAD
+#'
+#' @description This function reads all phosphoproteomics related datasets from CPTAC LUAD.
+#' It generates two global variable.
+#'
+#' CPTAC_LUAD_Phos: the phosphoproteomics data of CPTAC from \code{Phos.xlsx}
+#'
+#' CPTAC_LUAD_Clinic_Sampletype: the merged dataset from .CPTAC_LUAD_Clinic,
+#' the CPTAC clinical data from \code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx},
+#' and .CPTAC_LUAD_sampletype, the CPTAC annotation data from \code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx}.
+#'
+#' @importFrom dplyr case_when
+#' @importFrom readxl read_excel
+#'
+#' @export
+#'
+#' @examples \dontrun{initialize_phosphoproteomics_data()}
+#'
 initialize_phosphoproteomics_data <- function() {
   CPTAC_LUAD_Phos <<- read_excel(file.path(data.file.directory, "Phos.xlsx"),
     col_names = FALSE
   )
 
 
-  CPTAC_LUAD_Clinic <- read_excel(file.path(
+  .CPTAC_LUAD_Clinic <- read_excel(file.path(
     data.file.directory,
     "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"
   ),
   sheet = 2
   )
 
-  CPTAC_LUAD_sampletype <- read_excel(
+  .CPTAC_LUAD_sampletype <- read_excel(
     file.path(
       data.file.directory,
       "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"
@@ -25,8 +43,8 @@ initialize_phosphoproteomics_data <- function() {
       # remove_rownames() %>%
       # column_to_rownames(var = "Aliquot (Specimen Label)")
 
-  CPTAC_LUAD_Clinic_Sampletype <<- merge(CPTAC_LUAD_Clinic,
-    CPTAC_LUAD_sampletype,
+  CPTAC_LUAD_Clinic_Sampletype <<- merge(.CPTAC_LUAD_Clinic,
+    .CPTAC_LUAD_sampletype,
     by.x = "case_id",
     by.y = "Participant ID (case_id)"
   ) %>%
@@ -41,7 +59,7 @@ initialize_phosphoproteomics_data <- function() {
     ))
 }
 
-.Scatter.plot <- function(df, x, y, z) {
+.protein_scatterplot <- function(df, x, y, z) {
   p1 <- ggscatter(df,
     x = x,
     y = y, # color = "black",
@@ -84,29 +102,57 @@ initialize_phosphoproteomics_data <- function() {
   )
 }
 
-.get.EIF.CPTAC.LUAD.Proteomics <- function(x) {
+#' Select subset of CPTAC proteomics data
+#' @description This function selected the CPTAC LUAD proteomics data from the input \code{x}.
+#'
+#' @details The function should not be used directly, only inside \code{\link{plot_boxgraph_protein_CPTAC}} function.
+#' @param x protein name, passed \code{EIF_list} argument from \code{\link{plot_boxgraph_protein_CPTAC}}
+#' @return a data frame of CPTAC LUAD  data from the input \code{x} genes
+#' @examples \dontrun{.get_CPTAC_LUAD_Proteomics_subset(EIF_list)}
+#' @keywords internal
+.get_CPTAC_LUAD_Proteomics_subset <- function(x) {
   CPTAC_LUAD_Proteomics %>%
   #  dplyr::select_if(names(.) %in% c(x, "Sample"))
-    select(any_of(x), "Sample")
+    dplyr::select(any_of(x), "Sample")
 }
 
-.get.EIF.CPTAC.LUAD.Phos <- function(x) {
+#' Select subset of CPTAC phosproteomics data
+#' @description This function selected the CPTAC LUAD phosproteomics data from the input \code{EIF}.
+#'
+#' @details The function should not be used directly, only inside \code{\link{plot_boxgraph_protein_CPTAC}} function.
+#' @param x protein name, passed \code{EIF_list} argument from \code{\link{plot_boxgraph_protein_CPTAC}}
+#' @return a data frame of CPTAC LUAD  data from the input \code{x} genes
+#' @examples \dontrun{.get_CCLE_RNAseq_subset()}
+#' @keywords internal
+.get_CPTAC_LUAD_Phosproteomics_subset <- function(x) {
   CPTAC_LUAD_Phos %>%
     dplyr::filter(.data$...1 %in% c(x, "Sample")) %>%
     # as.data.frame(.) %>%
-    mutate(phosname = paste(.data$...1, .data$...2)) %>%
+    dplyr::mutate(phosname = paste(.data$...1, .data$...2)) %>%
     tibble::column_to_rownames(var = "phosname") %>%
     dplyr::select(-c(.data$...1, .data$...2)) %>%
     t() %>%
     as_tibble() %>%
-    mutate_at(vars(-.data$`Sample na`), funs(as.numeric)) %>%
+    dplyr::mutate_at(vars(-.data$`Sample na`), funs(as.numeric)) %>%
     rename("Sample" = "Sample na")
 }
 
 
 # Boxplot for phosphor-proteomics across clinic data----------------------------
-.protein.boxplot <- function(df, x) {
-  hline <- summarise(group_by(df, .data$Gene, .data$Type), MD = 2**median(.data$normalize)) %>%
+#' Boxplots of phosphor-proteomics data across clinic stages
+#' @description This function should not be used directly,
+#' only inside \code{\link{plot_boxgraph_protein_CPTAC}}.
+#' @param df a data frame of the combined proteomics and prosphorylation data
+#' generated inside \code{\link{plot_boxgraph_protein_CPTAC}}
+#' @param x protein name
+#' @importFrom dplyr ungroup
+#' @importFrom ggpubr stat_compare_means
+#' @importFrom stats median
+#' @importFrom stringr str_remove
+#' @keywords internal
+.protein_boxplot <- function(df, x) {
+  hline <- summarise(group_by(df, .data$Gene, .data$Type),
+                     MD = 2**stats::median(.data$normalize)) %>%
     ungroup() %>%
     dplyr::filter(.data$Gene == x & .data$Type == "Tumor") %>%
     dplyr::select(.data$MD) %>%
@@ -177,7 +223,7 @@ initialize_phosphoproteomics_data <- function() {
       strip.text = black_bold_12,
       strip.background = element_rect(fill = "white")
     ) +
-    stat_compare_means(
+    ggpubr::stat_compare_means(
       comparisons = list(
         c("Normal", "Stage I"),
         c("Normal", "Stage II"),
@@ -193,7 +239,7 @@ initialize_phosphoproteomics_data <- function() {
   print(p2)
   ggplot2::ggsave(
     path = file.path(output.directory, "CPTAC"),
-    filename = paste0(str_remove(x, ":"), "pro.pdf"),
+    filename = paste0(stringr::str_remove(x, ":"), "pro.pdf"),
     plot = p2,
     width = 3,
     height = 3,
@@ -205,51 +251,70 @@ initialize_phosphoproteomics_data <- function() {
 EIF.pro.correlation <- function() {
   LUAD.Pro <- CPTAC_LUAD_Proteomics[CPTAC_LUAD_Proteomics$Type %in% "Tumor", ]
 
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF4G1", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF4A1", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF4E", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "EIF4G1", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "EIF4A1", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "EIF4E", z = "dark blue")
 
   ## cell division
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "CKAP2", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "CKAP2", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "CKAP2", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "CKAP2", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "CKAP2", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "CKAP2", z = "dark blue")
 
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "CCNA2", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "CCNA2", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "CCNA2", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "CCNA2", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "CCNA2", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "CCNA2", z = "dark blue")
 
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "ERCC6L", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "ERCC6L", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "ERCC6L", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "ERCC6L", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "ERCC6L", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "ERCC6L", z = "dark blue")
 
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "MCM7", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "MCM7", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "MCM7", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "MCM7", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "MCM7", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "MCM7", z = "dark blue")
 
   ## translation
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "RPS2", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "RPS2", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "RPS2", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "RPS2", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "RPS2", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "RPS2", z = "dark blue")
 
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3B", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF3B", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3B", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3B", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "EIF3B", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3B", z = "dark blue")
 
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3G", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF3G", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3G", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3G", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "EIF3G", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3G", z = "dark blue")
 
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4G1", y = "EIF2S3", z = "dark green")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4E", y = "EIF2S3", z = "dark red")
-  .Scatter.plot(df = LUAD.Pro, x = "EIF4A1", y = "EIF2S3", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "EIF2S3", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "EIF2S3", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "EIF2S3", z = "dark blue")
 }
 
-plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
-  EIF.CPTAC.LUAD.Proteomics <- .get.EIF.CPTAC.LUAD.Proteomics(EIF_list)
-  EIF.CPTAC.LUAD.Phos <- .get.EIF.CPTAC.LUAD.Phos(EIF_list)
+#' Comparison of protein and phosphorylation levels among different stages of LUAD
+#' @description generates boxplot for eIF4F proteomics and prosphorylation data from CPTAC LUAD
+#' @details  This function merges the LUAD proteomics values from EIF4F genes
+#' in the data frame prepared from \code{\link{.get_CPTAC_LUAD_Proteomics_subset}} and
+#' phosphoproteomics data of the same protein in the data frame prepared
+#' from \code{\link{.get_CPTAC_LUAD_Phosproteomics_subset}}.
+#'
+#' Then it uses the combined data to compare the abundance across different tumor stages
+#' , and plot the result with the function \code{\link{.protein_boxplot}}
+#' @param EIF_list protein names in a vector of string
+#' @return the box plots for \code{EIF} protein and phosphorylation values in LUAD
+#' @importFrom dplyr group_by right_join summarise
+#' @importFrom tidyr pivot_longer
+#' @export
+#' @examples \dontrun{
+#' plot_boxgraph_protein_CPTAC(c("EIF4G1", "EIF4A1", "EIF4E"))
+#' plot_boxgraph_protein_CPTAC(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
+#' "AKT1", "MTOR", "EIF4B", "EIF4H", "MKNK1", "MKNK2"))
+#' }
+plot_boxgraph_protein_CPTAC <- function(EIF_list) {
+  .CPTAC_LUAD_Proteomics_subset <- .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
+  .CPTAC_LUAD_Phos_subset <- .get_CPTAC_LUAD_Phosproteomics_subset(EIF_list)
   EIF.LUAD.Phos.Proteomics.Sampletype <- list(
-    EIF.CPTAC.LUAD.Phos,
-    EIF.CPTAC.LUAD.Proteomics,
+    .CPTAC_LUAD_Proteomics_subset,
+    .CPTAC_LUAD_Phos_subset,
     CPTAC_LUAD_Clinic_Sampletype
   ) %>%
     reduce(full_join, by = "Sample") %>%
@@ -260,19 +325,19 @@ plot.EIF4.CPTAC.pro.LUAD <- function(EIF_list) {
       values_drop_na = TRUE
     ) %>%
     mutate_if(is.character, as.factor) %>%
-    na.omit(.)
+    na.omit()
 
   EIF.LUAD.Phos.Proteomics.Sampletype.Normalization <- EIF.LUAD.Phos.Proteomics.Sampletype %>%
     dplyr::filter(.data$Type == "Normal") %>%
     group_by(.data$Gene) %>%
     # group_by(Gene) %>%
     summarise(NAT.mean = median(.data$value)) %>%
-    left_join(EIF.LUAD.Phos.Proteomics.Sampletype, ., by = "Gene") %>% # right_join is possible with the dev dplyr
+    right_join(EIF.LUAD.Phos.Proteomics.Sampletype, by = "Gene") %>% # right_join is possible with the dev dplyr
     # group_by(Gene) %>%
     mutate(normalize = .data$value - .data$NAT.mean) # %>%
 
   lapply(sort(unique(EIF.LUAD.Phos.Proteomics.Sampletype.Normalization$Gene)),
-    .protein.boxplot,
+    .protein_boxplot,
     df = EIF.LUAD.Phos.Proteomics.Sampletype.Normalization
   )
 }

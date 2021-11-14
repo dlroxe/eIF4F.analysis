@@ -2,7 +2,7 @@
 CCLE_RNAseq <- CCLE_Anno <- CCLE_Proteomics <- CPTAC_LUAD_Proteomics <- CPTAC_LUAD_RNAseq <- NULL
 #' Read all proteomics related datasets from CCLE and CPTAC LUAD
 #'
-#' @description This function reads all proteomics related datasets from CCLE and CPTAC LUAD. It generates three global variables.
+#' @description This function reads all proteomics related datasets from CCLE and CPTAC LUAD. It generates five global variables.
 #'
 #' CCLE_RNAseq: the RNAseq data of CCLE from \code{CCLE_expression_full.csv}
 #'

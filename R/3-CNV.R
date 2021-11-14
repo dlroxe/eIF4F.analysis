@@ -15,9 +15,10 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #' TCGA_CNVratio_sampletype: the merged dataset from .TCGA_CNV_ratio, the CNV ratio data generated from \code{\link{.get_TCGA_CNV_ratio}},
 #' and .TCGA_sampletype.
 #'
-#' @importFrom dplyr distinct filter select select_if mutate mutate_at summarise rename group_by
-#' @importFrom tibble remove_rownames column_to_rownames
 #' @importFrom data.table fread transpose
+#' @importFrom dplyr distinct filter select select_if mutate mutate_at summarise rename group_by
+#' @importFrom stats na.omit
+#' @importFrom tibble remove_rownames column_to_rownames
 #'
 #' @export
 #'
@@ -391,6 +392,7 @@ initialize_cnv_data <- function() {
 #' @return stacked bar plots for CNV status of each gene in an individual cancer type.
 #' @importFrom corrplot cor.mtest corrplot
 #' @importFrom grDevices dev.off pdf
+#' @importFrom stats cor cor.test setNames
 #' @examples \dontrun{
 #' TCGA_CNV_value %>%
 #'   dplyr::select(all_of(EIF_list)) %>%
@@ -399,7 +401,7 @@ initialize_cnv_data <- function() {
 #' @keywords internal
 .matrix_plot <- function(df) {
   # correlation plot
-  M <- cor(df)
+  M <- stats::cor(df)
   testRes <- corrplot::cor.mtest(df, conf.level = 0.95)
 
   p1 <- corrplot::corrplot(

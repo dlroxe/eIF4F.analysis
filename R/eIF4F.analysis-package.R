@@ -11,14 +11,12 @@
 #' @import graphics
 #' @import grid
 #' @import lattice
-#' @import magrittr
 #' @import limma
 #' @import org.Hs.eg.db
 #' @import purrr
 #' @import RColorBrewer
 #' @import ReactomePA
 #' @import scales
-#' @import stats
 #' @import stats4
 #' @import stringr
 #' @import tibble

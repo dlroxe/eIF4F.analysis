@@ -80,15 +80,18 @@ plot_PCA_CPTAC_LUAD(c(
 ))
 
 # Run master functions in 7-Correlation.R --------------------------------------
-lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"), plot_scatter_RNApro_CCLE)
-lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"), plot_scatter_RNApro_LUAD)
+lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"),
+       plot_scatter_RNApro_CCLE)
+lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"),
+       plot_scatter_RNApro_LUAD)
 plot.Venn.all(x = "All")
 plot.Venn.all(x = "Lung")
 
 
 # Run master functions in 8-Proteincorr.R --------------------------------------
 EIF.pro.correlation()
-plot.EIF4.CPTAC.pro.LUAD(c(
+plot_boxgraph_protein_CPTAC(c("EIF4G1", "EIF4A1", "EIF4E"))
+plot_boxgraph_protein_CPTAC(c(
   "EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
   "AKT1", "MTOR", "EIF4B", "EIF4H",
   "MKNK1", "MKNK2"
