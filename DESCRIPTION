@@ -48,7 +48,8 @@ Imports:
     survival,
     survivalAnalysis,
     tibble,
-    tidyr
+    tidyr,
+    tidyselect
 Suggests: 
     knitr,
     rmarkdown

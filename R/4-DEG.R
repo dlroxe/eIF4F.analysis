@@ -595,6 +595,7 @@ plot_boxgraph_RNAseq_TCGA <- function(EIF.list) {
 #' Finally, it compares RNA ratio in primary, metastatic tumors vs adjacent normal tissues from all TCGA cancer types combined with
 #' the function \code{\link{.RNAratio_tumortype}} and plots with \code{\link{.violinplot}}.
 #' @return box plots for RNA ratios between \code{x,y,z} in TCGA tumors
+#' @importFrom rlang :=
 #' @export
 #' @examples \dontrun{plot_boxgraph_RNAseq_TCGA("EIF4G1", "EIF4A1","EIF4E")}
 #' @examples \dontrun{plot_boxgraph_RNAseq_TCGA("EIF4G1", "EIF4E", "EIF4EBP1")}

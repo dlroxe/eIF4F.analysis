@@ -2,7 +2,6 @@
 #' @import circlize
 #' @import clusterProfiler
 #' @import ComplexHeatmap
-#' @import data.table
 #' @import dplyr
 #' @import eulerr
 #' @import forcats
@@ -18,7 +17,6 @@
 #' @import purrr
 #' @import RColorBrewer
 #' @import ReactomePA
-#' @import readxl
 #' @import scales
 #' @import stats
 #' @import stats4
@@ -29,6 +27,7 @@
 #' summarise rename group_by
 #' @importFrom rlang .data %||% set_names sym expr enexpr quo enquo parse_expr
 #' @importFrom reshape2 melt dcast
+#' @importFrom data.table %like% fread transpose
 #' @keywords internal
 "_PACKAGE"
 

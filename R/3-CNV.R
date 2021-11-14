@@ -15,15 +15,13 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #' TCGA_CNVratio_sampletype: the merged dataset from .TCGA_CNV_ratio, the CNV ratio data generated from \code{\link{.get_TCGA_CNV_ratio}},
 #' and .TCGA_sampletype.
 #'
-#' @importFrom dplyr distinct filter select select_if mutate mutate_at summarise rename group_by all_of
+#' @importFrom dplyr distinct filter select select_if mutate mutate_at summarise rename group_by
 #' @importFrom tibble remove_rownames column_to_rownames
 #' @importFrom data.table fread transpose
 #'
 #' @export
 #'
-#' @examples \dontrun{
-#' initialize_cnv_data()
-#' }
+#' @examples \dontrun{initialize_cnv_data()}
 #'
 initialize_cnv_data <- function() {
   # .TCGA_CNV <- .TCGA_CNV_ratio <- .TCGA_sampletype <- NULL
@@ -283,6 +281,7 @@ initialize_cnv_data <- function() {
 #' @param x one gene from the input argument of \code{\link{plot_bargraph_CNV_TCGA}}
 #' @return a list with the summary table of CNV in individual TCGA cancer types and gene name
 #' @importFrom forcats fct_rev
+#' @importFrom tidyselect all_of any_of
 #' @examples \dontrun{
 #' lapply(EIF, .CNV_ind_cancer, df = .TCGA_CNV_sampletype_subset)
 #' }
