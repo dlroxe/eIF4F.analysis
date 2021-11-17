@@ -84,8 +84,8 @@ lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"),
        plot_scatter_RNApro_CCLE)
 lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"),
        plot_scatter_RNApro_LUAD)
-plot.Venn.all(x = "All")
-plot.Venn.all(x = "Lung")
+plot_Corr_RNAseq_TCGA_GTEX(x = "All")
+plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")
 
 
 # Run master functions in 8-Proteincorr.R --------------------------------------

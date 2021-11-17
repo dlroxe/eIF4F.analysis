@@ -1,6 +1,4 @@
-#' @import AnnotationDbi
 #' @import circlize
-#' @import clusterProfiler
 #' @import ComplexHeatmap
 #' @import dplyr
 #' @import eulerr
@@ -10,13 +8,10 @@
 #' @import ggplot2
 #' @import graphics
 #' @import grid
-#' @import lattice
 #' @import limma
 #' @import org.Hs.eg.db
-#' @import purrr
 #' @import RColorBrewer
 #' @import ReactomePA
-#' @import scales
 #' @import stats4
 #' @import stringr
 #' @import tibble

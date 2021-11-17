@@ -110,6 +110,7 @@ initialize_survival_data <- function() {
 #' @param tumor all tumor types or specific type
 #' @return a KM plot
 #' @importFrom reshape2 dcast melt
+#' @importFrom scales percent
 #' @importFrom survival survfit survdiff
 #' @importFrom stats pchisq
 #' @examples \dontrun{.KM_curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)}
@@ -156,8 +157,8 @@ initialize_survival_data <- function() {
       name = paste(gene, "mRNA expression"),
       breaks = c("Bottom %", "Top %"),
       labels = c(
-        paste("Bottom ", percent(cutoff), ", n =", round((nrow(data)) * cutoff, digits = 0)),
-        paste("Top ", percent(cutoff), ", n =", round((nrow(data)) * cutoff, digits = 0))
+        paste("Bottom ", scales::percent(cutoff), ", n =", round((nrow(data)) * cutoff, digits = 0)),
+        paste("Top ", scales::percent(cutoff), ", n =", round((nrow(data)) * cutoff, digits = 0))
       )
     ) +
     annotate(
@@ -204,9 +205,9 @@ initialize_survival_data <- function() {
       vars("OS.time", "OS"),
       covariates = list(gene)
     ) %>%
-      with(summaryAsFrame)
+      purrr::pluck("summaryAsFrame") # extracts a named element from a list
   }) %>%
-    bind_rows()
+    dplyr::bind_rows()
 
   # To test for the proportional-hazards (PH) assumption
   test.ph <- map(covariate_names, function(x) {
@@ -257,7 +258,7 @@ initialize_survival_data <- function() {
 #' @importFrom stats as.formula
 #' @importFrom survival coxph cox.zph
 #' @importFrom survivalAnalysis analyse_multivariate
-#' @importFrom purrr map
+#' @importFrom purrr map pluck
 #' @examples \dontrun{.univariable_analysis(df = df1, covariate_names = EIF)}
 #' @keywords internal
 .multivariable_analysis <- function(df, covariate_names) {
@@ -266,7 +267,7 @@ initialize_survival_data <- function() {
     vars("OS.time", "OS"),
     covariates = covariate_names
   ) %>%
-    with(summaryAsFrame) #  to extract an element from a list
+    purrr::pluck("summaryAsFrame") #  to extract an element from a list
 
   # To test for the proportional-hazards (PH) assumption
   test.ph <- coxph(as.formula(paste(

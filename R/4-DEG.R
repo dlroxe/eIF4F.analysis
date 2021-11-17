@@ -214,6 +214,7 @@ initialize_RNAseq_data <- function() {
 #' Box plots of differential gene expression across tumors
 #' @description This function should not be used directly, only inside \code{\link{plot_boxgraph_RNAseq_TCGA}}function.
 #' @param data output dataset generated from \code{\link{.RNAseq_ind_gene}} function
+#' @importFrom scales log2_trans label_comma
 #' @keywords internal
 .RNAseq_boxplot <- function(df) {
   p1 <- ggplot(
@@ -225,10 +226,10 @@ initialize_RNAseq_data <- function() {
     )
   ) +
     scale_y_continuous(
-      trans = log2_trans(),
+      trans = scales::log2_trans(),
       # limits = c(2**11, 2**17),# for 4g
       # limits = c(2**7, 2**14),# for eif4E
-      labels = label_comma()
+      labels = scales::label_comma()
     ) +
     stat_n_text(
       size = 5,

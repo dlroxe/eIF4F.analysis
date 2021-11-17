@@ -29,7 +29,6 @@ Imports:
     graphics,
     grDevices,
     grid,
-    lattice,
     limma,
     magrittr,
     missMDA,
