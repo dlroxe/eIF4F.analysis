@@ -1,9 +1,9 @@
-## Directory Preparation -------------------------------------------------------
+# Directory Preparation -------------------------------------------------------
 data.file.directory <- "~/Downloads/Test"
 output.directory <- "~/Documents/EIF_output"
 
 
-## Format Preparation ----------------------------------------------------------
+# Format Preparation ----------------------------------------------------------
 #utils::globalVariables(c("black_bold_tahoma_7", "black_bold_12", "black_bold_12_45",
 #                         "black_bold_16", "black_bold_16_right", "black_bold_16_45",
 #                         "black_bold_16_90", "black_bold_18", "black_bold_tahoma_7"))

@@ -1,4 +1,14 @@
-# prepare TCGA survival and RNA-seq dataset-------------------------------------
+# Survival analyses on EIF4F gene expression in TCGA tumors --------------------
+
+# This R script contains four sections.
+# (1) RNAseq and clinical data preparation
+# (2) functions to analyze KM and cox analyses as well as plotting,
+# (3) master functions to execute a pipeline of functions to select related RNAseq and clinical data
+# for survival analysis and plot with supply of EIF4F gene names as values of the arguments.
+
+
+## prepare TCGA survival and RNA-seq dataset ===================================
+
 TCGA_RNAseq_OS_sampletype <- NULL
 #' Read RNA-seq and survival datasets from TCGA
 #'
@@ -99,7 +109,8 @@ initialize_survival_data <- function() {
 }
 
 
-# Survival analysis and plotting -----------------------------------------------
+## Survival analysis and plotting ==============================================
+
 ##  KM survival analyses
 #' Kaplan Meier survival analyses of gene expression
 #' @description This function correlate the gene expression within tumor samples with patient overall survival time from TCGA tumors.
@@ -245,7 +256,6 @@ initialize_survival_data <- function() {
   return(data1)
 }
 
-
 #' Multivariable Cox-PH analyses of gene expression
 #' @description This function generates univariable regression model of
 #' the gene expression within tumor samples and patient overall survival time TCGA.
@@ -303,7 +313,6 @@ initialize_survival_data <- function() {
 
   return(data1)
 }
-
 
 #' Forest plots of COX-PH results
 #' @description This function should not be used directly, only inside \code{\link{plot_CoxPH_RNAseq_TCGA}} function.
@@ -400,7 +409,8 @@ initialize_survival_data <- function() {
 }
 
 
-# master functions to call Survival analysis and plotting ----------------------
+## master functions to call Survival analysis and plotting =====================
+
 #' Survival analyses of TCGA patients with expression of \code{EIF} in their tumors by Kaplan Meier method
 #' @description This function generates a Kaplan Meier plot to compare the expression of one gene in TCGA cancer types.
 #' @details  This function first selects RNAseq of the query gene,

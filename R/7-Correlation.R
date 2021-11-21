@@ -1,243 +1,19 @@
-# prepare RNA proteomics datasets from CCLE and CPTAC LUAD
-CCLE_RNAseq <- CCLE_Anno <- CCLE_Proteomics <- CPTAC_LUAD_Proteomics <- CPTAC_LUAD_RNAseq <- NULL
-#' Read all proteomics related datasets from CCLE and CPTAC LUAD
-#'
-#' @description This function reads all proteomics related datasets from CCLE and CPTAC LUAD. It generates five global variables.
-#'
-#' CCLE_RNAseq: the RNAseq data of CCLE from \code{CCLE_expression_full.csv}
-#'
-#' CCLE_Anno: the annotation data of CCLE from \code{sample_info.csv}
-#'
-#' CCLE_Proteomics: the proteomics data of CCLE from \code{protein_quant_current_normalized.csv}
-#'
-#' CPTAC_LUAD_Proteomics: the proteomics data with annotation of CPTAC LUAD from \code{Protein.xlsx}
-#'
-#' CPTAC_LUAD_RNAseq: the RNAseq data of CPTAC LUAD from \code{RNA.xlsx}
-#'
-#' @importFrom readxl read_excel
-#'
-#' @export
-#'
-#' @examples \dontrun{initialize_proteomics_data()}
-#'
-initialize_proteomics_data <- function() {
-  CCLE_RNAseq <<- fread(
-    file.path(
-      data.file.directory,
-      "CCLE_expression_full.csv"
-    ),
-    data.table = FALSE
-  )
+# Analyses on EIF4F correlating genes ------------------------------------------
 
-  CCLE_Anno <<- fread(
-    file.path(
-      data.file.directory,
-      "sample_info.csv"
-    ),
-    data.table = FALSE
-  ) %>% dplyr::select(1, 2)
-
-  CCLE_Proteomics <<- fread(
-    file.path(
-      data.file.directory,
-      "protein_quant_current_normalized.csv"
-    ),
-    data.table = FALSE
-  )
-
-  CPTAC_LUAD_Proteomics <<- read_excel(
-    file.path(data.file.directory, "Protein.xlsx"),
-    col_names = FALSE
-  ) %>%
-    # as.data.frame(.) %>%
-    mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
-    tibble::column_to_rownames(var = "...1") %>%
-    t() %>%
-    as_tibble() %>%
-    mutate_at(vars(-.data$Type, -.data$Sample), ~ suppressWarnings(as.numeric(.))) # exclude two columns convert character to number
-
-  CPTAC_LUAD_RNAseq <<- read_excel(
-    file.path(data.file.directory, "RNA.xlsx"),
-    col_names = FALSE
-  ) %>%
-    # as_tibble(.) %>%
-    mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
-    tibble::column_to_rownames(var = "...1") %>%
-    t() %>%
-    as_tibble() %>%
-    mutate_at(vars(-.data$Type, -.data$Sample), ~ suppressWarnings(as.numeric(.))) # exclude two columns convert character to number
-}
-
-### select EIF expression plotting ---------------------------------------------
-#' Select subset of CCLE RNAseq data
-#' @description This function selected the CCLE RNAseq data from the input \code{EIF}.
-#'
-#' @details The function should not be used directly, only inside \code{\link{plot_scatter_RNApro_CCLE}} function.
-#' @param EIF gene name
-#' @return a data frame of CCLE RNAseq data from the input \code{EIF} genes
-#' @importFrom dplyr starts_with
-#' @examples \dontrun{.get_CCLE_RNAseq_subset()}
-#' @keywords internal
-.get_CCLE_RNAseq_subset <- function(EIF) {
-  .CCLE_RNAseq_subset <- CCLE_RNAseq %>%
-    rename("DepMap_ID" = "V1") %>%
-    dplyr::select("DepMap_ID", starts_with((!!paste(EIF, "(ENSG"))))
-  return(.CCLE_RNAseq_subset)
-}
-
-#' Select subset of CCLE proteomics data
-#' @description This function selected the CCLE proteomics data from the input \code{EIF}.
-#'
-#' @details The function should not be used directly, only inside \code{\link{plot_scatter_RNApro_CCLE}} function.
-#' @param EIF protein name
-#' @return a data frame of CCLE proteomics data from the input \code{EIF} genes
-#' @importFrom dplyr across
-#' @importFrom tidyselect contains vars_select_helpers
-#' @examples \dontrun{.get_CCLE_Proteomics_subset()}
-#' @keywords internal
-.get_CCLE_Proteomics_subset <- function(EIF) {
-  .CCLE_Proteomics_subset <- CCLE_Proteomics %>%
-    dplyr::filter(.data$Gene_Symbol == EIF)
-  if (nrow(.CCLE_Proteomics_subset) > 1) {
-    df <- .CCLE_Proteomics_subset %>%
-      dplyr::select(contains("_Peptides")) %>%
-      mutate(sum = rowSums(dplyr::across(tidyselect::vars_select_helpers$where(is.numeric))))
-    name <- rownames(df[df$sum == max(df$sum), ]) # for the maximum value
-    .CCLE_Proteomics_subset <- .CCLE_Proteomics_subset %>%
-      dplyr::filter(row.names(.CCLE_Proteomics_subset) == name)
-  } else {
-    TRUE
-  }
-  .CCLE_Proteomics_subset <- .CCLE_Proteomics_subset %>%
-    tibble::column_to_rownames(var = "Gene_Symbol") %>%
-    dplyr::select(contains("TenPx"), -contains("_Peptides")) %>%
-    t() %>%
-    as.data.frame() %>%
-    rownames_to_column(var = "rn") %>%
-    mutate(
-      Celline = sub("\\_.*", "", .data$rn),
-      Type = sub(".*_ *(.*?) *_.*", "\\1", .data$rn)
-    ) %>%
-    select(-.data$rn) %>%
-    mutate_if(is.character, as.factor) %>%
-    # select(!!paste0(EIF,".pro") := EIF)
-    rename(!!paste0(EIF, ".pro") := EIF) # rename with dynamic variables
-  return(.CCLE_Proteomics_subset)
-}
-
-#' Scatter plots of correlation between RNAseq and proteomics data
-#' @description This function should not be used directly,
-#' only inside \code{\link{plot_scatter_RNApro_CCLE}} or \code{\link{plot_scatter_RNApro_LUAD}} function.
-#' @param df dataframe of both RNAseq and proteomics generated inside
-#' @param x protein or gene name
-#' @param y database name. \code{CCLE} or \code{LUAD}
-#' @importFrom ggpubr ggscatter
-#' @keywords internal
-.RNApro_scatterplot <- function(df, x, y) {
-  p1 <- ggscatter(df,
-    x = paste0(x, ".pro"),
-    y = paste0(x, ".rna"), # color = "Type",
-    add = "reg.line", # conf.int = TRUE,
-    cor.coef = TRUE,
-    cor.method = "pearson",
-    title = paste(x, "(", y, ")"),
-    xlab = "Protein expresion",
-    ylab = "RNA expression"
-  ) +
-    theme_bw() +
-    theme(
-      plot.title = black_bold_12,
-      axis.title.x = black_bold_12,
-      axis.title.y = black_bold_12,
-      axis.text.x = black_bold_12,
-      axis.text.y = black_bold_12,
-      panel.grid = element_blank(),
-      legend.position = "none",
-      strip.text = black_bold_12,
-      strip.background = element_rect(fill = "white")
-    )
-  print(p1)
-  ggplot2::ggsave(
-    path = file.path(output.directory, "LUAD"),
-    filename = paste(y, x, "cor", ".pdf"),
-    plot = p1,
-    width = 3,
-    height = 3,
-    useDingbats = FALSE
-  )
-}
+# This R script contains three sections.
+# (1) identify positively or negatively correlating genes of EIF4F
+# (2) analyze the correlating genes and plotting
+# (3) master functions to execute a pipeline of functions to select related RNAseq data
+# for correlation analyses and plot with supply of EIF4F gene names as values of the arguments.
 
 
-## RNA protein correlation CCLE-------------------------------------------------
-#' Correlation between CCLE RNAseq and proteomics data
-#' @description generates correlation scatter plot for eIF4F RNAseq and proteomics data from CCLE
-#' @param EIF gene name
-#' @details  This function merge the CCLE RNAseq values from EIF4F genes
-#' in the data frame prepared from \code{\link{.get_CCLE_RNAseq_subset}} and
-#' proteomics data of the same protein in the data frame prepared from \code{\link{.get_CCLE_Proteomics_subset}}.
-#'
-#' Then it uses the combined data to calculate the correlation coefficients
-#' between protein and RNA levels, and plot the result with the function \code{\link{.RNApro_scatterplot}}
-#' @return the correlation scatter plot for \code{EIF} RNA and protein values in CCLE
-#' @export
-#' @examples \dontrun{
-#' plot_scatter_RNApro_CCLE("EIF4G1")
-#' lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"), plot_scatter_RNApro_CCLE)
-#' }
-plot_scatter_RNApro_CCLE <- function(EIF) {
-  .df <- .get_CCLE_RNAseq_subset(EIF) %>%
-    full_join(CCLE_Anno, by = "DepMap_ID") %>%
-    na.omit() %>%
-    dplyr::select(-.data$DepMap_ID) %>%
-    rename(
-      "Celline" = "stripped_cell_line_name",
-      !!paste0(EIF, ".rna") := contains(EIF)
-    ) %>%
-    full_join(.get_CCLE_Proteomics_subset(EIF), by = "Celline") %>%
-    na.omit()
-  .RNApro_scatterplot(df = .df, x = EIF, y = "CCLE")
-}
+## Identify correlating genes for EIF4F genes ==================================
 
-## RNA protein correlation LUAD-------------------------------------------------
-#' Correlation between LUAD RNAseq and proteomics data
-#' @description generates correlation scatter plot for eIF4F RNAseq and proteomics data from LUAD
-#' @param EIF gene name
-#' @details  This function merge the LUAD RNAseq values from EIF4F genes
-#' in the data frame prepred from \code{CPTAC_LUAD_Proteomics} and
-#' proteomics data of the same protein in the data frame prepared from \code{CPTAC_LUAD_RNAseq}.
-#'
-#' Then it uses the combined data to calculate the correlation coefficients
-#' between protein and RNA levels, and plot the result with the function \code{\link{.RNApro_scatterplot}}
-#' @return the correlation scatter plot for \code{EIF} RNA and protein values in LUAD
-#' @export
-#' @examples \dontrun{
-#' plot_scatter_RNApro_LUAD("EIF4G1")
-#' lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"), plot_scatter_RNApro_LUAD)
-#' }
-plot_scatter_RNApro_LUAD <- function(EIF) {
-  .EIF_LUAD_Proteomics <- CPTAC_LUAD_Proteomics %>%
-    dplyr::select(all_of(EIF), "Type", "Sample") %>%
-    dplyr::filter(.data$Type == "Tumor")
-
-  .EIF_LUAD_RNAseq <- CPTAC_LUAD_RNAseq %>%
-    dplyr::select(all_of(EIF), "Type", "Sample") %>%
-    dplyr::filter(.data$Type == "Tumor")
-
-  df <- merge(.EIF_LUAD_Proteomics,
-    .EIF_LUAD_RNAseq,
-    by = c("Sample", "Type"),
-    suffixes = c(".pro", ".rna")
-  )
-
-  .RNApro_scatterplot(df = df, x = EIF, y = "LUAD")
-}
-
-
-## Heatmap of correlation analysis----------------------------------------------
 #' Identify EIF4F correlating genes
-#' @description This function calculate the correlation efficiency between each EIF4F gene and the rest of cellular mRNA.
+#' @description This function calculate the correlation efficiency between each EIF4F gene and the rest of cellular mRNAs.
 #' and identify the significantly correlating genes.
-#' @details It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
+#'
+#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
 #' @param df the dataframe \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}}
 #' @param y sample types, either \code{all.tumor.type} or \code{c("Normal Tissue")}
 #' generated inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}}
@@ -365,14 +141,18 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
   return(output)
 }
 
+
+## Correlation analysis and plotting ===========================================
+
 #' Plot Venn diagrams for correlating genes
 #' @description This function draw Venn diagrams, using the correlation data
 #' generated from \code{\link{.EIF_correlation}}.
 #'
+#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
 #' @param df correlation data
 #' @param x input argument of \code{\link{plot_Corr_RNAseq_TCGA_GTEX}}
-#' @param z tumor or normal
-#' @param CORs posCOR or negCORs
+#' @param z tumor or normal for the title of Venn diagram
+#' @param CORs posCOR or negCORs for the title of Venn diagram
 #' @return vennDiagram for posCOR or negCORs
 #' @importFrom eulerr euler
 #' @importFrom limma vennCounts vennDiagram
@@ -438,9 +218,10 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
 #' @description This function counts the numbers of correlating genes, using the data
 #' generated from \code{\link{.EIF_correlation}}.
 #'
+#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
 #' @param df1 \code{EIF.cor.tumor[[2]]}
 #' @param df2 \code{EIF.cor.normal[[2]]}
-#' @return bargrah for posCOR or negCORs
+#' @return bargraph for posCOR or negCOR numbers
 #' @examples \dontrun{.count_CORs_tumor_normal(df1 = EIF.cor.tumor[[2]],
 #' df2 = EIF.cor.normal[[2]])}
 #' @keywords internal
@@ -467,6 +248,20 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
     ))
 }
 
+#' Plot bargraph for the numbers of correlating genes
+#' @description This function draw bargraph, using the correlation data
+#' generated from \code{\link{.EIF_correlation}}.
+#'
+#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
+#' @param df correlation data
+#' @param x input argument of \code{\link{plot_Corr_RNAseq_TCGA_GTEX}}
+#' @param CORs posCOR or negCORs for the title of Venn diagram
+#' @param coord_flip.ylim the limit of y axis in the bar plot
+#' @return bargraph for the numbers of posCOR or negCORs
+#' @examples \dontrun{.Cors_bargraph(df = EIF.cor, x = x,
+#' CORs = "posCORs", coord_flip.ylim = 14000)}
+#' @keywords internal
+#'
 .Cors_bargraph <- function(df, x, CORs, coord_flip.ylim) {
   p1 <- ggplot(
     data = df,
@@ -521,6 +316,18 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
 }
 
 
+#' Combine all the EIF4F correlating gene data from tumor and healthy tissues
+#' @description Combine all the EIF4F correlating genes and their correlation coefficients,
+#' using the data generated from \code{\link{.EIF_correlation}}.
+#'
+#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
+#' @param df1 \code{EIF.cor.tumor[[2]]}
+#' @param df2 \code{EIF.cor.normal[[2]]}
+#' @return data frame with posCOR or negCOR from both tumors and healthy tissue samples
+#' @importFrom stats setNames
+#' @examples \dontrun{.EIF_cor_normal_tumor(df1 = EIF.cor.tumor[[1]], df2 = EIF.cor.normal[[1]])}
+#' @keywords internal
+#'
 .EIF_cor_normal_tumor <- function(df1, df2) {
   cor.data <- cbind(
     stats::setNames(
@@ -565,8 +372,7 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
 }
 
 .Cors_heatmap <- function(df, x) {
-  # DF_scaled = t(scale(t(DF)))
-  ## Creating heatmap with three clusters (See the ComplexHeatmap documentation for more options
+  ## Creating heatmap with three clusters (See the ComplexHeatmap documentation for more options)
   ht1 <- ComplexHeatmap::Heatmap(df,
     name = paste("Correlation Coefficient Heatmap", x),
     heatmap_legend_param = list(
@@ -611,7 +417,7 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
       c("blue", "#EEEEEE", "red")
     )
   )
-  ht <- draw(ht1,
+  ht <- ComplexHeatmap::draw(ht1,
     merge_legends = TRUE,
     heatmap_legend_side = "top",
     annotation_legend_side = "top"
@@ -625,7 +431,7 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
   height = 8,
   useDingbats = FALSE
   )
-  ht <- draw(ht1,
+  ht <- ComplexHeatmap::draw(ht1,
     merge_legends = TRUE,
     heatmap_legend_side = "top",
     annotation_legend_side = "top"
@@ -689,7 +495,8 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
 
 
 
-# master functions to find the overlapping CORs --------------------------------
+## Master functions to analyze the EIF4F CORs ==================================
+
 #' Perform correlation analysis on RNAseq data from all tumors and healthy tissues
 #' @description This function find correlating genes of EIF4F from
 #' \code{TCGA_GTEX_RNAseq_sampletype} RNAseq data generated by \code{\link{initialize_RNAseq_data}}.
@@ -774,14 +581,19 @@ plot_Corr_RNAseq_TCGA_GTEX <- function(x) {
     fun = "enrichGO",
     OrgDb = "org.Hs.eg.db"
   )
+
   ck.KEGG <- clusterProfiler::compareCluster(
     geneClusters = cluster.data,
     fun = "enrichKEGG"
   )
+
+
   ck.REACTOME <- clusterProfiler::compareCluster(
     geneClusters = cluster.data,
-    fun = "enrichPathway"
+    fun = "enrichPathway",
   )
+
+
   .pathway_dotplot(df = ck.GO, p = "GO", x = x)
   .pathway_dotplot(df = ck.KEGG, p = "KEGG", x = x)
   .pathway_dotplot(df = ck.REACTOME, p = "REACTOME", x = x)

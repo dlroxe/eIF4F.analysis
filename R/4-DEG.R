@@ -1,4 +1,14 @@
-# prepare RNA-seq related dataset from TCGA and GTEx----------------------------
+# Differential gene expression analysis of EIF4F genes in TCGA -----------------
+
+# This R script contains four sections.
+# (1) RNAseq data preparation
+# (2) analyze differential mRNA gene expression and plotting,
+# (3) master functions to execute a pipeline of functions to select related RNAseq data
+# with supply of EIF4F gene names for analysis and plotting.
+
+
+## prepare RNA-seq related dataset from TCGA and GTEx ==========================
+
 TCGA_GTEX_RNAseq_sampletype <- NULL
 # RNAseq <- study <- mean_RNAseq <- primary.site <- NULL
 #' Read all RNA-seq related datasets from TCGA and GTEx
@@ -90,7 +100,7 @@ initialize_RNAseq_data <- function() {
 }
 
 
-# Differential expression analysis and plotting --------------------------------
+## Differential expression analysis and plotting ===============================
 
 #' Compares expressions among genes in tumor samples
 #' @description This function selects the RNAseq data from TCGA samples,
@@ -522,7 +532,8 @@ initialize_RNAseq_data <- function() {
   return(.RNAratio_data)
 }
 
-# master functions to call DEG gene analysis and plotting ----------------------
+## master functions to call DEG gene analysis and plotting =====================
+
 #' Compare the expression of EIF4F genes
 #' @description This function generates a summary box plot to compare the expression of all EIF4F genes across TCGA cancer types,
 #' box plots for differential gene expression in tumors tumors vs adjacent normal tissues for each  gene.

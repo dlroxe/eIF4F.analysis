@@ -1,4 +1,15 @@
-# prepare CNV related datasets from TCGA ---------------------------------------
+# CNV analyses of EIF genes in TCGA data ---------------------------------------
+
+# This R script contains three sections:
+# (1) CNV data preparation
+# (2) CNV data analyses and plotting
+# (3) master functions to execute a pipeline of functions to select related CNV data
+# with supply of EIF4F gene names for analysis and plotting.
+
+
+
+## prepare CNV related datasets from TCGA ======================================
+
 # due to NSE notes in R CMD check
 TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 
@@ -6,9 +17,9 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #'
 #' @description This function reads all CNV related datasets from TCGA and generates three global variables.
 #'
-#' TCGA_CNV_value: the CNV value data generated from \code{\link{.get_TCGA_CNV_value}}
+#' TCGA_CNV_value: the unthreshold CNV value data generated from \code{\link{.get_TCGA_CNV_value}}
 #'
-#' TCGA_CNV_sampletype: the merged dataset from TCGA.CNV, the threshold CNV data generated from \code{\link{.get_TCGA_CNV}},
+#' TCGA_CNV_sampletype: the merged dataset from .TCGA.CNV, the threshold CNV data generated from \code{\link{.get_TCGA_CNV}},
 #' and .TCGA_sampletype, the annotation data from the "TCGA_phenotype_denseDataOnlyDownload.tsv"
 #' dataset with selection of sample.type and primary.disease columns. “Solid Tissue Normal” samples are excluded.
 #'
@@ -165,7 +176,7 @@ initialize_cnv_data <- function() {
   return(.TCGA_pancancer_transpose)
 }
 
-# CNV data analysis and plotting -----------------------------------------------
+## CNV data analysis and plotting ==============================================
 
 #' Calculates the frequency of CNV status in all TCGA cancer types combined
 #' @description This function calculates the frequency of each CNV status across tumors in all TCGA cancer types for every EIF4F gene.
@@ -536,7 +547,8 @@ initialize_cnv_data <- function() {
 }
 
 
-# master function to call CNV data analysis and plotting -----------------------
+## master function to call CNV data analysis and plotting ======================
+
 #' Summary of CNV statuses in bar plots
 #' @description Provides the summary of CNV statuses of EIF4F genes in tumors from all TCGA
 #' cancer types combined and in tumors from individual TCGA cancer types
