@@ -1,10 +1,11 @@
 # Analyses on EIF4F correlating genes ------------------------------------------
 
-# This R script contains three sections.
+# This R script contains four sections.
 # (1) identify positively or negatively correlating genes of EIF4F
 # (2) analyze the correlating genes and plotting
 # (3) master functions to execute a pipeline of functions to select related RNAseq data
 # for correlation analyses and plot with supply of EIF4F gene names as values of the arguments.
+# (4) wrapper function to call all master functions with inputs
 
 
 ## Identify correlating genes for EIF4F genes ==================================
@@ -13,10 +14,10 @@
 #' @description This function calculate the correlation efficiency between each EIF4F gene and the rest of cellular mRNAs.
 #' and identify the significantly correlating genes.
 #'
-#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
-#' @param df the dataframe \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}}
+#' It should not be used directly, only inside \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}} function.
+#' @param df the dataframe \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}}
 #' @param y sample types, either \code{all.tumor.type} or \code{c("Normal Tissue")}
-#' generated inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}}
+#' generated inside \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}}
 #' @return a list output with four elements: cor.data for the heatmap function and CORs.counts for
 #' bargraph function, c4.posCOR, c4.negCOR for Venn plots
 #' @importFrom AnnotationDbi mapIds
@@ -148,9 +149,9 @@
 #' @description This function draw Venn diagrams, using the correlation data
 #' generated from \code{\link{.EIF_correlation}}.
 #'
-#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
+#' It should not be used directly, only inside \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}} function.
 #' @param df correlation data
-#' @param x input argument of \code{\link{plot_Corr_RNAseq_TCGA_GTEX}}
+#' @param x input argument of \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}}
 #' @param z tumor or normal for the title of Venn diagram
 #' @param CORs posCOR or negCORs for the title of Venn diagram
 #' @return vennDiagram for posCOR or negCORs
@@ -218,7 +219,7 @@
 #' @description This function counts the numbers of correlating genes, using the data
 #' generated from \code{\link{.EIF_correlation}}.
 #'
-#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
+#' It should not be used directly, only inside \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}} function.
 #' @param df1 \code{EIF.cor.tumor[[2]]}
 #' @param df2 \code{EIF.cor.normal[[2]]}
 #' @return bargraph for posCOR or negCOR numbers
@@ -252,9 +253,9 @@
 #' @description This function draw bargraph, using the correlation data
 #' generated from \code{\link{.EIF_correlation}}.
 #'
-#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
+#' It should not be used directly, only inside \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}} function.
 #' @param df correlation data
-#' @param x input argument of \code{\link{plot_Corr_RNAseq_TCGA_GTEX}}
+#' @param x input argument of \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}}
 #' @param CORs posCOR or negCORs for the title of Venn diagram
 #' @param coord_flip.ylim the limit of y axis in the bar plot
 #' @return bargraph for the numbers of posCOR or negCORs
@@ -320,7 +321,7 @@
 #' @description Combine all the EIF4F correlating genes and their correlation coefficients,
 #' using the data generated from \code{\link{.EIF_correlation}}.
 #'
-#' It should not be used directly, only inside \code{\link{plot_Corr_RNAseq_TCGA_GTEX}} function.
+#' It should not be used directly, only inside \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}} function.
 #' @param df1 \code{EIF.cor.tumor[[2]]}
 #' @param df2 \code{EIF.cor.normal[[2]]}
 #' @return data frame with posCOR or negCOR from both tumors and healthy tissue samples
@@ -505,14 +506,15 @@
 #' find the overlap with Vennplot, compare their number with bargraph,
 #' visualize the correlation strength with heatmap, and found enriched pathways within correlating genes
 #'
-#' @param x All or Lung
+#' This function should not be used directly, only inside \code{\link{EIF4F_Corrgene_analysis}} function.
+#' @param x all tissue/tumor types or one specific type
 #' @return Venn digram, bargraph, heatmap, and dotplot
 #' @importFrom purrr map pluck discard
-#' @export
-#' @examples \dontrun{plot_Corr_RNAseq_TCGA_GTEX(x = "All")
-#' plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")}
+#' @keywords internal
+#' @examples \dontrun{.plot_Corr_RNAseq_TCGA_GTEX(x = "All")
+#' .plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")}
 #'
-plot_Corr_RNAseq_TCGA_GTEX <- function(x) {
+.plot_Corr_RNAseq_TCGA_GTEX <- function(x) {
   .TCGA_GTEX_RNAseq_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::filter(if (x != "All") .data$primary.site == x else TRUE) %>%
     na.omit() %>%
@@ -598,3 +600,23 @@ plot_Corr_RNAseq_TCGA_GTEX <- function(x) {
   .pathway_dotplot(df = ck.KEGG, p = "KEGG", x = x)
   .pathway_dotplot(df = ck.REACTOME, p = "REACTOME", x = x)
 }
+
+
+## wrapper function to call all master functions with inputs ===================
+
+#' Perform PCA and generate plots
+#' @description A wrapper function to call all master functions for PCA with inputs
+#'
+#' @details  This function run the master functions  \code{\link{.plot_Corr_RNAseq_TCGA_GTEX}}
+#' with two inputs.
+#'
+#' @return correlating gene analysis plots
+#'
+#' @export
+#'
+#' @examples \dontrun{EIF4F_Corrgene_analysis())}
+EIF4F_Corrgene_analysis <- function(){
+  .plot_Corr_RNAseq_TCGA_GTEX(x = "All")
+  .plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")
+}
+

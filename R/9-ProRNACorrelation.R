@@ -1,6 +1,19 @@
+# Correlation between RNA and protein levels for EIF4F -------------------------
+
+# This R script contains four sections.
+# (1) CCLE and LUAD proteomics data preparation
+# (2) selection of RNA and protein expression data and plotting
+# (3) master functions to execute a pipeline of functions to select related expression
+# with supply of EIF4F gene names for correlation analysis and plotting.
+# (4) wrapper function to call all master functions with inputs
+
+
+
 ## prepare RNA proteomics datasets from CCLE and CPTAC LUAD ====================
 
+# due to NSE notes in R CMD check
 CCLE_RNAseq <- CCLE_Anno <- CCLE_Proteomics <- CPTAC_LUAD_Proteomics <- CPTAC_LUAD_RNAseq <- NULL
+
 #' Read all proteomics related datasets from CCLE and CPTAC LUAD
 #'
 #' @description This function reads all proteomics related datasets from CCLE and CPTAC LUAD. It generates five global variables.
@@ -75,7 +88,7 @@ initialize_proteomics_data <- function() {
 #' Select subset of CCLE RNAseq data
 #' @description This function selected the CCLE RNAseq data from the input \code{EIF}.
 #'
-#' @details The function should not be used directly, only inside \code{\link{plot_scatter_RNApro_CCLE}} function.
+#' @details The function should not be used directly, only inside \code{\link{.plot_scatter_RNApro_CCLE}} function.
 #' @param EIF gene name
 #' @return a data frame of CCLE RNAseq data from the input \code{EIF} genes
 #' @importFrom dplyr starts_with
@@ -91,7 +104,7 @@ initialize_proteomics_data <- function() {
 #' Select subset of CCLE proteomics data
 #' @description This function selected the CCLE proteomics data from the input \code{EIF}.
 #'
-#' @details The function should not be used directly, only inside \code{\link{plot_scatter_RNApro_CCLE}} function.
+#' @details The function should not be used directly, only inside \code{\link{.plot_scatter_RNApro_CCLE}} function.
 #' @param EIF protein name
 #' @return a data frame of CCLE proteomics data from the input \code{EIF} genes
 #' @importFrom dplyr across
@@ -130,7 +143,7 @@ initialize_proteomics_data <- function() {
 
 #' Scatter plots of correlation between RNAseq and proteomics data
 #' @description This function should not be used directly,
-#' only inside \code{\link{plot_scatter_RNApro_CCLE}} or \code{\link{plot_scatter_RNApro_LUAD}} function.
+#' only inside \code{\link{.plot_scatter_RNApro_CCLE}} or \code{\link{.plot_scatter_RNApro_LUAD}} function.
 #' @param df dataframe of both RNAseq and proteomics generated inside
 #' @param x protein or gene name
 #' @param y database name. \code{CCLE} or \code{LUAD}
@@ -182,13 +195,14 @@ initialize_proteomics_data <- function() {
 #'
 #' Then it uses the combined data to calculate the correlation coefficients
 #' between protein and RNA levels, and plot the result with the function \code{\link{.RNApro_scatterplot}}
+#'
+#' This function should not be used directly, only inside \code{\link{EIF4F_RNA_pro_correlation}} function.
 #' @return the correlation scatter plot for \code{EIF} RNA and protein values in CCLE
-#' @export
+#' @keywords internal
 #' @examples \dontrun{
-#' plot_scatter_RNApro_CCLE("EIF4G1")
-#' lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"), plot_scatter_RNApro_CCLE)
+#' lapply(c("EIF4G1", "EIF4A1", "EIF4E"), .plot_scatter_RNApro_CCLE)
 #' }
-plot_scatter_RNApro_CCLE <- function(EIF) {
+.plot_scatter_RNApro_CCLE <- function(EIF) {
   .df <- .get_CCLE_RNAseq_subset(EIF) %>%
     full_join(CCLE_Anno, by = "DepMap_ID") %>%
     na.omit() %>%
@@ -211,13 +225,14 @@ plot_scatter_RNApro_CCLE <- function(EIF) {
 #'
 #' Then it uses the combined data to calculate the correlation coefficients
 #' between protein and RNA levels, and plot the result with the function \code{\link{.RNApro_scatterplot}}
+#'
+#' This function should not be used directly, only inside \code{\link{EIF4F_RNA_pro_correlation}} function.
 #' @return the correlation scatter plot for \code{EIF} RNA and protein values in LUAD
-#' @export
+#' @keywords internal
 #' @examples \dontrun{
-#' plot_scatter_RNApro_LUAD("EIF4G1")
-#' lapply(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1", "PABPC1"), plot_scatter_RNApro_LUAD)
+#' lapply(c("EIF4G1", "EIF4A1", "EIF4E"), .plot_scatter_RNApro_LUAD)
 #' }
-plot_scatter_RNApro_LUAD <- function(EIF) {
+.plot_scatter_RNApro_LUAD <- function(EIF) {
   .EIF_LUAD_Proteomics <- CPTAC_LUAD_Proteomics %>%
     dplyr::select(all_of(EIF), "Type", "Sample") %>%
     dplyr::filter(.data$Type == "Tumor")
@@ -233,5 +248,24 @@ plot_scatter_RNApro_LUAD <- function(EIF) {
   )
 
   .RNApro_scatterplot(df = df, x = EIF, y = "LUAD")
+}
+
+
+## wrapper function to call all master functions with inputs ===================
+
+#' Perform PCA and generate plots
+#' @description A wrapper function to call all master functions for RNA and protein correlation with inputs.
+#'
+#' @details  This function run the master functions \code{\link{.plot_scatter_RNApro_CCLE}} and
+#' \code{\link{.plot_scatter_RNApro_LUAD}} with EIF4F gene name as inputs.
+#'
+#' @return correlating gene analysis plots
+#'
+#' @export
+#'
+#' @examples \dontrun{EIF4F_RNA_pro_correlation())}
+EIF4F_RNA_pro_correlation <- function(){
+  lapply(c("EIF4G1", "EIF4A1", "EIF4E"), .plot_scatter_RNApro_CCLE)
+  lapply(c("EIF4G1", "EIF4A1", "EIF4E"), .plot_scatter_RNApro_LUAD)
 }
 

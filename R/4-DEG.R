@@ -5,12 +5,14 @@
 # (2) analyze differential mRNA gene expression and plotting,
 # (3) master functions to execute a pipeline of functions to select related RNAseq data
 # with supply of EIF4F gene names for analysis and plotting.
+# (4) wrapper function to call all master functions with inputs
 
 
 ## prepare RNA-seq related dataset from TCGA and GTEx ==========================
 
+# due to NSE notes in R CMD check
 TCGA_GTEX_RNAseq_sampletype <- NULL
-# RNAseq <- study <- mean_RNAseq <- primary.site <- NULL
+
 #' Read all RNA-seq related datasets from TCGA and GTEx
 #'
 #' @description This function reads RNA-seq related datasets from TCGA and GTEx
@@ -106,8 +108,8 @@ initialize_RNAseq_data <- function() {
 #' @description This function selects the RNAseq data from TCGA samples,
 #' excludes “Solid Tissue Normal” and ranks the genes by their mRNA expression.
 #'
-#' It should not be used directly, only inside \code{\link{plot_boxgraph_RNAseq_TCGA}} function.
-#' @param df \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{plot_boxgraph_RNAseq_TCGA}}
+#' It should not be used directly, only inside \code{\link{.plot_boxgraph_RNAseq_TCGA}} function.
+#' @param df \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{.plot_boxgraph_RNAseq_TCGA}}
 #' @return a data frame ranking genes by their mRNA expressions in lung adenocarcinoma
 #' @importFrom dplyr pull
 #' @examples \dontrun{.RNAseq_all_gene(.TCGA_GTEX_RNAseq_sampletype_subset)}
@@ -133,7 +135,7 @@ initialize_RNAseq_data <- function() {
 }
 
 #' Grouped box plots of RNA expression across tumors
-#' @description This function should not be used directly, only inside \code{\link{plot_boxgraph_RNAseq_TCGA}}function.
+#' @description This function should not be used directly, only inside \code{\link{.plot_boxgraph_RNAseq_TCGA}}function.
 #' @param data output dataset generated from \code{\link{.RNAseq_all_gene}} function
 #' @keywords internal
 .RNAseq_grouped_boxplot <- function(df) {
@@ -199,9 +201,9 @@ initialize_RNAseq_data <- function() {
 #' @description This function selects the RNAseq data from TCGA samples including all
 #' tumors and solid tissue normal samples for comparison.
 #'
-#' It should not be used directly, only inside \code{\link{plot_boxgraph_RNAseq_TCGA}} function.
-#' @param df \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{plot_boxgraph_RNAseq_TCGA}}
-#' @param x one gene from the input argument of \code{\link{plot_boxgraph_RNAseq_TCGA}}
+#' It should not be used directly, only inside \code{\link{.plot_boxgraph_RNAseq_TCGA}} function.
+#' @param df \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{.plot_boxgraph_RNAseq_TCGA}}
+#' @param x one gene from the input argument of \code{\link{.plot_boxgraph_RNAseq_TCGA}}
 #' @return a data frame of differential gene expression in tumors vs adjacent normal tissues from individual TCGA cancer types
 #' @importFrom dplyr case_when
 #' @importFrom forcats fct_rev
@@ -222,7 +224,7 @@ initialize_RNAseq_data <- function() {
 }
 
 #' Box plots of differential gene expression across tumors
-#' @description This function should not be used directly, only inside \code{\link{plot_boxgraph_RNAseq_TCGA}}function.
+#' @description This function should not be used directly, only inside \code{\link{.plot_boxgraph_RNAseq_TCGA}}function.
 #' @param data output dataset generated from \code{\link{.RNAseq_ind_gene}} function
 #' @importFrom scales log2_trans label_comma
 #' @keywords internal
@@ -299,15 +301,15 @@ initialize_RNAseq_data <- function() {
 #' @description This function selects the RNAseq data from TCGA samples including
 #' tumor samples that are labeled as “metastatic”, “primary tumor”, and “solid tissue normal” for comparison..
 #'
-#' It should not be used directly, only inside \code{\link{plot_boxgraph_RNAseq_TCGA}} function.
-#' @param df \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{plot_boxgraph_RNAseq_TCGA}}
+#' It should not be used directly, only inside \code{\link{.plot_boxgraph_RNAseq_TCGA}} function.
+#' @param df \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{.plot_boxgraph_RNAseq_TCGA}}
 #' @return a data frame of differential gene expression in tumors vs adjacent normal tissues in individual TCGA cancer types
 #' @keywords internal
 #'
 .RNAseq_tumortype <- function(df) {
   df1 <- df %>%
     dplyr::filter(.data$study == "TCGA") %>%
-    mutate_if(is.character, as.factor) %>%
+    dplyr::mutate_if(is.character, as.factor) %>%
     dplyr::filter(.data$sample.type %in% c(
       "Metastatic",
       "Primary Tumor",
@@ -317,11 +319,11 @@ initialize_RNAseq_data <- function() {
 }
 
 #' Violin plots of differential gene expression/ratio in primary, metastatic tumors vs adjacent normal tissues
-#' @description This function should not be used directly, only inside \code{\link{plot_boxgraph_RNAseq_TCGA}} or \code{\link{plot_boxgraph_RNAratio_TCGA}} function.
+#' @description This function should not be used directly, only inside \code{\link{.plot_boxgraph_RNAseq_TCGA}} or \code{\link{.plot_boxgraph_RNAratio_TCGA}} function.
 #' @param data output dataset generated from \code{\link{.RNAseq_tumortype}} or \code{\link{.RNAratio_tumortype}} function
 #' @importFrom EnvStats stat_n_text
 #' @keywords internal
-.violinplot <- function(df) {
+.violinplot <- function(df, y.axis.title, y.axis.break, yintercept) {
   p1 <- ggplot(
     data = df,
     # data = EIF.TCGA.RNAseq.anno.subset.long,
@@ -331,8 +333,8 @@ initialize_RNAseq_data <- function() {
       color = ~ sample.type,
       fill = ~ sample.type
     )
-  ) +
-    stat_n_text(
+    ) +
+    EnvStats::stat_n_text(
       size = 6,
       fontface = "bold",
       angle = 90,
@@ -352,7 +354,8 @@ initialize_RNAseq_data <- function() {
     ) +
     labs(
       x = "sample type",
-      y = "normalized RNA counts"
+      y = y.axis.title
+      #y = "normalized RNA counts"
     ) +
     scale_x_discrete(labels = c(
       "Metastatic Tumor",
@@ -361,12 +364,14 @@ initialize_RNAseq_data <- function() {
       "Adjacent Normal"
     )) +
     scale_y_continuous(
-      trans = log2_trans(),
-      labels = label_comma(),
-      breaks = c(1, 128, 2048, 32768),
+      trans = scales::log2_trans(),
+      labels = scales::label_comma(),
+      breaks = y.axis.break,
+      # breaks = c(1, 128, 2048, 32768),
       # labels = c("1","8","64","512"),
       position = "left"
     ) +
+    geom_hline(yintercept = yintercept, linetype = "dashed") +
     scale_color_manual(values = c("#56B4E9", "#009E73", "#D55E00")) + # for color-blind palettes
     scale_fill_manual(values = c("#56B4E9", "#009E73", "#D55E00")) + # for color-blind palettes
     theme_bw() +
@@ -382,7 +387,7 @@ initialize_RNAseq_data <- function() {
       legend.position = "none",
       strip.text = black_bold_16
     ) +
-    stat_compare_means(
+    ggpubr::stat_compare_means(
       comparisons = list(
         c("Metastatic", "Solid Tissue Normal"),
         c("Primary Tumor", "Solid Tissue Normal"),
@@ -404,39 +409,124 @@ initialize_RNAseq_data <- function() {
 }
 
 
-#' Analyzes RNA ratios in tumors vs adjacent normal tissues
-#' @description This function selects the RNA ratio data from TCGA samples including all
+#' Calculate RNA ratios in tumors vs adjacent normal tissues
+#' @description This function calculates the RNA ratio data from TCGA samples including all
 #' tumors and solid tissue normal samples for comparison.
 #'
-#' It should not be used directly, only inside \code{\link{plot_boxgraph_RNAratio_TCGA}} function.
-#' @param df \code{.RNAratio_ind(.RNAratio_data)} generated inside \code{\link{plot_boxgraph_RNAratio_TCGA}}
+#' It should not be used directly, only inside \code{\link{.plot_boxgraph_RNAratio_TCGA}} function.
+#' @param EIF4E gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF4E2 gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF4E3 gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF4EBP1 gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF4G1 gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF4G2 gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF4G3 gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF3D gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF4A1 gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @param EIF4A2 gene name, same input from \code{\link{.plot_boxgraph_RNAratio_TCGA}}
+#' @importFrom rlang :=
 #' @return a data frame of differential RNA ratios in tumors vs adjacent normal tissues from individual TCGA cancer types
 #' @keywords internal
 #'
-.RNAratio_ind <- function(df) {
+.RNAratio_calculation <- function(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
+                                  EIF4G1, EIF4G2, EIF4G3, EIF3D,
+                                  EIF4A1, EIF4A2) {
+  .genes_names <- c(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
+                    EIF4G1, EIF4G2, EIF4G3, EIF3D,
+                    EIF4A1, EIF4A2)
+  .RNAratio_data <- TCGA_GTEX_RNAseq_sampletype %>%
+    dplyr::select(
+      all_of(.genes_names),
+      "sample.type",
+      "primary.disease",
+      "primary.site",
+      "study"
+    ) %>%
+    as_tibble() %>%
+    filter(EIF4E != 0 & !is.na(.data$primary.site)) %>%
+    # calculate the ratio of mRNA counts
+    dplyr::mutate(
+      (!!paste0(EIF4E,"+",EIF4EBP1)) := log2(2**(!!as.name(EIF4E))+2**(!!as.name(EIF4EBP1))-1),
+      (!!paste0(EIF4A1,":","\n",EIF4E)) := (!!as.name(EIF4A1))-(!!as.name(EIF4E)),
+      (!!paste0(EIF4A1,":","\n",EIF4E2)) := (!!as.name(EIF4A1))-(!!as.name(EIF4E2)),
+      (!!paste0(EIF4A2,":","\n",EIF4E)) := (!!as.name(EIF4A2))-(!!as.name(EIF4E)),
+      (!!paste0(EIF4A2,":","\n",EIF4E2)) := (!!as.name(EIF4A2))-(!!as.name(EIF4E2)),
+      (!!paste0(EIF4G1,":","\n",EIF4E)) := (!!as.name(EIF4G1))-(!!as.name(EIF4E)),
+      (!!paste0(EIF4G1,":","\n",EIF4E2)) := (!!as.name(EIF4G1))-(!!as.name(EIF4E2)),
+      (!!paste0(EIF4G3,":","\n",EIF4E)) := (!!as.name(EIF4G3))-(!!as.name(EIF4E)),
+      (!!paste0(EIF4G3,":","\n",EIF4E2)) := (!!as.name(EIF4G3))-(!!as.name(EIF4E2)),
+      (!!paste0(EIF4A1,":","\n",EIF4G1)) := (!!as.name(EIF4A1))-(!!as.name(EIF4G1)),
+      (!!paste0(EIF4A2,":","\n",EIF4G1)) := (!!as.name(EIF4A2))-(!!as.name(EIF4G1)),
+      (!!paste0(EIF4A1,":","\n",EIF4G2)) := (!!as.name(EIF4A1))-(!!as.name(EIF4G2)),
+      (!!paste0(EIF4A2,":","\n",EIF4G2)) := (!!as.name(EIF4A2))-(!!as.name(EIF4G2)),
+      (!!paste0(EIF4E,":","\n",EIF4EBP1)) := (!!as.name(EIF4E))-(!!as.name(EIF4EBP1)),
+      (!!paste0(EIF4E2,":","\n",EIF4E)) := (!!as.name(EIF4E2))-(!!as.name(EIF4E)),
+      (!!paste0(EIF4G2,":","\n",EIF4G1)) := (!!as.name(EIF4G2))-(!!as.name(EIF4G1)),
+      (!!paste0(EIF4G1,":","\n",EIF4G3)) := (!!as.name(EIF4G1))-(!!as.name(EIF4G3)),
+      (!!paste0(EIF4A1,":","\n",EIF4A2)) := (!!as.name(EIF4A1))-(!!as.name(EIF4A2)),
+      (!!paste0(EIF4G1,":","\n",EIF4E,"+",EIF4EBP1)) := (!!as.name(EIF4G1))-log2(2**(!!as.name(EIF4E))+2**(!!as.name(EIF4EBP1))-1),
+      (!!paste0(EIF4A1,":","\n",EIF4E,"+",EIF4EBP1)) := (!!as.name(EIF4A1))-log2(2**(!!as.name(EIF4E))+2**(!!as.name(EIF4EBP1))-1)
+    ) %>%
+    dplyr::select(
+      (!!paste0(EIF4A1,":","\n",EIF4E)), (!!paste0(EIF4A1,":","\n",EIF4E2)),
+      (!!paste0(EIF4A2,":","\n",EIF4E)), (!!paste0(EIF4A2,":","\n",EIF4E2)),
+      (!!paste0(EIF4G1,":","\n",EIF4E)), (!!paste0(EIF4G1,":","\n",EIF4E2)),
+      (!!paste0(EIF4G3,":","\n",EIF4E)), (!!paste0(EIF4G3,":","\n",EIF4E2)),
+      (!!paste0(EIF4A1,":","\n",EIF4G1)), (!!paste0(EIF4A2,":","\n",EIF4G1)),
+      (!!paste0(EIF4A1,":","\n",EIF4G2)), (!!paste0(EIF4A2,":","\n",EIF4G2)),
+      (!!paste0(EIF4E,":","\n",EIF4EBP1)), (!!paste0(EIF4E2,":","\n",EIF4E)),
+      (!!paste0(EIF4G2,":","\n",EIF4G1)), (!!paste0(EIF4G1,":","\n",EIF4G3)),
+      (!!paste0(EIF4A1,":","\n",EIF4A2)),
+      (!!paste0(EIF4G1,":","\n",EIF4E,"+",EIF4EBP1)),
+      (!!paste0(EIF4A1,":","\n",EIF4E,"+",EIF4EBP1)),
+      "sample.type",
+      "primary.disease",
+      "primary.site",
+      "study"
+    ) %>%
+    dplyr::mutate_if(is.character, as.factor) %>%
+    na.omit()
+  return(.RNAratio_data)
+}
+
+#' Select RNA ratio data for plotting
+#' @description This function should not be used directly, only inside \code{\link{.plot_boxgraph_RNAratio_TCGA}}function.
+#' @param df output dataset generated from \code{\link{.RNAratio_calculation}} function
+#' @param x input argument for selected variables generated from \code{\link{.plot_boxgraph_RNAratio_TCGA}} function
+#' @keywords internal
+.RNAratio_selection <- function(df, x) {
   .RNAratio_data <- df %>%
     dplyr::filter(.data$study == "TCGA") %>%
     droplevels() %>%
-    mutate(sample.type = case_when(
+    dplyr::mutate(sample.type = case_when(
       sample.type != "Solid Tissue Normal" ~ "Tumor",
       sample.type == "Solid Tissue Normal" ~ "NAT"
     )) %>%
+    dplyr::select(
+      all_of(x),
+      "sample.type",
+      "primary.disease",
+      "primary.site",
+      "study"
+    ) %>%
     melt(id = c(
-        "sample.type",
-        "primary.disease",
-        "primary.site",
-        "study"
-      ),
-      value.name = "RNAseq"
+      "sample.type",
+      "primary.disease",
+      "primary.site",
+      "study"
+    ),
+    value.name = "RNAseq"
     ) %>%
     mutate_if(is.character, as.factor) %>%
     mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
   return(.RNAratio_data)
 }
 
+
+
 #' Box plots of differential RNA ratios across tumors
-#' @description This function should not be used directly, only inside \code{\link{plot_boxgraph_RNAratio_TCGA}}function.
-#' @param data output dataset generated from \code{\link{.RNAratio_ind}} function
+#' @description This function should not be used directly, only inside \code{\link{.plot_boxgraph_RNAratio_TCGA}}function.
+#' @param data output dataset generated from \code{\link{.RNAratio_selection}} function
 #' @keywords internal
 .RNAratio_boxplot <- function(df, dashline, ylimit, filename) {
   p1 <- ggplot(
@@ -506,12 +596,12 @@ initialize_RNAseq_data <- function() {
 #' @description This function selects the RNA ratio data from TCGA samples including
 #' tumor samples that are labeled as “metastatic”, “primary tumor”, and “solid tissue normal” for comparison..
 #'
-#' It should not be used directly, only inside \code{\link{plot_boxgraph_RNAratio_TCGA}} function.
-#' @param df \code{.RNAratio_tumortype(.RNAratio_data)} generated inside \code{\link{plot_boxgraph_RNAratio_TCGA}}
+#' It should not be used directly, only inside \code{\link{.plot_boxgraph_RNAratio_TCGA}} function.
+#' @param df \code{.RNAratio_tumortype(.RNAratio_data)} generated inside \code{\link{.plot_boxgraph_RNAratio_TCGA}}
 #' @return a data frame of differential RNA ratios in tumors vs adjacent normal tissues from individual TCGA cancer types
 #' @keywords internal
 #'
-.RNAratio_tumortype <- function(df) {
+.RNAratio_tumortype <- function(df, x) {
   .RNAratio_data <- df %>%
     dplyr::filter(.data$sample.type %in% c(
       "Metastatic",
@@ -519,6 +609,13 @@ initialize_RNAseq_data <- function() {
       "Solid Tissue Normal"
     )) %>%
     droplevels() %>%
+    dplyr::select(
+      all_of(x),
+      "sample.type",
+      "primary.disease",
+      "primary.site",
+      "study"
+    ) %>%
     melt(id = c(
            "sample.type",
            "primary.disease",
@@ -531,6 +628,7 @@ initialize_RNAseq_data <- function() {
     mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
   return(.RNAratio_data)
 }
+
 
 ## master functions to call DEG gene analysis and plotting =====================
 
@@ -551,12 +649,12 @@ initialize_RNAseq_data <- function() {
 #' Finally, it performs differential expression analysis for each gene
 #' in primary, metastatic tumors vs adjacent normal tissues from all TCGA cancer types combined with
 #' the function \code{\link{.RNAseq_tumortype}} and plots with \code{\link{.violinplot}}.
-#' @return box plots for diferenital gene expression of \code{EIF.list} in TCGA tumors
-#' @export
-#' @examples \dontrun{plot_boxgraph_RNAseq_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))}
-#' @examples \dontrun{plot_boxgraph_RNAseq_TCGA(c("EIF4G1", "EIF4G2", "EIF4G3",
+#' It should not be used directly, only inside \code{\link{EIF4F_DEG_analysis}} function.
+#' @return box plots for differential gene expression of \code{EIF.list} in TCGA tumors
+#' @keywords internal
+#' @examples \dontrun{.plot_boxgraph_RNAseq_TCGA(c("EIF4G1", "EIF4G2", "EIF4G3",
 #' "PABPC1", "EIF4A1", "EIF4A2", "EIF4B", "EIF4H", "EIF4E", "EIF4E2", "EIF4E3", "EIF4EBP1", "EIF3D" ))}
-plot_boxgraph_RNAseq_TCGA <- function(EIF.list) {
+.plot_boxgraph_RNAseq_TCGA <- function(EIF.list) {
   .TCGA_GTEX_RNAseq_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
       all_of(EIF.list),
@@ -589,67 +687,125 @@ plot_boxgraph_RNAseq_TCGA <- function(EIF.list) {
   lapply(RNAseq.ind.gene.df, .RNAseq_boxplot)
 
   # violin plot to compare  expression in primary, metastatic tumors vs NATs
-  .RNAseq_tumortype(.TCGA_GTEX_RNAseq_sampletype_subset) %>% .violinplot()
+  .RNAseq_tumortype(.TCGA_GTEX_RNAseq_sampletype_subset) %>%
+    .violinplot(y.axis.title = "normalized RNA counts",
+                y.axis.break = c(128, 2048, 32768),
+                yintercept = NULL)
 }
 
 #' Compare the RNA ratios between EIF4F genes
 #' @description This function generates box plot to compare the RNA ratios between EIF4F genes in tumors tumors vs adjacent normal tissues across TCGA cancer types.
 #' and a violin plot to compare RNA ratios in primary, metastatic tumors vs adjacent normal tissues from all TCGA cancer types combined.
-#' @param x gene name as a string
-#' @param y gene name as a string
-#' @param z gene name as a string
-#' @details  This function first calculate the ratios of mRNA levels between input genes within each TCGA sample,
+#' @param EIF4E gene name as a string
+#' @param EIF4E2 gene name as a string
+#' @param EIF4E3 gene name as a string
+#' @param EIF4EBP1 gene name as a string
+#' @param EIF4G1 gene name as a string
+#' @param EIF4G2 gene name as a string
+#' @param EIF4G3 gene name as a string
+#' @param EIF3D gene name as a string
+#' @param EIF4A1 gene name as a string
+#' @param EIF4A2 gene name as a string
+#' @details  This function analyzes the ratios of mRNA levels between input genes within each TCGA sample,
 #' in the data frame \code{TCGA_GTEX_RNAseq_sampletype} prepared from \code{\link{initialize_RNAseq_data}}.
 #'
-#' With the RNA ratio data \code{.RNAratio_data}, it compares RNA ratio across
-#' all tumors types with the function \code{\link{.RNAratio_ind}} and plots with \code{\link{.RNAratio_boxplot}}.
+#' It calculates RNA ratio across individual tumor types from all cancers
+#' with the function \code{\link{.RNAratio_calculation}}, select the ratio data with \code{\link{.RNAratio_selection}}
+#' and plots with \code{\link{.RNAratio_boxplot}}.
 #'
 #' Finally, it compares RNA ratio in primary, metastatic tumors vs adjacent normal tissues from all TCGA cancer types combined with
 #' the function \code{\link{.RNAratio_tumortype}} and plots with \code{\link{.violinplot}}.
-#' @return box plots for RNA ratios between \code{x,y,z} in TCGA tumors
-#' @importFrom rlang :=
-#' @export
-#' @examples \dontrun{plot_boxgraph_RNAseq_TCGA("EIF4G1", "EIF4A1","EIF4E")}
-#' @examples \dontrun{plot_boxgraph_RNAseq_TCGA("EIF4G1", "EIF4E", "EIF4EBP1")}
-plot_boxgraph_RNAratio_TCGA <- function(x,y,z) {
-  .genes_names <- c(x, y, z)
-  .RNAratio_data <- TCGA_GTEX_RNAseq_sampletype %>%
-    dplyr::select(
-      all_of(.genes_names),
-      "sample.type",
-      "primary.disease",
-      "primary.site",
-      "study"
-    ) %>%
-    as_tibble() %>%
-    dplyr::filter(x != 0 & !is.na(.data$primary.site)) %>%
-    # calculate the ratio of mRNA counts
-    mutate(
-      (!!paste0(x,":", "\n", y)) := (!!as.name(x))-(!!as.name(y)),
-      (!!paste0(x,":", "\n", z)) := (!!as.name(x))-(!!as.name(z)),
-      (!!paste0(y,":", "\n", z)) := (!!as.name(y))-(!!as.name(z))
-    ) %>%
-    dplyr::select(
-      (!!paste0(x,":", "\n", y)),
-      (!!paste0(x,":", "\n", z)),
-      (!!paste0(y,":", "\n", z)),
-      "sample.type",
-      "primary.disease",
-      "primary.site",
-      "study"
-    ) %>%
-    mutate_if(is.character, as.factor) %>%
-    na.omit()
-
+#' It should not be used directly, only inside \code{\link{EIF4F_DEG_analysis}} function.
+#' @return box plots for RNA ratios among input argument in TCGA tumors
+#' @examples \dontrun{.plot_boxgraph_RNAratio_TCGA(EIF4E = "EIF4E", EIF4E2 = "EIF4E2",
+#' EIF4E3 = "EIF4E3", EIF4EBP1 = "EIF4EBP1", EIF4G1 = "EIF4G1", EIF4G2 = "EIF4G2",
+#' EIF4G3 = "EIF4G3", EIF3D = "EIF3D", EIF4A1 = "EIF4A1", EIF4A2 = "EIF4A2")}
+.plot_boxgraph_RNAratio_TCGA <- function(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
+                                         EIF4G1, EIF4G2, EIF4G3, EIF3D,
+                                         EIF4A1, EIF4A2) {
+  RNAratio.data <- .RNAratio_calculation(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
+                                         EIF4G1, EIF4G2, EIF4G3, EIF3D,
+                                         EIF4A1, EIF4A2)
   .RNAratio_boxplot(
-    df = .RNAratio_ind(.RNAratio_data),
+    df = .RNAratio_selection(RNAratio.data, c(
+      (paste0(EIF4G1,":","\n",EIF4E)), (paste0(EIF4A1,":","\n",EIF4E)),
+      (paste0(EIF4A2,":","\n",EIF4E)), (paste0(EIF4G3,":","\n",EIF4E)),
+      (paste0(EIF4G3,":","\n",EIF4E2)), (paste0(EIF4G1,":","\n",EIF4G3))
+      )),
     dashline = 1,
     ylimit = c(0, 25),
     filename = "RNAratio1.pdf"
     )
 
-  .RNAratio_tumortype(.RNAratio_data) %>%
-    .violinplot()
+  .RNAratio_boxplot(
+    df = .RNAratio_selection(RNAratio.data, c(
+      (paste0(EIF4G2,":","\n",EIF4G1)), (paste0(EIF4E2,":","\n",EIF4E)),
+      (paste0(EIF4A1,":","\n",EIF4A2)), (paste0(EIF4E,":","\n",EIF4EBP1)),
+      (paste0(EIF4G1,":","\n",EIF4E,"+",EIF4EBP1)),
+      (paste0(EIF4A1,":","\n",EIF4E,"+",EIF4EBP1))
+      )),
+    dashline = 4,
+    ylimit = c(0, 25),
+    filename = "RNAratio2.pdf"
+    )
+
+  .RNAratio_boxplot(
+    df = .RNAratio_selection(RNAratio.data, c(
+      (paste0(EIF4G3,":","\n",EIF4E)), (paste0(EIF4G3,":","\n",EIF4E2)),
+      (paste0(EIF4G2,":","\n",EIF4G1)), (paste0(EIF4E2,":","\n",EIF4E)),
+      (paste0(EIF4A1,":","\n",EIF4A2)), (paste0(EIF4E,":","\n",EIF4EBP1))
+      )),
+    dashline = 1,
+    ylimit = c(0, 5),
+    filename = "RNAratio3.pdf"
+    )
+
+  .RNAratio_tumortype(RNAratio.data, c(
+    (paste0(EIF4G1,":","\n",EIF4E)), (paste0(EIF4A1,":","\n",EIF4E)),
+    (paste0(EIF4A2,":","\n",EIF4E)), (paste0(EIF4G3,":","\n",EIF4E)),
+    (paste0(EIF4G3,":","\n",EIF4E2)), (paste0(EIF4G1,":","\n",EIF4G3)),
+    (paste0(EIF4A1,":","\n",EIF4A2)), (paste0(EIF4E,":","\n",EIF4EBP1)),
+    (paste0(EIF4G1,":","\n",EIF4E,"+",EIF4EBP1)),
+    (paste0(EIF4A1,":","\n",EIF4E,"+",EIF4EBP1))
+    #"EIF4G1:\nEIF4E", "EIF4A1:\nEIF4E",
+    #"EIF4A2:\nEIF4E", "EIF4G3:\nEIF4E",
+    #"EIF4G3:\nEIF4E2", "EIF4G1:\nEIF4G3",
+    #"EIF4G2:\nEIF4G1", "EIF4E2:\nEIF4E",
+    #"EIF4A1:\nEIF4A2", "EIF4E:\nEIF4EBP1",
+    #"EIF4G1:\nEIF4E+EIF4EBP1",
+    #"EIF4A1:\nEIF4E+EIF4EBP1"
+  )) %>%
+    .violinplot(y.axis.title = "Ratio of RNA counts",
+                #y.axis.break = c(1, 128, 2048, 32768)
+                y.axis.break = c(0.125, 1, 4, 8, 64, 512),
+                yintercept = c(1, 4)
+                )
 }
 
+## wrapper function to call all master functions with inputs ===================
+
+#' Perform all CNV related analysis and generate plots
+#' @description A wrapper function to call all master functions for CNV analysis with inputs
+#'
+#' @details  This function run three master functions together:
+#' \code{\link{.plot_boxgraph_RNAseq_TCGA}} and
+#' \code{\link{.plot_boxgraph_RNAratio_TCGA}} with inputs
+#'
+#' @return DEG analysis plots
+#'
+#' @export
+#'
+#' @examples \dontrun{EIF4F_DEG_analysis())}
+EIF4F_DEG_analysis <- function(){
+  .plot_boxgraph_RNAseq_TCGA(c(
+    "EIF4G1", "EIF4G2", "EIF4G3", "PABPC1", "EIF4A1", "EIF4A2", "EIF4B", "EIF4H",
+    "EIF4E", "EIF4E2", "EIF4E3", "EIF4EBP1", "EIF3D"
+  ))
+
+  .plot_boxgraph_RNAratio_TCGA(
+    EIF4E = "EIF4E", EIF4E2 = "EIF4E2", EIF4E3 = "EIF4E3", EIF4EBP1 = "EIF4EBP1",
+    EIF4G1 = "EIF4G1", EIF4G2 = "EIF4G2", EIF4G3 = "EIF4G3", EIF3D = "EIF3D",
+    EIF4A1 = "EIF4A1", EIF4A2 = "EIF4A2"
+  )
+  }
 

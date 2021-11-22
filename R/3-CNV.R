@@ -1,11 +1,11 @@
 # CNV analyses of EIF genes in TCGA data ---------------------------------------
 
-# This R script contains three sections:
+# This R script contains four sections:
 # (1) CNV data preparation
 # (2) CNV data analyses and plotting
 # (3) master functions to execute a pipeline of functions to select related CNV data
 # with supply of EIF4F gene names for analysis and plotting.
-
+# (4) wrapper function to call all master functions with inputs
 
 
 ## prepare CNV related datasets from TCGA ======================================
@@ -180,8 +180,8 @@ initialize_cnv_data <- function() {
 
 #' Calculates the frequency of CNV status in all TCGA cancer types combined
 #' @description This function calculates the frequency of each CNV status across tumors in all TCGA cancer types for every EIF4F gene.
-#' @details It should not be used directly, only inside \code{\link{plot_bargraph_CNV_TCGA}} function.
-#' @param df \code{.TCGA_CNV_sampletype_subset} generated inside \code{\link{plot_bargraph_CNV_TCGA}}
+#' @details It should not be used directly, only inside \code{\link{.plot_bargraph_CNV_TCGA}} function.
+#' @param df \code{.TCGA_CNV_sampletype_subset} generated inside \code{\link{.plot_bargraph_CNV_TCGA}}
 #' @return a summary table ranking the EIF4F gene by the frequencies of duplication (CNV threshold labeled as “1” in the dataset)
 #' @importFrom reshape2 dcast melt
 #' @examples \dontrun{
@@ -216,7 +216,7 @@ initialize_cnv_data <- function() {
 #' @description This function generates the stacked bar plots to the summary of CNV statuses
 #' @details This plot function uses dataset generated from \code{\link{.CNV_all_cancer}} function
 #'
-#' It should not be used directly, only inside \code{\link{plot_bargraph_CNV_TCGA}}function.
+#' It should not be used directly, only inside \code{\link{.plot_bargraph_CNV_TCGA}}function.
 #' @param data summary table from \code{.CNV_all_cancer(.TCGA_CNV_sampletype_subset)}
 #' @return stacked bar plots showing the summary table of the CNV statuses
 #' @examples \dontrun{
@@ -288,9 +288,9 @@ initialize_cnv_data <- function() {
 
 #' Calculates the frequency of CNV status in individual TCGA cancer types
 #' @description a data analysis function that calculates the frequency of CNV status for each EIF4F gene in individual TCGA cancer types.
-#' @details It should not be used directly, only inside \code{\link{plot_bargraph_CNV_TCGA}} function.
-#' @param df \code{.TCGA_CNV_sampletype_subset} generated inside \code{\link{plot_bargraph_CNV_TCGA}}
-#' @param x one gene from the input argument of \code{\link{plot_bargraph_CNV_TCGA}}
+#' @details It should not be used directly, only inside \code{\link{.plot_bargraph_CNV_TCGA}} function.
+#' @param df \code{.TCGA_CNV_sampletype_subset} generated inside \code{\link{.plot_bargraph_CNV_TCGA}}
+#' @param x one gene from the input argument of \code{\link{.plot_bargraph_CNV_TCGA}}
 #' @return a list with the summary table of CNV in individual TCGA cancer types and gene name
 #' @importFrom forcats fct_rev
 #' @importFrom tidyselect all_of any_of
@@ -328,8 +328,8 @@ initialize_cnv_data <- function() {
 #' Stacked bar plots of the CNV status
 #' @description This function generates stacked bar plots for CNV status of each gene in an individual cancer type.
 #' @details This plot function uses dataset generated from \code{\link{.CNV_ind_cancer}} function
-#' It should not be used directly, only inside \code{\link{plot_bargraph_CNV_TCGA}} function.
-#' @param df \code{.EIF_CNV_ind_cancer} generated inside \code{\link{plot_bargraph_CNV_TCGA}}
+#' It should not be used directly, only inside \code{\link{.plot_bargraph_CNV_TCGA}} function.
+#' @param df \code{.EIF_CNV_ind_cancer} generated inside \code{\link{.plot_bargraph_CNV_TCGA}}
 #' @return stacked bar plots for CNV status of each gene in an individual cancer type.
 #' @examples \dontrun{
 #' lapply(.EIF_CNV_ind_cancer, .CNV_barplot)
@@ -398,8 +398,8 @@ initialize_cnv_data <- function() {
 #' Correlation coefficients for CNV values
 #' @description This function calculates the correlation coefficients between every two genes and plot the correlation matrix with the function.
 #' @details This plot function uses dataset \code{TCGA_CNV_value} generated from \code{\link{initialize_cnv_data}} function
-#' It should not be used directly, only inside \code{\link{plot_matrix_CNVcorr_TCGA}} function.
-#' @param df output of \code{TCGA_CNV_value \%>\% select(all_of(EIF))} generated inside \code{\link{plot_matrix_CNVcorr_TCGA}}
+#' It should not be used directly, only inside \code{\link{.plot_matrix_CNVcorr_TCGA}} function.
+#' @param df output of \code{TCGA_CNV_value \%>\% select(all_of(EIF))} generated inside \code{\link{.plot_matrix_CNVcorr_TCGA}}
 #' @return stacked bar plots for CNV status of each gene in an individual cancer type.
 #' @importFrom corrplot cor.mtest corrplot
 #' @importFrom grDevices dev.off pdf
@@ -458,9 +458,9 @@ initialize_cnv_data <- function() {
 
 #' Calculates the frequency of CNV status in all TCGA cancer types combined
 #' @description This function selects the CNV ratio data in tumors vs adjacent normals from individual TCGA cancer types for each input gene.
-#' @details It should not be used directly, only inside \code{\link{plot_boxgraph_CNVratio_TCGA}} function.
-#' @param df \code{.TCGA_CNVratio_sampletype_subset} generated inside \code{\link{plot_boxgraph_CNVratio_TCGA}}
-#' @param x one gene from the input argument of \code{\link{plot_boxgraph_CNVratio_TCGA}}
+#' @details It should not be used directly, only inside \code{\link{.plot_boxgraph_CNVratio_TCGA}} function.
+#' @param df \code{.TCGA_CNVratio_sampletype_subset} generated inside \code{\link{.plot_boxgraph_CNVratio_TCGA}}
+#' @param x one gene from the input argument of \code{\link{.plot_boxgraph_CNVratio_TCGA}}
 #' @return a list with the data frame of CNV ratio of the input gene in individual TCGA cancer types and gene name
 #' @examples \dontrun{
 #' lapply(EIF, .CNVratio_tumor, df = .TCGA_CNVratio_sampletype_subset)
@@ -481,10 +481,10 @@ initialize_cnv_data <- function() {
 
 #' Box plots of the CNV ratios in tumors vs adjacent normals
 #' @description This function generates boxplot for CNV ratios in tumors vs adjacent normals from individual TCGA cancer types.
-#' @details This plot function uses dataset \code{.TCGA_CNVratio_sampletype_subset} generated from \code{\link{plot_boxgraph_CNVratio_TCGA}} function.
+#' @details This plot function uses dataset \code{.TCGA_CNVratio_sampletype_subset} generated from \code{\link{.plot_boxgraph_CNVratio_TCGA}} function.
 #'
-#' It should not be used directly, only inside \code{\link{plot_boxgraph_CNVratio_TCGA}} function.
-#' @param df \code{.EIF_CNVratio_ind_cancer} generated inside \code{\link{plot_boxgraph_CNVratio_TCGA}}
+#' It should not be used directly, only inside \code{\link{.plot_boxgraph_CNVratio_TCGA}} function.
+#' @param df \code{.EIF_CNVratio_ind_cancer} generated inside \code{\link{.plot_boxgraph_CNVratio_TCGA}}
 #' @return boxplot for CNV ratios in tumors vs adjacent normals from individual TCGA cancer types.
 #' @examples \dontrun{
 #' lapply(.EIF_CNVratio_ind_cancer, .CNVratio_boxplot)
@@ -561,8 +561,9 @@ initialize_cnv_data <- function() {
 #'
 #' It also uses the same subset data to perform CNV status analysis for each gene across
 #' all tumors types with the function \code{\link{.CNV_ind_cancer}} and plots the CNV results and \code{\link{.CNV_barplot}}
+#'
+#' It should not be used directly, only inside \code{\link{EIF4F_CNV_analysis}} function.
 #' @return stacked bar plots for grouped CNV status of \code{EIF_list} in TCGA tumors
-#' @export
 #' @examples \dontrun{
 #' plot_bargraph_CNV_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 #' }
@@ -573,7 +574,8 @@ initialize_cnv_data <- function() {
 #'   "PABPC1", "MKNK1", "MKNK2"
 #' ))
 #' }
-plot_bargraph_CNV_TCGA <- function(EIF_list) {
+#' @keywords internal
+.plot_bargraph_CNV_TCGA <- function(EIF_list) {
   .TCGA_CNV_sampletype_subset <- NULL
   # combine CNV data with annotation data
   .TCGA_CNV_sampletype_subset <- TCGA_CNV_sampletype %>%
@@ -601,12 +603,14 @@ plot_bargraph_CNV_TCGA <- function(EIF_list) {
 #'
 #' Then it uses the subset data to calculate the correlation coefficients
 #' between every two genes and plot the correlation matrix with the function \code{\link{.matrix_plot}}
+#'
+#' It should not be used directly, only inside \code{\link{EIF4F_CNV_analysis}} function.
 #' @return the correlation matrix plot for \code{EIF_list} CNV values in TCGA tumors
-#' @export
 #' @examples \dontrun{
 #' plot_matrix_CNVcorr_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 #' }
-plot_matrix_CNVcorr_TCGA <- function(EIF_list) {
+#' @keywords internal
+.plot_matrix_CNVcorr_TCGA <- function(EIF_list) {
   TCGA_CNV_value %>%
     dplyr::select(all_of(EIF_list)) %>%
     .matrix_plot()
@@ -621,12 +625,14 @@ plot_matrix_CNVcorr_TCGA <- function(EIF_list) {
 #'
 #' Then it uses the subset data \code{.TCGA_CNVratio_sampletype_subset} to perform CNV status analysis for each gene across
 #' all tumors types with the function \code{\link{.CNVratio_tumor}} and plots the CNV results and \code{\link{.CNVratio_boxplot}}
+#'
+#' It should not be used directly, only inside \code{\link{EIF4F_CNV_analysis}} function.
 #' @return stacked bar plots for grouped CNV status of \code{EIF_list} in TCGA tumors
-#' @export
 #' @examples \dontrun{
 #' plot_boxgraph_CNVratio_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 #' }
-plot_boxgraph_CNVratio_TCGA <- function(EIF_list) {
+#' @keywords internal
+.plot_boxgraph_CNVratio_TCGA <- function(EIF_list) {
   .TCGA_CNVratio_sampletype_subset <- NULL
   .TCGA_CNVratio_sampletype_subset <- TCGA_CNVratio_sampletype %>%
     dplyr::select(
@@ -641,4 +647,41 @@ plot_boxgraph_CNVratio_TCGA <- function(EIF_list) {
   )
 
   lapply(.EIF_CNVratio_ind_cancer, .CNVratio_boxplot)
+}
+
+
+## wrapper function to call all master functions with inputs ===================
+
+#' Perform all CNV related analysis and generate plots
+#' @description A wrapper function to call all master functions for CNV analysis with inputs
+#'
+#' @details  This function run three master functions together:
+#' \code{\link{.plot_bargraph_CNV_TCGA}},
+#' \code{\link{.plot_matrix_CNVcorr_TCGA}} and
+#' \code{\link{.plot_boxgraph_CNVratio_TCGA}} with inputs
+#'
+#' @return CNV analysis plots
+#'
+#' @export
+#'
+#' @examples \dontrun{EIF4F_CNV_analysis())}
+EIF4F_CNV_analysis <- function(){
+  .plot_bargraph_CNV_TCGA(c(
+    "TP53", "EIF4A1", "EIF4A2",
+    "EIF4E", "EIF4E2", "EIF4E3",
+    "MYC", "EIF3D", "EIF4EBP1",
+    "EIF4G1", "EIF4G2", "EIF4G3",
+    "EIF4H", "EIF4B"))
+
+  .plot_matrix_CNVcorr_TCGA(c(
+    "TP53", "EIF4A1", "EIF4A2",
+    "EIF4E", "EIF4E2", "EIF4E3",
+    "MYC", "EIF3D", "EIF4EBP1",
+    "EIF4G1", "EIF4G2", "EIF4G3",
+    "EIF4H", "EIF4B"))
+
+  .plot_boxgraph_CNVratio_TCGA(c(
+    "EIF4G1", "EIF4E", "EIF4A1", "EIF4EBP1", "EIF4G2", "EIF4G3",
+    "EIF4E2", "EIF4E3", "EIF4A2", "EIF3D", "EIF4H", "EIF4B"
+))
 }
