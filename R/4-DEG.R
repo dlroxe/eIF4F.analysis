@@ -40,7 +40,7 @@ initialize_RNAseq_data <- function() {
 
   TCGA_GTEX_sampletype <- readr::read_tsv(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "TcgaTargetGTEX_phenotype.txt"
     ),
     show_col_types = FALSE
@@ -87,7 +87,7 @@ initialize_RNAseq_data <- function() {
 .get_TCGA_GTEX_RNAseq <- function() {
   .TCGA_pancancer <- data.table::fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "TcgaTargetGtex_RSEM_Hugo_norm_count"
     ),
     data.table = FALSE
@@ -193,7 +193,7 @@ initialize_RNAseq_data <- function() {
   print(p1)
 
   ggplot2::ggsave(
-    path = file.path(output.directory, "DEG"),
+    path = file.path(output_directory, "DEG"),
     filename = "RNAseqGroupedBoxplot.pdf",
     plot = p1,
     width = 16.5,
@@ -293,7 +293,7 @@ initialize_RNAseq_data <- function() {
   # geom_signif(comparisons=list(c("Tumor", "Normal")))
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "DEG"),
+    path = file.path(output_directory, "DEG"),
     filename = paste0(df[[2]], "tumorvsnormal.pdf"),
     plot = p1,
     width = 7.5,
@@ -405,7 +405,7 @@ initialize_RNAseq_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "DEG"),
+    path = file.path(output_directory, "DEG"),
     filename = "EIF4Fviolin.pdf",
     plot = p1,
     width = 18,
@@ -592,7 +592,7 @@ initialize_RNAseq_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "DEG"),
+    path = file.path(output_directory, "DEG"),
     filename = filename,
     plot = p1,
     width = 18,

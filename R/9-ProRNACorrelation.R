@@ -39,7 +39,7 @@ CCLE_RNAseq <- CCLE_Anno <- CCLE_Proteomics <- CPTAC_LUAD_Proteomics <- CPTAC_LU
 initialize_proteomics_data <- function() {
   CCLE_RNAseq <<- fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "CCLE_expression_full.csv"
     ),
     data.table = FALSE
@@ -47,7 +47,7 @@ initialize_proteomics_data <- function() {
 
   CCLE_Anno <<- fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "sample_info.csv"
     ),
     data.table = FALSE
@@ -55,14 +55,14 @@ initialize_proteomics_data <- function() {
 
   CCLE_Proteomics <<- fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "protein_quant_current_normalized.csv"
     ),
     data.table = FALSE
   )
 
   CPTAC_LUAD_Proteomics <<- read_excel(
-    file.path(data.file.directory, "Protein.xlsx"),
+    file.path(data_file_directory, "Protein.xlsx"),
     col_names = FALSE
   ) %>%
     # as.data.frame(.) %>%
@@ -73,7 +73,7 @@ initialize_proteomics_data <- function() {
     mutate_at(vars(-.data$Type, -.data$Sample), ~ suppressWarnings(as.numeric(.))) # exclude two columns convert character to number
 
   CPTAC_LUAD_RNAseq <<- read_excel(
-    file.path(data.file.directory, "RNA.xlsx"),
+    file.path(data_file_directory, "RNA.xlsx"),
     col_names = FALSE
   ) %>%
     # as_tibble(.) %>%
@@ -180,7 +180,7 @@ initialize_proteomics_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "RNApro"),
+    path = file.path(output_directory, "RNApro"),
     filename = paste(y, x, "cor", ".pdf"),
     plot = p1,
     width = 3,

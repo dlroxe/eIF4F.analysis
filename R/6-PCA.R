@@ -154,7 +154,7 @@
     )
   print(biplot)
   ggplot2::ggsave(
-    path = file.path(output.directory, "PCA", folder),
+    path = file.path(output_directory, "PCA", folder),
     filename = paste("PCA", x, ".pdf"),
     plot = biplot,
     width = 8,
@@ -192,7 +192,7 @@
   print(eig)
 
   ggplot2::ggsave(
-    path = file.path(output.directory, "PCA", folder),
+    path = file.path(output_directory, "PCA", folder),
     filename = paste("eig", x, ".pdf"),
     plot = eig,
     width = 8,
@@ -213,7 +213,7 @@
 
   var <- get_pca_var(res.pca)
   pdf(file.path(
-    path = file.path(output.directory, "PCA", folder),
+    path = file.path(output_directory, "PCA", folder),
     filename = paste("matrix", x, ".pdf")
   ),
   width = 9,
@@ -337,7 +337,7 @@
     )
   print(biplot)
   ggplot2::ggsave(
-    path = file.path(output.directory, "PCA", "All"),
+    path = file.path(output_directory, "PCA", "All"),
     filename = paste0("EIFPCAall", x, y, ".pdf"),
     plot = biplot,
     width = 8,

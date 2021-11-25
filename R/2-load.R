@@ -1,20 +1,20 @@
 # Directory Preparation -------------------------------------------------------
-data.file.directory <- "~/Downloads/Test"
-output.directory <- "~/Documents/EIF_output"
+data_file_directory <- "~/Downloads/Test"
+output_directory <- "~/Documents/EIF_output"
 
 initialize_dir <- function() {
-  dir.create(file.path(output.directory, "CNV"), recursive = TRUE)
-  dir.create(file.path(output.directory, "DEG"), recursive = TRUE)
-  dir.create(file.path(output.directory, "Survival", "KM"), recursive = TRUE)
-  dir.create(file.path(output.directory, "Survival", "CoxPH"), recursive = TRUE)
-  dir.create(file.path(output.directory, "PCA"))
-  dir.create(file.path(output.directory, "PCA", "All"), recursive = TRUE)
-  dir.create(file.path(output.directory, "PCA", "TCGA"), recursive = TRUE)
-  dir.create(file.path(output.directory, "PCA", "GTEX"), recursive = TRUE)
-  dir.create(file.path(output.directory, "PCA", "Lung"), recursive = TRUE)
-  dir.create(file.path(output.directory, "CORs"), recursive = TRUE)
-  dir.create(file.path(output.directory, "RNApro"), recursive = TRUE)
-  dir.create(file.path(output.directory, "Proteomics"), recursive = TRUE)
+  dir.create(file.path(output_directory, "CNV"), recursive = TRUE)
+  dir.create(file.path(output_directory, "DEG"), recursive = TRUE)
+  dir.create(file.path(output_directory, "Survival", "KM"), recursive = TRUE)
+  dir.create(file.path(output_directory, "Survival", "CoxPH"), recursive = TRUE)
+  dir.create(file.path(output_directory, "PCA"))
+  dir.create(file.path(output_directory, "PCA", "All"), recursive = TRUE)
+  dir.create(file.path(output_directory, "PCA", "TCGA"), recursive = TRUE)
+  dir.create(file.path(output_directory, "PCA", "GTEX"), recursive = TRUE)
+  dir.create(file.path(output_directory, "PCA", "Lung"), recursive = TRUE)
+  dir.create(file.path(output_directory, "CORs"), recursive = TRUE)
+  dir.create(file.path(output_directory, "RNApro"), recursive = TRUE)
+  dir.create(file.path(output_directory, "Proteomics"), recursive = TRUE)
 }
 
 

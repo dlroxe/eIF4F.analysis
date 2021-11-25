@@ -212,7 +212,7 @@
   )
   print(p2)
   ggplot2::ggsave(
-    path = file.path(output.directory, "CORs"),
+    path = file.path(output_directory, "CORs"),
     filename = paste("all", x, z, CORs, "Venn.pdf"),
     plot = p2,
     width = 8,
@@ -321,7 +321,7 @@
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "CORs"),
+    path = file.path(output_directory, "CORs"),
     filename = paste0("all ", x, CORs, ".pdf"),
     plot = p1,
     width = 8,
@@ -441,7 +441,7 @@
   )
 
   pdf(file.path(
-    path = file.path(output.directory, "CORs"),
+    path = file.path(output_directory, "CORs"),
     filename = paste(x, " tumors heatmap.pdf")
   ),
   width = 8,
@@ -501,7 +501,7 @@
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "CORs"),
+    path = file.path(output_directory, "CORs"),
     filename = paste(x, " tumors", p, ".pdf"),
     plot = p1,
     width = 10,

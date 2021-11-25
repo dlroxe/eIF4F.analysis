@@ -46,7 +46,7 @@ initialize_cnv_data <- function() {
   .TCGA_CNV_ratio <- .get_TCGA_CNV_ratio()
 
   .TCGA_sampletype <- readr::read_tsv(file.path(
-    data.file.directory,
+    data_file_directory,
     "TCGA_phenotype_denseDataOnlyDownload.tsv"
   )) %>%
     as.data.frame() %>%
@@ -93,7 +93,7 @@ initialize_cnv_data <- function() {
 .get_TCGA_CNV <- function() {
   .TCGA_pancancer <- data.table::fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "Gistic2_CopyNumber_Gistic2_all_thresholded.by_genes"
     ),
     data.table = FALSE
@@ -126,7 +126,7 @@ initialize_cnv_data <- function() {
 .get_TCGA_CNV_value <- function() {
   .TCGA_pancancer <- fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "Gistic2_CopyNumber_Gistic2_all_data_by_genes"
     ),
     data.table = FALSE
@@ -159,7 +159,7 @@ initialize_cnv_data <- function() {
 .get_TCGA_CNV_ratio <- function() {
   .TCGA_pancancer <- fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena"
     ),
     data.table = FALSE
@@ -280,7 +280,7 @@ initialize_cnv_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "CNV"),
+    path = file.path(output_directory, "CNV"),
     filename = "EIFCNVsum.pdf",
     plot = p1,
     width = 9,
@@ -389,7 +389,7 @@ initialize_cnv_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "CNV"),
+    path = file.path(output_directory, "CNV"),
     filename = paste0(df[[2]], "pancancerCNV.pdf"),
     plot = p1,
     width = 7.5,
@@ -436,7 +436,7 @@ initialize_cnv_data <- function() {
   print(p1) # print correlation matrix on the screen
   # save correlation plot as a pdf file
   pdf(
-    file.path(output.directory, "CNV", "EIFCNVcormatrix.pdf"),
+    file.path(output_directory, "CNV", "EIFCNVcormatrix.pdf"),
     width = 9,
     height = 9,
     useDingbats = FALSE
@@ -540,7 +540,7 @@ initialize_cnv_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "CNV"),
+    path = file.path(output_directory, "CNV"),
     filename = paste0(df[[2]], "pancancerCNVratio.pdf"),
     plot = p1,
     width = 7,

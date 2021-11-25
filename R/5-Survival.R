@@ -40,7 +40,7 @@ initialize_survival_data <- function() {
   ## get OS data ##
   TCGA_OS <- data.table::fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "Survival_SupplementalTable_S1_20171025_xena_sp"
     ),
     data.table = FALSE
@@ -54,7 +54,7 @@ initialize_survival_data <- function() {
   ## get sample type data ##
   TCGA_sampletype <- readr::read_tsv(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "TCGA_phenotype_denseDataOnlyDownload.tsv"
     ),
     show_col_types = FALSE
@@ -94,7 +94,7 @@ initialize_survival_data <- function() {
 .get_TCGA_RNAseq <- function() {
   .TCGA_pancancer <- fread(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena"
     ),
     data.table = FALSE
@@ -193,7 +193,7 @@ initialize_survival_data <- function() {
 
   print(KM)
   ggplot2::ggsave(
-    path = file.path(output.directory, "Survival", "KM"),
+    path = file.path(output_directory, "Survival", "KM"),
     filename = paste(gene, tumor, "tumors KM.pdf"),
     plot = KM,
     width = 6,
@@ -522,10 +522,10 @@ initialize_survival_data <- function() {
   .forest_graph(
     data = univariable.result,
     output.file = if (tumor == "All") {
-      file.path(output.directory, "Survival", "CoxPH", "EIFUniCox.pdf")
+      file.path(output_directory, "Survival", "CoxPH", "EIFUniCox.pdf")
     } else {
-      # paste0(output.directory, "/Survival/", tumor, "EIFUniCox.pdf")
-      file.path(output.directory, "Survival", "CoxPH", paste0(tumor, "EIFUniCox.pdf"))
+      # paste0(output_directory, "/Survival/", tumor, "EIFUniCox.pdf")
+      file.path(output_directory, "Survival", "CoxPH", paste0(tumor, "EIFUniCox.pdf"))
     },
     plot.title = if (tumor == "All") {
       "Univariable Cox proportional-hazards regression analysis (all tumor types)"
@@ -552,10 +552,10 @@ initialize_survival_data <- function() {
   .forest_graph(
     data = multivariable.result,
     output.file = if (tumor == "All") {
-      file.path(output.directory, "Survival", "EIFmultiCox.pdf")
+      file.path(output_directory, "Survival", "EIFmultiCox.pdf")
     } else {
-      # paste0(output.directory, "/Survival/", tumor, "EIFmultiCox.pdf")
-      file.path(output.directory, "Survival", "CoxPH", paste0(tumor, "EIFmultiCox.pdf"))
+      # paste0(output_directory, "/Survival/", tumor, "EIFmultiCox.pdf")
+      file.path(output_directory, "Survival", "CoxPH", paste0(tumor, "EIFmultiCox.pdf"))
     },
     plot.title = if (tumor == "All") {
       "Multivariable Cox proportional-hazards regression analysis (all tumor types)"

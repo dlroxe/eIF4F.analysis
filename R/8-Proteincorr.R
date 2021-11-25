@@ -35,13 +35,13 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' }
 #'
 initialize_phosphoproteomics_data <- function() {
-  CPTAC_LUAD_Phos <<- read_excel(file.path(data.file.directory, "Phos.xlsx"),
+  CPTAC_LUAD_Phos <<- read_excel(file.path(data_file_directory, "Phos.xlsx"),
     col_names = FALSE
   )
 
 
   .CPTAC_LUAD_Clinic <- read_excel(file.path(
-    data.file.directory,
+    data_file_directory,
     "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"
   ),
   sheet = 2
@@ -49,7 +49,7 @@ initialize_phosphoproteomics_data <- function() {
 
   .CPTAC_LUAD_sampletype <- read_excel(
     file.path(
-      data.file.directory,
+      data_file_directory,
       "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"
     )
   ) %>%
@@ -120,7 +120,7 @@ initialize_phosphoproteomics_data <- function() {
   print(p1)
 
   ggplot2::ggsave(
-    path = file.path(output.directory, "Proteomics"),
+    path = file.path(output_directory, "Proteomics"),
     filename = paste(x, y, "cor.pdf"),
     plot = p1,
     width = 3,
@@ -268,7 +268,7 @@ initialize_phosphoproteomics_data <- function() {
     )
   print(p2)
   ggplot2::ggsave(
-    path = file.path(output.directory, "Proteomics"),
+    path = file.path(output_directory, "Proteomics"),
     filename = paste0(stringr::str_remove(x, ":"), "pro.pdf"),
     plot = p2,
     width = 3,
