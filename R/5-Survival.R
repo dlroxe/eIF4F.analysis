@@ -31,7 +31,9 @@ TCGA_RNAseq_OS_sampletype <- NULL
 #'
 #' @export
 #'
-#' @examples \dontrun{initialize_survival_data()}
+#' @examples \dontrun{
+#' initialize_survival_data()
+#' }
 #'
 initialize_survival_data <- function() {
   TCGA_RNAseq <- .get_TCGA_RNAseq()
@@ -43,11 +45,11 @@ initialize_survival_data <- function() {
     ),
     data.table = FALSE
   ) %>%
-      dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-        # remove_rownames() %>%
-        # column_to_rownames(var = 'sample') %>%
-        dplyr::select("sample", "OS", "OS.time") %>%
-        rename(rn = .data$sample)
+    dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
+    # remove_rownames() %>%
+    # column_to_rownames(var = 'sample') %>%
+    dplyr::select("sample", "OS", "OS.time") %>%
+    dplyr::rename(rn = .data$sample)
 
   ## get sample type data ##
   TCGA_sampletype <- readr::read_tsv(
@@ -57,22 +59,22 @@ initialize_survival_data <- function() {
     ),
     show_col_types = FALSE
   ) %>%
-      as_tibble() %>%
-        dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-        dplyr::select(
-          "sample",
-          "sample_type",
-          "_primary_disease"
-        ) %>%
-        rename(
-          rn = .data$sample,
-          sample.type = .data$sample_type,
-          primary.disease = .data$`_primary_disease`
-        )
+    tibble::as_tibble() %>%
+    dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
+    dplyr::select(
+      "sample",
+      "sample_type",
+      "_primary_disease"
+    ) %>%
+    dplyr::rename(
+      rn = .data$sample,
+      sample.type = .data$sample_type,
+      primary.disease = .data$`_primary_disease`
+    )
 
   ## combine OS, sample type and RNAseq data ##
   TCGA_RNAseq_OS_sampletype <<- list(TCGA_RNAseq, TCGA_OS, TCGA_sampletype) %>%
-    reduce(full_join, by = "rn") %>%
+    purrr::reduce(full_join, by = "rn") %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "rn") %>%
     dplyr::filter(.data$sample.type != "Solid Tissue Normal")
@@ -85,7 +87,9 @@ initialize_survival_data <- function() {
 #'
 #' It should not be used directly, only inside \code{\link{initialize_survival_data}} function.
 #' @return a data frame that contains the RNAseq data from TCGA
-#' @examples \dontrun{.get_TCGA_RNAseq()}
+#' @examples \dontrun{
+#' .get_TCGA_RNAseq()
+#' }
 #' @keywords internal
 .get_TCGA_RNAseq <- function() {
   .TCGA_pancancer <- fread(
@@ -99,7 +103,7 @@ initialize_survival_data <- function() {
     !duplicated(.TCGA_pancancer$sample),
     !duplicated(colnames(.TCGA_pancancer))
   ] %>%
-    as_tibble() %>%
+    tibble::as_tibble() %>%
     # na.omit(.) %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "sample")
@@ -127,12 +131,14 @@ initialize_survival_data <- function() {
 #' @importFrom scales percent
 #' @importFrom survival survfit survdiff
 #' @importFrom stats pchisq
-#' @examples \dontrun{.KM_curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)}
+#' @examples \dontrun{
+#' .KM_curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)
+#' }
 #' @keywords internal
 .KM_curve <- function(gene, data, cutoff, tumor) {
   km <- survival::survfit(SurvObj ~ data$Group, data = data, conf.type = "log-log")
   stats <- survival::survdiff(SurvObj ~ data$Group, data = data, rho = 0) # rho = 0 log-rank
-  p.val <- (1 - pchisq(stats$chisq, length(stats$n) - 1)) %>%
+  p.val <- (1 - stats::pchisq(stats$chisq, length(stats$n) - 1)) %>%
     signif(3)
 
   KM <- ggplot2::autoplot(
@@ -187,8 +193,8 @@ initialize_survival_data <- function() {
 
   print(KM)
   ggplot2::ggsave(
-    path = file.path(output.directory, "KM"),
-    filename = paste(gene, " all tumors KM.pdf"),
+    path = file.path(output.directory, "Survival", "KM"),
+    filename = paste(gene, tumor, "tumors KM.pdf"),
     plot = KM,
     width = 6,
     height = 6,
@@ -210,13 +216,15 @@ initialize_survival_data <- function() {
 #' @importFrom survival coxph cox.zph
 #' @importFrom survivalAnalysis analyse_multivariate
 #' @importFrom purrr map
-#' @examples \dontrun{.univariable_analysis(df = df1, covariate_names = EIF)}
+#' @examples \dontrun{
+#' .univariable_analysis(df = df1, covariate_names = EIF)
+#' }
 #' @keywords internal
 .univariable_analysis <- function(df, covariate_names) {
   # Multiple Univariate Analyses
   res.cox <- map(covariate_names, function(gene) {
     survivalAnalysis::analyse_multivariate(df,
-      vars("OS.time", "OS"),
+      dplyr::vars("OS.time", "OS"),
       covariates = list(gene)
     ) %>%
       purrr::pluck("summaryAsFrame") # extracts a named element from a list
@@ -225,36 +233,36 @@ initialize_survival_data <- function() {
 
   # To test for the proportional-hazards (PH) assumption
   test.ph <- map(covariate_names, function(x) {
-    coxph(as.formula(paste("Surv(OS.time, OS)~", x)),
+    survival::coxph(as.formula(paste("Surv(OS.time, OS)~", x)),
       data = df
     ) %>%
-      cox.zph() %>%
+      survival::cox.zph() %>%
       print() %>%
       as.data.frame() %>%
-      slice(1)
+      dplyr::slice(1)
   }) %>%
-    bind_rows() %>%
+    dplyr::bind_rows() %>%
     dplyr::select("p") %>%
-    rename("pinteraction" = "p") %>%
+    dplyr::rename("pinteraction" = "p") %>%
     tibble::rownames_to_column()
 
-  data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
+  data1 <- dplyr::full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
     # as.data.frame(.) %>%
     mutate(across(7:11, round, 3)) %>%
     mutate(across(4:6, round, 2)) %>%
     mutate(np = nrow(df)) %>%
     mutate(HRCI = paste0(.data$HR, " (", .data$Lower_CI, "-", .data$Upper_CI, ")")) %>%
-    mutate(p = case_when(
+    mutate(p = dplyr::case_when(
       p < 0.001 ~ "<0.001",
       # p > 0.05 ~ paste(p,"*"),
       TRUE ~ as.character(p)
     )) %>%
-    mutate(pinteraction = case_when(
+    mutate(pinteraction = dplyr::case_when(
       pinteraction < 0.001 ~ "<0.001",
       pinteraction > 0.05 ~ paste(pinteraction, "*"),
       TRUE ~ as.character(pinteraction)
     )) %>%
-    arrange(desc(.data$HR))
+    dplyr::arrange(dplyr::desc(.data$HR))
 
   return(data1)
 }
@@ -272,37 +280,39 @@ initialize_survival_data <- function() {
 #' @importFrom survival coxph cox.zph
 #' @importFrom survivalAnalysis analyse_multivariate
 #' @importFrom purrr map pluck
-#' @examples \dontrun{.univariable_analysis(df = df1, covariate_names = EIF)}
+#' @examples \dontrun{
+#' .univariable_analysis(df = df1, covariate_names = EIF)
+#' }
 #' @keywords internal
 .multivariable_analysis <- function(df, covariate_names) {
   res.cox <- survivalAnalysis::analyse_multivariate(
     df,
-    vars("OS.time", "OS"),
+    dplyr::vars("OS.time", "OS"),
     covariates = covariate_names
   ) %>%
     purrr::pluck("summaryAsFrame") #  to extract an element from a list
 
   # To test for the proportional-hazards (PH) assumption
-  test.ph <- coxph(as.formula(paste(
+  test.ph <- survival::coxph(stats::as.formula(paste(
     "Surv(OS.time, OS)~",
     paste(covariate_names, collapse = "+")
   )),
   data = df
   ) %>%
-    cox.zph() %>%
+    survival::cox.zph() %>%
     print() %>%
     as.data.frame() %>% # do not use as_tibble here, cause errors
     dplyr::select("p") %>%
-    rename("pinteraction" = "p") %>%
-    rownames_to_column() %>%
+    dplyr::rename("pinteraction" = "p") %>%
+    tibble::rownames_to_column() %>%
     dplyr::filter(.data$rowname != "GLOBAL") # remove the global test result for graph
 
-  data1 <- full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
-    mutate(across(7:11, round, 3)) %>%
-    mutate(across(4:6, round, 2)) %>%
+  data1 <- dplyr::full_join(res.cox, test.ph, by = c("factor.id" = "rowname")) %>%
+    mutate(dplyr::across(7:11, round, 3)) %>%
+    mutate(dplyr::across(4:6, round, 2)) %>%
     mutate(np = nrow(df)) %>%
     mutate(HRCI = paste0(.data$HR, " (", .data$Lower_CI, "-", .data$Upper_CI, ")")) %>%
-    mutate(p = case_when(
+    mutate(p = dplyr::case_when(
       p < 0.001 ~ "<0.001",
       # p > 0.05 ~ paste(p,"*"),
       TRUE ~ as.character(p)
@@ -429,13 +439,17 @@ initialize_survival_data <- function() {
 #' @return KM curve plots for TCGA patients with expression of \code{EIF} in their tumors
 #' @importFrom survival Surv
 #' @importFrom stats quantile
-#' @examples \dontrun{plot.km.EIF.tumor(EIF = "EIF4E", cutoff = 0.2, tumor = "lung adenocarcinoma")}
-#' @examples \dontrun{plot.km.EIF.tumor(EIF = "EIF4G1", cutoff = 0.3, tumor = "All")}
+#' @examples \dontrun{
+#' plot.km.EIF.tumor(EIF = "EIF4E", cutoff = 0.2, tumor = "lung adenocarcinoma")
+#' }
+#' @examples \dontrun{
+#' plot.km.EIF.tumor(EIF = "EIF4G1", cutoff = 0.3, tumor = "All")
+#' }
 #' @keywords internal
 .plot_KM_RNAseq_TCGA <- function(EIF, cutoff, tumor) {
   df <- TCGA_RNAseq_OS_sampletype %>%
     dplyr::select(
-      all_of(EIF),
+      dplyr::all_of(EIF),
       "OS",
       "OS.time",
       "sample.type",
@@ -443,15 +457,15 @@ initialize_survival_data <- function() {
     ) %>%
     # drop_na(EIF) %>%
     dplyr::filter(if (tumor != "All") .data$primary.disease == tumor else TRUE) %>%
-    drop_na() %>%
+    tidyr::drop_na() %>%
     # na.omit(.) %>%
-    as_tibble() %>%
-    rename(RNAseq = EIF) %>%
-    mutate(Group = case_when(
-      RNAseq < quantile(RNAseq, cutoff) ~ "Bottom %",
-      RNAseq > quantile(RNAseq, (1 - cutoff)) ~ "Top %"
+    tibble::as_tibble() %>%
+    dplyr::rename(RNAseq = EIF) %>%
+    dplyr::mutate(Group = dplyr::case_when(
+      RNAseq < stats::quantile(RNAseq, cutoff) ~ "Bottom %",
+      RNAseq > stats::quantile(RNAseq, (1 - cutoff)) ~ "Top %"
     )) %>%
-    mutate(SurvObj = Surv(.data$OS.time, .data$OS == 1))
+    dplyr::mutate(SurvObj = survival::Surv(.data$OS.time, .data$OS == 1))
   .KM_curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)
 }
 
@@ -470,12 +484,20 @@ initialize_survival_data <- function() {
 #' @param tumor all tumor types or specific type
 #' @return forest graph showing the relation between survival of TCGA patients and expression of \code{EIF} in their tumors
 #' @importFrom tidyr drop_na
-#' @examples \dontrun{.plot_CoxPH_RNAseq_TCGA(c("EIF4E", "EIF4E2", "EIF4E3",
-#' "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E", "EIF4EBP1",
-#' "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"), "All")}
-#' @examples \dontrun{.plot_CoxPH_RNAseq_TCGA(c("EIF4E", "EIF4E2", "EIF4E3",
-#' "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E", "EIF4EBP1",
-#' "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"), "lung adenocarcinoma")}
+#' @examples \dontrun{
+#' .plot_CoxPH_RNAseq_TCGA(c(
+#'   "EIF4E", "EIF4E2", "EIF4E3",
+#'   "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E", "EIF4EBP1",
+#'   "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"
+#' ), "All")
+#' }
+#' @examples \dontrun{
+#' .plot_CoxPH_RNAseq_TCGA(c(
+#'   "EIF4E", "EIF4E2", "EIF4E3",
+#'   "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E", "EIF4EBP1",
+#'   "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"
+#' ), "lung adenocarcinoma")
+#' }
 #' @keywords internal
 .plot_CoxPH_RNAseq_TCGA <- function(EIF.list, tumor) {
   df1 <- TCGA_RNAseq_OS_sampletype %>%
@@ -500,9 +522,10 @@ initialize_survival_data <- function() {
   .forest_graph(
     data = univariable.result,
     output.file = if (tumor == "All") {
-      file.path(output.directory, "Cox", "EIFUniCox.pdf")
+      file.path(output.directory, "Survival", "CoxPH", "EIFUniCox.pdf")
     } else {
-      paste0(output.directory, "/Cox/", tumor, "EIFUniCox.pdf")
+      # paste0(output.directory, "/Survival/", tumor, "EIFUniCox.pdf")
+      file.path(output.directory, "Survival", "CoxPH", paste0(tumor, "EIFUniCox.pdf"))
     },
     plot.title = if (tumor == "All") {
       "Univariable Cox proportional-hazards regression analysis (all tumor types)"
@@ -529,9 +552,10 @@ initialize_survival_data <- function() {
   .forest_graph(
     data = multivariable.result,
     output.file = if (tumor == "All") {
-      file.path(output.directory, "Cox", "EIFmultiCox.pdf")
+      file.path(output.directory, "Survival", "EIFmultiCox.pdf")
     } else {
-      paste0(output.directory, "/Cox/", tumor, "EIFmultiCox.pdf")
+      # paste0(output.directory, "/Survival/", tumor, "EIFmultiCox.pdf")
+      file.path(output.directory, "Survival", "CoxPH", paste0(tumor, "EIFmultiCox.pdf"))
     },
     plot.title = if (tumor == "All") {
       "Multivariable Cox proportional-hazards regression analysis (all tumor types)"
@@ -565,8 +589,10 @@ initialize_survival_data <- function() {
 #'
 #' @export
 #'
-#' @examples \dontrun{EIF4F_Survival_analysis())}
-EIF4F_Survival_analysis <- function(){
+#' @examples \dontrun{
+#' EIF4F_Survival_analysis()
+#' }
+EIF4F_Survival_analysis <- function() {
   lapply(c(
     "EIF4G1", "EIF4G2", "EIF4G3",
     "EIF4A1", "EIF4A2",

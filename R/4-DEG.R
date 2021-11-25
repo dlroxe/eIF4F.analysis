@@ -31,7 +31,9 @@ TCGA_GTEX_RNAseq_sampletype <- NULL
 #'
 #' @export
 #'
-#' @examples \dontrun{initialize_RNAseq_data()}
+#' @examples \dontrun{
+#' initialize_RNAseq_data()
+#' }
 #'
 initialize_RNAseq_data <- function() {
   TCGA_GTEX_RNAseq <- .get_TCGA_GTEX_RNAseq()
@@ -43,32 +45,32 @@ initialize_RNAseq_data <- function() {
     ),
     show_col_types = FALSE
   ) %>%
-   # {
-      as_tibble() %>%
-        dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-        tibble::remove_rownames() %>%
-        tibble::column_to_rownames(var = "sample") %>%
-        dplyr::select(
-          "_sample_type",
-          "primary disease or tissue",
-          "_primary_site",
-          "_study"
-        ) %>%
-        dplyr::rename(
-          "sample.type" = "_sample_type",
-          "primary.disease" = "primary disease or tissue",
-          "primary.site" = "_primary_site",
-          "study" = "_study"
-        )
-   # }
+    # {
+    as_tibble() %>%
+    dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
+    tibble::remove_rownames() %>%
+    tibble::column_to_rownames(var = "sample") %>%
+    dplyr::select(
+      "_sample_type",
+      "primary disease or tissue",
+      "_primary_site",
+      "_study"
+    ) %>%
+    dplyr::rename(
+      "sample.type" = "_sample_type",
+      "primary.disease" = "primary disease or tissue",
+      "primary.site" = "_primary_site",
+      "study" = "_study"
+    )
+  # }
 
   TCGA_GTEX_RNAseq_sampletype <<- merge(TCGA_GTEX_RNAseq,
     TCGA_GTEX_sampletype,
     by    = "row.names",
     all.x = TRUE
   ) %>%
-      tibble::remove_rownames() %>%
-        tibble::column_to_rownames(var = "Row.names")
+    tibble::remove_rownames() %>%
+    tibble::column_to_rownames(var = "Row.names")
 }
 
 #' Read recomputed RNAseq data from both TCGA and GTEx
@@ -78,7 +80,9 @@ initialize_RNAseq_data <- function() {
 #'
 #' It should not be used directly, only inside \code{\link{initialize_RNAseq_data}} function.
 #' @return a data frame that contains the recomputed RNAseq data from both TCGA and GTEx
-#' @examples \dontrun{.get_TCGA_GTEX_RNAseq()}
+#' @examples \dontrun{
+#' .get_TCGA_GTEX_RNAseq()
+#' }
 #' @keywords internal
 .get_TCGA_GTEX_RNAseq <- function() {
   .TCGA_pancancer <- data.table::fread(
@@ -112,7 +116,9 @@ initialize_RNAseq_data <- function() {
 #' @param df \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link{.plot_boxgraph_RNAseq_TCGA}}
 #' @return a data frame ranking genes by their mRNA expressions in lung adenocarcinoma
 #' @importFrom dplyr pull
-#' @examples \dontrun{.RNAseq_all_gene(.TCGA_GTEX_RNAseq_sampletype_subset)}
+#' @examples \dontrun{
+#' .RNAseq_all_gene(.TCGA_GTEX_RNAseq_sampletype_subset)
+#' }
 #' @keywords internal
 #'
 .RNAseq_all_gene <- function(df) {
@@ -142,7 +148,7 @@ initialize_RNAseq_data <- function() {
   p1 <- ggplot(
     data = df,
     aes_(
-      x = ~ primary.disease,
+      x = ~primary.disease,
       y = ~ 2**RNAseq
     )
   ) +
@@ -158,8 +164,8 @@ initialize_RNAseq_data <- function() {
       hjust = 0
     ) +
     geom_boxplot(aes_(
-      #colour = factor(variable),
-      colour = ~ variable,
+      # colour = factor(variable),
+      colour = ~variable,
     ),
     outlier.shape = NA,
     position = position_dodge(width = 1)
@@ -187,8 +193,8 @@ initialize_RNAseq_data <- function() {
   print(p1)
 
   ggplot2::ggsave(
-    path = file.path(output.directory, "Expression"),
-    filename = "tumorexpression.pdf",
+    path = file.path(output.directory, "DEG"),
+    filename = "RNAseqGroupedBoxplot.pdf",
     plot = p1,
     width = 16.5,
     height = 8,
@@ -232,9 +238,9 @@ initialize_RNAseq_data <- function() {
   p1 <- ggplot(
     data = df[[1]],
     aes_(
-      x = ~ primary.disease,
+      x = ~primary.disease,
       y = ~ 2**RNAseq,
-      color = ~ sample.type
+      color = ~sample.type
     )
   ) +
     scale_y_continuous(
@@ -287,7 +293,7 @@ initialize_RNAseq_data <- function() {
   # geom_signif(comparisons=list(c("Tumor", "Normal")))
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "Expression"),
+    path = file.path(output.directory, "DEG"),
     filename = paste0(df[[2]], "tumorvsnormal.pdf"),
     plot = p1,
     width = 7.5,
@@ -328,12 +334,12 @@ initialize_RNAseq_data <- function() {
     data = df,
     # data = EIF.TCGA.RNAseq.anno.subset.long,
     aes_(
-      x = ~ sample.type,
+      x = ~sample.type,
       y = ~ 2**RNAseq,
-      color = ~ sample.type,
-      fill = ~ sample.type
+      color = ~sample.type,
+      fill = ~sample.type
     )
-    ) +
+  ) +
     EnvStats::stat_n_text(
       size = 6,
       fontface = "bold",
@@ -355,7 +361,7 @@ initialize_RNAseq_data <- function() {
     labs(
       x = "sample type",
       y = y.axis.title
-      #y = "normalized RNA counts"
+      # y = "normalized RNA counts"
     ) +
     scale_x_discrete(labels = c(
       "Metastatic Tumor",
@@ -399,8 +405,8 @@ initialize_RNAseq_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "Expression"),
-    filename = "EIFexpressionviolin.pdf",
+    path = file.path(output.directory, "DEG"),
+    filename = "EIF4Fviolin.pdf",
     plot = p1,
     width = 18,
     height = 9,
@@ -431,9 +437,11 @@ initialize_RNAseq_data <- function() {
 .RNAratio_calculation <- function(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
                                   EIF4G1, EIF4G2, EIF4G3, EIF3D,
                                   EIF4A1, EIF4A2) {
-  .genes_names <- c(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
-                    EIF4G1, EIF4G2, EIF4G3, EIF3D,
-                    EIF4A1, EIF4A2)
+  .genes_names <- c(
+    EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
+    EIF4G1, EIF4G2, EIF4G3, EIF3D,
+    EIF4A1, EIF4A2
+  )
   .RNAratio_data <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
       all_of(.genes_names),
@@ -446,39 +454,39 @@ initialize_RNAseq_data <- function() {
     filter(EIF4E != 0 & !is.na(.data$primary.site)) %>%
     # calculate the ratio of mRNA counts
     dplyr::mutate(
-      (!!paste0(EIF4E,"+",EIF4EBP1)) := log2(2**(!!as.name(EIF4E))+2**(!!as.name(EIF4EBP1))-1),
-      (!!paste0(EIF4A1,":","\n",EIF4E)) := (!!as.name(EIF4A1))-(!!as.name(EIF4E)),
-      (!!paste0(EIF4A1,":","\n",EIF4E2)) := (!!as.name(EIF4A1))-(!!as.name(EIF4E2)),
-      (!!paste0(EIF4A2,":","\n",EIF4E)) := (!!as.name(EIF4A2))-(!!as.name(EIF4E)),
-      (!!paste0(EIF4A2,":","\n",EIF4E2)) := (!!as.name(EIF4A2))-(!!as.name(EIF4E2)),
-      (!!paste0(EIF4G1,":","\n",EIF4E)) := (!!as.name(EIF4G1))-(!!as.name(EIF4E)),
-      (!!paste0(EIF4G1,":","\n",EIF4E2)) := (!!as.name(EIF4G1))-(!!as.name(EIF4E2)),
-      (!!paste0(EIF4G3,":","\n",EIF4E)) := (!!as.name(EIF4G3))-(!!as.name(EIF4E)),
-      (!!paste0(EIF4G3,":","\n",EIF4E2)) := (!!as.name(EIF4G3))-(!!as.name(EIF4E2)),
-      (!!paste0(EIF4A1,":","\n",EIF4G1)) := (!!as.name(EIF4A1))-(!!as.name(EIF4G1)),
-      (!!paste0(EIF4A2,":","\n",EIF4G1)) := (!!as.name(EIF4A2))-(!!as.name(EIF4G1)),
-      (!!paste0(EIF4A1,":","\n",EIF4G2)) := (!!as.name(EIF4A1))-(!!as.name(EIF4G2)),
-      (!!paste0(EIF4A2,":","\n",EIF4G2)) := (!!as.name(EIF4A2))-(!!as.name(EIF4G2)),
-      (!!paste0(EIF4E,":","\n",EIF4EBP1)) := (!!as.name(EIF4E))-(!!as.name(EIF4EBP1)),
-      (!!paste0(EIF4E2,":","\n",EIF4E)) := (!!as.name(EIF4E2))-(!!as.name(EIF4E)),
-      (!!paste0(EIF4G2,":","\n",EIF4G1)) := (!!as.name(EIF4G2))-(!!as.name(EIF4G1)),
-      (!!paste0(EIF4G1,":","\n",EIF4G3)) := (!!as.name(EIF4G1))-(!!as.name(EIF4G3)),
-      (!!paste0(EIF4A1,":","\n",EIF4A2)) := (!!as.name(EIF4A1))-(!!as.name(EIF4A2)),
-      (!!paste0(EIF4G1,":","\n",EIF4E,"+",EIF4EBP1)) := (!!as.name(EIF4G1))-log2(2**(!!as.name(EIF4E))+2**(!!as.name(EIF4EBP1))-1),
-      (!!paste0(EIF4A1,":","\n",EIF4E,"+",EIF4EBP1)) := (!!as.name(EIF4A1))-log2(2**(!!as.name(EIF4E))+2**(!!as.name(EIF4EBP1))-1)
+      (!!paste0(EIF4E, "+", EIF4EBP1)) := log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E2)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4E2)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4E)) := (!!as.name(EIF4A2)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4E2)) := (!!as.name(EIF4A2)) - (!!as.name(EIF4E2)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E)) := (!!as.name(EIF4G1)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E2)) := (!!as.name(EIF4G1)) - (!!as.name(EIF4E2)),
+      (!!paste0(EIF4G3, ":", "\n", EIF4E)) := (!!as.name(EIF4G3)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4G3, ":", "\n", EIF4E2)) := (!!as.name(EIF4G3)) - (!!as.name(EIF4E2)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4G1)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4G1)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4G1)) := (!!as.name(EIF4A2)) - (!!as.name(EIF4G1)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4G2)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4G2)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4G2)) := (!!as.name(EIF4A2)) - (!!as.name(EIF4G2)),
+      (!!paste0(EIF4E, ":", "\n", EIF4EBP1)) := (!!as.name(EIF4E)) - (!!as.name(EIF4EBP1)),
+      (!!paste0(EIF4E2, ":", "\n", EIF4E)) := (!!as.name(EIF4E2)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4G2, ":", "\n", EIF4G1)) := (!!as.name(EIF4G2)) - (!!as.name(EIF4G1)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4G3)) := (!!as.name(EIF4G1)) - (!!as.name(EIF4G3)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4A2)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4A2)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)) := (!!as.name(EIF4G1)) - log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1)) := (!!as.name(EIF4A1)) - log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1)
     ) %>%
     dplyr::select(
-      (!!paste0(EIF4A1,":","\n",EIF4E)), (!!paste0(EIF4A1,":","\n",EIF4E2)),
-      (!!paste0(EIF4A2,":","\n",EIF4E)), (!!paste0(EIF4A2,":","\n",EIF4E2)),
-      (!!paste0(EIF4G1,":","\n",EIF4E)), (!!paste0(EIF4G1,":","\n",EIF4E2)),
-      (!!paste0(EIF4G3,":","\n",EIF4E)), (!!paste0(EIF4G3,":","\n",EIF4E2)),
-      (!!paste0(EIF4A1,":","\n",EIF4G1)), (!!paste0(EIF4A2,":","\n",EIF4G1)),
-      (!!paste0(EIF4A1,":","\n",EIF4G2)), (!!paste0(EIF4A2,":","\n",EIF4G2)),
-      (!!paste0(EIF4E,":","\n",EIF4EBP1)), (!!paste0(EIF4E2,":","\n",EIF4E)),
-      (!!paste0(EIF4G2,":","\n",EIF4G1)), (!!paste0(EIF4G1,":","\n",EIF4G3)),
-      (!!paste0(EIF4A1,":","\n",EIF4A2)),
-      (!!paste0(EIF4G1,":","\n",EIF4E,"+",EIF4EBP1)),
-      (!!paste0(EIF4A1,":","\n",EIF4E,"+",EIF4EBP1)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E)), (!!paste0(EIF4A1, ":", "\n", EIF4E2)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4E)), (!!paste0(EIF4A2, ":", "\n", EIF4E2)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E)), (!!paste0(EIF4G1, ":", "\n", EIF4E2)),
+      (!!paste0(EIF4G3, ":", "\n", EIF4E)), (!!paste0(EIF4G3, ":", "\n", EIF4E2)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4G1)), (!!paste0(EIF4A2, ":", "\n", EIF4G1)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4G2)), (!!paste0(EIF4A2, ":", "\n", EIF4G2)),
+      (!!paste0(EIF4E, ":", "\n", EIF4EBP1)), (!!paste0(EIF4E2, ":", "\n", EIF4E)),
+      (!!paste0(EIF4G2, ":", "\n", EIF4G1)), (!!paste0(EIF4G1, ":", "\n", EIF4G3)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4A2)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1)),
       "sample.type",
       "primary.disease",
       "primary.site",
@@ -509,13 +517,14 @@ initialize_RNAseq_data <- function() {
       "primary.site",
       "study"
     ) %>%
-    melt(id = c(
-      "sample.type",
-      "primary.disease",
-      "primary.site",
-      "study"
-    ),
-    value.name = "RNAseq"
+    melt(
+      id = c(
+        "sample.type",
+        "primary.disease",
+        "primary.site",
+        "study"
+      ),
+      value.name = "RNAseq"
     ) %>%
     mutate_if(is.character, as.factor) %>%
     mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
@@ -532,11 +541,11 @@ initialize_RNAseq_data <- function() {
   p1 <- ggplot(
     data = df,
     aes_(
-      x = ~ primary.disease,
+      x = ~primary.disease,
       # x = f.ordered1,
       y = ~ 2**RNAseq,
       # fill  = variable,
-      color = ~ sample.type
+      color = ~sample.type
     )
   ) +
     geom_boxplot(
@@ -583,7 +592,7 @@ initialize_RNAseq_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "Expression"),
+    path = file.path(output.directory, "DEG"),
     filename = filename,
     plot = p1,
     width = 18,
@@ -616,13 +625,14 @@ initialize_RNAseq_data <- function() {
       "primary.site",
       "study"
     ) %>%
-    melt(id = c(
-           "sample.type",
-           "primary.disease",
-           "primary.site",
-           "study"
-         ),
-         value.name = "RNAseq"
+    melt(
+      id = c(
+        "sample.type",
+        "primary.disease",
+        "primary.site",
+        "study"
+      ),
+      value.name = "RNAseq"
     ) %>%
     mutate_if(is.character, as.factor) %>%
     mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
@@ -652,8 +662,12 @@ initialize_RNAseq_data <- function() {
 #' It should not be used directly, only inside \code{\link{EIF4F_DEG_analysis}} function.
 #' @return box plots for differential gene expression of \code{EIF.list} in TCGA tumors
 #' @keywords internal
-#' @examples \dontrun{.plot_boxgraph_RNAseq_TCGA(c("EIF4G1", "EIF4G2", "EIF4G3",
-#' "PABPC1", "EIF4A1", "EIF4A2", "EIF4B", "EIF4H", "EIF4E", "EIF4E2", "EIF4E3", "EIF4EBP1", "EIF3D" ))}
+#' @examples \dontrun{
+#' .plot_boxgraph_RNAseq_TCGA(c(
+#'   "EIF4G1", "EIF4G2", "EIF4G3",
+#'   "PABPC1", "EIF4A1", "EIF4A2", "EIF4B", "EIF4H", "EIF4E", "EIF4E2", "EIF4E3", "EIF4EBP1", "EIF3D"
+#' ))
+#' }
 .plot_boxgraph_RNAseq_TCGA <- function(EIF.list) {
   .TCGA_GTEX_RNAseq_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
@@ -664,7 +678,8 @@ initialize_RNAseq_data <- function() {
       "study"
     ) %>%
     as_tibble() %>%
-    melt(id = c(
+    melt(
+      id = c(
         "sample.type",
         "primary.disease",
         "primary.site",
@@ -673,7 +688,7 @@ initialize_RNAseq_data <- function() {
       value.name = "RNAseq"
     ) %>%
     filter(!is.na(.data$primary.site)) %>%
-    #na.omit(.$primary.site) %>%
+    # na.omit(.$primary.site) %>%
     # filter(RNAseq != 0) %>%
     mutate_if(is.character, as.factor)
 
@@ -683,14 +698,17 @@ initialize_RNAseq_data <- function() {
 
   # boxplot to compare RNA-seq of one gene in tumor vs adjacent normal
   RNAseq.ind.gene.df <- lapply(EIF.list, .RNAseq_ind_gene,
-                               df = .TCGA_GTEX_RNAseq_sampletype_subset)
+    df = .TCGA_GTEX_RNAseq_sampletype_subset
+  )
   lapply(RNAseq.ind.gene.df, .RNAseq_boxplot)
 
   # violin plot to compare  expression in primary, metastatic tumors vs NATs
   .RNAseq_tumortype(.TCGA_GTEX_RNAseq_sampletype_subset) %>%
-    .violinplot(y.axis.title = "normalized RNA counts",
-                y.axis.break = c(128, 2048, 32768),
-                yintercept = NULL)
+    .violinplot(
+      y.axis.title = "normalized RNA counts",
+      y.axis.break = c(128, 2048, 32768),
+      yintercept = NULL
+    )
 }
 
 #' Compare the RNA ratios between EIF4F genes
@@ -717,69 +735,76 @@ initialize_RNAseq_data <- function() {
 #' the function \code{\link{.RNAratio_tumortype}} and plots with \code{\link{.violinplot}}.
 #' It should not be used directly, only inside \code{\link{EIF4F_DEG_analysis}} function.
 #' @return box plots for RNA ratios among input argument in TCGA tumors
-#' @examples \dontrun{.plot_boxgraph_RNAratio_TCGA(EIF4E = "EIF4E", EIF4E2 = "EIF4E2",
-#' EIF4E3 = "EIF4E3", EIF4EBP1 = "EIF4EBP1", EIF4G1 = "EIF4G1", EIF4G2 = "EIF4G2",
-#' EIF4G3 = "EIF4G3", EIF3D = "EIF3D", EIF4A1 = "EIF4A1", EIF4A2 = "EIF4A2")}
+#' @examples \dontrun{
+#' .plot_boxgraph_RNAratio_TCGA(
+#'   EIF4E = "EIF4E", EIF4E2 = "EIF4E2",
+#'   EIF4E3 = "EIF4E3", EIF4EBP1 = "EIF4EBP1", EIF4G1 = "EIF4G1", EIF4G2 = "EIF4G2",
+#'   EIF4G3 = "EIF4G3", EIF3D = "EIF3D", EIF4A1 = "EIF4A1", EIF4A2 = "EIF4A2"
+#' )
+#' }
 .plot_boxgraph_RNAratio_TCGA <- function(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
                                          EIF4G1, EIF4G2, EIF4G3, EIF3D,
                                          EIF4A1, EIF4A2) {
-  RNAratio.data <- .RNAratio_calculation(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
-                                         EIF4G1, EIF4G2, EIF4G3, EIF3D,
-                                         EIF4A1, EIF4A2)
+  RNAratio.data <- .RNAratio_calculation(
+    EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
+    EIF4G1, EIF4G2, EIF4G3, EIF3D,
+    EIF4A1, EIF4A2
+  )
   .RNAratio_boxplot(
     df = .RNAratio_selection(RNAratio.data, c(
-      (paste0(EIF4G1,":","\n",EIF4E)), (paste0(EIF4A1,":","\n",EIF4E)),
-      (paste0(EIF4A2,":","\n",EIF4E)), (paste0(EIF4G3,":","\n",EIF4E)),
-      (paste0(EIF4G3,":","\n",EIF4E2)), (paste0(EIF4G1,":","\n",EIF4G3))
-      )),
+      (paste0(EIF4G1, ":", "\n", EIF4E)), (paste0(EIF4A1, ":", "\n", EIF4E)),
+      (paste0(EIF4A2, ":", "\n", EIF4E)), (paste0(EIF4G3, ":", "\n", EIF4E)),
+      (paste0(EIF4G3, ":", "\n", EIF4E2)), (paste0(EIF4G1, ":", "\n", EIF4G3))
+    )),
     dashline = 1,
     ylimit = c(0, 25),
     filename = "RNAratio1.pdf"
-    )
+  )
 
   .RNAratio_boxplot(
     df = .RNAratio_selection(RNAratio.data, c(
-      (paste0(EIF4G2,":","\n",EIF4G1)), (paste0(EIF4E2,":","\n",EIF4E)),
-      (paste0(EIF4A1,":","\n",EIF4A2)), (paste0(EIF4E,":","\n",EIF4EBP1)),
-      (paste0(EIF4G1,":","\n",EIF4E,"+",EIF4EBP1)),
-      (paste0(EIF4A1,":","\n",EIF4E,"+",EIF4EBP1))
-      )),
+      (paste0(EIF4G2, ":", "\n", EIF4G1)), (paste0(EIF4E2, ":", "\n", EIF4E)),
+      (paste0(EIF4A1, ":", "\n", EIF4A2)), (paste0(EIF4E, ":", "\n", EIF4EBP1)),
+      (paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)),
+      (paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1))
+    )),
     dashline = 4,
     ylimit = c(0, 25),
     filename = "RNAratio2.pdf"
-    )
+  )
 
   .RNAratio_boxplot(
     df = .RNAratio_selection(RNAratio.data, c(
-      (paste0(EIF4G3,":","\n",EIF4E)), (paste0(EIF4G3,":","\n",EIF4E2)),
-      (paste0(EIF4G2,":","\n",EIF4G1)), (paste0(EIF4E2,":","\n",EIF4E)),
-      (paste0(EIF4A1,":","\n",EIF4A2)), (paste0(EIF4E,":","\n",EIF4EBP1))
-      )),
+      (paste0(EIF4G3, ":", "\n", EIF4E)), (paste0(EIF4G3, ":", "\n", EIF4E2)),
+      (paste0(EIF4G2, ":", "\n", EIF4G1)), (paste0(EIF4E2, ":", "\n", EIF4E)),
+      (paste0(EIF4A1, ":", "\n", EIF4A2)), (paste0(EIF4E, ":", "\n", EIF4EBP1))
+    )),
     dashline = 1,
     ylimit = c(0, 5),
     filename = "RNAratio3.pdf"
-    )
+  )
 
   .RNAratio_tumortype(RNAratio.data, c(
-    (paste0(EIF4G1,":","\n",EIF4E)), (paste0(EIF4A1,":","\n",EIF4E)),
-    (paste0(EIF4A2,":","\n",EIF4E)), (paste0(EIF4G3,":","\n",EIF4E)),
-    (paste0(EIF4G3,":","\n",EIF4E2)), (paste0(EIF4G1,":","\n",EIF4G3)),
-    (paste0(EIF4A1,":","\n",EIF4A2)), (paste0(EIF4E,":","\n",EIF4EBP1)),
-    (paste0(EIF4G1,":","\n",EIF4E,"+",EIF4EBP1)),
-    (paste0(EIF4A1,":","\n",EIF4E,"+",EIF4EBP1))
-    #"EIF4G1:\nEIF4E", "EIF4A1:\nEIF4E",
-    #"EIF4A2:\nEIF4E", "EIF4G3:\nEIF4E",
-    #"EIF4G3:\nEIF4E2", "EIF4G1:\nEIF4G3",
-    #"EIF4G2:\nEIF4G1", "EIF4E2:\nEIF4E",
-    #"EIF4A1:\nEIF4A2", "EIF4E:\nEIF4EBP1",
-    #"EIF4G1:\nEIF4E+EIF4EBP1",
-    #"EIF4A1:\nEIF4E+EIF4EBP1"
+    (paste0(EIF4G1, ":", "\n", EIF4E)), (paste0(EIF4A1, ":", "\n", EIF4E)),
+    (paste0(EIF4A2, ":", "\n", EIF4E)), (paste0(EIF4G3, ":", "\n", EIF4E)),
+    (paste0(EIF4G3, ":", "\n", EIF4E2)), (paste0(EIF4G1, ":", "\n", EIF4G3)),
+    (paste0(EIF4A1, ":", "\n", EIF4A2)), (paste0(EIF4E, ":", "\n", EIF4EBP1)),
+    (paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)),
+    (paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1))
+    # "EIF4G1:\nEIF4E", "EIF4A1:\nEIF4E",
+    # "EIF4A2:\nEIF4E", "EIF4G3:\nEIF4E",
+    # "EIF4G3:\nEIF4E2", "EIF4G1:\nEIF4G3",
+    # "EIF4G2:\nEIF4G1", "EIF4E2:\nEIF4E",
+    # "EIF4A1:\nEIF4A2", "EIF4E:\nEIF4EBP1",
+    # "EIF4G1:\nEIF4E+EIF4EBP1",
+    # "EIF4A1:\nEIF4E+EIF4EBP1"
   )) %>%
-    .violinplot(y.axis.title = "Ratio of RNA counts",
-                #y.axis.break = c(1, 128, 2048, 32768)
-                y.axis.break = c(0.125, 1, 4, 8, 64, 512),
-                yintercept = c(1, 4)
-                )
+    .violinplot(
+      y.axis.title = "Ratio of RNA counts",
+      # y.axis.break = c(1, 128, 2048, 32768)
+      y.axis.break = c(0.125, 1, 4, 8, 64, 512),
+      yintercept = c(1, 4)
+    )
 }
 
 ## wrapper function to call all master functions with inputs ===================
@@ -795,8 +820,10 @@ initialize_RNAseq_data <- function() {
 #'
 #' @export
 #'
-#' @examples \dontrun{EIF4F_DEG_analysis())}
-EIF4F_DEG_analysis <- function(){
+#' @examples \dontrun{
+#' EIF4F_DEG_analysis()
+#' }
+EIF4F_DEG_analysis <- function() {
   .plot_boxgraph_RNAseq_TCGA(c(
     "EIF4G1", "EIF4G2", "EIF4G3", "PABPC1", "EIF4A1", "EIF4A2", "EIF4B", "EIF4H",
     "EIF4E", "EIF4E2", "EIF4E3", "EIF4EBP1", "EIF3D"
@@ -807,5 +834,4 @@ EIF4F_DEG_analysis <- function(){
     EIF4G1 = "EIF4G1", EIF4G2 = "EIF4G2", EIF4G3 = "EIF4G3", EIF3D = "EIF3D",
     EIF4A1 = "EIF4A1", EIF4A2 = "EIF4A2"
   )
-  }
-
+}

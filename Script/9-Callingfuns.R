@@ -1,5 +1,7 @@
 library(eIF4F.analysis)
 
+initialize_dir()
+
 initialize_data <- function() {
   initialize_cnv_data()
   initialize_RNAseq_data()

@@ -30,7 +30,9 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #'
 #' @export
 #'
-#' @examples \dontrun{initialize_phosphoproteomics_data()}
+#' @examples \dontrun{
+#' initialize_phosphoproteomics_data()
+#' }
 #'
 initialize_phosphoproteomics_data <- function() {
   CPTAC_LUAD_Phos <<- read_excel(file.path(data.file.directory, "Phos.xlsx"),
@@ -52,10 +54,10 @@ initialize_phosphoproteomics_data <- function() {
     )
   ) %>%
     as.data.frame() %>%
-        dplyr::select("Aliquot (Specimen Label)", "Type", "Participant ID (case_id)") %>%
-        dplyr::distinct(.data$`Aliquot (Specimen Label)`, .keep_all = TRUE) # %>%
-      # remove_rownames() %>%
-      # column_to_rownames(var = "Aliquot (Specimen Label)")
+    dplyr::select("Aliquot (Specimen Label)", "Type", "Participant ID (case_id)") %>%
+    dplyr::distinct(.data$`Aliquot (Specimen Label)`, .keep_all = TRUE) # %>%
+  # remove_rownames() %>%
+  # column_to_rownames(var = "Aliquot (Specimen Label)")
 
   CPTAC_LUAD_Clinic_Sampletype <<- merge(.CPTAC_LUAD_Clinic,
     .CPTAC_LUAD_sampletype,
@@ -118,7 +120,7 @@ initialize_phosphoproteomics_data <- function() {
   print(p1)
 
   ggplot2::ggsave(
-    path = file.path(output.directory, "LUAD"),
+    path = file.path(output.directory, "Proteomics"),
     filename = paste(x, y, "cor.pdf"),
     plot = p1,
     width = 3,
@@ -133,11 +135,13 @@ initialize_phosphoproteomics_data <- function() {
 #' @details The function should not be used directly, only inside \code{\link{.plot_boxgraph_protein_CPTAC}} function.
 #' @param x protein name, passed \code{EIF_list} argument from \code{\link{.plot_boxgraph_protein_CPTAC}}
 #' @return a data frame of CPTAC LUAD  data from the input \code{x} genes
-#' @examples \dontrun{.get_CPTAC_LUAD_Proteomics_subset(EIF_list)}
+#' @examples \dontrun{
+#' .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
+#' }
 #' @keywords internal
 .get_CPTAC_LUAD_Proteomics_subset <- function(x) {
   CPTAC_LUAD_Proteomics %>%
-  #  dplyr::select_if(names(.) %in% c(x, "Sample"))
+    #  dplyr::select_if(names(.) %in% c(x, "Sample"))
     dplyr::select(any_of(x), "Sample")
 }
 
@@ -147,7 +151,9 @@ initialize_phosphoproteomics_data <- function() {
 #' @details The function should not be used directly, only inside \code{\link{.plot_boxgraph_protein_CPTAC}} function.
 #' @param x protein name, passed \code{EIF_list} argument from \code{\link{.plot_boxgraph_protein_CPTAC}}
 #' @return a data frame of CPTAC LUAD  data from the input \code{x} genes
-#' @examples \dontrun{.get_CCLE_RNAseq_subset()}
+#' @examples \dontrun{
+#' .get_CCLE_RNAseq_subset()
+#' }
 #' @keywords internal
 .get_CPTAC_LUAD_Phosproteomics_subset <- function(x) {
   CPTAC_LUAD_Phos %>%
@@ -175,7 +181,8 @@ initialize_phosphoproteomics_data <- function() {
 #' @keywords internal
 .protein_boxplot <- function(df, x) {
   hline <- summarise(group_by(df, .data$Gene, .data$Type),
-                     MD = 2**stats::median(.data$normalize)) %>%
+    MD = 2**stats::median(.data$normalize)
+  ) %>%
     ungroup() %>%
     dplyr::filter(.data$Gene == x & .data$Type == "Tumor") %>%
     dplyr::select(.data$MD) %>%
@@ -185,13 +192,13 @@ initialize_phosphoproteomics_data <- function() {
   p2 <- ggplot(
     data = df[df$Gene == x, ],
     aes_(
-      x = ~ tumor_stage_pathological,
+      x = ~tumor_stage_pathological,
       y = ~ 2**normalize
     )
   ) +
     geom_boxplot(
       data = df[df$Gene == x, ],
-      aes_(fill = ~ Gene),
+      aes_(fill = ~Gene),
       # alpha         = 0,
       # size     = .75,
       # width    = 1,
@@ -261,7 +268,7 @@ initialize_phosphoproteomics_data <- function() {
     )
   print(p2)
   ggplot2::ggsave(
-    path = file.path(output.directory, "CPTAC"),
+    path = file.path(output.directory, "Proteomics"),
     filename = paste0(stringr::str_remove(x, ":"), "pro.pdf"),
     plot = p2,
     width = 3,
@@ -338,8 +345,10 @@ initialize_phosphoproteomics_data <- function() {
 #' @importFrom tidyr pivot_longer
 #' @keywords internal
 #' @examples \dontrun{
-#' .plot_boxgraph_protein_CPTAC(c("EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
-#' "AKT1", "MTOR", "EIF4B", "EIF4H", "MKNK1", "MKNK2"))
+#' .plot_boxgraph_protein_CPTAC(c(
+#'   "EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
+#'   "AKT1", "MTOR", "EIF4B", "EIF4H", "MKNK1", "MKNK2"
+#' ))
 #' }
 .plot_boxgraph_protein_CPTAC <- function(EIF_list) {
   .CPTAC_LUAD_Proteomics_subset <- .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
@@ -387,12 +396,14 @@ initialize_phosphoproteomics_data <- function() {
 #'
 #' @export
 #'
-#' @examples \dontrun{EIF4F_Proteomics_analysis())}
-EIF4F_Proteomics_analysis <- function(){
+#' @examples \dontrun{
+#' EIF4F_Proteomics_analysis()
+#' }
+EIF4F_Proteomics_analysis <- function() {
   .plot_scatterplot_protein_LUAD()
   .plot_boxgraph_protein_CPTAC(c(
     "EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
     "AKT1", "MTOR", "EIF4B", "EIF4H",
     "MKNK1", "MKNK2"
   ))
-  }
+}

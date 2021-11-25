@@ -33,7 +33,9 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #'
 #' @export
 #'
-#' @examples \dontrun{initialize_cnv_data()}
+#' @examples \dontrun{
+#' initialize_cnv_data()
+#' }
 #'
 initialize_cnv_data <- function() {
   # .TCGA_CNV <- .TCGA_CNV_ratio <- .TCGA_sampletype <- NULL
@@ -53,7 +55,7 @@ initialize_cnv_data <- function() {
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "sample") %>%
     dplyr::select("sample_type", "_primary_disease") %>%
-    rename(
+    dplyr::rename(
       "sample.type" = "sample_type",
       "primary.disease" = "_primary_disease"
     )
@@ -82,6 +84,7 @@ initialize_cnv_data <- function() {
 #' @details The function also removes possible duplicated tumor samples and samples with NAs in the dataset.
 #'
 #' It should not be used directly, only inside \code{\link{initialize_cnv_data}} function.
+#' @importFrom tibble as_tibble
 #' @return a data frame that contains CNV threshold data for all TCGA tumor
 #' @examples \dontrun{
 #' .get_TCGA_CNV()
@@ -95,7 +98,7 @@ initialize_cnv_data <- function() {
     ),
     data.table = FALSE
   ) %>%
-    as_tibble() %>%
+    tibble::as_tibble() %>%
     # as.data.frame(.) %>%
     dplyr::distinct(.data$Sample, .keep_all = TRUE) %>%
     na.omit() %>%
@@ -227,9 +230,9 @@ initialize_cnv_data <- function() {
   p1 <- ggplot2::ggplot(
     data,
     aes_(
-      fill = ~ CNV,
-      y = ~ Freq,
-      x = ~ variable
+      fill = ~CNV,
+      y = ~Freq,
+      x = ~variable
     )
   ) +
     geom_bar(
@@ -341,8 +344,8 @@ initialize_cnv_data <- function() {
     aes_(
       fill = ~CNV,
       order = ~ as.numeric(CNV),
-      y = ~ Freq,
-      x = ~ primary.disease
+      y = ~Freq,
+      x = ~primary.disease
     )
   ) +
     geom_bar(stat = "identity", position = "fill") +
@@ -495,12 +498,12 @@ initialize_cnv_data <- function() {
     data = df[[1]],
     aes_(
       y = ~ 2**CNV,
-      x = ~ primary.disease,
+      x = ~primary.disease,
       # x = f.ordered1,
-      color = ~ primary.disease
+      color = ~primary.disease
     )
   ) +
-    # ylim(0, 3) +
+    ylim(0, 3) +
     geom_hline(yintercept = 1, linetype = "dashed") +
     stat_n_text(
       size = 5,
@@ -664,24 +667,28 @@ initialize_cnv_data <- function() {
 #'
 #' @export
 #'
-#' @examples \dontrun{EIF4F_CNV_analysis())}
-EIF4F_CNV_analysis <- function(){
+#' @examples \dontrun{
+#' EIF4F_CNV_analysis()
+#' }
+EIF4F_CNV_analysis <- function() {
   .plot_bargraph_CNV_TCGA(c(
     "TP53", "EIF4A1", "EIF4A2",
     "EIF4E", "EIF4E2", "EIF4E3",
     "MYC", "EIF3D", "EIF4EBP1",
     "EIF4G1", "EIF4G2", "EIF4G3",
-    "EIF4H", "EIF4B"))
+    "EIF4H", "EIF4B"
+  ))
 
   .plot_matrix_CNVcorr_TCGA(c(
     "TP53", "EIF4A1", "EIF4A2",
     "EIF4E", "EIF4E2", "EIF4E3",
     "MYC", "EIF3D", "EIF4EBP1",
     "EIF4G1", "EIF4G2", "EIF4G3",
-    "EIF4H", "EIF4B"))
+    "EIF4H", "EIF4B"
+  ))
 
   .plot_boxgraph_CNVratio_TCGA(c(
     "EIF4G1", "EIF4E", "EIF4A1", "EIF4EBP1", "EIF4G2", "EIF4G3",
     "EIF4E2", "EIF4E3", "EIF4A2", "EIF3D", "EIF4H", "EIF4B"
-))
+  ))
 }

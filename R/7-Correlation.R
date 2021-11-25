@@ -24,8 +24,12 @@
 #' @importFrom clusterProfiler compareCluster dotplot
 #' @importFrom purrr discard
 #' @importFrom stats setNames
-#' @examples \dontrun{.EIF_correlation(df = .TCGA_GTEX_RNAseq_sampletype_subset,
-#' y = all.tumor.type)}
+#' @examples \dontrun{
+#' .EIF_correlation(
+#'   df = .TCGA_GTEX_RNAseq_sampletype_subset,
+#'   y = all.tumor.type
+#' )
+#' }
 #' @keywords internal
 .EIF_correlation <- function(df, y) {
   TCGA.GTEX.tumor <- df[
@@ -33,13 +37,13 @@
   ] %>% na.omit() # select tumor or healthy samples
 
   Gene.ID <- names(df) %>%
-    purrr::discard( ~ .x %in% c(
+    purrr::discard(~ .x %in% c(
       "Row.names",
       "sample.type",
       "primary.disease",
       "primary.site",
       "study"
-  ))
+    ))
 
   correlation.coefficient <- function(x, y) {
     result <- cor.test(TCGA.GTEX.tumor[[x]],
@@ -102,15 +106,15 @@
     EIF4EBP1.cor$estimate < -0.3 & EIF4EBP1.cor$p.value <= 0.05
   )
 
-  #df <- as.data.frame(unclass(summary(c4)))
-  #filter_at(vars(starts_with("Sepal"
+  # df <- as.data.frame(unclass(summary(c4)))
+  # filter_at(vars(starts_with("Sepal"
 
 
   count.CORs <- function() {
     c4 <- c4.posCOR
     colnames(c4) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1")
     df <- as.data.frame(summary(c4))
-    #df <- as.data.frame(unclass(summary(c4)))
+    # df <- as.data.frame(unclass(summary(c4)))
     df1 <- df[df$Freq %like% "TRUE", ]
     df1$Var1 <- NULL
     df1$Var2 <- gsub(" ", "", df1$Var2)
@@ -157,7 +161,9 @@
 #' @return vennDiagram for posCOR or negCORs
 #' @importFrom eulerr euler
 #' @importFrom limma vennCounts vennDiagram
-#' @examples \dontrun{.Cors_vennplot(df = EIF.cor.tumor[[3]], x = x, z = "tumor", CORs = "posCOR")}
+#' @examples \dontrun{
+#' .Cors_vennplot(df = EIF.cor.tumor[[3]], x = x, z = "tumor", CORs = "posCOR")
+#' }
 #' @keywords internal
 #'
 .Cors_vennplot <- function(df, x, z, CORs) {
@@ -206,7 +212,7 @@
   )
   print(p2)
   ggplot2::ggsave(
-    path = file.path(output.directory, "Heatmap"),
+    path = file.path(output.directory, "CORs"),
     filename = paste("all", x, z, CORs, "Venn.pdf"),
     plot = p2,
     width = 8,
@@ -223,8 +229,12 @@
 #' @param df1 \code{EIF.cor.tumor[[2]]}
 #' @param df2 \code{EIF.cor.normal[[2]]}
 #' @return bargraph for posCOR or negCOR numbers
-#' @examples \dontrun{.count_CORs_tumor_normal(df1 = EIF.cor.tumor[[2]],
-#' df2 = EIF.cor.normal[[2]])}
+#' @examples \dontrun{
+#' .count_CORs_tumor_normal(
+#'   df1 = EIF.cor.tumor[[2]],
+#'   df2 = EIF.cor.normal[[2]]
+#' )
+#' }
 #' @keywords internal
 #'
 .count_CORs_tumor_normal <- function(df1, df2) {
@@ -259,8 +269,12 @@
 #' @param CORs posCOR or negCORs for the title of Venn diagram
 #' @param coord_flip.ylim the limit of y axis in the bar plot
 #' @return bargraph for the numbers of posCOR or negCORs
-#' @examples \dontrun{.Cors_bargraph(df = EIF.cor, x = x,
-#' CORs = "posCORs", coord_flip.ylim = 14000)}
+#' @examples \dontrun{
+#' .Cors_bargraph(
+#'   df = EIF.cor, x = x,
+#'   CORs = "posCORs", coord_flip.ylim = 14000
+#' )
+#' }
 #' @keywords internal
 #'
 .Cors_bargraph <- function(df, x, CORs, coord_flip.ylim) {
@@ -269,7 +283,7 @@
     aes_string(
       x = "gene",
       y = CORs,
-      #y = !!sym(CORs), # quote the passed variable CORs
+      # y = !!sym(CORs), # quote the passed variable CORs
       fill = "label"
     ), color = "label"
   ) +
@@ -307,7 +321,7 @@
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "Heatmap"),
+    path = file.path(output.directory, "CORs"),
     filename = paste0("all ", x, CORs, ".pdf"),
     plot = p1,
     width = 8,
@@ -326,7 +340,9 @@
 #' @param df2 \code{EIF.cor.normal[[2]]}
 #' @return data frame with posCOR or negCOR from both tumors and healthy tissue samples
 #' @importFrom stats setNames
-#' @examples \dontrun{.EIF_cor_normal_tumor(df1 = EIF.cor.tumor[[1]], df2 = EIF.cor.normal[[1]])}
+#' @examples \dontrun{
+#' .EIF_cor_normal_tumor(df1 = EIF.cor.tumor[[1]], df2 = EIF.cor.normal[[1]])
+#' }
 #' @keywords internal
 #'
 .EIF_cor_normal_tumor <- function(df1, df2) {
@@ -425,7 +441,7 @@
   )
 
   pdf(file.path(
-    path = file.path(output.directory, "Heatmap"),
+    path = file.path(output.directory, "CORs"),
     filename = paste(x, " tumors heatmap.pdf")
   ),
   width = 8,
@@ -485,7 +501,7 @@
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "Heatmap"),
+    path = file.path(output.directory, "CORs"),
     filename = paste(x, " tumors", p, ".pdf"),
     plot = p1,
     width = 10,
@@ -511,8 +527,10 @@
 #' @return Venn digram, bargraph, heatmap, and dotplot
 #' @importFrom purrr map pluck discard
 #' @keywords internal
-#' @examples \dontrun{.plot_Corr_RNAseq_TCGA_GTEX(x = "All")
-#' .plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")}
+#' @examples \dontrun{
+#' .plot_Corr_RNAseq_TCGA_GTEX(x = "All")
+#' .plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")
+#' }
 #'
 .plot_Corr_RNAseq_TCGA_GTEX <- function(x) {
   .TCGA_GTEX_RNAseq_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
@@ -529,13 +547,13 @@
   all.tumor.type <- .TCGA_GTEX_RNAseq_sampletype_subset %>%
     dplyr::select(.data$sample.type) %>%
     mutate_if(is.character, as.factor) %>%
-    #{
+    # {
     #  levels(.$sample.type)
-    #} %>%
+    # } %>%
     purrr::map(levels) %>%
-    purrr::pluck("sample.type")  %>%
-    purrr::discard( ~ .x %in% c("Cell Line", "Normal Tissue", "Solid Tissue Normal"))
-   #.[!. %in% c("Cell Line", "Normal Tissue", "Solid Tissue Normal")]
+    purrr::pluck("sample.type") %>%
+    purrr::discard(~ .x %in% c("Cell Line", "Normal Tissue", "Solid Tissue Normal"))
+  # .[!. %in% c("Cell Line", "Normal Tissue", "Solid Tissue Normal")]
 
 
   EIF.cor.tumor <- .EIF_correlation(
@@ -614,9 +632,10 @@
 #'
 #' @export
 #'
-#' @examples \dontrun{EIF4F_Corrgene_analysis())}
-EIF4F_Corrgene_analysis <- function(){
+#' @examples \dontrun{
+#' EIF4F_Corrgene_analysis()
+#' }
+EIF4F_Corrgene_analysis <- function() {
   .plot_Corr_RNAseq_TCGA_GTEX(x = "All")
   .plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")
 }
-

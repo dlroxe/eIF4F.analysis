@@ -32,7 +32,9 @@ CCLE_RNAseq <- CCLE_Anno <- CCLE_Proteomics <- CPTAC_LUAD_Proteomics <- CPTAC_LU
 #'
 #' @export
 #'
-#' @examples \dontrun{initialize_proteomics_data()}
+#' @examples \dontrun{
+#' initialize_proteomics_data()
+#' }
 #'
 initialize_proteomics_data <- function() {
   CCLE_RNAseq <<- fread(
@@ -92,7 +94,9 @@ initialize_proteomics_data <- function() {
 #' @param EIF gene name
 #' @return a data frame of CCLE RNAseq data from the input \code{EIF} genes
 #' @importFrom dplyr starts_with
-#' @examples \dontrun{.get_CCLE_RNAseq_subset()}
+#' @examples \dontrun{
+#' .get_CCLE_RNAseq_subset()
+#' }
 #' @keywords internal
 .get_CCLE_RNAseq_subset <- function(EIF) {
   .CCLE_RNAseq_subset <- CCLE_RNAseq %>%
@@ -109,7 +113,9 @@ initialize_proteomics_data <- function() {
 #' @return a data frame of CCLE proteomics data from the input \code{EIF} genes
 #' @importFrom dplyr across
 #' @importFrom tidyselect contains vars_select_helpers
-#' @examples \dontrun{.get_CCLE_Proteomics_subset()}
+#' @examples \dontrun{
+#' .get_CCLE_Proteomics_subset()
+#' }
 #' @keywords internal
 .get_CCLE_Proteomics_subset <- function(EIF) {
   .CCLE_Proteomics_subset <- CCLE_Proteomics %>%
@@ -174,7 +180,7 @@ initialize_proteomics_data <- function() {
     )
   print(p1)
   ggplot2::ggsave(
-    path = file.path(output.directory, "LUAD"),
+    path = file.path(output.directory, "RNApro"),
     filename = paste(y, x, "cor", ".pdf"),
     plot = p1,
     width = 3,
@@ -263,9 +269,10 @@ initialize_proteomics_data <- function() {
 #'
 #' @export
 #'
-#' @examples \dontrun{EIF4F_RNA_pro_correlation())}
-EIF4F_RNA_pro_correlation <- function(){
+#' @examples \dontrun{
+#' EIF4F_RNA_pro_correlation()
+#' }
+EIF4F_RNA_pro_correlation <- function() {
   lapply(c("EIF4G1", "EIF4A1", "EIF4E"), .plot_scatter_RNApro_CCLE)
   lapply(c("EIF4G1", "EIF4A1", "EIF4E"), .plot_scatter_RNApro_LUAD)
 }
-
