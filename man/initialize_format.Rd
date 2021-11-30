@@ -2,7 +2,7 @@
 % Please edit documentation in R/2-load.R
 \name{initialize_format}
 \alias{initialize_format}
-\title{Set format for plots}
+\title{Set format for font and color of plots}
 \usage{
 initialize_format()
 }
