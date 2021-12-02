@@ -202,9 +202,9 @@
 
   corrtitle <- function(x) {
     if (x == "All") {
-      title <- "PC (Healthy Tissues + Tumors)"
+      title <- "PCA (Healthy Tissues + Tumors)"
     } else {
-      title <- paste0("PC (", x, ")")
+      title <- paste0("PCA (", x, ")")
     }
     return(title)
   }
@@ -223,7 +223,8 @@
   corrplot::corrplot(var$cos2, # cos2 is better than contribute
     # title = paste("PCA (", x, ")"),
     method = "color",
-    title = title,
+    title = title, #fix title cut off
+    mar = c(0,0,2,0),
     # is.corr     = FALSE,
     tl.cex = 1.5,
     number.cex = 1.5,
@@ -243,32 +244,6 @@
     addCoef.col = "black",
     tl.col = "black"
   )
-
-
-  contribplot <- function(x) {
-    fviz_contrib(res.pca,
-      choice = "var",
-      axes = x,
-      top = 10,
-      fill = "lightblue",
-      color = "black"
-    ) +
-      theme_minimal() +
-      theme(
-        plot.background = element_blank(),
-        plot.title = black_bold_16,
-        panel.background = element_rect(
-          fill = "transparent",
-          color = "black",
-          size = 1
-        ),
-        axis.title.x = element_blank(),
-        axis.title.y = black_bold_16,
-        axis.text.x = black_bold_16_45,
-        axis.text.y = black_bold_16
-      )
-  }
-  lapply(c(1, 2), contribplot)
 }
 
 #' Plot subgroups of PCA results as biplots
@@ -547,7 +522,7 @@
   .biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "All",
+    x = tissue,
     y = "sample.type",
     color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
     folder = "Lung"
@@ -629,13 +604,14 @@ EIF4F_PCA <- function() {
     "PABPC1", "MKNK1", "MKNK2"
   ))
 
-  .plot_PCA_TCGA_GTEX_tumor(
-    c(
-      "EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
-      "PABPC1", "MKNK1", "MKNK2"
-    ),
-    "Lung"
-  )
+  #.plot_PCA_TCGA_GTEX_tumor(c("EIF4G1", "EIF4A1", "EIF4E",
+  #                            "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"),
+  #                          "Breast")
+## save file name edit
+  lapply(c("Lung", "Brain", "Breast", "Colon","Pancreas", "Prostate", "Skin"),
+         .plot_PCA_TCGA_GTEX_tumor,
+         EIF.list = c("EIF4G1", "EIF4A1", "EIF4E",
+                      "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"))
 
   .plot_PCA_CPTAC_LUAD(c(
     "EIF4E", "EIF4G1", "EIF4A1", "PABPC1",
