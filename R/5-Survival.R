@@ -194,7 +194,7 @@ initialize_survival_data <- function() {
   print(KM)
   ggplot2::ggsave(
     path = file.path(output_directory, "Survival", "KM"),
-    filename = paste(gene, tumor, "tumors KM.pdf"),
+    filename = paste(gene, cutoff, tumor, "tumors KM.pdf"),
     plot = KM,
     width = 6,
     height = 6,
@@ -552,7 +552,7 @@ initialize_survival_data <- function() {
   .forest_graph(
     data = multivariable.result,
     output.file = if (tumor == "All") {
-      file.path(output_directory, "Survival", "EIFmultiCox.pdf")
+      file.path(output_directory, "Survival", "CoxPH", "EIFmultiCox.pdf")
     } else {
       # paste0(output_directory, "/Survival/", tumor, "EIFmultiCox.pdf")
       file.path(output_directory, "Survival", "CoxPH", paste0(tumor, "EIFmultiCox.pdf"))
