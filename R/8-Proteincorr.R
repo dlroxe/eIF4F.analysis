@@ -123,8 +123,10 @@ initialize_phosphoproteomics_data <- function() {
     path = file.path(output_directory, "Proteomics"),
     filename = paste(x, y, "cor.pdf"),
     plot = p1,
-    width = 3,
-    height = 3,
+    #width = 3,
+    #height = 3,
+    width = 6,
+    height = 6,
     useDingbats = FALSE
   )
 }
@@ -271,8 +273,10 @@ initialize_phosphoproteomics_data <- function() {
     path = file.path(output_directory, "Proteomics"),
     filename = paste0(stringr::str_remove(x, ":"), "pro.pdf"),
     plot = p2,
-    width = 3,
-    height = 3,
+    #width = 3,
+    #height = 3,
+    width = 6,
+    height = 6,
     useDingbats = FALSE
   )
 }
