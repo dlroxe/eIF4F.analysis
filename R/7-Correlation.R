@@ -215,8 +215,8 @@
     path = file.path(output_directory, "CORs"),
     filename = paste("all", x, z, CORs, "Venn.pdf"),
     plot = p2,
-    width = 8,
-    height = 8,
+    width = 6,
+    height = 6,
     useDingbats = FALSE
   )
 }
@@ -445,7 +445,7 @@
     filename = paste(x, " tumors heatmap.pdf")
   ),
   width = 8,
-  height = 8,
+  height = 10,
   useDingbats = FALSE
   )
   ht <- ComplexHeatmap::draw(ht1,
@@ -483,7 +483,7 @@
   p1 <- clusterProfiler::dotplot(df,
     title = paste("The Most Enriched", p, "Pathways"),
     showCategory = 8,
-    font.size = 18,
+    font.size = 10,
     includeAll = FALSE
   ) +
     theme_bw() +
@@ -505,7 +505,7 @@
     filename = paste(x, " tumors", p, ".pdf"),
     plot = p1,
     width = 10,
-    height = 8,
+    height = 10,
     useDingbats = FALSE
   )
 }
