@@ -183,8 +183,10 @@ initialize_proteomics_data <- function() {
     path = file.path(output_directory, "RNApro"),
     filename = paste(y, x, "cor", ".pdf"),
     plot = p1,
-    width = 3,
-    height = 3,
+    #width = 3,
+    #height = 3,
+    width = 6,
+    height = 6,
     useDingbats = FALSE
   )
 }
