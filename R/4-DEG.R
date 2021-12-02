@@ -406,7 +406,7 @@ initialize_RNAseq_data <- function() {
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "DEG"),
-    filename = "EIF4Fviolin.pdf",
+    filename = paste(y.axis.title, " violin.pdf"),
     plot = p1,
     width = 18,
     height = 9,
