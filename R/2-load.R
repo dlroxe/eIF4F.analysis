@@ -2,6 +2,18 @@
 data_file_directory <- "~/Downloads/Test"
 output_directory <- "~/Documents/EIF_output"
 
+
+#' Set output directories
+#'
+#' @description This function set up the output directories
+#'
+#'
+#' @export
+#'
+#' @examples \dontrun{
+#' initialize_dir()
+#' }
+#'
 initialize_dir <- function() {
   dir.create(file.path(output_directory, "CNV"), recursive = TRUE)
   dir.create(file.path(output_directory, "DEG"), recursive = TRUE)
@@ -24,7 +36,7 @@ black_bold_tahoma_7 <- black_bold_12 <- black_bold_12_45 <- black_bold_16 <- NUL
 black_bold_16_right <- black_bold_16_45 <- black_bold_16_90 <- black_bold_18 <- NULL
 col_vector <- NULL
 
-#' Set format for plots
+#' Set format for font and color of plots
 #'
 #' @description This function set up the font type, size and color for ggplots.
 #'
@@ -101,10 +113,22 @@ initialize_format <- function() {
   col_vector <<- color()
 }
 
+
+#' Generates a number of most distinctive colors for PCA.
+#'
+#' @description This function should not be used directly,
+#' only inside \code{\link{initialize_format}} function.
+#'
+#' @importFrom RColorBrewer brewer.pal.info brewer.pal
+#' @keywords internal
+#' @examples \dontrun{
+#' color()
+#' }
+#'
 color <- function() {
-  qual_col_pals <- brewer.pal.info[brewer.pal.info$category == "qual", ]
+  qual_col_pals <- RColorBrewer::brewer.pal.info[RColorBrewer::brewer.pal.info$category == "qual", ]
   col_vector <- unlist(mapply(
-    brewer.pal,
+    RColorBrewer::brewer.pal,
     qual_col_pals$maxcolors,
     rownames(qual_col_pals)
   ))
