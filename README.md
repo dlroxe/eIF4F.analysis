@@ -18,6 +18,25 @@ You can install the development version of eIF4F.analysis from
 devtools::install_github("a3609640/eIF4F.analysis")
 ```
 
+## Before you begin
+
+Perform the following steps to ensure the proper operation of this
+package.
+
+[System requirements](#system-requirements)
+
+[Install RStudio/R](#install-rstudior)
+
+[Download data-sets](#download-data-sets)
+
+[File directories](#file-directories)
+
+[Install dependent libraries](#install-dependent-libraries)
+
+[Load eIF4F.analysis package](#load-eif4f.analysis-package)
+
+[Session information](#session-information)
+
 ## System requirements
 
 This project makes use of various resource-intensive R packages, which
@@ -150,6 +169,18 @@ gunzip ${DATA_FILE_DIRECTORY}/*.gz
 suit, they may be adjusted trivially in these lines near the top of the
 `1-download.sh` script. 
 
+## File directories
+
+Confirm the directories for input and output files. The directories for
+input and output files are defined in the `2-load.R` as following.
+
+    data_file_directory <- "~/Downloads/EIF_data" 
+    output_directory <- "~/Documents/EIF_output"
+
+**CRITICAL**: If the root directory paths `~/Download/EIF_data` and
+`~/Documents/EIF_output` do not suit, they may be adjusted trivially in
+these lines near the top of the `1-download.sh` and `2-load.R` scripts.
+
 ## Install dependent libraries
 
 The work here depends upon many R libraries. The following command may
@@ -179,19 +210,10 @@ Load `eIF4F.analysis` in the R console.
 library(eIF4F.analysis)
 ```
 
-## File directories
-
-Confirm the directories for input and output files. The directories for
-input and output files are defined in the `2-load.R` as following.
-
-    data_file_directory <- "~/Downloads/EIF_data" 
-    output_directory <- "~/Documents/EIF_output"
-
-**CRITICAL**: If the root directory paths `~/Download/EIF_data` and
-`~/Documents/EIF_output` do not suit, they may be adjusted trivially in
-these lines near the top of the `1-download.sh` and `2-load.R` scripts.
-
 ## Session information
+
+The version information of R, Linux and attached or loaded packages for
+developing this package is the following.
 
 ``` r
 > sessionInfo(package = "eIF4F.analysis")
@@ -258,3 +280,7 @@ loaded via a namespace (and not attached):
 ```
 
 ## **Tutorials**
+
+Open the `9-Callingfuns.R` from `Script` folder from our GitHub
+repository. This script contains the command lines to execute all
+analyses.
