@@ -19,11 +19,11 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' @description This function reads all phosphoproteomics related datasets from CPTAC LUAD.
 #' It generates two global variable.
 #'
-#' CPTAC_LUAD_Phos: the phosphoproteomics data of CPTAC from \code{Phos.xlsx}
+#' CPTAC_LUAD_Phos: the phosphoproteomics data of CPTAC from `Phos.xlsx`
 #'
 #' CPTAC_LUAD_Clinic_Sampletype: the merged dataset from .CPTAC_LUAD_Clinic,
-#' the CPTAC clinical data from \code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx},
-#' and .CPTAC_LUAD_sampletype, the CPTAC annotation data from \code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx}.
+#' the CPTAC clinical data from `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx`,
+#' and .CPTAC_LUAD_sampletype, the CPTAC annotation data from `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`.
 #'
 #' @importFrom dplyr case_when
 #' @importFrom readxl read_excel
@@ -79,8 +79,8 @@ initialize_phosphoproteomics_data <- function() {
 ## selection of RNA and protein expression data and plotting ===================
 
 #' Scatter plots of protein coexpression
-#' @description This function should not be used directly, only inside \code{\link{.plot_scatterplot_protein_LUAD}} function.
-#' @param data input LUAD dataset generated from \code{\link{.plot_scatterplot_protein_LUAD}}.
+#' @description This function should not be used directly, only inside [.plot_scatterplot_protein_LUAD()] function.
+#' @param data input LUAD dataset generated from [.plot_scatterplot_protein_LUAD()].
 #' @param x protein name
 #' @param y protein name
 #' @param z color scheme for the scatter plot
@@ -132,11 +132,11 @@ initialize_phosphoproteomics_data <- function() {
 }
 
 #' Select subset of CPTAC proteomics data
-#' @description This function selected the CPTAC LUAD proteomics data from the input \code{x}.
+#' @description This function selected the CPTAC LUAD proteomics data from the input `x`.
 #'
-#' @details The function should not be used directly, only inside \code{\link{.plot_boxgraph_protein_CPTAC}} function.
-#' @param x protein name, passed \code{EIF_list} argument from \code{\link{.plot_boxgraph_protein_CPTAC}}
-#' @return a data frame of CPTAC LUAD  data from the input \code{x} genes
+#' @details The function should not be used directly, only inside [.plot_boxgraph_protein_CPTAC()] function.
+#' @param x protein name, passed `EIF_list` argument from [.plot_boxgraph_protein_CPTAC()]
+#' @return a data frame of CPTAC LUAD  data from the input `x` genes
 #' @examples \dontrun{
 #' .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
 #' }
@@ -148,11 +148,11 @@ initialize_phosphoproteomics_data <- function() {
 }
 
 #' Select subset of CPTAC phosproteomics data
-#' @description This function selected the CPTAC LUAD phosproteomics data from the input \code{EIF}.
+#' @description This function selected the CPTAC LUAD phosproteomics data from the input `EIF`.
 #'
-#' @details The function should not be used directly, only inside \code{\link{.plot_boxgraph_protein_CPTAC}} function.
-#' @param x protein name, passed \code{EIF_list} argument from \code{\link{.plot_boxgraph_protein_CPTAC}}
-#' @return a data frame of CPTAC LUAD  data from the input \code{x} genes
+#' @details The function should not be used directly, only inside [.plot_boxgraph_protein_CPTAC()] function.
+#' @param x protein name, passed `EIF_list` argument from [.plot_boxgraph_protein_CPTAC()]
+#' @return a data frame of CPTAC LUAD  data from the input `x` genes
 #' @examples \dontrun{
 #' .get_CCLE_RNAseq_subset()
 #' }
@@ -172,9 +172,9 @@ initialize_phosphoproteomics_data <- function() {
 
 #' Boxplots of phosphor-proteomics data across clinic stages
 #' @description This function should not be used directly,
-#' only inside \code{\link{.plot_boxgraph_protein_CPTAC}}.
+#' only inside [.plot_boxgraph_protein_CPTAC()].
 #' @param df a data frame of the combined proteomics and prosphorylation data
-#' generated inside \code{\link{.plot_boxgraph_protein_CPTAC}}
+#' generated inside [.plot_boxgraph_protein_CPTAC()]
 #' @param x protein name
 #' @importFrom dplyr ungroup
 #' @importFrom ggpubr stat_compare_means
@@ -287,7 +287,7 @@ initialize_phosphoproteomics_data <- function() {
 #' protein-protein coexpression in CPTAC LUAD
 #' @description This function selects proteomics data from CPTAC LUAD dataset and protein coexpression analysis
 #'
-#' This function should not be used directly, only inside \code{\link{EIF4F_Proteomics_analysis}} function.
+#' This function should not be used directly, only inside [EIF4F_Proteomics_analysis()] function.
 #' @importFrom ggpubr ggscatter
 #' @keywords internal
 .plot_scatterplot_protein_LUAD <- function() {
@@ -335,16 +335,16 @@ initialize_phosphoproteomics_data <- function() {
 #' Comparison of protein and phosphorylation levels among different stages of LUAD
 #' @description generates boxplot for eIF4F proteomics and prosphorylation data from CPTAC LUAD
 #' @details  This function merges the LUAD proteomics values from EIF4F genes
-#' in the data frame prepared from \code{\link{.get_CPTAC_LUAD_Proteomics_subset}} and
+#' in the data frame prepared from [.get_CPTAC_LUAD_Proteomics_subset()] and
 #' phosphoproteomics data of the same protein in the data frame prepared
-#' from \code{\link{.get_CPTAC_LUAD_Phosproteomics_subset}}.
+#' from [.get_CPTAC_LUAD_Phosproteomics_subset()].
 #'
 #' Then it uses the combined data to compare the abundance across different tumor stages
-#' , and plot the result with the function \code{\link{.protein_boxplot}}
+#' , and plot the result with the function [.protein_boxplot()]
 #'
-#' This function should not be used directly, only inside \code{\link{EIF4F_Proteomics_analysis}} function.
+#' This function should not be used directly, only inside [EIF4F_Proteomics_analysis()] function.
 #' @param EIF_list protein names in a vector of string
-#' @return the box plots for \code{EIF} protein and phosphorylation values in LUAD
+#' @return the box plots for `EIF` protein and phosphorylation values in LUAD
 #' @importFrom dplyr group_by right_join summarise
 #' @importFrom tidyr pivot_longer
 #' @keywords internal
@@ -393,8 +393,8 @@ initialize_phosphoproteomics_data <- function() {
 #' Analyze co-expression among EIF4F subunits and differential expression
 #' @description A wrapper function to call all master functions for protein coexpression and differential expression.
 #'
-#' @details  This function run the master functions \code{\link{.plot_scatterplot_protein_LUAD}} and
-#' \code{\link{.plot_boxgraph_protein_CPTAC}} with EIF4F gene name as inputs.
+#' @details  This function run the master functions [.plot_scatterplot_protein_LUAD()] and
+#' [.plot_boxgraph_protein_CPTAC()] with EIF4F gene name as inputs.
 #'
 #' @return proteomics data analysis plots
 #'

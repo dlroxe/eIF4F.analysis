@@ -1,31 +1,41 @@
-# Survival analyses on EIF4F gene expression in TCGA tumors --------------------
-
-# This R script contains four sections.
-# (1) RNAseq and clinical data preparation
-# (2) functions to analyze KM and cox analyses as well as plotting,
-# (3) master functions to execute a pipeline of functions to select related RNAseq and clinical data
-# for survival analysis and plot with supply of EIF4F gene names as values of the arguments.
-# (4) wrapper function to call all master functions with inputs
-
-
+#' ## Survival analyses on EIF4F gene expression in TCGA tumors
+#' This R script contains four sections.
+#'
+#' (1) RNAseq and clinical data preparation
+#'
+#' (2) functions to analyze KM and cox analyses as well as plotting
+#'
+#' (3) master functions to execute a pipeline of functions to select related
+#'  RNAseq and clinical data for survival analysis and plot with supply of
+#'  EIF4F gene names as values of the arguments.
+#'
+#' (4) wrapper function to call all master functions with inputs
+#'
+#' ### Prepare TCGA survival and RNA-seq dataset
 ## prepare TCGA survival and RNA-seq dataset ===================================
 
+#' @noRd
 # due to NSE notes in R CMD check
 TCGA_RNAseq_OS_sampletype <- NULL
 
 #' Read RNA-seq and survival datasets from TCGA
 #'
-#' @description This function reads RNA-seq and survival datasets from TCGA
+#' @description
 #'
-#' .TCGA_RNAseq: the RNAseq data from TCGA generated from \code{\link{.get_TCGA_RNAseq}}
+#' This function reads RNA-seq and survival datasets from TCGA.
 #'
-#' .TCGA_OS: the annotation data from the "Survival_SupplementalTable_S1_20171025_xena_sp"
-#' dataset with selection of OS and OS.time columns.
+#' side effect: `TCGA_RNAseq_OS_sampletype` the merged dataset from
+#'  `.TCGA_RNAseq`, `.TCGA_OS` and `.TCGA_sampletype`
 #'
-#' .TCGA_sampletype: the annotation data from the "TCGA_phenotype_denseDataOnlyDownload.tsv"
-#' dataset with selection of sample.type and primary.disease columns.
+#' * `.TCGA_RNAseq`: the RNAseq data from TCGA generated from [.get_TCGA_RNAseq()]
 #'
-#' TCGA_RNAseq_OS_sampletype: the merged dataset from .TCGA_RNAseq, .TCGA_OS and .TCGA_sampletype
+#' * `.TCGA_OS`: the annotation data from the
+#'  `Survival_SupplementalTable_S1_20171025_xena_sp` dataset with selection of
+#'  `OS` and `OS.time` columns.
+#'
+#' * `.TCGA_sampletype`: the annotation data from the
+#'  `TCGA_phenotype_denseDataOnlyDownload.tsv` dataset with selection of
+#'  `sample.type` and `primary.disease` columns.
 #'
 #' @importFrom purrr reduce
 #'
@@ -81,16 +91,29 @@ initialize_survival_data <- function() {
 }
 
 #' Read the RNAseq data from TCGA
-#' @description This function reads the RNAseq data from TCGA
-#' "EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena".
-#' @details The function also removes possible duplicated tumor samples and samples with NAs in the dataset.
 #'
-#' It should not be used directly, only inside \code{\link{initialize_survival_data}} function.
-#' @return a data frame that contains the RNAseq data from TCGA
+#' @description
+#'
+#' This function reads the RNAseq data from TCGA
+#' `EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena`.
+#'
+#' @details
+#'
+#' This function removes possible duplicated tumor samples and samples with
+#'  NAs in the dataset.
+#' It should not be used directly, only inside [initialize_survival_data()]
+#'  function.
+#'
+#' @return
+#'
+#' a data frame that contains the RNAseq data from TCGA
+#'
 #' @examples \dontrun{
 #' .get_TCGA_RNAseq()
 #' }
+#'
 #' @keywords internal
+#'
 .get_TCGA_RNAseq <- function() {
   .TCGA_pancancer <- fread(
     file.path(
@@ -115,26 +138,45 @@ initialize_survival_data <- function() {
   return(.TCGA_RNAseq_transpose)
 }
 
-
+#' ### Survival analysis and plotting
 ## Survival analysis and plotting ==============================================
 
-##  KM survival analyses
+
 #' Kaplan Meier survival analyses of gene expression
-#' @description This function correlate the gene expression within tumor samples with patient overall survival time from TCGA tumors.
-#' @details It should not be used directly, only inside \code{\link{.plot_KM_RNAseq_TCGA}} function.
-#' @param gene gene name, passed \code{EIF} argument from \code{\link{.plot_KM_RNAseq_TCGA}}
-#' @param data \code{df} generated inside \code{\link{.plot_KM_RNAseq_TCGA}}
+#'
+#' @description
+#'
+#' This function correlate the gene expression within tumor samples with patient
+#'  overall survival time from TCGA tumors.
+#'
+#' @details
+#'
+#' It should not be used directly, only inside [.plot_KM_RNAseq_TCGA()] function.
+#'
+#' @param gene gene name, passed `EIF` argument from [.plot_KM_RNAseq_TCGA()]
+#'
+#' @param data `df` generated inside [.plot_KM_RNAseq_TCGA()]
+#'
 #' @param cutoff percentage of gene expression
+#'
 #' @param tumor all tumor types or specific type
+#'
 #' @return a KM plot
+#'
 #' @importFrom reshape2 dcast melt
+#'
 #' @importFrom scales percent
+#'
 #' @importFrom survival survfit survdiff
+#'
 #' @importFrom stats pchisq
+#'
 #' @examples \dontrun{
 #' .KM_curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)
 #' }
+#'
 #' @keywords internal
+#'
 .KM_curve <- function(gene, data, cutoff, tumor) {
   km <- survival::survfit(SurvObj ~ data$Group, data = data, conf.type = "log-log")
   stats <- survival::survdiff(SurvObj ~ data$Group, data = data, rho = 0) # rho = 0 log-rank
@@ -202,24 +244,45 @@ initialize_survival_data <- function() {
   )
 }
 
-## Cox regression model and forest plot
+
 #' Univariable Cox-PH analyses of gene expression
-#' @description This function generates univariable regression model of
-#' the gene expression within tumor samples and patient overall survival time TCGA.
-#' @details It should not be used directly, only inside \code{\link{.plot_CoxPH_RNAseq_TCGA}} function.
-#' @param gene gene names, passed \code{EIF.list} argument from \code{\link{.plot_CoxPH_RNAseq_TCGA}}
-#' @param data \code{df1} generated inside \code{\link{.plot_CoxPH_RNAseq_TCGA}}
-#' @param covariate_names gene names from the input arguement of \code{\link{.plot_CoxPH_RNAseq_TCGA}}
+#'
+#' @description
+#'
+#' This function generates univariable regression model of the gene expression
+#'  within tumor samples and patient overall survival time TCGA.
+#'
+#' @details
+#'
+#' It should not be used directly, only inside [.plot_CoxPH_RNAseq_TCGA()]
+#'  function.
+#'
+#' @param gene gene names, passed `EIF.list` argument from
+#' [.plot_CoxPH_RNAseq_TCGA()]
+#'
+#' @param data `df1` generated inside [.plot_CoxPH_RNAseq_TCGA()]
+#'
+#' @param covariate_names gene names from the input arguement
+#' of [.plot_CoxPH_RNAseq_TCGA()]
+#'
 #' @return a table of univariable Cox-PH
+#'
 #' @importFrom dplyr across arrange bind_rows desc full_join slice vars
+#'
 #' @importFrom stats as.formula
+#'
 #' @importFrom survival coxph cox.zph
+#'
 #' @importFrom survivalAnalysis analyse_multivariate
+#'
 #' @importFrom purrr map
+#'
 #' @examples \dontrun{
 #' .univariable_analysis(df = df1, covariate_names = EIF)
 #' }
+#'
 #' @keywords internal
+#'
 .univariable_analysis <- function(df, covariate_names) {
   # Multiple Univariate Analyses
   res.cox <- map(covariate_names, function(gene) {
@@ -268,22 +331,41 @@ initialize_survival_data <- function() {
 }
 
 #' Multivariable Cox-PH analyses of gene expression
-#' @description This function generates univariable regression model of
-#' the gene expression within tumor samples and patient overall survival time TCGA.
-#' @details It should not be used directly, only inside \code{\link{.plot_CoxPH_RNAseq_TCGA}} function.
-#' @param gene gene names, passed \code{EIF.list} argument from \code{\link{.plot_CoxPH_RNAseq_TCGA}}
-#' @param data \code{df1} generated inside \code{\link{.plot_CoxPH_RNAseq_TCGA}}
-#' @param covariate_names gene names from the input argument of \code{\link{.plot_CoxPH_RNAseq_TCGA}}
+#'
+#' @description
+#'
+#' This function generates univariable regression model of the gene expression
+#'  within tumor samples and patient overall survival time TCGA.
+#'
+#' @details It should not be used directly, only inside
+#' [.plot_CoxPH_RNAseq_TCGA()] function.
+#'
+#' @param gene gene names, passed `EIF.list` argument from
+#' [.plot_CoxPH_RNAseq_TCGA()]
+#'
+#' @param data `df1` generated inside [.plot_CoxPH_RNAseq_TCGA()]
+#'
+#' @param covariate_names gene names from the input argument of
+#' [.plot_CoxPH_RNAseq_TCGA()]
+#'
 #' @return a table of multivariable Cox-PH
+#'
 #' @importFrom dplyr across arrange bind_rows desc full_join slice vars
+#'
 #' @importFrom stats as.formula
+#'
 #' @importFrom survival coxph cox.zph
+#'
 #' @importFrom survivalAnalysis analyse_multivariate
+#'
 #' @importFrom purrr map pluck
+#'
 #' @examples \dontrun{
 #' .univariable_analysis(df = df1, covariate_names = EIF)
 #' }
+#'
 #' @keywords internal
+#'
 .multivariable_analysis <- function(df, covariate_names) {
   res.cox <- survivalAnalysis::analyse_multivariate(
     df,
@@ -328,14 +410,27 @@ initialize_survival_data <- function() {
 }
 
 #' Forest plots of COX-PH results
-#' @description This function should not be used directly, only inside \code{\link{.plot_CoxPH_RNAseq_TCGA}} function.
-#' @param data output dataset generated from \code{\link{.univariable_analysis}} or \code{\link{.multivariable_analysis}} function
+#'
+#' @description
+#'
+#' This function should not be used directly,
+#' only inside [.plot_CoxPH_RNAseq_TCGA()] function.
+#'
+#' @param data output dataset generated from [.univariable_analysis()] or
+#' [.multivariable_analysis()] function
+#'
 #' @param output.file output file name
+#'
 #' @param plot.title title name of the forest graph
+#'
 #' @param x.tics tics for x axis
+#'
 #' @param x.range range for x axis
+#'
 #' @importFrom forestplot forestplot fpTxtGp fpColors
+#'
 #' @keywords internal
+#'
 .forest_graph <- function(data, output.file, plot.title, x.tics, x.range) {
   tabletext1 <- cbind(
     c("Gene", data$factor.id),
@@ -421,31 +516,49 @@ initialize_survival_data <- function() {
   dev.off()
 }
 
-
+#' ### Master functions to call survival analysis and plotting
 ## master functions to call Survival analysis and plotting =====================
 
-#' Survival analyses of TCGA patients with expression of \code{EIF} in their tumors by Kaplan Meier method
-#' @description This function generates a Kaplan Meier plot to compare the expression of one gene in TCGA cancer types.
-#' @details  This function first selects RNAseq of the query gene, survival data and
-#' cancer types from the dataset \code{TCGA_RNAseq_OS_sampletype} prepared from \code{\link{initialize_survival_data}}.
+#' Survival analyses of TCGA patients with expression in their tumors by
+#'  Kaplan Meier method
 #'
-#' With the subset data \code{df}, it compares the survival data from patients with top or bottom percents of gene expression,
-#' and plot the results as a KM curve plot with \code{\link{.KM_curve}}.
+#' @description
 #'
-#' This function should not be used directly, only inside \code{\link{EIF4F_Survival_analysis}} function.
+#' This function generates a Kaplan Meier plot to compare the expression of
+#'  one gene in TCGA cancer types.
+#'
+#' @details This function
+#'
+#'  * selects RNAseq of the query gene, survival data and cancer types from
+#'   the dataset `TCGA_RNAseq_OS_sampletype` prepared from
+#'   [initialize_survival_data()].
+#'
+#'  * compares the survival data from patients with top or bottom percents of
+#'   gene expression, and plot the results as a KM curve plot by [.KM_curve()].
+#'
+#' This function should not be used directly, only inside
+#'  [EIF4F_Survival_analysis()] function.
+#'
 #' @param EIF gene name
+#'
 #' @param cutoff percentage of gene expression for patient stratification
+#'
 #' @param tumor all tumor types or specific type
-#' @return KM curve plots for TCGA patients with expression of \code{EIF} in their tumors
+#'
+#' @return
+#'
+#' KM curve plots for TCGA patients with expression of `EIF` in their tumors
+#'
 #' @importFrom survival Surv
+#'
 #' @importFrom stats quantile
+#'
 #' @examples \dontrun{
 #' plot.km.EIF.tumor(EIF = "EIF4E", cutoff = 0.2, tumor = "lung adenocarcinoma")
 #' }
-#' @examples \dontrun{
-#' plot.km.EIF.tumor(EIF = "EIF4G1", cutoff = 0.3, tumor = "All")
-#' }
+#'
 #' @keywords internal
+#'
 .plot_KM_RNAseq_TCGA <- function(EIF, cutoff, tumor) {
   df <- TCGA_RNAseq_OS_sampletype %>%
     dplyr::select(
@@ -469,21 +582,37 @@ initialize_survival_data <- function() {
   .KM_curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)
 }
 
-#' Survival analyses of TCGA patients with expression of \code{EIF} in their tumors by Cox-PH method
-#' @description This function makes regression models between the gene expression within tumor samples and patient overall survival time.
-#' @details  This function first selects RNAseq of the query gene,
-#' survival data and cancer types from the dataset \code{TCGA_RNAseq_OS_sampletype} prepared from \code{\link{initialize_survival_data}}.
+#' Survival analyses of TCGA patients with expression in their tumors by
+#'  Cox-PH method
 #'
-#' With the subset data \code{df1}, it makes univariable regression models with \code{\link{.univariable_analysis}}
-#' and multivariable regression models with \code{\link{.multivariable_analysis}}.
+#' @description
 #'
-#' It plots the results as a forest graph with \code{\link{.forest_graph}}
+#' This function makes regression models between the gene expression within
+#' tumor samples and patient overall survival time.
 #'
-#' This function should not be used directly, only inside \code{\link{EIF4F_Survival_analysis}} function.
+#' @details  This function
+#'
+#' * selects RNAseq of the query gene, survival data and cancer types from
+#' the dataset `TCGA_RNAseq_OS_sampletype` prepared from
+#' [initialize_survival_data()].
+#'
+#' * makes univariable regression models with [.univariable_analysis()]
+#'  and multivariable regression models with [.multivariable_analysis()].
+#'
+#' * plots the results as a forest graph with [.forest_graph()]
+#'
+#' This function should not be used directly, only inside
+#' [EIF4F_Survival_analysis()] function.
+#'
 #' @param EIF.list gene names in a vector of characters
+#'
 #' @param tumor all tumor types or specific type
-#' @return forest graph showing the relation between survival of TCGA patients and expression of \code{EIF} in their tumors
+#'
+#' @return forest graph showing the relation between survival of TCGA patients
+#' and expression of `EIF` in their tumors
+#'
 #' @importFrom tidyr drop_na
+#'
 #' @examples \dontrun{
 #' .plot_CoxPH_RNAseq_TCGA(c(
 #'   "EIF4E", "EIF4E2", "EIF4E3",
@@ -491,14 +620,9 @@ initialize_survival_data <- function() {
 #'   "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"
 #' ), "All")
 #' }
-#' @examples \dontrun{
-#' .plot_CoxPH_RNAseq_TCGA(c(
-#'   "EIF4E", "EIF4E2", "EIF4E3",
-#'   "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E", "EIF4EBP1",
-#'   "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"
-#' ), "lung adenocarcinoma")
-#' }
+#'
 #' @keywords internal
+#'
 .plot_CoxPH_RNAseq_TCGA <- function(EIF.list, tumor) {
   df1 <- TCGA_RNAseq_OS_sampletype %>%
     dplyr::filter(.data$sample.type != "Solid Tissue Normal") %>%
@@ -576,14 +700,22 @@ initialize_survival_data <- function() {
 }
 
 
+#' ### Wrapper function to call all master functions with inputs
 ## wrapper function to call all master functions with inputs ===================
 
 #' Perform all related survival analysis and generate plots
-#' @description A wrapper function to call all master functions for survival analysis with inputs
 #'
-#' @details  This function run three master functions together:
-#' \code{\link{.plot_KM_RNAseq_TCGA}},
-#' \code{\link{.plot_boxgraph_CNVratio_TCGA}} with inputs
+#' @description
+#'
+#' A wrapper function to call all master functions for survival analysis with
+#' inputs
+#'
+#' @details
+#'
+#' This function runs two master functions together with inputs:
+#'
+#' * [.plot_KM_RNAseq_TCGA()]
+#' * [.plot_CoxPH_RNAseq_TCGA()]
 #'
 #' @return Survival analysis plots
 #'
@@ -592,6 +724,7 @@ initialize_survival_data <- function() {
 #' @examples \dontrun{
 #' EIF4F_Survival_analysis()
 #' }
+#'
 EIF4F_Survival_analysis <- function() {
   lapply(c(
     "EIF4G1", "EIF4G2", "EIF4G3",
