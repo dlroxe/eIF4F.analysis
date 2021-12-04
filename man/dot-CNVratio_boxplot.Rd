@@ -21,7 +21,8 @@ vs adjacent normals from individual TCGA cancer types.
 \details{
 This plot function uses dataset \code{.TCGA_CNVratio_sampletype_subset}
 generated from \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}} function.
-It should not be used directly, only inside \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}} function.
+It should not be used directly, only inside \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}}
+function.
 }
 \examples{
 \dontrun{

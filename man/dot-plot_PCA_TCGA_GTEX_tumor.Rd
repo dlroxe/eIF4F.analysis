@@ -21,7 +21,8 @@ This function performs standard PCA on selected RNAseq data from
 It perform PCA on combined tumors from TCGA cancer types and GTEx healthy
 tissues with the same \code{tissue} of origin.
 
-This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}} function.
+This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}}
+function.
 }
 \examples{
 \dontrun{

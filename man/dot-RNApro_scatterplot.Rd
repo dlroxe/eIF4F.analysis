@@ -14,7 +14,7 @@
 \item{y}{database name. \code{CCLE} or \code{LUAD}}
 }
 \description{
-This function should not be used directly,
-only inside \code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} or \code{\link[=.plot_scatter_RNApro_LUAD]{.plot_scatter_RNApro_LUAD()}} function.
+This function should not be used directly, only inside
+\code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} or \code{\link[=.plot_scatter_RNApro_LUAD]{.plot_scatter_RNApro_LUAD()}} function.
 }
 \keyword{internal}

@@ -2,13 +2,18 @@
 % Please edit documentation in R/Proteincorr.R
 \name{.plot_scatterplot_protein_LUAD}
 \alias{.plot_scatterplot_protein_LUAD}
-\title{protein-protein coexpression in CPTAC LUAD}
+\title{\subsection{Master function for coexpression and differential expression analysis}{
+
+protein-protein coexpression in CPTAC LUAD
+}}
 \usage{
 .plot_scatterplot_protein_LUAD()
 }
 \description{
-This function selects proteomics data from CPTAC LUAD dataset and protein coexpression analysis
+This function selects proteomics data from CPTAC LUAD dataset and protein
+coexpression analysis
 
-This function should not be used directly, only inside \code{\link[=EIF4F_Proteomics_analysis]{EIF4F_Proteomics_analysis()}} function.
+This function should not be used directly, only inside
+\code{\link[=EIF4F_Proteomics_analysis]{EIF4F_Proteomics_analysis()}} function.
 }
 \keyword{internal}

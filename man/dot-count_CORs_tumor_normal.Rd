@@ -18,7 +18,8 @@ bargraph for posCOR or negCOR numbers
 This function counts the numbers of correlating genes, using the data
 generated from \code{\link[=.EIF_correlation]{.EIF_correlation()}}.
 
-It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}} function.
+It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
+function.
 }
 \examples{
 \dontrun{
@@ -27,5 +28,6 @@ It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_
   df2 = EIF.cor.normal[[2]]
 )
 }
+
 }
 \keyword{internal}

@@ -7,15 +7,15 @@
 initialize_RNAseq_data()
 }
 \description{
-This function reads RNA-seq related datasets from TCGA and GTEx
+This function reads RNA-seq related datasets from TCGA and GTEx.
+Its side effects is the global variable \code{TCGA_GTEX_RNAseq_sampletype}, which
+was merged from two internal dataframes.
 \itemize{
 \item \code{.TCGA_GTEX_RNAseq}: the recomputed RNAseq data from both TCGA and GTEx
 generated from \code{\link[=.get_TCGA_GTEX_RNAseq]{.get_TCGA_GTEX_RNAseq()}}
 \item \code{.TCGA_GTEX_sampletype}: the annotation data from
 \code{TcgaTargetGTEX_phenotype.txt} with selection of \code{sample.type} and
 \code{primary.disease} columns to reduce the data size.
-\item \code{TCGA_GTEX_RNAseq_sampletype}: the merged dataset from \code{.TCGA_GTEX_RNAseq}
-and \code{.TCGA_GTEX_sampletype}.
 }
 }
 \examples{

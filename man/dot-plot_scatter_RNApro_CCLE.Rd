@@ -2,7 +2,10 @@
 % Please edit documentation in R/ProRNACorrelation.R
 \name{.plot_scatter_RNApro_CCLE}
 \alias{.plot_scatter_RNApro_CCLE}
-\title{Correlation between CCLE RNAseq and proteomics data}
+\title{\subsection{Master function to perform RNA protein correlation}{
+
+Correlation between CCLE RNAseq and proteomics data
+}}
 \usage{
 .plot_scatter_RNApro_CCLE(EIF)
 }
@@ -13,21 +16,25 @@
 the correlation scatter plot for \code{EIF} RNA and protein values in CCLE
 }
 \description{
-generates correlation scatter plot for eIF4F RNAseq and proteomics data from CCLE
+This function generates correlation scatter plot for eIF4F RNAseq and
+proteomics data from CCLE.
 }
 \details{
-This function merge the CCLE RNAseq values from EIF4F genes
-in the data frame prepared from \code{\link[=.get_CCLE_RNAseq_subset]{.get_CCLE_RNAseq_subset()}} and
-proteomics data of the same protein in the data frame prepared from \code{\link[=.get_CCLE_Proteomics_subset]{.get_CCLE_Proteomics_subset()}}.
+This function merge the CCLE RNAseq values from EIF4F genes in the data frame
+prepared from \code{\link[=.get_CCLE_RNAseq_subset]{.get_CCLE_RNAseq_subset()}} and proteomics data of the same
+protein in the data frame prepared from \code{\link[=.get_CCLE_Proteomics_subset]{.get_CCLE_Proteomics_subset()}}.
 
 Then it uses the combined data to calculate the correlation coefficients
-between protein and RNA levels, and plot the result with the function \code{\link[=.RNApro_scatterplot]{.RNApro_scatterplot()}}
+between protein and RNA levels, and plot the result with the function
+\code{\link[=.RNApro_scatterplot]{.RNApro_scatterplot()}}
 
-This function should not be used directly, only inside \code{\link[=EIF4F_RNA_pro_correlation]{EIF4F_RNA_pro_correlation()}} function.
+This function should not be used directly, only inside
+\code{\link[=EIF4F_RNA_pro_correlation]{EIF4F_RNA_pro_correlation()}} function.
 }
 \examples{
 \dontrun{
 lapply(c("EIF4G1", "EIF4A1", "EIF4E"), .plot_scatter_RNApro_CCLE)
 }
+
 }
 \keyword{internal}

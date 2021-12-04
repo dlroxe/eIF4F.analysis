@@ -2,7 +2,10 @@
 % Please edit documentation in R/Proteincorr.R
 \name{EIF4F_Proteomics_analysis}
 \alias{EIF4F_Proteomics_analysis}
-\title{Analyze co-expression among EIF4F subunits and differential expression}
+\title{\subsection{Wrapper function to call all master functions with inputs}{
+
+Analyze co-expression among EIF4F subunits and differential expression
+}}
 \usage{
 EIF4F_Proteomics_analysis()
 }
@@ -10,7 +13,8 @@ EIF4F_Proteomics_analysis()
 proteomics data analysis plots
 }
 \description{
-A wrapper function to call all master functions for protein coexpression and differential expression.
+A wrapper function to call all master functions for protein coexpression and
+differential expression.
 }
 \details{
 This function run the master functions \code{\link[=.plot_scatterplot_protein_LUAD]{.plot_scatterplot_protein_LUAD()}} and
@@ -20,4 +24,5 @@ This function run the master functions \code{\link[=.plot_scatterplot_protein_LU
 \dontrun{
 EIF4F_Proteomics_analysis()
 }
+
 }

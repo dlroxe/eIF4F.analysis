@@ -12,7 +12,8 @@ This function reads RNA-seq and survival datasets from TCGA.
 side effect: \code{TCGA_RNAseq_OS_sampletype} the merged dataset from
 \code{.TCGA_RNAseq}, \code{.TCGA_OS} and \code{.TCGA_sampletype}
 \itemize{
-\item \code{.TCGA_RNAseq}: the RNAseq data from TCGA generated from \code{\link[=.get_TCGA_RNAseq]{.get_TCGA_RNAseq()}}
+\item \code{.TCGA_RNAseq}: the RNAseq data from TCGA generated from
+\code{\link[=.get_TCGA_RNAseq]{.get_TCGA_RNAseq()}}
 \item \code{.TCGA_OS}: the annotation data from the
 \code{Survival_SupplementalTable_S1_20171025_xena_sp} dataset with selection of
 \code{OS} and \code{OS.time} columns.

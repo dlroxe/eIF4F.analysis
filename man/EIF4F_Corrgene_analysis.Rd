@@ -2,7 +2,10 @@
 % Please edit documentation in R/COR.R
 \name{EIF4F_Corrgene_analysis}
 \alias{EIF4F_Corrgene_analysis}
-\title{Perform PCA and generate plots}
+\title{\subsection{Wrapper function to call all master functions with inputs}{
+
+Perform PCA and generate plots
+}}
 \usage{
 EIF4F_Corrgene_analysis()
 }
@@ -15,9 +18,15 @@ A wrapper function to call all master functions for PCA with inputs
 \details{
 This function run the master functions  \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
 with two inputs.
+\itemize{
+\item "All" for all cancer types of TCGA and all healthy tissues types of GTEx.
+\item "Lung" for lung cancer types (LUAD and LUSC of TCGA) and healthy lung
+tissues of GTEx
+}
 }
 \examples{
 \dontrun{
 EIF4F_Corrgene_analysis()
 }
+
 }

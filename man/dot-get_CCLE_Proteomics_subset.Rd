@@ -16,11 +16,13 @@ a data frame of CCLE proteomics data from the input \code{EIF} genes
 This function selected the CCLE proteomics data from the input \code{EIF}.
 }
 \details{
-The function should not be used directly, only inside \code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} function.
+The function should not be used directly, only inside
+\code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} function.
 }
 \examples{
 \dontrun{
 .get_CCLE_Proteomics_subset()
 }
+
 }
 \keyword{internal}

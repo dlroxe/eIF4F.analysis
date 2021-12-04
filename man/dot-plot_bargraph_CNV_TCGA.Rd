@@ -40,8 +40,8 @@ It should not be used directly, only inside \code{\link[=EIF4F_CNV_analysis]{EIF
 \dontrun{
 plot_bargraph_CNV_TCGA(c(
   "TP53", "EIF4A1", "EIF4A2", "EIF4E",
-  "EIF4E2", "EIF4E3", "MYC", "EIF3D", "EIF4EBP1", "EIF4G1", "EIF4G2", "EIF4G3",
-  "PABPC1", "MKNK1", "MKNK2"
+  "EIF4E2", "EIF4E3", "MYC", "EIF3D", "EIF4EBP1", "EIF4G1", "EIF4G2",
+  "EIF4G3", "PABPC1", "MKNK1", "MKNK2"
 ))
 }
 

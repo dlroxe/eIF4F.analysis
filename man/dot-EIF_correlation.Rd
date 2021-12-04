@@ -2,25 +2,49 @@
 % Please edit documentation in R/COR.R
 \name{.EIF_correlation}
 \alias{.EIF_correlation}
-\title{Identify EIF4F correlating genes}
+\title{\subsection{Analyses on EIF4F correlating genes (CORs)}{
+
+This R script contains four sections.
+}}
 \usage{
 .EIF_correlation(df, y)
 }
 \arguments{
-\item{df}{the dataframe \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}}
+\item{df}{the dataframe \code{.TCGA_GTEX_RNAseq_sampletype_subset} generated
+inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}}
 
 \item{y}{sample types, either \code{all.tumor.type} or \code{c("Normal Tissue")}
 generated inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}}
 }
 \value{
-a list output with four elements: cor.data for the heatmap function and CORs.counts for
-bargraph function, c4.posCOR, c4.negCOR for Venn plots
+a list output with four elements:
+\itemize{
+\item cor.data for the heatmap
+\item CORs.counts for bargraph
+\item c4.posCOR and c4.negCOR for Venn plots
+}
 }
 \description{
-This function calculate the correlation efficiency between each EIF4F gene and the rest of cellular mRNAs.
-and identify the significantly correlating genes.
+This function calculates the correlation efficiency between each EIF4F gene
+and the rest of cellular mRNAs to identify the significantly correlating
+genes.
 
-It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}} function.
+It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
+function.
+}
+\details{
+(1) identify positively or negatively correlating genes of EIF4F
+
+(2) analyze the correlating genes and plotting
+
+(3) master functions to execute a pipeline of functions to select related
+RNAseq data for correlation analyses and plotting.
+
+(4) wrapper function to call all master functions with inputs
+\subsection{Identify correlating genes for EIF4F genes}{
+
+Identify EIF4F correlating genes
+}
 }
 \examples{
 \dontrun{
@@ -29,5 +53,6 @@ It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_
   y = all.tumor.type
 )
 }
+
 }
 \keyword{internal}

@@ -7,8 +7,8 @@
 initialize_cnv_data()
 }
 \description{
-This function reads all CNV related datasets from TCGA and
-generates three global variables as side effects.
+This function reads all CNV related datasets from TCGA and its side effects
+are three global variables.
 }
 \details{
 \itemize{

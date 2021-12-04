@@ -23,7 +23,8 @@ It perform PCA on tumors from all TCGA cancer types,
 PCA on healthy tissues from all GTEx healthy tissue types,
 and PCA on combined TCGA tumors and GTEx healthy tissues.
 
-This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}} function.
+This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}}
+function.
 }
 \examples{
 \dontrun{

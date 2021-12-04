@@ -20,7 +20,8 @@ This function performs standard PCA on selected proteomics data from
 It perform PCA on combined tumors from CPTAC LUAD and and
 matched healthy lung tissues.
 
-This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}} function.
+This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}}
+function.
 }
 \examples{
 \dontrun{

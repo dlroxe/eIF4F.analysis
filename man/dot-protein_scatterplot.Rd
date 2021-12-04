@@ -2,7 +2,10 @@
 % Please edit documentation in R/Proteincorr.R
 \name{.protein_scatterplot}
 \alias{.protein_scatterplot}
-\title{Scatter plots of protein coexpression}
+\title{\subsection{Selection of RNA and protein expression data and plotting}{
+
+Scatter plots of protein coexpression
+}}
 \usage{
 .protein_scatterplot(df, x, y, z)
 }
@@ -13,9 +16,11 @@
 
 \item{z}{color scheme for the scatter plot}
 
-\item{data}{input LUAD dataset generated from \code{\link[=.plot_scatterplot_protein_LUAD]{.plot_scatterplot_protein_LUAD()}}.}
+\item{data}{input LUAD dataset generated from
+\code{\link[=.plot_scatterplot_protein_LUAD]{.plot_scatterplot_protein_LUAD()}}}
 }
 \description{
-This function should not be used directly, only inside \code{\link[=.plot_scatterplot_protein_LUAD]{.plot_scatterplot_protein_LUAD()}} function.
+This function should not be used directly, only inside
+\code{\link[=.plot_scatterplot_protein_LUAD]{.plot_scatterplot_protein_LUAD()}} function.
 }
 \keyword{internal}

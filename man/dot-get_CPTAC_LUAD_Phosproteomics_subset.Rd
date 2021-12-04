@@ -7,20 +7,24 @@
 .get_CPTAC_LUAD_Phosproteomics_subset(x)
 }
 \arguments{
-\item{x}{protein name, passed \code{EIF_list} argument from \code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}}}
+\item{x}{protein name, passed \code{EIF_list} argument from
+\code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}}}
 }
 \value{
 a data frame of CPTAC LUAD  data from the input \code{x} genes
 }
 \description{
-This function selected the CPTAC LUAD phosproteomics data from the input \code{EIF}.
+This function selected the CPTAC LUAD phosproteomics data from the
+input \code{EIF}.
 }
 \details{
-The function should not be used directly, only inside \code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}} function.
+The function should not be used directly, only inside
+\code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}} function.
 }
 \examples{
 \dontrun{
 .get_CCLE_RNAseq_subset()
 }
+
 }
 \keyword{internal}

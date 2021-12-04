@@ -7,17 +7,17 @@
 initialize_proteomics_data()
 }
 \description{
-This function reads all proteomics related datasets from CCLE and CPTAC LUAD. It generates five global variables.
-
-CCLE_RNAseq: the RNAseq data of CCLE from \code{CCLE_expression_full.csv}
-
-CCLE_Anno: the annotation data of CCLE from \code{sample_info.csv}
-
-CCLE_Proteomics: the proteomics data of CCLE from \code{protein_quant_current_normalized.csv}
-
-CPTAC_LUAD_Proteomics: the proteomics data with annotation of CPTAC LUAD from \code{Protein.xlsx}
-
-CPTAC_LUAD_RNAseq: the RNAseq data of CPTAC LUAD from \code{RNA.xlsx}
+This function reads all proteomics related datasets from CCLE and CPTAC LUAD.
+Its side effects includes five global variables.
+\itemize{
+\item \code{CCLE_RNAseq}: the RNAseq data of CCLE from \code{CCLE_expression_full.csv}
+\item \code{CCLE_Anno}: the annotation data of CCLE from \code{sample_info.csv}
+\item \code{CCLE_Proteomics}: the proteomics data of CCLE from
+\code{protein_quant_current_normalized.csv}
+\item \code{CPTAC_LUAD_Proteomics}: the proteomics data with annotation of CPTAC LUAD
+from \code{Protein.xlsx}
+\item \code{CPTAC_LUAD_RNAseq}: the RNAseq data of CPTAC LUAD samples from \code{RNA.xlsx}
+}
 }
 \examples{
 \dontrun{

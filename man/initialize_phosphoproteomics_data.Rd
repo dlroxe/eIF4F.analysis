@@ -8,13 +8,17 @@ initialize_phosphoproteomics_data()
 }
 \description{
 This function reads all phosphoproteomics related datasets from CPTAC LUAD.
-It generates two global variable.
+Its side effects include two global variable.
 
-CPTAC_LUAD_Phos: the phosphoproteomics data of CPTAC from \code{Phos.xlsx}
+(1) \code{CPTAC_LUAD_Phos}: the phosphoproteomics data of CPTAC from \code{Phos.xlsx}
 
-CPTAC_LUAD_Clinic_Sampletype: the merged dataset from .CPTAC_LUAD_Clinic,
-the CPTAC clinical data from \code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx},
-and .CPTAC_LUAD_sampletype, the CPTAC annotation data from \code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx}.
+(2) \code{CPTAC_LUAD_Clinic_Sampletype}: the merged dataset from
+\itemize{
+\item \code{.CPTAC_LUAD_Clinic}, the CPTAC clinical data from
+\code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx},
+\item \code{.CPTAC_LUAD_sampletype}, the CPTAC annotation data from
+\code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx}.
+}
 }
 \examples{
 \dontrun{

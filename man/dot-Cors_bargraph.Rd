@@ -19,10 +19,11 @@
 bargraph for the numbers of posCOR or negCORs
 }
 \description{
-This function draw bargraph, using the correlation data
-generated from \code{\link[=.EIF_correlation]{.EIF_correlation()}}.
+This function draw bargraph, using the correlation data generated from
+\code{\link[=.EIF_correlation]{.EIF_correlation()}}.
 
-It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}} function.
+It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
+function.
 }
 \examples{
 \dontrun{
@@ -31,5 +32,6 @@ It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_
   CORs = "posCORs", coord_flip.ylim = 14000
 )
 }
+
 }
 \keyword{internal}

@@ -2,7 +2,8 @@
 % Please edit documentation in R/Proteincorr.R
 \name{.plot_boxgraph_protein_CPTAC}
 \alias{.plot_boxgraph_protein_CPTAC}
-\title{Comparison of protein and phosphorylation levels among different stages of LUAD}
+\title{Comparison of protein and phosphorylation levels among different stages of
+LUAD}
 \usage{
 .plot_boxgraph_protein_CPTAC(EIF_list)
 }
@@ -13,7 +14,8 @@
 the box plots for \code{EIF} protein and phosphorylation values in LUAD
 }
 \description{
-generates boxplot for eIF4F proteomics and prosphorylation data from CPTAC LUAD
+This function generates boxplot for eIF4F proteomics and prosphorylation data
+from CPTAC LUAD.
 }
 \details{
 This function merges the LUAD proteomics values from EIF4F genes
@@ -21,10 +23,11 @@ in the data frame prepared from \code{\link[=.get_CPTAC_LUAD_Proteomics_subset]{
 phosphoproteomics data of the same protein in the data frame prepared
 from \code{\link[=.get_CPTAC_LUAD_Phosproteomics_subset]{.get_CPTAC_LUAD_Phosproteomics_subset()}}.
 
-Then it uses the combined data to compare the abundance across different tumor stages
-, and plot the result with the function \code{\link[=.protein_boxplot]{.protein_boxplot()}}
+Then it uses the combined data to compare the abundance across different
+tumor stages, and plot the result with the function \code{\link[=.protein_boxplot]{.protein_boxplot()}}
 
-This function should not be used directly, only inside \code{\link[=EIF4F_Proteomics_analysis]{EIF4F_Proteomics_analysis()}} function.
+This function should not be used directly, only inside
+\code{\link[=EIF4F_Proteomics_analysis]{EIF4F_Proteomics_analysis()}} function.
 }
 \examples{
 \dontrun{
@@ -33,5 +36,6 @@ This function should not be used directly, only inside \code{\link[=EIF4F_Proteo
   "AKT1", "MTOR", "EIF4B", "EIF4H", "MKNK1", "MKNK2"
 ))
 }
+
 }
 \keyword{internal}

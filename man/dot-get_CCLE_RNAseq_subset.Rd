@@ -2,7 +2,10 @@
 % Please edit documentation in R/ProRNACorrelation.R
 \name{.get_CCLE_RNAseq_subset}
 \alias{.get_CCLE_RNAseq_subset}
-\title{Select subset of CCLE RNAseq data}
+\title{\subsection{Select EIF RNA/pro data and plotting}{
+
+Select subset of CCLE RNAseq data
+}}
 \usage{
 .get_CCLE_RNAseq_subset(EIF)
 }
@@ -16,11 +19,13 @@ a data frame of CCLE RNAseq data from the input \code{EIF} genes
 This function selected the CCLE RNAseq data from the input \code{EIF}.
 }
 \details{
-The function should not be used directly, only inside \code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} function.
+The function should not be used directly, only inside
+\code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} function.
 }
 \examples{
 \dontrun{
 .get_CCLE_RNAseq_subset()
 }
+
 }
 \keyword{internal}

@@ -2,7 +2,10 @@
 % Please edit documentation in R/ProRNACorrelation.R
 \name{EIF4F_RNA_pro_correlation}
 \alias{EIF4F_RNA_pro_correlation}
-\title{Perform PCA and generate plots}
+\title{\subsection{Wrapper function to call all master functions with inputs}{
+
+Perform PCA and generate plots
+}}
 \usage{
 EIF4F_RNA_pro_correlation()
 }
@@ -10,7 +13,8 @@ EIF4F_RNA_pro_correlation()
 correlating gene analysis plots
 }
 \description{
-A wrapper function to call all master functions for RNA and protein correlation with inputs.
+A wrapper function to call all master functions for RNA and protein
+correlation with inputs.
 }
 \details{
 This function run the master functions \code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} and
@@ -20,4 +24,5 @@ This function run the master functions \code{\link[=.plot_scatter_RNApro_CCLE]{.
 \dontrun{
 EIF4F_RNA_pro_correlation()
 }
+
 }

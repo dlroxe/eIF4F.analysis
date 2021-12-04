@@ -38,8 +38,8 @@ This function should not be used directly, only inside
 \dontrun{
 .plot_CoxPH_RNAseq_TCGA(c(
   "EIF4E", "EIF4E2", "EIF4E3",
-  "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E", "EIF4EBP1",
-  "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"
+  "EIF4G1", "EIF4G2", "EIF4G3", "EIF4A1", "EIF4A2", "EIF3D", "EIF3E",
+  "EIF4EBP1", "EIF4EBP2", "MKNK1", "MKNK2", "EIF4B", "EIF4H", "MTOR", "MYC"
 ), "All")
 }
 

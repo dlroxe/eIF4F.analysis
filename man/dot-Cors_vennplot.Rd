@@ -2,7 +2,10 @@
 % Please edit documentation in R/COR.R
 \name{.Cors_vennplot}
 \alias{.Cors_vennplot}
-\title{Plot Venn diagrams for correlating genes}
+\title{\subsection{Correlation analysis and plotting}{
+
+Plot Venn diagrams for correlating genes
+}}
 \usage{
 .Cors_vennplot(df, x, z, CORs)
 }
@@ -19,14 +22,16 @@
 vennDiagram for posCOR or negCORs
 }
 \description{
-This function draw Venn diagrams, using the correlation data
-generated from \code{\link[=.EIF_correlation]{.EIF_correlation()}}.
+This function draw Venn diagrams, using the correlation data generated from
+\code{\link[=.EIF_correlation]{.EIF_correlation()}}.
 
-It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}} function.
+It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
+function.
 }
 \examples{
 \dontrun{
 .Cors_vennplot(df = EIF.cor.tumor[[3]], x = x, z = "tumor", CORs = "posCOR")
 }
+
 }
 \keyword{internal}

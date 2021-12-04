@@ -26,7 +26,8 @@ This function correlate the gene expression within tumor samples with patient
 overall survival time from TCGA tumors.
 }
 \details{
-It should not be used directly, only inside \code{\link[=.plot_KM_RNAseq_TCGA]{.plot_KM_RNAseq_TCGA()}} function.
+It should not be used directly, only inside \code{\link[=.plot_KM_RNAseq_TCGA]{.plot_KM_RNAseq_TCGA()}}
+function.
 }
 \examples{
 \dontrun{

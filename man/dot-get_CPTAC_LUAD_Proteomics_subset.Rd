@@ -7,7 +7,8 @@
 .get_CPTAC_LUAD_Proteomics_subset(x)
 }
 \arguments{
-\item{x}{protein name, passed \code{EIF_list} argument from \code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}}}
+\item{x}{protein name, passed \code{EIF_list} argument from
+\code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}}}
 }
 \value{
 a data frame of CPTAC LUAD  data from the input \code{x} genes
@@ -16,11 +17,13 @@ a data frame of CPTAC LUAD  data from the input \code{x} genes
 This function selected the CPTAC LUAD proteomics data from the input \code{x}.
 }
 \details{
-The function should not be used directly, only inside \code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}} function.
+The function should not be used directly, only inside
+\code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}} function.
 }
 \examples{
 \dontrun{
 .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
 }
+
 }
 \keyword{internal}

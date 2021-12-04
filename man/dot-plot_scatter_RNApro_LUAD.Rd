@@ -13,21 +13,27 @@
 the correlation scatter plot for \code{EIF} RNA and protein values in LUAD
 }
 \description{
-generates correlation scatter plot for eIF4F RNAseq and proteomics data from LUAD
+This function generates correlation scatter plot for eIF4F RNAseq and
+proteomics data from LUAD.
 }
 \details{
-This function merge the LUAD RNAseq values from EIF4F genes
-in the data frame prepred from \code{CPTAC_LUAD_Proteomics} and
-proteomics data of the same protein in the data frame prepared from \code{CPTAC_LUAD_RNAseq}.
+This function
+\itemize{
+\item merges the LUAD RNAseq data of EIF4F genes prepared from
+\code{CPTAC_LUAD_Proteomics} and proteomics data of the EIF4F proteins
+prepared from \code{CPTAC_LUAD_RNAseq}.
+\item uses the combined data to calculate the correlation coefficients between
+protein and RNA levels, and plot the result with the function
+\code{\link[=.RNApro_scatterplot]{.RNApro_scatterplot()}}
+}
 
-Then it uses the combined data to calculate the correlation coefficients
-between protein and RNA levels, and plot the result with the function \code{\link[=.RNApro_scatterplot]{.RNApro_scatterplot()}}
-
-This function should not be used directly, only inside \code{\link[=EIF4F_RNA_pro_correlation]{EIF4F_RNA_pro_correlation()}} function.
+This function should not be used directly, only inside
+\code{\link[=EIF4F_RNA_pro_correlation]{EIF4F_RNA_pro_correlation()}} function.
 }
 \examples{
 \dontrun{
 lapply(c("EIF4G1", "EIF4A1", "EIF4E"), .plot_scatter_RNApro_LUAD)
 }
+
 }
 \keyword{internal}

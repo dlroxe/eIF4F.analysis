@@ -15,14 +15,17 @@
 data frame with posCOR or negCOR from both tumors and healthy tissue samples
 }
 \description{
-Combine all the EIF4F correlating genes and their correlation coefficients,
-using the data generated from \code{\link[=.EIF_correlation]{.EIF_correlation()}}.
+This function combines all the EIF4F correlating genes and their correlation
+coefficients to a data frame, with the data generated from
+\code{\link[=.EIF_correlation]{.EIF_correlation()}}.
 
-It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}} function.
+It should not be used directly, only inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
+function.
 }
 \examples{
 \dontrun{
 .EIF_cor_normal_tumor(df1 = EIF.cor.tumor[[1]], df2 = EIF.cor.normal[[1]])
 }
+
 }
 \keyword{internal}
