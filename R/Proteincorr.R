@@ -1,31 +1,44 @@
-# Co-expression among EIF4F subunits and differential expression ---------------
+#' ## Co-expression among EIF4F subunits and differential expression
+#' This R script contains four sections.
+#'
+#' (1) LUAD phospho-proteomics data preparation
+#'
+#' (2) selection of RNA and protein expression data and plotting
+#'
+#' (3) master functions to execute a pipeline of functions to select related
+#'  expression with supply of EIF4F gene names for coexpression and differential
+#'  expression analyses.
+#'
+#' (4) wrapper function to call all master functions with inputs
 
-# This R script contains four sections.
-# (1) LUAD phospho-proteomics data preparation
-# (2) selection of RNA and protein expression data and plotting
-# (3) master functions to execute a pipeline of functions to select related expression
-# with supply of EIF4F gene names for coexpression and differential expression analyses.
-# (4) wrapper function to call all master functions with inputs
 
-
-
+#'
+#' ### Prepare phosphoproteomics datasets from CPTAC LUAD
 ## prepare  phosphoproteomics datasets from CPTAC LUAD =========================
 
-# due to NSE notes in R CMD check
+#' @noRd
+## due to NSE notes in R CMD check
 CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 
 #' Read all phosphoproteomics related datasets from CPTAC LUAD
 #'
-#' @description This function reads all phosphoproteomics related datasets from CPTAC LUAD.
-#' It generates two global variable.
+#' @description
 #'
-#' CPTAC_LUAD_Phos: the phosphoproteomics data of CPTAC from `Phos.xlsx`
+#' This function reads all phosphoproteomics related datasets from CPTAC LUAD.
+#' Its side effects include two global variable.
 #'
-#' CPTAC_LUAD_Clinic_Sampletype: the merged dataset from .CPTAC_LUAD_Clinic,
-#' the CPTAC clinical data from `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx`,
-#' and .CPTAC_LUAD_sampletype, the CPTAC annotation data from `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`.
+#' (1) `CPTAC_LUAD_Phos`: the phosphoproteomics data of CPTAC from `Phos.xlsx`
+#'
+#' (2) `CPTAC_LUAD_Clinic_Sampletype`: the merged dataset from
+#'
+#'  * `.CPTAC_LUAD_Clinic`, the CPTAC clinical data from
+#'  `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx`,
+#'
+#'  * `.CPTAC_LUAD_sampletype`, the CPTAC annotation data from
+#'  `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`.
 #'
 #' @importFrom dplyr case_when
+#'
 #' @importFrom readxl read_excel
 #'
 #' @export
@@ -68,24 +81,40 @@ initialize_phosphoproteomics_data <- function() {
     rename("Sample" = "Aliquot (Specimen Label)") %>%
     mutate(tumor_stage_pathological = case_when(
       Type == "Normal" ~ "Normal",
-      tumor_stage_pathological %in% c("Stage I", "Stage IA", "Stage IB") ~ "Stage I",
-      tumor_stage_pathological %in% c("Stage II", "Stage IIA", "Stage IIB") ~ "Stage II",
-      tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~ "Stage III",
+      tumor_stage_pathological %in% c("Stage I", "Stage IA", "Stage IB") ~
+        "Stage I",
+      tumor_stage_pathological %in% c("Stage II", "Stage IIA", "Stage IIB") ~
+        "Stage II",
+      tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~
+        "Stage III",
       tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"
     ))
 }
 
 
+#' ### Selection of RNA and protein expression data and plotting
 ## selection of RNA and protein expression data and plotting ===================
 
 #' Scatter plots of protein coexpression
-#' @description This function should not be used directly, only inside [.plot_scatterplot_protein_LUAD()] function.
-#' @param data input LUAD dataset generated from [.plot_scatterplot_protein_LUAD()].
+#'
+#' @description
+#'
+#' This function should not be used directly, only inside
+#'  [.plot_scatterplot_protein_LUAD()] function.
+#'
+#' @param data input LUAD dataset generated from
+#'  [.plot_scatterplot_protein_LUAD()]
+#'
 #' @param x protein name
+#'
 #' @param y protein name
+#'
 #' @param z color scheme for the scatter plot
+#'
 #' @importFrom ggpubr ggscatter
+#'
 #' @keywords internal
+#'
 .protein_scatterplot <- function(df, x, y, z) {
   p1 <- ggpubr::ggscatter(df,
     x = x,
@@ -132,15 +161,27 @@ initialize_phosphoproteomics_data <- function() {
 }
 
 #' Select subset of CPTAC proteomics data
-#' @description This function selected the CPTAC LUAD proteomics data from the input `x`.
 #'
-#' @details The function should not be used directly, only inside [.plot_boxgraph_protein_CPTAC()] function.
-#' @param x protein name, passed `EIF_list` argument from [.plot_boxgraph_protein_CPTAC()]
+#' @description
+#'
+#' This function selected the CPTAC LUAD proteomics data from the input `x`.
+#'
+#' @details
+#'
+#' The function should not be used directly, only inside
+#' [.plot_boxgraph_protein_CPTAC()] function.
+#'
+#' @param x protein name, passed `EIF_list` argument from
+#'  [.plot_boxgraph_protein_CPTAC()]
+#'
 #' @return a data frame of CPTAC LUAD  data from the input `x` genes
+#'
 #' @examples \dontrun{
 #' .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
 #' }
+#'
 #' @keywords internal
+#'
 .get_CPTAC_LUAD_Proteomics_subset <- function(x) {
   CPTAC_LUAD_Proteomics %>%
     #  dplyr::select_if(names(.) %in% c(x, "Sample"))
@@ -148,14 +189,26 @@ initialize_phosphoproteomics_data <- function() {
 }
 
 #' Select subset of CPTAC phosproteomics data
-#' @description This function selected the CPTAC LUAD phosproteomics data from the input `EIF`.
 #'
-#' @details The function should not be used directly, only inside [.plot_boxgraph_protein_CPTAC()] function.
-#' @param x protein name, passed `EIF_list` argument from [.plot_boxgraph_protein_CPTAC()]
+#' @description
+#'
+#' This function selected the CPTAC LUAD phosproteomics data from the
+#'  input `EIF`.
+#'
+#' @details
+#'
+#' The function should not be used directly, only inside
+#'  [.plot_boxgraph_protein_CPTAC()] function.
+#'
+#' @param x protein name, passed `EIF_list` argument from
+#'  [.plot_boxgraph_protein_CPTAC()]
+#'
 #' @return a data frame of CPTAC LUAD  data from the input `x` genes
+#'
 #' @examples \dontrun{
 #' .get_CCLE_RNAseq_subset()
 #' }
+#'
 #' @keywords internal
 .get_CPTAC_LUAD_Phosproteomics_subset <- function(x) {
   CPTAC_LUAD_Phos %>%
@@ -171,16 +224,27 @@ initialize_phosphoproteomics_data <- function() {
 }
 
 #' Boxplots of phosphor-proteomics data across clinic stages
-#' @description This function should not be used directly,
-#' only inside [.plot_boxgraph_protein_CPTAC()].
+#'
+#' @description
+#'
+#' This function should not be used directly,
+#'  only inside [.plot_boxgraph_protein_CPTAC()].
+#'
 #' @param df a data frame of the combined proteomics and prosphorylation data
-#' generated inside [.plot_boxgraph_protein_CPTAC()]
+#'  generated inside [.plot_boxgraph_protein_CPTAC()]
+#'
 #' @param x protein name
+#'
 #' @importFrom dplyr ungroup
+#'
 #' @importFrom ggpubr stat_compare_means
+#'
 #' @importFrom stats median
+#'
 #' @importFrom stringr str_remove
+#'
 #' @keywords internal
+#'
 .protein_boxplot <- function(df, x) {
   hline <- summarise(group_by(df, .data$Gene, .data$Type),
     MD = 2**stats::median(.data$normalize)
@@ -281,79 +345,130 @@ initialize_phosphoproteomics_data <- function() {
   )
 }
 
-
+#' ### Master function for coexpression and differential expression analysis
 ## master function for coexpression and differential expression analysis =======
 
 #' protein-protein coexpression in CPTAC LUAD
-#' @description This function selects proteomics data from CPTAC LUAD dataset and protein coexpression analysis
 #'
-#' This function should not be used directly, only inside [EIF4F_Proteomics_analysis()] function.
+#' @description
+#'
+#' This function selects proteomics data from CPTAC LUAD dataset and protein
+#'  coexpression analysis
+#'
+#' This function should not be used directly, only inside
+#'  [EIF4F_Proteomics_analysis()] function.
+#'
 #' @importFrom ggpubr ggscatter
+#'
 #' @keywords internal
+#'
 .plot_scatterplot_protein_LUAD <- function() {
   LUAD.Pro <- CPTAC_LUAD_Proteomics[CPTAC_LUAD_Proteomics$Type %in% "Tumor", ]
 
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "EIF4G1", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "EIF4A1", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "EIF4E", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "EIF4G1", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "EIF4A1", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "EIF4E", z = "dark blue")
 
   ## cell division
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "CKAP2", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "CKAP2", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "CKAP2", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "CKAP2", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "CKAP2", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "CKAP2", z = "dark blue")
 
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "CCNA2", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "CCNA2", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "CCNA2", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "CCNA2", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "CCNA2", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "CCNA2", z = "dark blue")
 
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "ERCC6L", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "ERCC6L", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "ERCC6L", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "ERCC6L", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "ERCC6L", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "ERCC6L", z = "dark blue")
 
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "MCM7", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "MCM7", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "MCM7", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "MCM7", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "MCM7", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "MCM7", z = "dark blue")
 
   ## translation
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "RPS2", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "RPS2", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "RPS2", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "RPS2", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "RPS2", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "RPS2", z = "dark blue")
 
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3B", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "EIF3B", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3B", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "EIF3B", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "EIF3B", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "EIF3B", z = "dark blue")
 
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "EIF3G", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "EIF3G", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "EIF3G", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "EIF3G", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "EIF3G", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "EIF3G", z = "dark blue")
 
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4G1", y = "EIF2S3", z = "dark green")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4E", y = "EIF2S3", z = "dark red")
-  .protein_scatterplot(df = LUAD.Pro, x = "EIF4A1", y = "EIF2S3", z = "dark blue")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4G1", y = "EIF2S3", z = "dark green")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4E", y = "EIF2S3", z = "dark red")
+  .protein_scatterplot(df = LUAD.Pro,
+                       x = "EIF4A1", y = "EIF2S3", z = "dark blue")
 }
 
-#' Comparison of protein and phosphorylation levels among different stages of LUAD
-#' @description generates boxplot for eIF4F proteomics and prosphorylation data from CPTAC LUAD
-#' @details  This function merges the LUAD proteomics values from EIF4F genes
-#' in the data frame prepared from [.get_CPTAC_LUAD_Proteomics_subset()] and
-#' phosphoproteomics data of the same protein in the data frame prepared
-#' from [.get_CPTAC_LUAD_Phosproteomics_subset()].
+#' Comparison of protein and phosphorylation levels among different stages of
+#' LUAD
 #'
-#' Then it uses the combined data to compare the abundance across different tumor stages
-#' , and plot the result with the function [.protein_boxplot()]
+#' @description
 #'
-#' This function should not be used directly, only inside [EIF4F_Proteomics_analysis()] function.
+#' This function generates boxplot for eIF4F proteomics and prosphorylation data
+#'  from CPTAC LUAD.
+#'
+#' @details
+#'
+#' This function merges the LUAD proteomics values from EIF4F genes
+#'  in the data frame prepared from [.get_CPTAC_LUAD_Proteomics_subset()] and
+#'  phosphoproteomics data of the same protein in the data frame prepared
+#'  from [.get_CPTAC_LUAD_Phosproteomics_subset()].
+#'
+#' Then it uses the combined data to compare the abundance across different
+#'  tumor stages, and plot the result with the function [.protein_boxplot()]
+#'
+#' This function should not be used directly, only inside
+#'  [EIF4F_Proteomics_analysis()] function.
+#'
 #' @param EIF_list protein names in a vector of string
+#'
 #' @return the box plots for `EIF` protein and phosphorylation values in LUAD
+#'
 #' @importFrom dplyr group_by right_join summarise
+#'
 #' @importFrom tidyr pivot_longer
+#'
 #' @keywords internal
+#'
 #' @examples \dontrun{
 #' .plot_boxgraph_protein_CPTAC(c(
 #'   "EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
 #'   "AKT1", "MTOR", "EIF4B", "EIF4H", "MKNK1", "MKNK2"
 #' ))
 #' }
+#'
 .plot_boxgraph_protein_CPTAC <- function(EIF_list) {
   .CPTAC_LUAD_Proteomics_subset <- .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
   .CPTAC_LUAD_Phos_subset <- .get_CPTAC_LUAD_Phosproteomics_subset(EIF_list)
@@ -372,7 +487,7 @@ initialize_phosphoproteomics_data <- function() {
     mutate_if(is.character, as.factor) %>%
     na.omit()
 
-  EIF.LUAD.Phos.Proteomics.Sampletype.Normalization <- EIF.LUAD.Phos.Proteomics.Sampletype %>%
+  Normalization <- EIF.LUAD.Phos.Proteomics.Sampletype %>%
     dplyr::filter(.data$Type == "Normal") %>%
     group_by(.data$Gene) %>%
     # group_by(Gene) %>%
@@ -381,20 +496,26 @@ initialize_phosphoproteomics_data <- function() {
     # group_by(Gene) %>%
     mutate(normalize = .data$value - .data$NAT.mean) # %>%
 
-  lapply(sort(unique(EIF.LUAD.Phos.Proteomics.Sampletype.Normalization$Gene)),
+  lapply(sort(unique(Normalization$Gene)),
     .protein_boxplot,
-    df = EIF.LUAD.Phos.Proteomics.Sampletype.Normalization
+    df = Normalization
   )
 }
 
-
+#' ### Wrapper function to call all master functions with inputs
 ## wrapper function to call all master functions with inputs ===================
 
 #' Analyze co-expression among EIF4F subunits and differential expression
-#' @description A wrapper function to call all master functions for protein coexpression and differential expression.
 #'
-#' @details  This function run the master functions [.plot_scatterplot_protein_LUAD()] and
-#' [.plot_boxgraph_protein_CPTAC()] with EIF4F gene name as inputs.
+#' @description
+#'
+#' A wrapper function to call all master functions for protein coexpression and
+#'  differential expression.
+#'
+#' @details
+#'
+#' This function run the master functions [.plot_scatterplot_protein_LUAD()] and
+#'  [.plot_boxgraph_protein_CPTAC()] with EIF4F gene name as inputs.
 #'
 #' @return proteomics data analysis plots
 #'
@@ -403,6 +524,7 @@ initialize_phosphoproteomics_data <- function() {
 #' @examples \dontrun{
 #' EIF4F_Proteomics_analysis()
 #' }
+#'
 EIF4F_Proteomics_analysis <- function() {
   .plot_scatterplot_protein_LUAD()
   .plot_boxgraph_protein_CPTAC(c(

@@ -23,8 +23,8 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #'
 #' @description
 #'
-#' This function reads all CNV related datasets from TCGA and
-#'  generates three global variables as side effects.
+#' This function reads all CNV related datasets from TCGA and its side effects
+#'  are three global variables.
 #'
 #' @details
 #'
@@ -139,7 +139,7 @@ initialize_cnv_data <- function() {
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "Sample")
 
-  # transpose function from the data.table library keeps numeric values as numeric.
+  # transpose function from the data.table keeps numeric values as numeric.
   .TCGA_pancancer_transpose <- data.table::transpose(.TCGA_pancancer)
   # get row and column names in order
   rownames(.TCGA_pancancer_transpose) <- colnames(.TCGA_pancancer)
@@ -370,7 +370,8 @@ initialize_cnv_data <- function() {
       legend.box = "horizontal",
       strip.text = black_bold_16
     ) +
-    guides(fill = guide_legend(reverse = TRUE)) + # Flip ordering of legend without altering ordering in plot
+    # Flip ordering of legend without altering ordering in plot
+    guides(fill = guide_legend(reverse = TRUE)) +
     scale_fill_manual(
       name = "Copy number variation",
       breaks = c("-2", "-1", "0", "1", "2"),
@@ -678,7 +679,8 @@ initialize_cnv_data <- function() {
 #'
 #' This plot function uses dataset `.TCGA_CNVratio_sampletype_subset`
 #'  generated from [.plot_boxgraph_CNVratio_TCGA()] function.
-#' It should not be used directly, only inside [.plot_boxgraph_CNVratio_TCGA()] function.
+#' It should not be used directly, only inside [.plot_boxgraph_CNVratio_TCGA()]
+#'  function.
 #'
 #' @param df `.EIF_CNVratio_ind_cancer` generated
 #' inside [.plot_boxgraph_CNVratio_TCGA()]
@@ -750,7 +752,7 @@ initialize_cnv_data <- function() {
 
 
 #' ### master function to call CNV data analysis and plotting
-## master function to call CNV data analysis and plotting ======================
+## Master function to call CNV data analysis and plotting ======================
 
 #' Summary of CNV statuses in bar plots
 #'
@@ -785,8 +787,8 @@ initialize_cnv_data <- function() {
 #' @examples \dontrun{
 #' plot_bargraph_CNV_TCGA(c(
 #'   "TP53", "EIF4A1", "EIF4A2", "EIF4E",
-#'   "EIF4E2", "EIF4E3", "MYC", "EIF3D", "EIF4EBP1", "EIF4G1", "EIF4G2", "EIF4G3",
-#'   "PABPC1", "MKNK1", "MKNK2"
+#'   "EIF4E2", "EIF4E3", "MYC", "EIF3D", "EIF4EBP1", "EIF4G1", "EIF4G2",
+#'   "EIF4G3", "PABPC1", "MKNK1", "MKNK2"
 #' ))
 #' }
 #'
@@ -900,7 +902,7 @@ initialize_cnv_data <- function() {
 
 
 #' ### wrapper function to call all master functions with inputs
-## wrapper function to call all master functions with inputs ===================
+## Wrapper function to call all master functions with inputs ===================
 
 #' Perform all CNV related analysis and generate plots
 #'

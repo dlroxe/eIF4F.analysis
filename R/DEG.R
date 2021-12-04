@@ -14,7 +14,7 @@
 ## prepare RNA-seq related dataset from TCGA and GTEx ==========================
 
 #' @noRd
-# due to NSE notes in R CMD check
+## due to NSE notes in R CMD check
 TCGA_GTEX_RNAseq_sampletype <- NULL
 
 
@@ -22,7 +22,9 @@ TCGA_GTEX_RNAseq_sampletype <- NULL
 #'
 #' @description
 #'
-#' This function reads RNA-seq related datasets from TCGA and GTEx
+#' This function reads RNA-seq related datasets from TCGA and GTEx.
+#' Its side effects is the global variable `TCGA_GTEX_RNAseq_sampletype`, which
+#'  was merged from two internal dataframes.
 #'
 #' * `.TCGA_GTEX_RNAseq`: the recomputed RNAseq data from both TCGA and GTEx
 #'  generated from [.get_TCGA_GTEX_RNAseq()]
@@ -30,9 +32,6 @@ TCGA_GTEX_RNAseq_sampletype <- NULL
 #' * `.TCGA_GTEX_sampletype`: the annotation data from
 #'  `TcgaTargetGTEX_phenotype.txt` with selection of `sample.type` and
 #'  `primary.disease` columns to reduce the data size.
-#'
-#' * `TCGA_GTEX_RNAseq_sampletype`: the merged dataset from `.TCGA_GTEX_RNAseq`
-#'  and `.TCGA_GTEX_sampletype`.
 #'
 #' @importFrom dplyr distinct filter select select_if mutate mutate_at
 #' summarise rename group_by all_of
@@ -125,7 +124,7 @@ initialize_RNAseq_data <- function() {
     na.omit() %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "sample")
-  # transpose function from the data.table library keeps numeric values as numeric.
+  # transpose function from the data.table keeps numeric values as numeric.
   .TCGA_pancancer_transpose <- data.table::transpose(.TCGA_pancancer)
   # get row and colnames in order
   rownames(.TCGA_pancancer_transpose) <- colnames(.TCGA_pancancer)
@@ -482,8 +481,10 @@ initialize_RNAseq_data <- function() {
       position = "left"
     ) +
     geom_hline(yintercept = yintercept, linetype = "dashed") +
-    scale_color_manual(values = c("#56B4E9", "#009E73", "#D55E00")) + # for color-blind palettes
-    scale_fill_manual(values = c("#56B4E9", "#009E73", "#D55E00")) + # for color-blind palettes
+    # for color-blind palettes
+    scale_color_manual(values = c("#56B4E9", "#009E73", "#D55E00")) +
+    # for color-blind palettes
+    scale_fill_manual(values = c("#56B4E9", "#009E73", "#D55E00")) +
     theme_bw() +
     theme(
       plot.title = black_bold_16,
@@ -562,6 +563,7 @@ initialize_RNAseq_data <- function() {
 #'
 #' @return
 #'
+
 #' a data frame of differential RNA ratios in tumors vs adjacent normal tissues
 #'  from individual TCGA cancer types
 #'
@@ -587,36 +589,66 @@ initialize_RNAseq_data <- function() {
     filter(EIF4E != 0 & !is.na(.data$primary.site)) %>%
     # calculate the ratio of mRNA counts
     dplyr::mutate(
-      (!!paste0(EIF4E, "+", EIF4EBP1)) := log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1),
-      (!!paste0(EIF4A1, ":", "\n", EIF4E)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4E2)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4E2)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4E)) := (!!as.name(EIF4A2)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4E2)) := (!!as.name(EIF4A2)) - (!!as.name(EIF4E2)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E)) := (!!as.name(EIF4G1)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E2)) := (!!as.name(EIF4G1)) - (!!as.name(EIF4E2)),
-      (!!paste0(EIF4G3, ":", "\n", EIF4E)) := (!!as.name(EIF4G3)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4G3, ":", "\n", EIF4E2)) := (!!as.name(EIF4G3)) - (!!as.name(EIF4E2)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4G1)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4G1)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4G1)) := (!!as.name(EIF4A2)) - (!!as.name(EIF4G1)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4G2)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4G2)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4G2)) := (!!as.name(EIF4A2)) - (!!as.name(EIF4G2)),
-      (!!paste0(EIF4E, ":", "\n", EIF4EBP1)) := (!!as.name(EIF4E)) - (!!as.name(EIF4EBP1)),
-      (!!paste0(EIF4E2, ":", "\n", EIF4E)) := (!!as.name(EIF4E2)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4G2, ":", "\n", EIF4G1)) := (!!as.name(EIF4G2)) - (!!as.name(EIF4G1)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4G3)) := (!!as.name(EIF4G1)) - (!!as.name(EIF4G3)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4A2)) := (!!as.name(EIF4A1)) - (!!as.name(EIF4A2)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)) := (!!as.name(EIF4G1)) - log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1),
-      (!!paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1)) := (!!as.name(EIF4A1)) - log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1)
+      (!!paste0(EIF4E, "+", EIF4EBP1)) :=
+        log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E)) :=
+        (!!as.name(EIF4A1)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E2)) :=
+        (!!as.name(EIF4A1)) - (!!as.name(EIF4E2)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4E)) :=
+        (!!as.name(EIF4A2)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4E2)) :=
+        (!!as.name(EIF4A2)) - (!!as.name(EIF4E2)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E)) :=
+        (!!as.name(EIF4G1)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E2)) :=
+        (!!as.name(EIF4G1)) - (!!as.name(EIF4E2)),
+      (!!paste0(EIF4G3, ":", "\n", EIF4E)) :=
+        (!!as.name(EIF4G3)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4G3, ":", "\n", EIF4E2)) :=
+        (!!as.name(EIF4G3)) - (!!as.name(EIF4E2)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4G1)) :=
+        (!!as.name(EIF4A1)) - (!!as.name(EIF4G1)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4G1)) :=
+        (!!as.name(EIF4A2)) - (!!as.name(EIF4G1)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4G2)) :=
+        (!!as.name(EIF4A1)) - (!!as.name(EIF4G2)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4G2)) :=
+        (!!as.name(EIF4A2)) - (!!as.name(EIF4G2)),
+      (!!paste0(EIF4E, ":", "\n", EIF4EBP1)) :=
+        (!!as.name(EIF4E)) - (!!as.name(EIF4EBP1)),
+      (!!paste0(EIF4E2, ":", "\n", EIF4E)) :=
+        (!!as.name(EIF4E2)) - (!!as.name(EIF4E)),
+      (!!paste0(EIF4G2, ":", "\n", EIF4G1)) :=
+        (!!as.name(EIF4G2)) - (!!as.name(EIF4G1)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4G3)) :=
+        (!!as.name(EIF4G1)) - (!!as.name(EIF4G3)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4A2)) :=
+        (!!as.name(EIF4A1)) - (!!as.name(EIF4A2)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)) :=
+        (!!as.name(EIF4G1)) -
+        log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1)) :=
+        (!!as.name(EIF4A1)) -
+        log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1)
     ) %>%
     dplyr::select(
-      (!!paste0(EIF4A1, ":", "\n", EIF4E)), (!!paste0(EIF4A1, ":", "\n", EIF4E2)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4E)), (!!paste0(EIF4A2, ":", "\n", EIF4E2)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E)), (!!paste0(EIF4G1, ":", "\n", EIF4E2)),
-      (!!paste0(EIF4G3, ":", "\n", EIF4E)), (!!paste0(EIF4G3, ":", "\n", EIF4E2)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4G1)), (!!paste0(EIF4A2, ":", "\n", EIF4G1)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4G2)), (!!paste0(EIF4A2, ":", "\n", EIF4G2)),
-      (!!paste0(EIF4E, ":", "\n", EIF4EBP1)), (!!paste0(EIF4E2, ":", "\n", EIF4E)),
-      (!!paste0(EIF4G2, ":", "\n", EIF4G1)), (!!paste0(EIF4G1, ":", "\n", EIF4G3)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4E2)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4E)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4E2)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4E2)),
+      (!!paste0(EIF4G3, ":", "\n", EIF4E)),
+      (!!paste0(EIF4G3, ":", "\n", EIF4E2)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4G1)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4G1)),
+      (!!paste0(EIF4A1, ":", "\n", EIF4G2)),
+      (!!paste0(EIF4A2, ":", "\n", EIF4G2)),
+      (!!paste0(EIF4E, ":", "\n", EIF4EBP1)),
+      (!!paste0(EIF4E2, ":", "\n", EIF4E)),
+      (!!paste0(EIF4G2, ":", "\n", EIF4G1)),
+      (!!paste0(EIF4G1, ":", "\n", EIF4G3)),
       (!!paste0(EIF4A1, ":", "\n", EIF4A2)),
       (!!paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)),
       (!!paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1)),

@@ -110,15 +110,14 @@
 #' @keywords internal
 #'
 .protein_imputePCA <- function(df, x) {
-  # Impute the missing values of a dataset with the Principal Components Analysis model
+  # Impute the missing values of a dataset with the Principal Components
+  # Analysis model
   nb <- missMDA::estim_ncpPCA(
     df %>% dplyr::select_if(is.numeric),
-    # CPTAC.LUAD.Proteomics.Sample[1:(length(CPTAC.LUAD.Proteomics.Sample) - 1)],
     ncp.max = x
   ) # estimate the number of dimensions to impute
   res.comp <- missMDA::imputePCA(
     df %>% dplyr::select_if(is.numeric),
-    # CPTAC.LUAD.Proteomics.Sample[1:(length(CPTAC.LUAD.Proteomics.Sample) - 1)],
     ncp = nb$ncp
   )
   res.pca <- PCA(res.comp$completeObs,
@@ -401,7 +400,8 @@
 #'  PCA on healthy tissues from all GTEx healthy tissue types,
 #'  and PCA on combined TCGA tumors and GTEx healthy tissues.
 #'
-#' This function should not be used directly, only inside [EIF4F_PCA()] function.
+#' This function should not be used directly, only inside [EIF4F_PCA()]
+#'  function.
 #'
 #' @param EIF.list gene names in a vector of characters
 #'
@@ -550,7 +550,8 @@
 #' It perform PCA on combined tumors from TCGA cancer types and GTEx healthy
 #'  tissues with the same `tissue` of origin.
 #'
-#' This function should not be used directly, only inside [EIF4F_PCA()] function.
+#' This function should not be used directly, only inside [EIF4F_PCA()]
+#'  function.
 #'
 #' @param EIF.list gene names in a vector of characters
 #'
@@ -624,7 +625,8 @@
 #' It perform PCA on combined tumors from CPTAC LUAD and and
 #'  matched healthy lung tissues.
 #'
-#' This function should not be used directly, only inside [EIF4F_PCA()] function.
+#' This function should not be used directly, only inside [EIF4F_PCA()]
+#'  function.
 #'
 #' @param EIF.list gene names in a vector of characters
 #'
