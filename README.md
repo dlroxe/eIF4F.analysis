@@ -79,15 +79,17 @@ Information” section below.
 
 ## Download data-sets
 
-Run `1-download.sh` from `Script` folder from our GitHub repository.
+Run `Download.sh` from `Script` folder of our GitHub repository.
+
+Download.sh
 
 ``` bash
-~/github/eIF4F.analysis/Script/1-download.sh
+bash ~/github/eIF4F.analysis/Script/Download.sh
 ```
 
-`1-download.sh` is a bash script to download all needed datasets (TGCA,
-GTEx, CPTAC, CCLE and etc) from URLs and unzip them. `1-download.sh`
-will create the `~/Downloads/EIF_data` directory to store all downloaded
+`Download.sh` is a bash script to download all needed datasets (TGCA,
+GTEx, CPTAC, CCLE and etc) from URLs and unzip them. `Download.sh` will
+create the `~/Downloads/EIF_data` directory to store all downloaded
 datasets.
 
 ``` bash
@@ -167,19 +169,19 @@ gunzip ${DATA_FILE_DIRECTORY}/*.gz
 
 **CRITICAL**: If the root directory path `~/Downloads/EIF_data` does not
 suit, they may be adjusted trivially in these lines near the top of the
-`1-download.sh` script. 
+`Download.sh` script. 
 
 ## File directories
 
 Confirm the directories for input and output files. The directories for
-input and output files are defined in the `2-load.R` as following.
+input and output files are defined in the `Load.R` as following.
 
     data_file_directory <- "~/Downloads/EIF_data" 
     output_directory <- "~/Documents/EIF_output"
 
 **CRITICAL**: If the root directory paths `~/Download/EIF_data` and
 `~/Documents/EIF_output` do not suit, they may be adjusted trivially in
-these lines near the top of the `1-download.sh` and `2-load.R` scripts.
+these lines near the top of the `Download.sh` and `Load.R` scripts.
 
 ## Install dependent libraries
 
@@ -281,6 +283,5 @@ loaded via a namespace (and not attached):
 
 ## **Tutorials**
 
-Open the `9-Callingfuns.R` from `Script` folder from our GitHub
-repository. This script contains the command lines to execute all
-analyses.
+Open the `Analysis.R` from `Script` folder from our GitHub repository.
+This script contains the command lines to execute all analyses.
