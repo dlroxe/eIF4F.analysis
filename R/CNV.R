@@ -26,6 +26,7 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #' This function reads all CNV related datasets from TCGA and its side effects
 #'  are three global variables.
 #'
+#'
 #' @details
 #'
 #' * `TCGA_CNV_value`: the unthreshold CNV value data generated from
@@ -41,6 +42,7 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #' * `TCGA_CNVratio_sampletype`: the merged dataset from `.TCGA_CNV_ratio`
 #'  that contains the CNV ratio data generated from [.get_TCGA_CNV_ratio()],
 #'  and `.TCGA_sampletype`.
+#'
 #'
 #' @importFrom data.table fread transpose
 #'
