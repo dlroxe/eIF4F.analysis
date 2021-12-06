@@ -17,7 +17,9 @@ knitr::opts_chunk$set(
 Load eIF4F.analysis library.
 
 ```{r setup}
-devtools::load_all()
+# install.packages("devtools")
+# devtools::install_github("a3609640/eIF4F.analysis")
+# load eif4F.analysis	
 library(eIF4F.analysis)
 ```
 
@@ -35,6 +37,6 @@ initialize_data()
 
 Load the font types, size and orientation for plotting functions.
 
-```{r}
+```{r, eval = FALSE}
 initialize_format()
 ```
