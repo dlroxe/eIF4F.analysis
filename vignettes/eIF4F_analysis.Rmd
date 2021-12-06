@@ -1,8 +1,8 @@
 ---
-title: "library initialization"
+title: "eIF4F_analysis"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{library initialization}
+  %\VignetteIndexEntry{eIF4F_analysis}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -14,20 +14,27 @@ knitr::opts_chunk$set(
 )
 ```
 
+Load eIF4F.analysis library.
+
 ```{r setup}
+devtools::load_all()
 library(eIF4F.analysis)
 ```
 
 Run the `initialize_dir()` command to create the sub-directories under `~/Documents/EIF_output` to store the output files.
 
-```{r, warning = FALSE}
+```{r}
 initialize_dir()
 ```
 
 Load all needed TCGA, GTEX, CPTAC and CCLE datasets download by `1-download.sh` for the following analyses.
 
 ```{r, eval = FALSE}
+initialize_data()
+```
 
-initialize_cnv_data()
+Load the font types, size and orientation for plotting functions.
 
+```{r}
+initialize_format()
 ```
