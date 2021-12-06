@@ -4,7 +4,7 @@
 ## download all datasets from the following weblinks
 
 ### create the directory to store all downloaded datasets
-readonly DATA_FILE_DIRECTORY="${HOME}/Downloads/Test"
+readonly DATA_FILE_DIRECTORY="${HOME}/Downloads/EIF_data"
 mkdir -p "${DATA_FILE_DIRECTORY}"
 
 

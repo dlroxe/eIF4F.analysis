@@ -1,7 +1,7 @@
 #' ### Directory Preparation
 ## Directory Preparation =======================================================
 #' @noRd
-data_file_directory <- "~/Downloads/Test"
+data_file_directory <- "~/Downloads/EIF_data"
 output_directory <- "~/Documents/EIF_output"
 
 
