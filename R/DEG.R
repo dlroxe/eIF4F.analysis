@@ -529,34 +529,34 @@ initialize_RNAseq_data <- function() {
 #' It should not be used directly, only inside [.plot_boxgraph_RNAratio_TCGA()]
 #'  function.
 #'
-#' @param EIF4E
+#' @param gene01
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF4E2
+#' @param gene02
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF4E3
+#' @param gene03
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF4EBP1
+#' @param gene04
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF4G1
+#' @param gene05
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF4G2
+#' @param gene06
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF4G3
+#' @param gene07
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF3D
+#' @param gene08
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF4A1
+#' @param gene09
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @param EIF4A2
+#' @param gene10
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
 #'
 #' @importFrom rlang :=
@@ -569,13 +569,20 @@ initialize_RNAseq_data <- function() {
 #'
 #' @keywords internal
 #'
-.RNAratio_calculation <- function(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
-                                  EIF4G1, EIF4G2, EIF4G3, EIF3D,
-                                  EIF4A1, EIF4A2) {
+.RNAratio_calculation <- function(gene01 = "EIF4E",
+                                  gene02 = "EIF4E2",
+                                  gene03 = "EIF4E3",
+                                  gene04 = "EIF4EBP1",
+                                  gene05 = "EIF4G1",
+                                  gene06 = "EIF4G2",
+                                  gene07 = "EIF4G3",
+                                  gene08 = "EIF3D",
+                                  gene09 = "EIF4A1",
+                                  gene10 = "EIF4A2") {
   .genes_names <- c(
-    EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
-    EIF4G1, EIF4G2, EIF4G3, EIF3D,
-    EIF4A1, EIF4A2
+    gene01, gene02, gene03, gene04,
+    gene05, gene06, gene07, gene08,
+    gene09, gene10
   )
   .RNAratio_data <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
@@ -586,72 +593,72 @@ initialize_RNAseq_data <- function() {
       "study"
     ) %>%
     as_tibble() %>%
-    filter(EIF4E != 0 & !is.na(.data$primary.site)) %>%
+    filter(gene01 != 0 & !is.na(.data$primary.site)) %>%
     # calculate the ratio of mRNA counts
     dplyr::mutate(
-      (!!paste0(EIF4E, "+", EIF4EBP1)) :=
-        log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1),
-      (!!paste0(EIF4A1, ":", "\n", EIF4E)) :=
-        (!!as.name(EIF4A1)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4E2)) :=
-        (!!as.name(EIF4A1)) - (!!as.name(EIF4E2)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4E)) :=
-        (!!as.name(EIF4A2)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4E2)) :=
-        (!!as.name(EIF4A2)) - (!!as.name(EIF4E2)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E)) :=
-        (!!as.name(EIF4G1)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E2)) :=
-        (!!as.name(EIF4G1)) - (!!as.name(EIF4E2)),
-      (!!paste0(EIF4G3, ":", "\n", EIF4E)) :=
-        (!!as.name(EIF4G3)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4G3, ":", "\n", EIF4E2)) :=
-        (!!as.name(EIF4G3)) - (!!as.name(EIF4E2)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4G1)) :=
-        (!!as.name(EIF4A1)) - (!!as.name(EIF4G1)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4G1)) :=
-        (!!as.name(EIF4A2)) - (!!as.name(EIF4G1)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4G2)) :=
-        (!!as.name(EIF4A1)) - (!!as.name(EIF4G2)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4G2)) :=
-        (!!as.name(EIF4A2)) - (!!as.name(EIF4G2)),
-      (!!paste0(EIF4E, ":", "\n", EIF4EBP1)) :=
-        (!!as.name(EIF4E)) - (!!as.name(EIF4EBP1)),
-      (!!paste0(EIF4E2, ":", "\n", EIF4E)) :=
-        (!!as.name(EIF4E2)) - (!!as.name(EIF4E)),
-      (!!paste0(EIF4G2, ":", "\n", EIF4G1)) :=
-        (!!as.name(EIF4G2)) - (!!as.name(EIF4G1)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4G3)) :=
-        (!!as.name(EIF4G1)) - (!!as.name(EIF4G3)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4A2)) :=
-        (!!as.name(EIF4A1)) - (!!as.name(EIF4A2)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)) :=
-        (!!as.name(EIF4G1)) -
-        log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1),
-      (!!paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1)) :=
-        (!!as.name(EIF4A1)) -
-        log2(2**(!!as.name(EIF4E)) + 2**(!!as.name(EIF4EBP1)) - 1)
+      (!!paste0(gene01, "+", gene04)) :=
+        log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1),
+      (!!paste0(gene09, ":", "\n", gene01)) :=
+        (!!as.name(gene09)) - (!!as.name(gene01)),
+      (!!paste0(gene09, ":", "\n", gene02)) :=
+        (!!as.name(gene09)) - (!!as.name(gene02)),
+      (!!paste0(gene10, ":", "\n", gene01)) :=
+        (!!as.name(gene10)) - (!!as.name(gene01)),
+      (!!paste0(gene10, ":", "\n", gene02)) :=
+        (!!as.name(gene10)) - (!!as.name(gene02)),
+      (!!paste0(gene05, ":", "\n", gene01)) :=
+        (!!as.name(gene05)) - (!!as.name(gene01)),
+      (!!paste0(gene05, ":", "\n", gene02)) :=
+        (!!as.name(gene05)) - (!!as.name(gene02)),
+      (!!paste0(gene07, ":", "\n", gene01)) :=
+        (!!as.name(gene07)) - (!!as.name(gene01)),
+      (!!paste0(gene07, ":", "\n", gene02)) :=
+        (!!as.name(gene07)) - (!!as.name(gene02)),
+      (!!paste0(gene09, ":", "\n", gene05)) :=
+        (!!as.name(gene09)) - (!!as.name(gene05)),
+      (!!paste0(gene10, ":", "\n", gene05)) :=
+        (!!as.name(gene10)) - (!!as.name(gene05)),
+      (!!paste0(gene09, ":", "\n", gene06)) :=
+        (!!as.name(gene09)) - (!!as.name(gene06)),
+      (!!paste0(gene10, ":", "\n", gene06)) :=
+        (!!as.name(gene10)) - (!!as.name(gene06)),
+      (!!paste0(gene01, ":", "\n", gene04)) :=
+        (!!as.name(gene01)) - (!!as.name(gene04)),
+      (!!paste0(gene02, ":", "\n", gene01)) :=
+        (!!as.name(gene02)) - (!!as.name(gene01)),
+      (!!paste0(gene06, ":", "\n", gene05)) :=
+        (!!as.name(gene06)) - (!!as.name(gene05)),
+      (!!paste0(gene05, ":", "\n", gene07)) :=
+        (!!as.name(gene05)) - (!!as.name(gene07)),
+      (!!paste0(gene09, ":", "\n", gene10)) :=
+        (!!as.name(gene09)) - (!!as.name(gene10)),
+      (!!paste0(gene05, ":", "\n", gene01, "+", gene04)) :=
+        (!!as.name(gene05)) -
+        log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1),
+      (!!paste0(gene09, ":", "\n", gene01, "+", gene04)) :=
+        (!!as.name(gene09)) -
+        log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1)
     ) %>%
     dplyr::select(
-      (!!paste0(EIF4A1, ":", "\n", EIF4E)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4E2)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4E)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4E2)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E2)),
-      (!!paste0(EIF4G3, ":", "\n", EIF4E)),
-      (!!paste0(EIF4G3, ":", "\n", EIF4E2)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4G1)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4G1)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4G2)),
-      (!!paste0(EIF4A2, ":", "\n", EIF4G2)),
-      (!!paste0(EIF4E, ":", "\n", EIF4EBP1)),
-      (!!paste0(EIF4E2, ":", "\n", EIF4E)),
-      (!!paste0(EIF4G2, ":", "\n", EIF4G1)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4G3)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4A2)),
-      (!!paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)),
-      (!!paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1)),
+      (!!paste0(gene09, ":", "\n", gene01)),
+      (!!paste0(gene09, ":", "\n", gene02)),
+      (!!paste0(gene10, ":", "\n", gene01)),
+      (!!paste0(gene10, ":", "\n", gene02)),
+      (!!paste0(gene05, ":", "\n", gene01)),
+      (!!paste0(gene05, ":", "\n", gene02)),
+      (!!paste0(gene07, ":", "\n", gene01)),
+      (!!paste0(gene07, ":", "\n", gene02)),
+      (!!paste0(gene09, ":", "\n", gene05)),
+      (!!paste0(gene10, ":", "\n", gene05)),
+      (!!paste0(gene09, ":", "\n", gene06)),
+      (!!paste0(gene10, ":", "\n", gene06)),
+      (!!paste0(gene01, ":", "\n", gene04)),
+      (!!paste0(gene02, ":", "\n", gene01)),
+      (!!paste0(gene06, ":", "\n", gene05)),
+      (!!paste0(gene05, ":", "\n", gene07)),
+      (!!paste0(gene09, ":", "\n", gene10)),
+      (!!paste0(gene05, ":", "\n", gene01, "+", gene04)),
+      (!!paste0(gene09, ":", "\n", gene01, "+", gene04)),
       "sample.type",
       "primary.disease",
       "primary.site",
@@ -947,34 +954,34 @@ initialize_RNAseq_data <- function() {
 #'  and a violin plot to compare RNA ratios in primary, metastatic tumors vs
 #'  adjacent normal tissues from all TCGA cancer types combined.
 #'
-#' @param EIF4E
+#' @param gene01
 #' gene name as a string
 #'
-#' @param EIF4E2
+#' @param gene02
 #' gene name as a string
 #'
-#' @param EIF4E3
+#' @param gene03
 #' gene name as a string
 #'
-#' @param EIF4EBP1
+#' @param gene04
 #' gene name as a string
 #'
-#' @param EIF4G1
+#' @param gene05
 #' gene name as a string
 #'
-#' @param EIF4G2
+#' @param gene06
 #' gene name as a string
 #'
-#' @param EIF4G3
+#' @param gene07
 #' gene name as a string
 #'
-#' @param EIF3D
+#' @param gene08
 #' gene name as a string
 #'
-#' @param EIF4A1
+#' @param gene09
 #' gene name as a string
 #'
-#' @param EIF4A2
+#' @param gene10
 #' gene name as a string
 #'
 #' @details This function
@@ -1007,19 +1014,20 @@ initialize_RNAseq_data <- function() {
 #'
 #' @keywords internal
 #'
-.plot_boxgraph_RNAratio_TCGA <- function(EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
-                                         EIF4G1, EIF4G2, EIF4G3, EIF3D,
-                                         EIF4A1, EIF4A2) {
+.plot_boxgraph_RNAratio_TCGA <- function(gene01, gene02, gene03, gene04,
+                                         gene05, gene06, gene07, gene08,
+                                         gene09, gene10) {
   RNAratio.data <- .RNAratio_calculation(
-    EIF4E, EIF4E2, EIF4E3, EIF4EBP1,
-    EIF4G1, EIF4G2, EIF4G3, EIF3D,
-    EIF4A1, EIF4A2
+    gene01, gene02, gene03, gene04,
+    gene05, gene06, gene07, gene08,
+    gene09, gene10
   )
+
   .RNAratio_boxplot(
     df = .RNAratio_selection(RNAratio.data, c(
-      (paste0(EIF4G1, ":", "\n", EIF4E)), (paste0(EIF4A1, ":", "\n", EIF4E)),
-      (paste0(EIF4A2, ":", "\n", EIF4E)), (paste0(EIF4G3, ":", "\n", EIF4E)),
-      (paste0(EIF4G3, ":", "\n", EIF4E2)), (paste0(EIF4G1, ":", "\n", EIF4G3))
+      (paste0(gene05, ":", "\n", gene01)), (paste0(gene09, ":", "\n", gene01)),
+      (paste0(gene10, ":", "\n", gene01)), (paste0(gene07, ":", "\n", gene01)),
+      (paste0(gene07, ":", "\n", gene02)), (paste0(gene05, ":", "\n", gene07))
     )),
     dashline = 1,
     ylimit = c(0, 25),
@@ -1028,10 +1036,10 @@ initialize_RNAseq_data <- function() {
 
   .RNAratio_boxplot(
     df = .RNAratio_selection(RNAratio.data, c(
-      (paste0(EIF4G2, ":", "\n", EIF4G1)), (paste0(EIF4E2, ":", "\n", EIF4E)),
-      (paste0(EIF4A1, ":", "\n", EIF4A2)), (paste0(EIF4E, ":", "\n", EIF4EBP1)),
-      (paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)),
-      (paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1))
+      (paste0(gene06, ":", "\n", gene05)), (paste0(gene02, ":", "\n", gene01)),
+      (paste0(gene09, ":", "\n", gene10)), (paste0(gene01, ":", "\n", gene04)),
+      (paste0(gene05, ":", "\n", gene01, "+", gene04)),
+      (paste0(gene09, ":", "\n", gene01, "+", gene04))
     )),
     dashline = 4,
     ylimit = c(0, 25),
@@ -1040,9 +1048,9 @@ initialize_RNAseq_data <- function() {
 
   .RNAratio_boxplot(
     df = .RNAratio_selection(RNAratio.data, c(
-      (paste0(EIF4G3, ":", "\n", EIF4E)), (paste0(EIF4G3, ":", "\n", EIF4E2)),
-      (paste0(EIF4G2, ":", "\n", EIF4G1)), (paste0(EIF4E2, ":", "\n", EIF4E)),
-      (paste0(EIF4A1, ":", "\n", EIF4A2)), (paste0(EIF4E, ":", "\n", EIF4EBP1))
+      (paste0(gene07, ":", "\n", gene01)), (paste0(gene07, ":", "\n", gene02)),
+      (paste0(gene06, ":", "\n", gene05)), (paste0(gene02, ":", "\n", gene01)),
+      (paste0(gene09, ":", "\n", gene10)), (paste0(gene01, ":", "\n", gene04))
     )),
     dashline = 1,
     ylimit = c(0, 5),
@@ -1050,12 +1058,12 @@ initialize_RNAseq_data <- function() {
   )
 
   .RNAratio_tumortype(RNAratio.data, c(
-    (paste0(EIF4G1, ":", "\n", EIF4E)), (paste0(EIF4A1, ":", "\n", EIF4E)),
-    (paste0(EIF4A2, ":", "\n", EIF4E)), (paste0(EIF4G3, ":", "\n", EIF4E)),
-    (paste0(EIF4G3, ":", "\n", EIF4E2)), (paste0(EIF4G1, ":", "\n", EIF4G3)),
-    (paste0(EIF4A1, ":", "\n", EIF4A2)), (paste0(EIF4E, ":", "\n", EIF4EBP1)),
-    (paste0(EIF4G1, ":", "\n", EIF4E, "+", EIF4EBP1)),
-    (paste0(EIF4A1, ":", "\n", EIF4E, "+", EIF4EBP1))
+    (paste0(gene05, ":", "\n", gene01)), (paste0(gene09, ":", "\n", gene01)),
+    (paste0(gene10, ":", "\n", gene01)), (paste0(gene07, ":", "\n", gene01)),
+    (paste0(gene07, ":", "\n", gene02)), (paste0(gene05, ":", "\n", gene07)),
+    (paste0(gene09, ":", "\n", gene10)), (paste0(gene01, ":", "\n", gene04)),
+    (paste0(gene05, ":", "\n", gene01, "+", gene04)),
+    (paste0(gene09, ":", "\n", gene01, "+", gene04))
     # "EIF4G1:\nEIF4E", "EIF4A1:\nEIF4E",
     # "EIF4A2:\nEIF4E", "EIF4G3:\nEIF4E",
     # "EIF4G3:\nEIF4E2", "EIF4G1:\nEIF4G3",
@@ -1096,13 +1104,13 @@ initialize_RNAseq_data <- function() {
 #'
 EIF4F_DEG_analysis <- function() {
   .plot_boxgraph_RNAseq_TCGA(c(
-    "EIF4G1", "EIF4G2", "EIF4G3", "PABPC1", "EIF4A1", "EIF4A2", "EIF4B", "EIF4H",
-    "EIF4E", "EIF4E2", "EIF4E3", "EIF4EBP1", "EIF3D"
+    "EIF4G1", "EIF4G2", "EIF4G3", "PABPC1", "EIF4A1", "EIF4A2",
+    "EIF4B", "EIF4H", "EIF4E", "EIF4E2", "EIF4E3", "EIF4EBP1", "EIF3D"
   ))
 
   .plot_boxgraph_RNAratio_TCGA(
-    EIF4E = "EIF4E", EIF4E2 = "EIF4E2", EIF4E3 = "EIF4E3", EIF4EBP1 = "EIF4EBP1",
-    EIF4G1 = "EIF4G1", EIF4G2 = "EIF4G2", EIF4G3 = "EIF4G3", EIF3D = "EIF3D",
-    EIF4A1 = "EIF4A1", EIF4A2 = "EIF4A2"
+    gene01 = "EIF4E", gene02 = "EIF4E2", gene03 = "EIF4E3", gene04 = "EIF4EBP1",
+    gene05 = "EIF4G1", gene06 = "EIF4G2", gene07 = "EIF4G3", gene08 = "EIF3D",
+    gene09 = "EIF4A1", gene10 = "EIF4A2"
   )
 }
