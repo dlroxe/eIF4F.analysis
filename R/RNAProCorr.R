@@ -24,19 +24,19 @@ CCLE_RNAseq <- CCLE_Anno <- CCLE_Proteomics <- CPTAC_LUAD_Proteomics <- CPTAC_LU
 #' @description
 #'
 #' This function reads all proteomics related datasets from CCLE and CPTAC LUAD.
-#' Its side effects includes five global variables.
 #'
-#' * `CCLE_RNAseq`: the RNAseq data of CCLE from `CCLE_expression_full.csv`
+#' side effects:
 #'
-#' * `CCLE_Anno`: the annotation data of CCLE from `sample_info.csv`
-#'
-#' * `CCLE_Proteomics`: the proteomics data of CCLE from
+#' (1) `CCLE_RNAseq`: the RNAseq data of CCLE from the download dataset
+#'  `CCLE_expression_full.csv`
+#' (2) `CCLE_Anno`: the annotation data of CCLE from `sample_info.csv`
+#' (3) `CCLE_Proteomics`: the proteomics data of CCLE from
 #'  `protein_quant_current_normalized.csv`
+#' (4) `CPTAC_LUAD_Proteomics`: the proteomics data with annotation of CPTAC
+#'  LUAD study from the download data file `Protein.xlsx`
+#' (5) `CPTAC_LUAD_RNAseq`: the RNAseq data of CPTAC LUAD samples from
+#'  the download data file `RNA.xlsx`
 #'
-#' * `CPTAC_LUAD_Proteomics`: the proteomics data with annotation of CPTAC LUAD
-#'  from `Protein.xlsx`
-#'
-#' * `CPTAC_LUAD_RNAseq`: the RNAseq data of CPTAC LUAD samples from `RNA.xlsx`
 #'
 #' @importFrom readxl read_excel
 #'

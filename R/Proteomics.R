@@ -25,17 +25,18 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' @description
 #'
 #' This function reads all phosphoproteomics related datasets from CPTAC LUAD.
-#' Its side effects include two global variable.
+#' Side effects:
 #'
-#' (1) `CPTAC_LUAD_Phos`: the phosphoproteomics data of CPTAC from `Phos.xlsx`
+#' (1) `CPTAC_LUAD_Phos`: the phosphoproteomics data of CPTAC LUAD from the
+#'  download data `Phos.xlsx`
+#' (2) `CPTAC_LUAD_Clinic_Sampletype`: a merged dataset from two data frames.
+#'  It provides the annotation data about sample types (tumor or healthy tissues)
+#'  and tumors stages of each sample
+#'  * `.CPTAC_LUAD_Clinic`, the CPTAC clinical data from the download dataset
+#'  `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx`
+#'  * `.CPTAC_LUAD_sampletype`, the CPTAC annotation data from the download
+#'  dataset `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`
 #'
-#' (2) `CPTAC_LUAD_Clinic_Sampletype`: the merged dataset from
-#'
-#'  * `.CPTAC_LUAD_Clinic`, the CPTAC clinical data from
-#'  `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx`,
-#'
-#'  * `.CPTAC_LUAD_sampletype`, the CPTAC annotation data from
-#'  `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`.
 #'
 #' @importFrom dplyr case_when
 #'
@@ -51,7 +52,6 @@ initialize_phosphoproteomics_data <- function() {
   CPTAC_LUAD_Phos <<- read_excel(file.path(data_file_directory, "Phos.xlsx"),
     col_names = FALSE
   )
-
 
   .CPTAC_LUAD_Clinic <- read_excel(file.path(
     data_file_directory,

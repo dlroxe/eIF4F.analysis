@@ -24,19 +24,27 @@ TCGA_RNAseq_OS_sampletype <- NULL
 #'
 #' This function reads RNA-seq and survival datasets from TCGA.
 #'
-#' side effect: `TCGA_RNAseq_OS_sampletype` the merged dataset from
-#'  `.TCGA_RNAseq`, `.TCGA_OS` and `.TCGA_sampletype`
+#' side effect:
+#'
+#' (1)`TCGA_RNAseq_OS_sampletype` a merged dataset from
+#'  `.TCGA_RNAseq`, `.TCGA_OS` and `.TCGA_sampletype`.
 #'
 #' * `.TCGA_RNAseq`: the RNAseq data from TCGA generated from
-#'  [.get_TCGA_RNAseq()]
+#'  [.get_TCGA_RNAseq()], which imports the dataset
+#'  `EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena`.
 #'
-#' * `.TCGA_OS`: the annotation data from the
-#'  `Survival_SupplementalTable_S1_20171025_xena_sp` dataset with selection of
-#'  `OS` and `OS.time` columns.
+#' * `.TCGA.OS`: the clinical data from
+#'  `Survival_SupplementalTable_S1_20171025_xena_sp`. We select three columns:
+#'   `OS` for overall survival status, `OS.time` for overall survival time and
+#'   `sample` for sample ID of each patient.
 #'
 #' * `.TCGA_sampletype`: the annotation data from the
-#'  `TCGA_phenotype_denseDataOnlyDownload.tsv` dataset with selection of
-#'  `sample.type` and `primary.disease` columns.
+#'  `TCGA_phenotype_denseDataOnlyDownload.tsv` dataset. We select two columns
+#'  `sample.type` that annotates malignant tissues, and `primary.disease`
+#'  that annotates cancer types for each sample.
+#'
+#' Only malignant tissue (Solid normal tissues are excluded) are selected for
+#'  survival analysis
 #'
 #' @importFrom purrr reduce
 #'
