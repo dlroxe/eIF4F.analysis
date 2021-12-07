@@ -74,7 +74,7 @@ Information” section below.
 ## Install RStudio/R
 
 1.  Download & install R 4.1, if not already installed. 
-2.  Download & install Rstudio, if not already installed.
+2.  Download & install RStudio, if not already installed.
     (<https://www.rstudio.com/products/rstudio/download/>).  
 
 ## Download data-sets
