@@ -4,9 +4,9 @@ library(eIF4F.analysis)
 
 initialize_dir()
 
-initialize_data()
-
 initialize_format()
+
+initialize_data()
 
 EIF4F_CNV_analysis()
 
