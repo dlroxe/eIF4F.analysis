@@ -1,4 +1,4 @@
-#' ## PCA on EIF4F expression in GTEx, TCGA, and combined studies
+#' ## PCA on EIF4F expression in GTEx, or/and TCGA studies
 #' This R script contains four sections.
 #'
 #' (1) select TCGA RNA-seq dataset for PCA.
@@ -6,14 +6,14 @@
 #' (2) perform PCA or imputed PCA and plot the PCA results as biplots or
 #'  selected biplots
 #'
-#' (3) master functions to execute a pipeline of functions to select related
+#' (3) composite functions to execute a pipeline of functions to select related
 #'  RNAseq data for PCA and plot with supply of EIF4F gene names as values of
 #'  the arguments.
 #'
 #' (4) wrapper function to call all master functions with inputs
 #'
-#' ### Select TCGA RNA-seq data for PCA
-## Select TCGA RNA-seq data for PCA ============================================
+#' ### Select RNA-seq data from specific study groups for PCA
+## Select RNA-seq data from specific study groups for PCA ======================
 
 #' Select RNAseq data based on the sample types
 #'
@@ -29,7 +29,7 @@
 #' @param df `.TCGA_GTEX_sampletype_subset` generated inside
 #'  [.plot_PCA_TCGA_GTEX()]
 #'
-#' @param x selected sample types
+#' @param sample.type selected sample types
 #'
 #' @return
 #'
@@ -42,9 +42,10 @@
 #'
 #' @keywords internal
 #'
-.get_df_subset <- function(df, x) {
+.get_df_subset <- function(df, sample_type) {
   df1 <- df %>%
-    dplyr::filter(if (x != "All") .data$sample.type == x else TRUE) %>%
+    dplyr::filter(if (sample_type != "All") .data$sample.type == sample_type
+                  else TRUE) %>%
     droplevels()
   df2 <- df1 %>% dplyr::select_if(is.numeric)
   output <- list(df2, df1)
@@ -65,7 +66,7 @@
 #'
 #' @param df `df` generated inside [.get_df_subset()]
 #'
-#' @param x number of components kept in the final results
+#' @param number_of_dimension number of components kept in the final results
 #'
 #' @return PCA results
 #'
@@ -77,10 +78,10 @@
 #'
 #' @keywords internal
 #'
-.RNAseq_PCA <- function(df, x) {
+.RNAseq_PCA <- function(df, number_of_dimension) {
   res.pca <- FactoMineR::PCA(df, # remove column with characters
     scale.unit = TRUE,
-    ncp = x,
+    ncp = number_of_dimension,
     graph = FALSE
   )
   return(res.pca)
@@ -97,7 +98,7 @@
 #' @param df `CPTAC.LUAD.Proteomics.Sample.subset` generated inside
 #' [.plot_PCA_CPTAC_LUAD()]
 #'
-#' @param x maximum number of components kept in the final results
+#' @param number_of_dimension maximum number of components kept in the final results
 #'
 #' @return imputed PCA results
 #'
@@ -109,20 +110,20 @@
 #'
 #' @keywords internal
 #'
-.protein_imputePCA <- function(df, x) {
+.protein_imputePCA <- function(df, number_of_dimension) {
   # Impute the missing values of a dataset with the Principal Components
   # Analysis model
   nb <- missMDA::estim_ncpPCA(
     df %>% dplyr::select_if(is.numeric),
-    ncp.max = x
+    ncp.max = number_of_dimension
   ) # estimate the number of dimensions to impute
   res.comp <- missMDA::imputePCA(
     df %>% dplyr::select_if(is.numeric),
     ncp = nb$ncp
   )
-  res.pca <- PCA(res.comp$completeObs,
+  res.pca <- FactoMineR::PCA(res.comp$completeObs,
     scale.unit = TRUE,
-    ncp = x,
+    ncp = number_of_dimension,
     graph = FALSE
   )
   return(res.pca)
@@ -139,9 +140,10 @@
 #'
 #' @param df selected RNAseq data with sample type annotation
 #'
-#' @param x selected sample types for plot label
+#' @param sample_type selected sample types for plot label
 #'
-#' @param y type of primary diseases or healthy tissues for color of individuals
+#' @param column_name column name of annotation of primary diseases or
+#'  healthy tissues for color of individuals
 #'
 #' @param color color scheme used for individual sample on the PCA
 #'
@@ -156,18 +158,18 @@
 #' @examples \dontrun{
 #' .biplot(
 #'   res.pca = .RNAseq_PCA(df[[1]], 10), df = df[[2]],
-#'   x = "Metastatic Tumor (TCGA)",
+#'   sample_type = "Metastatic Tumor (TCGA)",
 #'   y = "primary.disease", color = col_vector, folder = "TCGA"
 #' )
 #' }
 #'
 #' @keywords internal
 #'
-.biplot <- function(res.pca, df, x, y, color, folder) {
-  biplot <- fviz_pca_biplot(res.pca,
+.biplot <- function(res.pca, df, sample_type, column_name, color, folder) {
+  biplot <- factoextra::fviz_pca_biplot(res.pca,
     axes = c(1, 2),
     labelsize = 5,
-    col.ind = df[, y],
+    col.ind = df[, column_name],
     # title = paste("PCA - Biplot (", x, ")"),
     palette = color,
     pointshape = 20,
@@ -177,10 +179,10 @@
     repel = TRUE
   ) +
     {
-      if (x == "All") {
+      if (sample_type == "All") {
         labs(title = "PCA - Biplot (Healthy Tissues + Tumors)")
       } else {
-        labs(title = paste0("PCA - Biplot (", x, ")"))
+        labs(title = paste0("PCA - Biplot (", sample_type, ")"))
       }
     } +
     # xlim(-7, 8) +
@@ -207,24 +209,24 @@
   print(biplot)
   ggplot2::ggsave(
     path = file.path(output_directory, "PCA", folder),
-    filename = paste("PCA", x, ".pdf"),
+    filename = paste("PCA", sample_type, ".pdf"),
     plot = biplot,
     width = 8,
     height = 8,
     useDingbats = FALSE
   )
 
-  eig <- fviz_eig(res.pca,
+  eig <- factoextra::fviz_eig(res.pca,
     labelsize = 6,
     geom = "bar",
     width = 0.7,
     addlabels = TRUE
   ) +
     {
-      if (x == "All") {
+      if (sample_type == "All") {
         labs(title = "Scree plot (Healthy Tissues + Tumors)")
       } else {
-        labs(title = paste0("Scree plot (", x, ")"))
+        labs(title = paste0("Scree plot (", sample_type, ")"))
       }
     } +
     theme_classic() +
@@ -245,35 +247,30 @@
 
   ggplot2::ggsave(
     path = file.path(output_directory, "PCA", folder),
-    filename = paste("eig", x, ".pdf"),
+    filename = paste("eig", sample_type, ".pdf"),
     plot = eig,
     width = 8,
     height = 8,
     useDingbats = FALSE
   )
 
-  corrtitle <- function(x) {
-    if (x == "All") {
-      title <- "PCA (Healthy Tissues + Tumors)"
+  if (sample_type == "All") {
+    title <- "PCA (Healthy Tissues + Tumors)"
     } else {
-      title <- paste0("PCA (", x, ")")
+      title <- paste0("PCA (", sample_type, ")")
     }
-    return(title)
-  }
 
-  title <- corrtitle(x)
-
-  var <- get_pca_var(res.pca)
+  var <- factoextra::get_pca_var(res.pca)
   pdf(file.path(
     path = file.path(output_directory, "PCA", folder),
-    filename = paste("matrix", x, ".pdf")
+    filename = paste("matrix", sample_type, ".pdf")
   ),
   width = 9,
   height = 9,
   useDingbats = FALSE
   )
   corrplot::corrplot(var$cos2, # cos2 is better than contribute
-    # title = paste("PCA (", x, ")"),
+    # title = paste("PCA (", sample_type, ")"),
     method = "color",
     title = title, #fix title cut off
     mar = c(0,0,2,0),
@@ -285,7 +282,7 @@
     tl.col = "black"
   )
   dev.off()
-  corrplot(var$cos2, # cos2 is better than contribute
+  corrplot::corrplot(var$cos2, # cos2 is better than contribute
     # title = paste("PCA (", x, ")"),
     title = title,
     # is.corr = FALSE,
@@ -310,9 +307,10 @@
 #'
 #' @param df combined RNAseq data with sample type annotation
 #'
-#' @param x sample types for plot labeling
+#' @param sample_type sample types for plot labeling
 #'
-#' @param y type of primary diseases or healthy tissues for color of individuals
+#' @param column_name column name of annotation of primary diseases or
+#'  healthy tissues for color of individuals
 #'
 #' @param color color scheme used for individual sample on the PCA
 #'
@@ -335,14 +333,14 @@
 #'
 #' @keywords internal
 #'
-.selected_biplot <- function(res.pca, df, x, y, color) {
+.selected_biplot <- function(res.pca, df, sample_type, column_name, color) {
   .selected_samples <- df %>%
-    dplyr::filter(.data$sample.type == x)
-  biplot <- fviz_pca_biplot(res.pca,
+    dplyr::filter(.data$sample.type == sample_type)
+  biplot <- factoextra::fviz_pca_biplot(res.pca,
     axes = c(1, 2),
     labelsize = 5,
     # col.ind = TCGA.GTEX.sampletype.subset$sample.type,
-    col.ind = df[, y],
+    col.ind = df[, column_name],
     palette = color,
     select.ind = list(name = row.names(.selected_samples)),
     pointshape = 20,
@@ -377,7 +375,7 @@
   print(biplot)
   ggplot2::ggsave(
     path = file.path(output_directory, "PCA", "All"),
-    filename = paste0("EIFPCAall", x, y, ".pdf"),
+    filename = paste0("EIFPCAall", sample_type, column_name, ".pdf"),
     plot = biplot,
     width = 8,
     height = 8,
@@ -386,24 +384,27 @@
 }
 
 
-#' ### Master functions to call PCA and plot results
-## Master functions to call PCA and plot results ===============================
+#' ### Composite functions to call PCA and plot results
+## Composite functions to call PCA and plot results ============================
 
 #' Perform PCA on RNAseq data from all tumors and healthy tissues
 #'
-#' @description
+#' @description This function
 #'
-#' This function performs standard PCA on selected RNAseq data from
-#'  `EIF.list` genes generated by [.get_df_subset()].
-#'
-#' It perform PCA on tumors from all TCGA cancer types,
-#'  PCA on healthy tissues from all GTEx healthy tissue types,
-#'  and PCA on combined TCGA tumors and GTEx healthy tissues.
+#' * selects RNAseq data of `EIF_list` genes of specific sample types from
+#'  `TCGA_GTEX_RNAseq_sampletype` by [.get_df_subset()].
+#' * performs three PCAs by [.RNAseq_PCA()] on
+#'   (i) tumors samples from all TCGA cancer types,
+#'   (ii) healthy tissue samples from all GTEx healthy tissue types,
+#'   (iii) TCGA tumors and GTEx healthy tissue samples combined.
+#' * generates biplot, screen plot and matrix plots by [.biplot()]
+#' * generates subset biplots for PCA results of combined TCGA tumors and
+#'  GTEx healthy tissues with [.selected_biplot()] function
 #'
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' @param EIF.list gene names in a vector of characters
+#' @param EIF_list gene names in a vector of characters
 #'
 #' @return PCA biplot, matrix, scree plot
 #'
@@ -418,10 +419,10 @@
 #' ))
 #' }
 #'
-.plot_PCA_TCGA_GTEX <- function(EIF.list) {
+.plot_PCA_TCGA_GTEX <- function(EIF_list) {
   .TCGA_GTEX_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
-      all_of(EIF.list),
+      dplyr::all_of(EIF_list),
       "sample.type",
       "primary.disease",
       "primary.site",
@@ -436,8 +437,8 @@
         "Normal Tissue",
         "Solid Tissue Normal"
       )) %>%
-    mutate_if(is.character, as.factor) %>%
-    mutate(sample.type = factor(.data$sample.type,
+    dplyr::mutate_if(is.character, as.factor) %>%
+    dplyr::mutate(sample.type = factor(.data$sample.type,
       levels = c(
         "Normal Tissue",
         "Primary Tumor",
@@ -456,8 +457,8 @@
   .biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Primary Tumor (TCGA)",
-    y = "primary.disease",
+    sample_type = "Primary Tumor (TCGA)",
+    column_name = "primary.disease",
     color = col_vector,
     folder = "TCGA"
   )
@@ -466,8 +467,8 @@
   .biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Metastatic Tumor (TCGA)",
-    y = "primary.disease",
+    sample_type = "Metastatic Tumor (TCGA)",
+    column_name = "primary.disease",
     color = col_vector,
     folder = "TCGA"
   )
@@ -476,8 +477,8 @@
   .biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Healthy Tissue (GTEx)",
-    y = "primary.site",
+    sample_type = "Healthy Tissue (GTEx)",
+    column_name = "primary.site",
     color = col_vector,
     folder = "GTEX"
   )
@@ -488,8 +489,8 @@
   .biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "All",
-    y = "sample.type",
+    sample_type = "All",
+    column_name = "sample.type",
     color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
     folder = "All"
   )
@@ -497,65 +498,66 @@
   .selected_biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Healthy Tissue (GTEx)",
-    y = "sample.type",
+    sample_type = "Healthy Tissue (GTEx)",
+    column_name = "sample.type",
     color = "#D55E00"
   )
   .selected_biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Healthy Tissue (GTEx)",
-    y = "primary.site",
+    sample_type = "Healthy Tissue (GTEx)",
+    column_name = "primary.site",
     color = col_vector
   )
 
   .selected_biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Primary Tumor (TCGA)",
-    y = "sample.type",
+    sample_type = "Primary Tumor (TCGA)",
+    column_name = "sample.type",
     color = "#009E73"
   )
   .selected_biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Primary Tumor (TCGA)",
-    y = "primary.disease",
+    sample_type = "Primary Tumor (TCGA)",
+    column_name = "primary.disease",
     color = col_vector
   )
 
   .selected_biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Metastatic Tumor (TCGA)",
-    y = "sample.type",
+    sample_type = "Metastatic Tumor (TCGA)",
+    column_name = "sample.type",
     color = "#CC79A7"
   )
   .selected_biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = "Metastatic Tumor (TCGA)",
-    y = "primary.disease",
+    sample_type = "Metastatic Tumor (TCGA)",
+    column_name = "primary.disease",
     color = col_vector
   )
 }
 
+
 #' Perform PCA on RNAseq data from one tumor type and matched healthy tissue
 #'
-#' @description
+#' @description This function
 #'
-#' This function performs standard PCA on selected RNAseq data from
-#'  `EIF.list` genes generated by [.get_df_subset()].
-#'
-#' It perform PCA on combined tumors from TCGA cancer types and GTEx healthy
-#'  tissues with the same `tissue` of origin.
+#' * selects RNAseq data of `EIF_list` genes in TCGA tumors and GTEx healthy
+#'  tissues with the same `tissue` of origin from `TCGA_GTEX_RNAseq_sampletype`,
+#'  by [.get_df_subset()].
+#' * performs PCA on combined tumor and healthy samples by [.RNAseq_PCA()],
+#' * plots results as biplot, scree and matrix plots by [.biplot()]
 #'
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' @param EIF.list gene names in a vector of characters
+#' @param EIF_list gene names in a vector of characters
 #'
-#' @param tissue tissue type
+#' @param sample_type tissue type
 #'
 #' @return PCA bioplot, matrix, scree plot
 #'
@@ -570,10 +572,10 @@
 #' ), "Lung")
 #' }
 #'
-.plot_PCA_TCGA_GTEX_tumor <- function(EIF.list, tissue) {
+.plot_PCA_TCGA_GTEX_tumor <- function(EIF_list, sample_type) {
   .TCGA_GTEX_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
-      all_of(EIF.list),
+      dplyr::all_of(EIF_list),
       "sample.type",
       "primary.disease",
       "primary.site",
@@ -588,8 +590,8 @@
         "Normal Tissue",
         "Solid Tissue Normal"
       )) %>%
-    mutate_if(is.character, as.factor) %>%
-    mutate(sample.type = factor(.data$sample.type,
+    dplyr::mutate_if(is.character, as.factor) %>%
+    dplyr::mutate(sample.type = factor(.data$sample.type,
       levels = c(
         "Normal Tissue",
         "Primary Tumor",
@@ -603,32 +605,35 @@
         "Adjacent Normal Tissue (TCGA)"
       )
     )) %>%
-    dplyr::filter(.data$primary.site == tissue)
+    dplyr::filter(.data$primary.site == sample_type)
 
   df <- .get_df_subset(.TCGA_GTEX_sampletype_subset, "All")
   .biplot(
     res.pca = .RNAseq_PCA(df[[1]], 10),
     df = df[[2]],
-    x = tissue,
-    y = "sample.type",
+    sample_type = sample_type,
+    column_name = "sample.type",
     color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
     folder = "Lung"
   )
 }
 
+
 #' Perform PCA on proteomics data from CPATC LUADs and matched healthy lung
 #'  tissues
-#' @description
-#' This function performs standard PCA on selected proteomics data from
-#'  `CPTAC_LUAD_Proteomics` prepared by [initialize_proteomics_data()].
 #'
-#' It perform PCA on combined tumors from CPTAC LUAD and and
-#'  matched healthy lung tissues.
+#' @description This function performs standard PCA on
+#'
+#' * selects proteomics data from `CPTAC_LUAD_Proteomics` prepared by
+#'  [initialize_proteomics_data()].
+#' * performs imputed PCA on combined tumors from CPTAC LUAD and and
+#'  matched healthy lung tissues, by [.protein_imputePCA()].
+#' * plots results as biplot, scree and matrix plots by [.biplot()]
 #'
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' @param EIF.list gene names in a vector of characters
+#' @param EIF_list gene names in a vector of characters
 #'
 #' @return PCA bioplot, matrix, scree plot
 #'
@@ -641,10 +646,10 @@
 #' ), "Lung")
 #' }
 #'
-.plot_PCA_CPTAC_LUAD <- function(EIF.list) {
+.plot_PCA_CPTAC_LUAD <- function(EIF_list) {
   CPTAC.LUAD.Proteomics.Sample.subset <- CPTAC_LUAD_Proteomics %>%
-    column_to_rownames(var = "Sample") %>%
-    mutate(Type = factor(.data$Type,
+    tibble::column_to_rownames(var = "Sample") %>%
+    dplyr::mutate(Type = factor(.data$Type,
       levels = c(
         "NAT",
         "Tumor"
@@ -655,11 +660,11 @@
       )
     )) %>%
     dplyr::select(
-      all_of(EIF.list),
+      dplyr::all_of(EIF_list),
       "Type"
     ) %>%
     # as.data.frame(.) %>%
-    mutate_if(is.character, as.factor) %>%
+    dplyr::mutate_if(is.character, as.factor) %>%
     dplyr::filter(!is.na(.data$Type)) %>%
     tibble::remove_rownames()
 
@@ -668,28 +673,28 @@
   .biplot(
     res.pca = res.pca,
     df = CPTAC.LUAD.Proteomics.Sample.subset,
-    x = "LUAD(CPTAC)",
-    y = "Type",
+    sample_type = "LUAD(CPTAC)",
+    column_name = "Type",
     color = c("#D55E00", "#009E73"),
     folder = "Lung"
   )
 }
 
 
-#' ### Wrapper function to call all master functions with inputs
-## wrapper function to call all master functions with inputs ===================
+#' ### Wrapper function to call all composite functions with inputs
+## Wrapper function to call all composite functions with inputs ================
 
 #' Perform PCA and generate plots
 #'
-#' @description A wrapper function to call all master functions for PCA
+#' @description A wrapper function to call all composite functions for PCA
 #'
-#' @details  This function run three master functions together:
+#' @details  This function run three composite functions together:
 #'
 #'  * [.plot_PCA_TCGA_GTEX()]
 #'  * [.plot_PCA_TCGA_GTEX_tumor()]
 #'  * [.plot_PCA_CPTAC_LUAD()]
 #'
-#' @return CNV analysis plots
+#' @return PCA plots
 #'
 #' @export
 #'
@@ -703,13 +708,9 @@ EIF4F_PCA <- function() {
     "PABPC1", "MKNK1", "MKNK2"
   ))
 
-  #.plot_PCA_TCGA_GTEX_tumor(c("EIF4G1", "EIF4A1", "EIF4E",
-  #                            "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"),
-  #                          "Breast")
-## save file name edit
-  lapply(c("Lung", "Brain", "Breast", "Colon","Pancreas", "Prostate", "Skin"),
+  lapply(c("Lung", "Brain", "Breast", "Colon", "Pancreas", "Prostate", "Skin"),
          .plot_PCA_TCGA_GTEX_tumor,
-         EIF.list = c("EIF4G1", "EIF4A1", "EIF4E",
+         EIF_list = c("EIF4G1", "EIF4A1", "EIF4E",
                       "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"))
 
   .plot_PCA_CPTAC_LUAD(c(

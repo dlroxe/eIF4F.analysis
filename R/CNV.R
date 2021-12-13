@@ -6,13 +6,14 @@
 #'
 #' (2) CNV data analyses and plotting
 #'
-#' (3) master functions to execute a pipeline of functions to select related
+#' (3) composite functions to execute a pipeline of functions to select related
 #'  CNV data with supply of EIF4F gene names for analysis and plotting.
 #'
 #' (4) wrapper function to call all master functions with inputs
 #'
-#' ### Prepare CNV related datasets from TCGA
-## prepare CNV related datasets from TCGA ======================================
+#' ### Wrapper function for data initialization of CNV related datasets
+## Wrapper function for data initialization of CNV related datasets ============
+
 #' @noRd
 ## due to NSE notes in R CMD check
 TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
@@ -76,7 +77,7 @@ initialize_cnv_data <- function() {
   )) %>%
     as.data.frame() %>%
     dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-    na.omit() %>%
+    stats::na.omit() %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "sample") %>%
     dplyr::select("sample_type", "_primary_disease") %>%
@@ -86,10 +87,10 @@ initialize_cnv_data <- function() {
     )
 
   TCGA_CNV_sampletype <<- merge(.TCGA_CNV,
-    .TCGA_sampletype,
-    by    = "row.names",
-    all.x = TRUE
-  ) %>%
+                                .TCGA_sampletype,
+                                by    = "row.names",
+                                all.x = TRUE
+                              ) %>%
     dplyr::filter(.data$sample.type != "Solid Tissue Normal") %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "Row.names")
@@ -187,10 +188,10 @@ initialize_cnv_data <- function() {
     ),
     data.table = FALSE
   ) %>%
-    as_tibble() %>%
+    tibble::as_tibble() %>%
     # as.data.frame(.) %>%
     dplyr::distinct(.data$Sample, .keep_all = TRUE) %>%
-    na.omit() %>%
+    stats::na.omit() %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "Sample")
 
@@ -238,10 +239,10 @@ initialize_cnv_data <- function() {
     ),
     data.table = FALSE
   ) %>%
-    as_tibble() %>%
+    tibble::as_tibble() %>%
     # as.data.frame(.) %>%
     dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-    na.omit() %>%
+    stats::na.omit() %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "sample")
 
@@ -288,23 +289,24 @@ initialize_cnv_data <- function() {
 #' @keywords internal
 #'
 .CNV_all_cancer <- function(df) {
-  .TCGA_CNV_anno_subset_long <- melt(df,
+  .TCGA_CNV_anno_subset_long <- reshape2::melt(df,
     id = c(
       "sample.type",
       "primary.disease"
     ),
     value.name = "CNV"
   ) %>%
-    mutate_if(is.character, as.factor)
+    dplyr::mutate_if(is.character, as.factor)
 
   .CNV_sum <-
     table(.TCGA_CNV_anno_subset_long[, c("CNV", "variable")]) %>%
     # tibble(.) %>%
     as.data.frame() %>%
-    mutate(CNV = factor(.data$CNV, levels = c("-2", "-1", "0", "1", "2")))
+    dplyr::mutate(CNV = factor(.data$CNV,
+                               levels = c("-2", "-1", "0", "1", "2")))
 
   # reorder stack bars by the frequency of duplication.
-  Freq.sum <- dcast(.CNV_sum, variable ~ CNV, mean)
+  Freq.sum <- reshape2::dcast(.CNV_sum, variable ~ CNV, mean)
   .CNV_sum$variable <- factor(.CNV_sum$variable,
     levels = Freq.sum[order(Freq.sum$`1`), ]$variable
   )
@@ -418,7 +420,7 @@ initialize_cnv_data <- function() {
 #' @param df `.TCGA_CNV_sampletype_subset` generated inside
 #' [.plot_bargraph_CNV_TCGA()]
 #'
-#' @param x one gene from the input argument of
+#' @param gene one gene from the input argument of
 #' [.plot_bargraph_CNV_TCGA()]
 #'
 #' @return
@@ -436,30 +438,31 @@ initialize_cnv_data <- function() {
 #'
 #' @keywords internal
 #'
-.CNV_ind_cancer <- function(df, x) {
+.CNV_ind_cancer <- function(df, gene) {
   .TCGA_CNV_anno_subset_long <- df %>%
     dplyr::select(
-      all_of(x),
+      dplyr::all_of(gene),
       "sample.type",
       "primary.disease"
     ) %>%
-    melt(
+    reshape2::melt(
       id = c(
         "sample.type",
         "primary.disease"
       ),
       value.name = "CNV"
     ) %>%
-    mutate_if(is.character, as.factor)
+    dplyr::mutate_if(is.character, as.factor)
 
   .CNV_sum <-
     table(.TCGA_CNV_anno_subset_long[, c("CNV", "primary.disease")]) %>%
     # tibble(.) %>%
     as.data.frame() %>%
-    mutate(CNV = factor(.data$CNV, levels = c("-2", "-1", "0", "1", "2"))) %>%
-    mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
+    dplyr::mutate(CNV = factor(.data$CNV,
+                               levels = c("-2", "-1", "0", "1", "2"))) %>%
+    dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
 
-  output <- list(.CNV_sum, x)
+  output <- list(.CNV_sum, gene)
   return(output)
 }
 
@@ -572,8 +575,7 @@ initialize_cnv_data <- function() {
 #'
 #' @return
 #'
-#' stacked bar plots for CNV status of each gene in
-#' an individual cancer type.
+#' stacked bar plots for CNV status of each gene in an individual cancer type.
 #'
 #' @importFrom corrplot cor.mtest corrplot
 #'
@@ -650,7 +652,7 @@ initialize_cnv_data <- function() {
 #' @param df `.TCGA_CNVratio_sampletype_subset` generated inside
 #'  [.plot_boxgraph_CNVratio_TCGA()]
 #'
-#' @param x one gene from the input argument of [.plot_boxgraph_CNVratio_TCGA()]
+#' @param gene one gene from the input argument of [.plot_boxgraph_CNVratio_TCGA()]
 #'
 #' @return
 #'
@@ -663,16 +665,16 @@ initialize_cnv_data <- function() {
 #'
 #' @keywords internal
 #'
-.CNVratio_tumor <- function(df, x) {
+.CNVratio_tumor <- function(df, gene) {
   .CNVratio_data <- df %>%
-    dplyr::select(all_of(x), "sample.type", "primary.disease") %>%
-    melt(
+    dplyr::select(dplyr::all_of(gene), "sample.type", "primary.disease") %>%
+    reshape2::melt(
       id = c("sample.type", "primary.disease"),
       value.name = "CNV"
     ) %>%
-    mutate_if(is.character, as.factor) %>%
-    mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
-  output <- list(.CNVratio_data, x)
+    dplyr::mutate_if(is.character, as.factor) %>%
+    dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
+  output <- list(.CNVratio_data, gene)
   return(output)
 }
 
@@ -759,8 +761,8 @@ initialize_cnv_data <- function() {
 }
 
 
-#' ### master function to call CNV data analysis and plotting
-## Master function to call CNV data analysis and plotting ======================
+#' ### Composite function to call CNV data analysis and plotting
+## Composite function to call CNV data analysis and plotting ======================
 
 #' Summary of CNV statuses in bar plots
 #'
@@ -776,12 +778,10 @@ initialize_cnv_data <- function() {
 #' * selects CNV and sample type data from only
 #'  EIF4F gene in the data frame `TCGA_CNV_sampletype` prepared
 #'  from [initialize_cnv_data()].
-#'
 #' * uses the subset data `.TCGA_CNV_sampletype_subset` to perform the
 #'  CNV status analysis of all inquired genes with the functions
 #'  [.CNV_all_cancer()] and plot the results as a bar plot
 #'  with [.CNV_sum_barplot()]
-#'
 #' * uses the same subset data to perform CNV status analysis for each
 #'  gene across all tumors types with the function [.CNV_ind_cancer()]
 #'  and plots the CNV results and [.CNV_barplot()]
@@ -806,7 +806,7 @@ initialize_cnv_data <- function() {
   .TCGA_CNV_sampletype_subset <- NULL
   # combine CNV data with annotation data
   .TCGA_CNV_sampletype_subset <- TCGA_CNV_sampletype %>%
-    dplyr::select(all_of(EIF_list), "sample.type", "primary.disease")
+    dplyr::select(dplyr::all_of(EIF_list), "sample.type", "primary.disease")
 
   # stacked bar plots for CNV status in combined TCGA tumors
   .CNV_all_cancer(.TCGA_CNV_sampletype_subset) %>%
@@ -835,7 +835,6 @@ initialize_cnv_data <- function() {
 #'
 #' * selects unthreshold CNV values from only EIF4F gene
 #' in the data frame `TCGA_CNV_value` prepared from [initialize_cnv_data()].
-#'
 #' * uses the subset data to calculate the correlation coefficients
 #' between every two genes and plot the correlation matrix with the function
 #' [.matrix_plot()]
@@ -854,7 +853,7 @@ initialize_cnv_data <- function() {
 #'
 .plot_matrix_CNVcorr_TCGA <- function(EIF_list) {
   TCGA_CNV_value %>%
-    dplyr::select(all_of(EIF_list)) %>%
+    dplyr::select(dplyr::all_of(EIF_list)) %>%
     .matrix_plot()
 }
 
@@ -873,7 +872,6 @@ initialize_cnv_data <- function() {
 #' * selects CNV and sample type data
 #' from only EIF4F gene in the data frame `TCGA_CNVratio_sampletype`
 #' prepared from [initialize_cnv_data()].
-#'
 #' * uses the subset data `.TCGA_CNVratio_sampletype_subset`
 #' to perform CNV status analysis for each gene across
 #' all tumors types with the function [.CNVratio_tumor()]
@@ -895,7 +893,7 @@ initialize_cnv_data <- function() {
   .TCGA_CNVratio_sampletype_subset <- NULL
   .TCGA_CNVratio_sampletype_subset <- TCGA_CNVratio_sampletype %>%
     dplyr::select(
-      all_of(EIF_list),
+      dplyr::all_of(EIF_list),
       "sample.type",
       "primary.disease"
     )
@@ -909,18 +907,19 @@ initialize_cnv_data <- function() {
 }
 
 
-#' ### wrapper function to call all master functions with inputs
-## Wrapper function to call all master functions with inputs ===================
+#' ### wrapper function to call all composite functions with inputs
+## Wrapper function to call all composite functions with inputs ================
 
 #' Perform all CNV related analysis and generate plots
 #'
 #' @description
 #'
-#' A wrapper function to call all master functions for CNV analysis with inputs
+#' A wrapper function to call all composite functions for CNV analysis with inputs
 #'
 #' @details
 #'
-#' This function run three master functions together with inputs:
+#' This function run three composite functions together with inputs:
+#'
 #'  * [.plot_bargraph_CNV_TCGA()]
 #'  * [.plot_matrix_CNVcorr_TCGA()]
 #'  * [.plot_boxgraph_CNVratio_TCGA()]

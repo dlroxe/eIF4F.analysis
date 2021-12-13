@@ -1,17 +1,17 @@
-#' ## Differential gene expression analysis of EIF4F genes in TCGA
+#' ## Differential gene expression (ratio) analysis of EIF4F genes in TCGA
 #' This R script contains four sections.
 #'
 #' (1) RNAseq data preparation
 #'
-#' (2) analyze differential mRNA gene expression and plotting
+#' (2) analyze differential mRNA gene (ratio) expression and plotting
 #'
-#' (3) master functions to execute a pipeline of functions to select related
+#' (3) composite functions to execute a pipeline of functions to select related
 #'  RNAseq data  with supply of EIF4F gene names for analysis and plotting.
 #'
 #' (4) wrapper function to call all master functions with inputs
 #'
-#' ### Prepare RNA-seq related dataset from TCGA and GTEx
-## prepare RNA-seq related dataset from TCGA and GTEx ==========================
+#' ### Wrapper function for data initialization of RNA-seq related datasets
+## Wrapper function for data initialization of RNA-seq related datasets ========
 
 #' @noRd
 ## due to NSE notes in R CMD check
@@ -69,7 +69,7 @@ initialize_RNAseq_data <- function() {
     show_col_types = FALSE
   ) %>%
     # {
-    as_tibble() %>%
+    tibble::as_tibble() %>%
     dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "sample") %>%
@@ -128,9 +128,9 @@ initialize_RNAseq_data <- function() {
     ),
     data.table = FALSE
   ) %>%
-    as_tibble() %>%
+    tibble::as_tibble() %>%
     dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-    na.omit() %>%
+    stats::na.omit() %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "sample")
   # transpose function from the data.table keeps numeric values as numeric.
@@ -148,8 +148,9 @@ initialize_RNAseq_data <- function() {
 #'
 #' @description
 #'
-#' This function selects the RNAseq data from TCGA samples,
-#'  excludes `Solid Tissue Normal` and ranks the genes by their mRNA expression.
+#' This function selects the RNAseq data from TCGA samples, excludes
+#'  samples with label of `Solid Tissue Normal` and ranks the genes by their
+#'  mRNA expression.
 #' It should not be used directly, only inside [.plot_boxgraph_RNAseq_TCGA()]
 #'  function.
 #'
@@ -160,10 +161,10 @@ initialize_RNAseq_data <- function() {
 #'
 #' @return
 #'
-#' a data frame ranking genes by their mRNA expressions in
-#' lung adenocarcinoma
+#' a data frame ranking genes by their mRNA expressions in lung adenocarcinoma
 #'
 #' @importFrom dplyr pull
+#' @importFrom forcats fct_reorder
 #'
 #' @examples \dontrun{
 #' .RNAseq_all_gene(.TCGA_GTEX_RNAseq_sampletype_subset)
@@ -179,14 +180,15 @@ initialize_RNAseq_data <- function() {
     # dplyr::filter out category equal to 'Lung Adenocarcinoma'
     dplyr::filter(.data$primary.disease == "Lung Adenocarcinoma") %>%
     # use the same groups as in the ggplot
-    group_by(.data$variable) %>%
+    dplyr::group_by(.data$variable) %>%
     # calculate the means
-    summarise(mean_RNAseq = mean(.data$RNAseq)) %>%
-    mutate(variable = fct_reorder(.data$variable, .data$mean_RNAseq)) %>%
-    pull(.data$variable) %>%
+    dplyr::summarise(mean_RNAseq = mean(.data$RNAseq)) %>%
+    dplyr::mutate(variable = forcats::fct_reorder(.data$variable,
+                                                  .data$mean_RNAseq)) %>%
+    dplyr::pull(.data$variable) %>%
     levels()
   output <- df %>%
-    mutate(variable = factor(.data$variable, levels = rev(order)))
+    dplyr::mutate(variable = factor(.data$variable, levels = rev(order)))
   return(output)
 }
 
@@ -194,12 +196,15 @@ initialize_RNAseq_data <- function() {
 #'
 #' @description
 #'
+#' This function takes the output of [.RNAseq_all_gene()] function and generate
+#'  box plots of differential gene expression in an individual cancer type
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_RNAseq_TCGA()]function.
 #'
 #' @param data
 #'
-#' output dataset generated from [.RNAseq_all_gene()] function
+#' output dataset from `.RNAseq_all_gene(.TCGA_GTEX_RNAseq_sampletype_subset)`,
+#'  which was generated inside [.plot_boxgraph_RNAseq_TCGA()]function.
 #'
 #' @keywords internal
 #'
@@ -266,8 +271,8 @@ initialize_RNAseq_data <- function() {
 #'
 #' @description
 #'
-#' This function selects the RNAseq data from TCGA samples including all
-#'  tumors and solid tissue normal samples for comparison.
+#' This function selects the RNAseq data of each EIF genes from TCGA tumors and
+#'  solid tissue normal samples out of `.TCGA_GTEX_RNAseq_sampletype_subset`.
 #' It should not be used directly, only inside [.plot_boxgraph_RNAseq_TCGA()]
 #' function.
 #'
@@ -276,7 +281,7 @@ initialize_RNAseq_data <- function() {
 #' `.TCGA_GTEX_RNAseq_sampletype_subset` generated
 #'  inside [.plot_boxgraph_RNAseq_TCGA()]
 #'
-#' @param x
+#' @param gene
 #'
 #' one gene from the input argument of [.plot_boxgraph_RNAseq_TCGA()]
 #'
@@ -291,17 +296,17 @@ initialize_RNAseq_data <- function() {
 #'
 #' @keywords internal
 #'
-.RNAseq_ind_gene <- function(df, x) {
+.RNAseq_ind_gene <- function(df, gene) {
   df <- df %>%
     dplyr::filter(.data$study == "TCGA") %>%
     droplevels() %>%
-    mutate(sample.type = case_when(
+    dplyr::mutate(sample.type = dplyr::case_when(
       sample.type != "Solid Tissue Normal" ~ "Tumor",
       sample.type == "Solid Tissue Normal" ~ "Normal"
     )) %>%
-    dplyr::filter(.data$variable == x) %>%
-    mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
-  output <- list(df, x)
+    dplyr::filter(.data$variable == gene) %>%
+    dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
+  output <- list(df, gene)
   return(output)
 }
 
@@ -309,6 +314,8 @@ initialize_RNAseq_data <- function() {
 #'
 #' @description
 #'
+#' This function takes the output of [.RNAseq_ind_gene()] and generate box plots
+#'  for differential gene expression in tumors vs NATs in TCGA cancer types
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_RNAseq_TCGA()]function.
 #'
@@ -389,8 +396,8 @@ initialize_RNAseq_data <- function() {
 }
 
 
-#' Analyzes differential gene expression in primary, metastatic tumors vs
-#'  adjacent normal tissues from all TCGA cancer types combined
+#' Select gene expression data in primary, metastatic tumors vs adjacent normal
+#'  tissues from all TCGA cancer types combined
 #'
 #' @description
 #'
@@ -529,14 +536,19 @@ initialize_RNAseq_data <- function() {
 }
 
 
-#' Calculate RNA ratios in tumors vs adjacent normal tissues
+#' Calculate RNA ratios
 #'
-#' @description
+#' @description This function
 #'
-#' This function calculates the RNA ratio data from TCGA samples including all
+#'  * select the of RNAseq data of input genes from all TCGA samples, using the
+#'   data frame `TCGA_GTEX_RNAseq_sampletype` prepared by the function
+#'   [initialize_RNAseq_data()].
+#'  * calculates the RNA ratio data in each TCGA samples including
 #'  tumors and solid tissue normal samples for comparison.
+#'
 #' It should not be used directly, only inside [.plot_boxgraph_RNAratio_TCGA()]
 #'  function.
+#'
 #'
 #' @param gene01
 #' gene name, same input from [.plot_boxgraph_RNAratio_TCGA()]
@@ -572,7 +584,6 @@ initialize_RNAseq_data <- function() {
 #'
 #' @return
 #'
-
 #' a data frame of differential RNA ratios in tumors vs adjacent normal tissues
 #'  from individual TCGA cancer types
 #'
@@ -595,14 +606,14 @@ initialize_RNAseq_data <- function() {
   )
   .RNAratio_data <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
-      all_of(.genes_names),
+      dplyr::all_of(.genes_names),
       "sample.type",
       "primary.disease",
       "primary.site",
       "study"
     ) %>%
-    as_tibble() %>%
-    filter(gene01 != 0 & !is.na(.data$primary.site)) %>%
+    tibble::as_tibble() %>%
+    dplyr::filter(gene01 != 0 & !is.na(.data$primary.site)) %>%
     # calculate the ratio of mRNA counts
     dplyr::mutate(
       (!!paste0(gene01, "+", gene04)) :=
@@ -674,7 +685,7 @@ initialize_RNAseq_data <- function() {
       "study"
     ) %>%
     dplyr::mutate_if(is.character, as.factor) %>%
-    na.omit()
+    stats::na.omit()
   return(.RNAratio_data)
 }
 
@@ -689,29 +700,29 @@ initialize_RNAseq_data <- function() {
 #'
 #' output dataset generated from [.RNAratio_calculation()] function
 #'
-#' @param x
+#' @param gene_ratio gene ratio name
 #'
 #' input argument for selected variables generated
 #'  from [.plot_boxgraph_RNAratio_TCGA()] function
 #'
 #' @keywords internal
 #'
-.RNAratio_selection <- function(df, x) {
+.RNAratio_selection <- function(df, gene_ratio) {
   .RNAratio_data <- df %>%
     dplyr::filter(.data$study == "TCGA") %>%
     droplevels() %>%
-    dplyr::mutate(sample.type = case_when(
+    dplyr::mutate(sample.type = dplyr::case_when(
       sample.type != "Solid Tissue Normal" ~ "Tumor",
       sample.type == "Solid Tissue Normal" ~ "NAT"
     )) %>%
     dplyr::select(
-      all_of(x),
+      dplyr::all_of(gene_ratio),
       "sample.type",
       "primary.disease",
       "primary.site",
       "study"
     ) %>%
-    melt(
+    reshape2::melt(
       id = c(
         "sample.type",
         "primary.disease",
@@ -720,11 +731,10 @@ initialize_RNAseq_data <- function() {
       ),
       value.name = "RNAseq"
     ) %>%
-    mutate_if(is.character, as.factor) %>%
-    mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
+    dplyr::mutate_if(is.character, as.factor) %>%
+    dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
   return(.RNAratio_data)
 }
-
 
 
 #' Box plots of differential RNA ratios across tumors
@@ -804,6 +814,7 @@ initialize_RNAseq_data <- function() {
   )
 }
 
+
 #' Analyzes differential RNA ratios in primary, metastatic tumors vs
 #'  adjacent normal tissues from all TCGA cancer types combined
 #'
@@ -821,6 +832,8 @@ initialize_RNAseq_data <- function() {
 #' `.RNAratio_tumortype(.RNAratio_data)` generated
 #'  inside [.plot_boxgraph_RNAratio_TCGA()]
 #'
+#' @param gene_ratio
+#'
 #' @return
 #'
 #' a data frame of differential RNA ratios in tumors vs adjacent normal tissues
@@ -828,7 +841,7 @@ initialize_RNAseq_data <- function() {
 #'
 #' @keywords internal
 #'
-.RNAratio_tumortype <- function(df, x) {
+.RNAratio_tumortype <- function(df, gene_ratio) {
   .RNAratio_data <- df %>%
     dplyr::filter(.data$sample.type %in% c(
       "Metastatic",
@@ -837,13 +850,13 @@ initialize_RNAseq_data <- function() {
     )) %>%
     droplevels() %>%
     dplyr::select(
-      all_of(x),
+      dplyr::all_of(gene_ratio),
       "sample.type",
       "primary.disease",
       "primary.site",
       "study"
     ) %>%
-    melt(
+    reshape2::melt(
       id = c(
         "sample.type",
         "primary.disease",
@@ -852,14 +865,14 @@ initialize_RNAseq_data <- function() {
       ),
       value.name = "RNAseq"
     ) %>%
-    mutate_if(is.character, as.factor) %>%
-    mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
+    dplyr::mutate_if(is.character, as.factor) %>%
+    dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
   return(.RNAratio_data)
 }
 
 
-#' ### master functions to call DEG gene analysis and plotting
-## master functions to call DEG gene analysis and plotting =====================
+#' ### Composite functions to call DEG gene analysis and plotting
+## composite functions to call DEG gene analysis and plotting =====================
 
 #' Compare the expression of EIF4F genes
 #'
@@ -872,24 +885,23 @@ initialize_RNAseq_data <- function() {
 #'  metastatic tumors vs adjacent normal tissues from all TCGA cancer types
 #'  combined.
 #'
-#' @param EIF.list
+#' @param EIF_list
 #'
 #' gene names in a vector of characters
 #'
 #' @details This function
 #'
-#' * selects RNASeq and sample type data from input gene
-#'  in the data frame `TCGA_GTEX_RNAseq_sampletype` prepared
-#'  from [initialize_RNAseq_data()].
-#'
-#' * With the subset data `.TCGA_GTEX_RNAseq_sampletype_subset`, compares the
-#'  mRNA expression of all inquired genes with the functions [.RNAseq_all_gene()]
-#'  and plot the results as a bar plot with [.RNAseq_grouped_boxplot()]
-#'
+#' * selects RNASeq of input genes and columns including `sample.type`,
+#'  `primary.disease`, and `primary.site`,from the data frame
+#'  `TCGA_GTEX_RNAseq_sampletype` that was prepared by the function
+#'  [initialize_RNAseq_data()] to produce a subset data frame called
+#'  `.TCGA_GTEX_RNAseq_sampletype_subset`
+#' * with the subset data, calls the functions [.RNAseq_all_gene()] to compare
+#'   relative mRNA expression of all inquired genes and calls the functions
+#'   [.RNAseq_grouped_boxplot()] plot the results as a grouped box plot.
 #' * performs differential expression analysis for each gene across all
 #'  tumors types with the function [.RNAseq_ind_gene()] and plots with
 #'  [.RNAseq_boxplot()].
-#'
 #' * performs differential expression analysis for each gene in
 #'  primary, metastatic tumors vs adjacent normal tissues from all TCGA cancer
 #'  types combined with the function [.RNAseq_tumortype()] and plots with
@@ -899,7 +911,7 @@ initialize_RNAseq_data <- function() {
 #'
 #' @return
 #'
-#' box plots for differential gene expression of `EIF.list` in TCGA tumors
+#' box plots for differential gene expression of `EIF_list` in TCGA tumors
 #'
 #' @keywords internal
 #'
@@ -911,17 +923,17 @@ initialize_RNAseq_data <- function() {
 #' ))
 #' }
 #'
-.plot_boxgraph_RNAseq_TCGA <- function(EIF.list) {
+.plot_boxgraph_RNAseq_TCGA <- function(EIF_list) {
   .TCGA_GTEX_RNAseq_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
-      all_of(EIF.list),
+      dplyr::all_of(EIF_list),
       "sample.type",
       "primary.disease",
       "primary.site",
       "study"
     ) %>%
-    as_tibble() %>%
-    melt(
+    tibble::as_tibble() %>%
+    reshape2::melt(
       id = c(
         "sample.type",
         "primary.disease",
@@ -930,17 +942,17 @@ initialize_RNAseq_data <- function() {
       ),
       value.name = "RNAseq"
     ) %>%
-    filter(!is.na(.data$primary.site)) %>%
+    dplyr::filter(!is.na(.data$primary.site)) %>%
     # na.omit(.$primary.site) %>%
     # filter(RNAseq != 0) %>%
-    mutate_if(is.character, as.factor)
+    dplyr::mutate_if(is.character, as.factor)
 
   # boxplot to compare relative abundance of genes across tumors
   .RNAseq_all_gene(.TCGA_GTEX_RNAseq_sampletype_subset) %>%
     .RNAseq_grouped_boxplot()
 
   # boxplot to compare RNA-seq of one gene in tumor vs adjacent normal
-  RNAseq.ind.gene.df <- lapply(EIF.list, .RNAseq_ind_gene,
+  RNAseq.ind.gene.df <- lapply(EIF_list, .RNAseq_ind_gene,
     df = .TCGA_GTEX_RNAseq_sampletype_subset
   )
   lapply(RNAseq.ind.gene.df, .RNAseq_boxplot)
@@ -962,6 +974,20 @@ initialize_RNAseq_data <- function() {
 #'  genes in tumors tumors vs adjacent normal tissues across TCGA cancer types,
 #'  and a violin plot to compare RNA ratios in primary, metastatic tumors vs
 #'  adjacent normal tissues from all TCGA cancer types combined.
+#'
+#'
+#' @details This function
+#'
+#' * calculates RNA ratio across individual tumor types from all cancers with
+#'  the function [.RNAratio_calculation()],
+#' * select the ratio data with [.RNAratio_selection()] and make boxplot with
+#'  [.RNAratio_boxplot()].
+#' * compares RNA ratio in primary, metastatic tumors vs adjacent
+#'  normal tissues from all TCGA cancer types combined with the function
+#'  [.RNAratio_tumortype()] and plots with [.violinplot()].
+#'
+#' It should not be used directly, only inside [EIF4F_DEG_analysis()] function.
+#'
 #'
 #' @param gene01
 #' gene name as a string
@@ -992,22 +1018,6 @@ initialize_RNAseq_data <- function() {
 #'
 #' @param gene10
 #' gene name as a string
-#'
-#' @details This function
-#'
-#' * analyzes the ratios of mRNA levels between input genes within
-#' each TCGA sample, in the data frame `TCGA_GTEX_RNAseq_sampletype` prepared
-#' from [initialize_RNAseq_data()].
-#'
-#' * calculates RNA ratio across individual tumor types from all cancers with
-#'  the function [.RNAratio_calculation()], select the ratio data with
-#'  [.RNAratio_selection()] and plots with [.RNAratio_boxplot()].
-#'
-#' * compares RNA ratio in primary, metastatic tumors vs adjacent
-#'  normal tissues from all TCGA cancer types combined with the function
-#'  [.RNAratio_tumortype()] and plots with [.violinplot()].
-#'
-#' It should not be used directly, only inside [EIF4F_DEG_analysis()] function.
 #'
 #' @return
 #'
@@ -1089,17 +1099,20 @@ initialize_RNAseq_data <- function() {
     )
 }
 
-## wrapper function to call all master functions with inputs ===================
 
-#' Perform all CNV related analysis and generate plots
+## Wrapper function to call all composite functions with inputs ================
+
+#' Perform differential gene expression or ratio analysis and generate plots
 #'
 #' @description
 #'
-#' A wrapper function to call all master functions for CNV analysis with inputs
+#' A wrapper function to call all composite functions for differential gene
+#'  expression or ratio analysis with inputs
 #'
 #' @details
 #'
-#' This function run two master functions together, with inputs:
+#' This function run two composite functions together, with inputs:
+#'
 #'  * [.plot_boxgraph_RNAseq_TCGA()]
 #'  * [.plot_boxgraph_RNAratio_TCGA()]
 #'

@@ -5,15 +5,15 @@
 #'
 #' (2) selection of RNA and protein expression data and plotting
 #'
-#' (3) master functions to execute a pipeline of functions to select related
+#' (3) composite functions to execute a pipeline of functions to select related
 #'  expression with supply of EIF4F gene names for correlation analysis and
 #'  plotting.
 #'
 #' (4) wrapper function to call all master functions with inputs
 #'
 #'
-#' ### Prepare RNA proteomics datasets from CCLE and CPTAC LUAD
-## Prepare RNA proteomics datasets from CCLE and CPTAC LUAD ====================
+#' ### Wrapper function for data initialization of RNA and proteomics datasets
+## Wrapper function for data initialization of RNA and proteomics datasets =====
 
 #' @noRd
 ## due to NSE notes in R CMD check
@@ -71,29 +71,29 @@ initialize_proteomics_data <- function() {
     data.table = FALSE
   )
 
-  CPTAC_LUAD_Proteomics <<- read_excel(
+  CPTAC_LUAD_Proteomics <<- readxl::read_excel(
     file.path(data_file_directory, "Protein.xlsx"),
     col_names = FALSE
   ) %>%
     # as.data.frame(.) %>%
-    mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
+    dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
     tibble::column_to_rownames(var = "...1") %>%
     t() %>%
-    as_tibble() %>%
-    mutate_at(vars(-.data$Type, -.data$Sample),
+    tibble::as_tibble() %>%
+    dplyr::mutate_at(dplyr::vars(-.data$Type, -.data$Sample),
               # exclude two columns convert character to number
               ~ suppressWarnings(as.numeric(.)))
 
-  CPTAC_LUAD_RNAseq <<- read_excel(
+  CPTAC_LUAD_RNAseq <<- readxl::read_excel(
     file.path(data_file_directory, "RNA.xlsx"),
     col_names = FALSE
   ) %>%
     # as_tibble(.) %>%
-    mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
+    dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
     tibble::column_to_rownames(var = "...1") %>%
     t() %>%
-    as_tibble() %>%
-    mutate_at(vars(-.data$Type, -.data$Sample),
+    tibble::as_tibble() %>%
+    dplyr::mutate_at(dplyr::vars(-.data$Type, -.data$Sample),
               # exclude two columns convert character to number
               ~ suppressWarnings(as.numeric(.)))
 }
@@ -126,7 +126,7 @@ initialize_proteomics_data <- function() {
 .get_CCLE_RNAseq_subset <- function(EIF) {
   .CCLE_RNAseq_subset <- CCLE_RNAseq %>%
     rename("DepMap_ID" = "V1") %>%
-    dplyr::select("DepMap_ID", starts_with((!!paste(EIF, "(ENSG"))))
+    dplyr::select("DepMap_ID", dplyr::starts_with((!!paste(EIF, "(ENSG"))))
   return(.CCLE_RNAseq_subset)
 }
 
@@ -161,7 +161,7 @@ initialize_proteomics_data <- function() {
   if (nrow(.CCLE_Proteomics_subset) > 1) {
     df <- .CCLE_Proteomics_subset %>%
       dplyr::select(contains("_Peptides")) %>%
-      mutate(sum = rowSums(dplyr::across(tidyselect::vars_select_helpers$where(is.numeric))))
+      dplyr::mutate(sum = rowSums(dplyr::across(tidyselect::vars_select_helpers$where(is.numeric))))
     name <- rownames(df[df$sum == max(df$sum), ]) # for the maximum value
     .CCLE_Proteomics_subset <- .CCLE_Proteomics_subset %>%
       dplyr::filter(row.names(.CCLE_Proteomics_subset) == name)
@@ -173,13 +173,13 @@ initialize_proteomics_data <- function() {
     dplyr::select(contains("TenPx"), -contains("_Peptides")) %>%
     t() %>%
     as.data.frame() %>%
-    rownames_to_column(var = "rn") %>%
-    mutate(
+    tibble::rownames_to_column(var = "rn") %>%
+    dplyr::mutate(
       Celline = sub("\\_.*", "", .data$rn),
       Type = sub(".*_ *(.*?) *_.*", "\\1", .data$rn)
     ) %>%
-    select(-.data$rn) %>%
-    mutate_if(is.character, as.factor) %>%
+    dplyr::select(-.data$rn) %>%
+    dplyr::mutate_if(is.character, as.factor) %>%
     # select(!!paste0(EIF,".pro") := EIF)
     rename(!!paste0(EIF, ".pro") := EIF) # rename with dynamic variables
   return(.CCLE_Proteomics_subset)
@@ -194,22 +194,22 @@ initialize_proteomics_data <- function() {
 #'
 #' @param df dataframe of both RNAseq and proteomics generated inside
 #'
-#' @param x protein or gene name
+#' @param gene_name protein or gene name
 #'
-#' @param y database name. `CCLE` or `LUAD`
+#' @param cohort database name. `CCLE` or `LUAD`
 #'
 #' @importFrom ggpubr ggscatter
 #'
 #' @keywords internal
 #'
-.RNApro_scatterplot <- function(df, x, y) {
+.RNApro_scatterplot <- function(df, gene_name, cohort) {
   p1 <- ggscatter(df,
-    x = paste0(x, ".pro"),
-    y = paste0(x, ".rna"), # color = "Type",
+    x = paste0(gene_name, ".pro"),
+    y = paste0(gene_name, ".rna"), # color = "Type",
     add = "reg.line", # conf.int = TRUE,
     cor.coef = TRUE,
     cor.method = "pearson",
-    title = paste(x, "(", y, ")"),
+    title = paste(gene_name, "(", cohort, ")"),
     xlab = "Protein expresion",
     ylab = "RNA expression"
   ) +
@@ -228,7 +228,7 @@ initialize_proteomics_data <- function() {
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "RNApro"),
-    filename = paste(y, x, "cor", ".pdf"),
+    filename = paste(cohort, gene_name, "cor", ".pdf"),
     plot = p1,
     #width = 3,
     #height = 3,
@@ -238,8 +238,8 @@ initialize_proteomics_data <- function() {
   )
 }
 
-#' ### Master function to perform RNA protein correlation
-## master function to perform RNA protein correlation ==========================
+#' ### Composite function to perform RNA protein correlation
+## Composite function to perform RNA protein correlation ==========================
 
 #' Correlation between CCLE RNAseq and proteomics data
 #'
@@ -275,16 +275,16 @@ initialize_proteomics_data <- function() {
 #'
 .plot_scatter_RNApro_CCLE <- function(EIF) {
   .df <- .get_CCLE_RNAseq_subset(EIF) %>%
-    full_join(CCLE_Anno, by = "DepMap_ID") %>%
-    na.omit() %>%
+    dplyr::full_join(CCLE_Anno, by = "DepMap_ID") %>%
+    stats::na.omit() %>%
     dplyr::select(-.data$DepMap_ID) %>%
-    rename(
+    dplyr::rename(
       "Celline" = "stripped_cell_line_name",
-      !!paste0(EIF, ".rna") := contains(EIF)
+      !!paste0(EIF, ".rna") := tidyselect::contains(EIF)
     ) %>%
-    full_join(.get_CCLE_Proteomics_subset(EIF), by = "Celline") %>%
-    na.omit()
-  .RNApro_scatterplot(df = .df, x = EIF, y = "CCLE")
+    dplyr::full_join(.get_CCLE_Proteomics_subset(EIF), by = "Celline") %>%
+    stats::na.omit()
+  .RNApro_scatterplot(df = .df, gene_name = EIF, cohort = "CCLE")
 }
 
 #' Correlation between LUAD RNAseq and proteomics data
@@ -300,7 +300,6 @@ initialize_proteomics_data <- function() {
 #' * merges the LUAD RNAseq data of EIF4F genes prepared from
 #'  `CPTAC_LUAD_Proteomics` and proteomics data of the EIF4F proteins
 #'  prepared from `CPTAC_LUAD_RNAseq`.
-#'
 #' * uses the combined data to calculate the correlation coefficients between
 #'  protein and RNA levels, and plot the result with the function
 #'  [.RNApro_scatterplot()]
@@ -320,11 +319,11 @@ initialize_proteomics_data <- function() {
 #'
 .plot_scatter_RNApro_LUAD <- function(EIF) {
   .EIF_LUAD_Proteomics <- CPTAC_LUAD_Proteomics %>%
-    dplyr::select(all_of(EIF), "Type", "Sample") %>%
+    dplyr::select(dplyr::all_of(EIF), "Type", "Sample") %>%
     dplyr::filter(.data$Type == "Tumor")
 
   .EIF_LUAD_RNAseq <- CPTAC_LUAD_RNAseq %>%
-    dplyr::select(all_of(EIF), "Type", "Sample") %>%
+    dplyr::select(dplyr::all_of(EIF), "Type", "Sample") %>%
     dplyr::filter(.data$Type == "Tumor")
 
   df <- merge(.EIF_LUAD_Proteomics,
@@ -333,23 +332,23 @@ initialize_proteomics_data <- function() {
     suffixes = c(".pro", ".rna")
   )
 
-  .RNApro_scatterplot(df = df, x = EIF, y = "LUAD")
+  .RNApro_scatterplot(df = df, gene_name = EIF, cohort = "LUAD")
 }
 
-#' ### Wrapper function to call all master functions with inputs
-## wrapper function to call all master functions with inputs ===================
+#' ### Wrapper function to call all composite functions with inputs
+## Wrapper function to call all composite functions with inputs ================
 
 #' Perform PCA and generate plots
 #'
 #' @description
 #'
-#' A wrapper function to call all master functions for RNA and protein
+#' A wrapper function to call all composite functions for RNA and protein
 #'  correlation with inputs.
 #'
 #' @details
 #'
-#' This function run the master functions [.plot_scatter_RNApro_CCLE()] and
-#' [.plot_scatter_RNApro_LUAD()] with EIF4F gene name as inputs.
+#' This function run the composite functions [.plot_scatter_RNApro_CCLE()] and
+#'  [.plot_scatter_RNApro_LUAD()] with EIF4F gene name as inputs.
 #'
 #' @return correlating gene analysis plots
 #'

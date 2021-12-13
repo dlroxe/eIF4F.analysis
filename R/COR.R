@@ -3,12 +3,12 @@
 #'
 #' (1) identify positively or negatively correlating genes of EIF4F
 #'
-#' (2) analyze the correlating genes and plotting
+#' (2) analyze and plot the correlating genes
 #'
-#' (3) master functions to execute a pipeline of functions to select related
-#'  RNAseq data for correlation analyses and plotting.
+#' (3) composite functions to execute a pipeline of functions to select related
+#'  RNASeq data for correlation analyses and plotting.
 #'
-#' (4) wrapper function to call all master functions with inputs
+#' (4) wrapper function that serves as the entry point for this file
 #'
 #' ### Identify correlating genes for EIF4F genes
 ## Identify correlating genes for EIF4F genes ==================================
@@ -24,10 +24,10 @@
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
 #'
-#' @param df the dataframe `.TCGA_GTEX_RNAseq_sampletype_subset` generated
+#' @param df the data frame `.TCGA_GTEX_RNAseq_sampletype_subset` generated
 #'  inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
-#' @param y sample types, either `all.tumor.type` or `c("Normal Tissue")`
+#' @param sample_type sample types, either `all.tumor.type` or `c("Normal Tissue")`
 #' generated inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
 #' @return
@@ -48,16 +48,15 @@
 #' @examples \dontrun{
 #' .EIF_correlation(
 #'   df = .TCGA_GTEX_RNAseq_sampletype_subset,
-#'   y = all.tumor.type
+#'   sample_type = all.tumor.type
 #' )
 #' }
 #'
 #' @keywords internal
 #'
-.EIF_correlation <- function(df, y) {
-  TCGA.GTEX.tumor <- df[
-    df$sample.type %in% y,
-  ] %>% na.omit() # select tumor or healthy samples
+.EIF_correlation <- function(df, sample_type) {
+  TCGA.GTEX.tumor <- df[df$sample.type %in% sample_type,] %>%
+    stats::na.omit() # select tumor or healthy samples
 
   Gene.ID <- names(df) %>%
     purrr::discard(~ .x %in% c(
@@ -76,7 +75,7 @@
       lapply(Gene.ID,
         .correlation_coefficient,
         gene2 = EIF,
-        TCGA.GTEX.tumor = TCGA.GTEX.tumor
+        df = TCGA.GTEX.tumor
       )
     )
     rownames(cor.data) <- cor.data[, 1]
@@ -90,10 +89,10 @@
   EIF4EBP1.cor <- EIF.cor.list("EIF4EBP1")
 
   cor.data <- cbind(
-    setNames(data.frame(EIF4E.cor[, c(3, 4)]), c("EIF4E", "EIF4E.p")),
-    setNames(data.frame(EIF4G1.cor[, c(3, 4)]), c("EIF4G1", "EIF4G1.p")),
-    setNames(data.frame(EIF4A1.cor[, c(3, 4)]), c("EIF4A1", "EIF4A1.p")),
-    setNames(data.frame(EIF4EBP1.cor[, c(3, 4)]), c("EIF4EBP1", "EIF4EBP1.p"))
+    stats::setNames(data.frame(EIF4E.cor[, c(3, 4)]), c("EIF4E", "EIF4E.p")),
+    stats::setNames(data.frame(EIF4G1.cor[, c(3, 4)]), c("EIF4G1", "EIF4G1.p")),
+    stats::setNames(data.frame(EIF4A1.cor[, c(3, 4)]), c("EIF4A1", "EIF4A1.p")),
+    stats::setNames(data.frame(EIF4EBP1.cor[, c(3, 4)]), c("EIF4EBP1", "EIF4EBP1.p"))
   )
 
 
@@ -122,9 +121,9 @@
   return(list(cor.data, CORs.counts, c4.posCOR, c4.negCOR))
 }
 
-.correlation_coefficient <- function(gene1, gene2, TCGA.GTEX.tumor) {
-  result <- cor.test(TCGA.GTEX.tumor[[gene1]],
-                     TCGA.GTEX.tumor[[gene2]],
+.correlation_coefficient <- function(gene1, gene2, df) {
+  result <- cor.test(df[[gene1]],
+                     df[[gene2]],
                      method = "pearson"
   )
   res <- data.frame(gene1,
@@ -178,9 +177,9 @@
 #'
 #' @param df correlation data
 #'
-#' @param x input argument of [.plot_Corr_RNAseq_TCGA_GTEX()]
+#' @param tissue_type input argument of [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
-#' @param z tumor or normal for the title of Venn diagram
+#' @param sample_type tumor or normal for the title of Venn diagram
 #'
 #' @param CORs posCOR or negCORs for the title of Venn diagram
 #'
@@ -196,7 +195,7 @@
 #'
 #' @keywords internal
 #'
-.Cors_vennplot <- function(df, x, z, CORs) {
+.Cors_vennplot <- function(df, tissue_type, sample_type, CORs) {
   b <- limma::vennCounts(df)
   colnames(b) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1", "Counts")
   limma::vennDiagram(b)
@@ -224,7 +223,7 @@
   )
   p2 <- plot(pos.Venn2,
     # key = TRUE,
-    main = paste(x, z, CORs),
+    main = paste(tissue_type, sample_type, CORs),
     # main = paste(z, Cor),
     lwd = 0,
     fill = c(
@@ -243,7 +242,7 @@
   print(p2)
   ggplot2::ggsave(
     path = file.path(output_directory, "CORs"),
-    filename = paste("all", x, z, CORs, "Venn.pdf"),
+    filename = paste("all", tissue_type, sample_type, CORs, "Venn.pdf"),
     plot = p2,
     width = 6,
     height = 6,
@@ -310,7 +309,7 @@
 #'
 #' @param df correlation data
 #'
-#' @param x input argument of [.plot_Corr_RNAseq_TCGA_GTEX()]
+#' @param tissue_type input argument of [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
 #' @param CORs posCOR or negCORs for the title of Venn diagram
 #'
@@ -320,14 +319,14 @@
 #'
 #' @examples \dontrun{
 #' .Cors_bargraph(
-#'   df = EIF.cor, x = x,
+#'   df = EIF.cor, tissue_type = tissue_type,
 #'   CORs = "posCORs", coord_flip.ylim = 14000
 #' )
 #' }
 #'
 #' @keywords internal
 #'
-.Cors_bargraph <- function(df, x, CORs, coord_flip.ylim) {
+.Cors_bargraph <- function(df, tissue_type, CORs, coord_flip.ylim) {
   p1 <- ggplot(
     data = df,
     aes_string(
@@ -349,7 +348,7 @@
       "#CC79A7", "#0072B2", "#E69F00",
       "#009E73", "#D55E00"
     )) + # for color-blind palettes
-    labs(y = paste("number of ", x, CORs)) +
+    labs(y = paste("number of ", tissue_type, CORs)) +
     coord_flip(ylim = c(0, coord_flip.ylim)) +
     # Flip ordering of legend without altering ordering in plot
     guides(fill = guide_legend(reverse = TRUE)) +
@@ -373,7 +372,7 @@
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "CORs"),
-    filename = paste0("all ", x, CORs, ".pdf"),
+    filename = paste0("all ", tissue_type, CORs, ".pdf"),
     plot = p1,
     width = 8,
     height = 8,
@@ -452,11 +451,11 @@
   return(DF)
 }
 
-.Cors_heatmap <- function(df, x) {
+.Cors_heatmap <- function(df, tissue_type) {
   ## Creating heatmap with three clusters (See the ComplexHeatmap documentation
   ## for more options)
   ht1 <- ComplexHeatmap::Heatmap(df,
-    name = paste("Correlation Coefficient Heatmap", x),
+    name = paste("Correlation Coefficient Heatmap", tissue_type),
     heatmap_legend_param = list(
       labels_gp = gpar(font = 15),
       legend_width = unit(6, "cm"),
@@ -507,7 +506,7 @@
 
   pdf(file.path(
     path = file.path(output_directory, "CORs"),
-    filename = paste(x, " tumors heatmap.pdf")
+    filename = paste(tissue_type, " tumors heatmap.pdf")
   ),
   width = 8,
   height = 10,
@@ -544,7 +543,7 @@
   return(cluster.data)
 }
 
-.pathway_dotplot <- function(df, p, x) {
+.pathway_dotplot <- function(df, p, tissue_type) {
   p1 <- clusterProfiler::dotplot(df,
     title = paste("The Most Enriched", p, "Pathways"),
     showCategory = 8,
@@ -567,7 +566,7 @@
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "CORs"),
-    filename = paste(x, " tumors", p, ".pdf"),
+    filename = paste(tissue_type, " tumors", p, ".pdf"),
     plot = p1,
     width = 10,
     height = 10,
@@ -614,12 +613,13 @@
 #' .plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")
 #' }
 #'
-.plot_Corr_RNAseq_TCGA_GTEX <- function(x) {
+.plot_Corr_RNAseq_TCGA_GTEX <- function(tissue_type) {
   .TCGA_GTEX_RNAseq_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
-    dplyr::filter(if (x != "All") .data$primary.site == x else TRUE) %>%
-    na.omit() %>%
+    dplyr::filter(if (tissue_type != "All") .data$primary.site == tissue_type
+                  else TRUE) %>%
+    stats::na.omit() %>%
     # mutate_if(is.character, as.factor) %>%
-    mutate_at(c(
+    dplyr::mutate_at(c(
       "sample.type",
       "primary.disease",
       "primary.site",
@@ -628,10 +628,7 @@
 
   all.tumor.type <- .TCGA_GTEX_RNAseq_sampletype_subset %>%
     dplyr::select(.data$sample.type) %>%
-    mutate_if(is.character, as.factor) %>%
-    # {
-    #  levels(.$sample.type)
-    # } %>%
+    dplyr::mutate_if(is.character, as.factor) %>%
     purrr::map(levels) %>%
     purrr::pluck("sample.type") %>%
     purrr::discard(~ .x %in% c("Cell Line",
@@ -642,18 +639,30 @@
 
   EIF.cor.tumor <- .EIF_correlation(
     df = .TCGA_GTEX_RNAseq_sampletype_subset,
-    y = all.tumor.type
+    sample_type = all.tumor.type
   )
-  .Cors_vennplot(df = EIF.cor.tumor[[3]], x = x, z = "tumor", CORs = "posCOR")
-  .Cors_vennplot(df = EIF.cor.tumor[[4]], x = x, z = "tumor", CORs = "negCOR")
+  .Cors_vennplot(df = EIF.cor.tumor[[3]],
+                 tissue_type = tissue_type,
+                 sample_type = "tumor",
+                 CORs = "posCOR")
+  .Cors_vennplot(df = EIF.cor.tumor[[4]],
+                 tissue_type = tissue_type,
+                 sample_type = "tumor",
+                 CORs = "negCOR")
 
 
   EIF.cor.normal <- .EIF_correlation(
     df = .TCGA_GTEX_RNAseq_sampletype_subset,
-    y = c("Normal Tissue")
+    sample_type = c("Normal Tissue")
   )
-  .Cors_vennplot(df = EIF.cor.normal[[3]], x = x, z = "normal", CORs = "posCOR")
-  .Cors_vennplot(df = EIF.cor.normal[[4]], x = x, z = "normal", CORs = "negCOR")
+  .Cors_vennplot(df = EIF.cor.normal[[3]],
+                 tissue_type = tissue_type,
+                 sample_type = "normal",
+                 CORs = "posCOR")
+  .Cors_vennplot(df = EIF.cor.normal[[4]],
+                 tissue_type = tissue_type,
+                 sample_type = "normal",
+                 CORs = "negCOR")
 
 
   EIF.cor <- .count_CORs_tumor_normal(
@@ -661,12 +670,14 @@
     df2 = EIF.cor.normal[[2]]
   )
   .Cors_bargraph(
-    df = EIF.cor, x = x,
+    df = EIF.cor,
+    tissue_type = tissue_type,
     CORs = "posCORs",
     coord_flip.ylim = 14000
   )
   .Cors_bargraph(
-    df = EIF.cor, x = x,
+    df = EIF.cor,
+    tissue_type = tissue_type,
     CORs = "negCORs",
     coord_flip.ylim = 14000
   )
@@ -676,7 +687,7 @@
     df1 = EIF.cor.tumor[[1]],
     df2 = EIF.cor.normal[[1]]
   )
-  ht1 <- .Cors_heatmap(df = DF, x = x)
+  ht1 <- .Cors_heatmap(df = DF, tissue_type = tissue_type)
 
 
   cluster.data <- .get_cluster_pathway_data(df1 = DF, df2 = ht1)
@@ -691,30 +702,29 @@
     fun = "enrichKEGG"
   )
 
-
   ck.REACTOME <- clusterProfiler::compareCluster(
     geneClusters = cluster.data,
     fun = "enrichPathway",
   )
 
 
-  .pathway_dotplot(df = ck.GO, p = "GO", x = x)
-  .pathway_dotplot(df = ck.KEGG, p = "KEGG", x = x)
-  .pathway_dotplot(df = ck.REACTOME, p = "REACTOME", x = x)
+  .pathway_dotplot(df = ck.GO, p = "GO", tissue_type = tissue_type)
+  .pathway_dotplot(df = ck.KEGG, p = "KEGG", tissue_type = tissue_type)
+  .pathway_dotplot(df = ck.REACTOME, p = "REACTOME", tissue_type = tissue_type)
 }
 
-#' ### Wrapper function to call all master functions with inputs
-## Wrapper function to call all master functions with inputs ===================
+#' ### Wrapper function to call all composite functions with inputs
+## Wrapper function to call all composite functions with inputs ================
 
 #' Perform PCA and generate plots
 #'
 #' @description
 #'
-#' A wrapper function to call all master functions for PCA with inputs
+#' A wrapper function to call all composite functions for PCA with inputs
 #'
 #' @details
 #'
-#' This function run the master functions  [.plot_Corr_RNAseq_TCGA_GTEX()]
+#' This function run the composite functions  [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  with two inputs.
 #'
 #'  * "All" for all cancer types of TCGA and all healthy tissues types of GTEx.
@@ -731,6 +741,6 @@
 #' }
 #'
 EIF4F_Corrgene_analysis <- function() {
-  .plot_Corr_RNAseq_TCGA_GTEX(x = "All")
-  .plot_Corr_RNAseq_TCGA_GTEX(x = "Lung")
+  .plot_Corr_RNAseq_TCGA_GTEX(tissue_type = "All")
+  .plot_Corr_RNAseq_TCGA_GTEX(tissue_type = "Lung")
 }
