@@ -68,30 +68,15 @@
       "study"
     ))
 
-  correlation.coefficient <- function(x, y) {
-    result <- cor.test(TCGA.GTEX.tumor[[x]],
-      TCGA.GTEX.tumor[[y]],
-      method = "pearson"
-    )
-    res <- data.frame(x,
-      y,
-      result[c(
-        "estimate",
-        "p.value",
-        "statistic",
-        "method"
-      )],
-      stringsAsFactors = FALSE
-    )
-  }
   # find all genes positively correlate with EIF4F expression
   # lapply function gives a large list, need to convert it to a dataframe
   EIF.cor.list <- function(EIF) {
     cor.data <- do.call(
       rbind.data.frame,
       lapply(Gene.ID,
-        correlation.coefficient,
-        y = EIF
+        .correlation_coefficient,
+        gene2 = EIF,
+        TCGA.GTEX.tumor = TCGA.GTEX.tumor
       )
     )
     rownames(cor.data) <- cor.data[, 1]
@@ -99,12 +84,10 @@
     return(cor.data)
   }
 
-
   EIF4E.cor <- EIF.cor.list("EIF4E")
   EIF4G1.cor <- EIF.cor.list("EIF4G1")
   EIF4A1.cor <- EIF.cor.list("EIF4A1")
   EIF4EBP1.cor <- EIF.cor.list("EIF4EBP1")
-
 
   cor.data <- cbind(
     setNames(data.frame(EIF4E.cor[, c(3, 4)]), c("EIF4E", "EIF4E.p")),
@@ -132,42 +115,53 @@
   # df <- as.data.frame(unclass(summary(c4)))
   # filter_at(vars(starts_with("Sepal"
 
+  CORs.counts <- .count_CORs(c4.posCOR, c4.negCOR)
 
-  count.CORs <- function() {
-    c4 <- c4.posCOR
-    colnames(c4) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1")
-    df <- as.data.frame(summary(c4))
-    # df <- as.data.frame(unclass(summary(c4)))
-    df1 <- df[df$Freq %like% "TRUE", ]
-    df1$Var1 <- NULL
-    df1$Var2 <- gsub(" ", "", df1$Var2)
-    row.names(df1) <- df1$Var2
-    df1$Var2 <- NULL
-    df1$Freq <- gsub("TRUE :", "", df1$Freq)
-    df1$Freq <- as.numeric(df1$Freq)
-    colnames(df1) <- "posCORs"
-
-    c5 <- c4.negCOR
-    colnames(c5) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1")
-    dt <- as.data.frame(summary(c5))
-    dt1 <- dt[dt$Freq %like% "TRUE", ]
-    dt1$Var1 <- NULL
-    dt1$Var2 <- gsub(" ", "", dt1$Var2)
-    row.names(dt1) <- dt1$Var2
-    dt1$Var2 <- NULL
-    dt1$Freq <- gsub("TRUE :", "", dt1$Freq)
-    dt1$Freq <- as.numeric(dt1$Freq)
-    colnames(dt1) <- "negCORs"
-    df2 <- cbind(df1, dt1)
-    return(df2)
-  }
-
-  CORs.counts <- count.CORs()
   ## four output values: cor.data for the heatmap function and CORs.counts for
   ## bargraph function, c4.posCOR, c4.negCOR for Venn plots
-  output <- list(cor.data, CORs.counts, c4.posCOR, c4.negCOR)
-  return(output)
+  return(list(cor.data, CORs.counts, c4.posCOR, c4.negCOR))
 }
+
+.correlation_coefficient <- function(gene1, gene2, TCGA.GTEX.tumor) {
+  result <- cor.test(TCGA.GTEX.tumor[[gene1]],
+                     TCGA.GTEX.tumor[[gene2]],
+                     method = "pearson"
+  )
+  res <- data.frame(gene1,
+                    gene2,
+                    result[c("estimate", "p.value", "statistic", "method")],
+                    stringsAsFactors = FALSE)
+}
+
+.count_CORs <- function(c4.posCOR, c4.negCOR) {
+  c4 <- c4.posCOR
+  colnames(c4) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1")
+  df <- as.data.frame(summary(c4))
+  # df <- as.data.frame(unclass(summary(c4)))
+  df1 <- df[df$Freq %like% "TRUE", ]
+  df1$Var1 <- NULL
+  df1$Var2 <- gsub(" ", "", df1$Var2)
+  row.names(df1) <- df1$Var2
+  df1$Var2 <- NULL
+  df1$Freq <- gsub("TRUE :", "", df1$Freq)
+  df1$Freq <- as.numeric(df1$Freq)
+  colnames(df1) <- "posCORs"
+
+  c5 <- c4.negCOR
+  colnames(c5) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1")
+  dt <- as.data.frame(summary(c5))
+  dt1 <- dt[dt$Freq %like% "TRUE", ]
+  dt1$Var1 <- NULL
+  dt1$Var2 <- gsub(" ", "", dt1$Var2)
+  row.names(dt1) <- dt1$Var2
+  dt1$Var2 <- NULL
+  dt1$Freq <- gsub("TRUE :", "", dt1$Freq)
+  dt1$Freq <- as.numeric(dt1$Freq)
+  colnames(dt1) <- "negCORs"
+  df2 <- cbind(df1, dt1)
+  return(df2)
+}
+
 
 #' ### Correlation analysis and plotting
 ## Correlation analysis and plotting ===========================================
