@@ -124,10 +124,9 @@ initialize_proteomics_data <- function() {
 #' @keywords internal
 #'
 .get_CCLE_RNAseq_subset <- function(EIF) {
-  .CCLE_RNAseq_subset <- CCLE_RNAseq %>%
+  return(CCLE_RNAseq %>%
     rename("DepMap_ID" = "V1") %>%
-    dplyr::select("DepMap_ID", dplyr::starts_with((!!paste(EIF, "(ENSG"))))
-  return(.CCLE_RNAseq_subset)
+    dplyr::select("DepMap_ID", dplyr::starts_with((!!paste(EIF, "(ENSG")))))
 }
 
 #' Select subset of CCLE proteomics data
@@ -168,6 +167,7 @@ initialize_proteomics_data <- function() {
   } else {
     TRUE
   }
+
   .CCLE_Proteomics_subset <- .CCLE_Proteomics_subset %>%
     tibble::column_to_rownames(var = "Gene_Symbol") %>%
     dplyr::select(contains("TenPx"), -contains("_Peptides")) %>%
@@ -182,6 +182,7 @@ initialize_proteomics_data <- function() {
     dplyr::mutate_if(is.character, as.factor) %>%
     # select(!!paste0(EIF,".pro") := EIF)
     rename(!!paste0(EIF, ".pro") := EIF) # rename with dynamic variables
+
   return(.CCLE_Proteomics_subset)
 }
 
@@ -284,6 +285,7 @@ initialize_proteomics_data <- function() {
     ) %>%
     dplyr::full_join(.get_CCLE_Proteomics_subset(EIF), by = "Celline") %>%
     stats::na.omit()
+
   .RNApro_scatterplot(df = .df, gene_name = EIF, cohort = "CCLE")
 }
 

@@ -48,8 +48,8 @@
                   else TRUE) %>%
     droplevels()
   df2 <- df1 %>% dplyr::select_if(is.numeric)
-  output <- list(df2, df1)
-  return(output)
+
+  return(list(df2, df1))
 }
 
 
@@ -84,6 +84,7 @@
     ncp = number_of_dimension,
     graph = FALSE
   )
+
   return(res.pca)
 }
 

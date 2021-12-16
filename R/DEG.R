@@ -187,9 +187,9 @@ initialize_RNAseq_data <- function() {
                                                   .data$mean_RNAseq)) %>%
     dplyr::pull(.data$variable) %>%
     levels()
-  output <- df %>%
-    dplyr::mutate(variable = factor(.data$variable, levels = rev(order)))
-  return(output)
+
+  return(df %>%
+    dplyr::mutate(variable = factor(.data$variable, levels = rev(order))))
 }
 
 #' Grouped box plots of RNA expression across tumors
@@ -306,8 +306,8 @@ initialize_RNAseq_data <- function() {
     )) %>%
     dplyr::filter(.data$variable == gene) %>%
     dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
-  output <- list(df, gene)
-  return(output)
+
+  return(list(df, gene))
 }
 
 #' Box plots of differential gene expression across tumors
@@ -420,15 +420,14 @@ initialize_RNAseq_data <- function() {
 #' @keywords internal
 #'
 .RNAseq_tumortype <- function(df) {
-  df1 <- df %>%
+  return(df %>%
     dplyr::filter(.data$study == "TCGA") %>%
     dplyr::mutate_if(is.character, as.factor) %>%
     dplyr::filter(.data$sample.type %in% c(
       "Metastatic",
       "Primary Tumor",
       "Solid Tissue Normal"
-    ))
-  return(df1)
+    )))
 }
 
 #' Violin plots of differential gene expression/ratio in primary,
@@ -686,6 +685,7 @@ initialize_RNAseq_data <- function() {
     ) %>%
     dplyr::mutate_if(is.character, as.factor) %>%
     stats::na.omit()
+
   return(.RNAratio_data)
 }
 
@@ -733,6 +733,7 @@ initialize_RNAseq_data <- function() {
     ) %>%
     dplyr::mutate_if(is.character, as.factor) %>%
     dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
+
   return(.RNAratio_data)
 }
 
@@ -867,6 +868,7 @@ initialize_RNAseq_data <- function() {
     ) %>%
     dplyr::mutate_if(is.character, as.factor) %>%
     dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
+
   return(.RNAratio_data)
 }
 

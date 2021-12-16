@@ -144,6 +144,7 @@ initialize_survival_data <- function() {
   # get row and colnames in order
   colnames(.TCGA_RNAseq_transpose) <- rownames(.TCGA_RNAseq)
   .TCGA_RNAseq_transpose$rn <- colnames(.TCGA_RNAseq)
+
   return(.TCGA_RNAseq_transpose)
 }
 
@@ -676,6 +677,7 @@ initialize_survival_data <- function() {
     # na.omit(.) %>%
     as.data.frame()
 
+  # perform Cox-PH univariable analysis and plot the results
   univariable.result <- .univariable_analysis(
     df = df1,
     covariate_names = EIF_list
@@ -706,7 +708,7 @@ initialize_survival_data <- function() {
     }
   )
 
-
+  # perform Cox-PH multivariable analysis and plot the results
   multivariable.result <- .multivariable_analysis(
     df = df1,
     covariate_names = EIF_list

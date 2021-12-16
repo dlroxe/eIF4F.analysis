@@ -55,7 +55,7 @@
 #' @keywords internal
 #'
 .EIF_correlation <- function(df, sample_type) {
-  TCGA_GTEX_RNAseq_subset <- df[df$sample.type %in% sample_type,] %>%
+  TCGA_GTEX_RNAseq_subset <- df[df$sample.type %in% sample_type, ] %>%
     stats::na.omit() # select tumor or healthy samples
   # provide a list of all cellular genes for the correlation analysis
   Gene_ID <- names(df) %>%
@@ -91,11 +91,13 @@
     stats::setNames(data.frame(EIF4E.cor[, c(3, 4)]), c("EIF4E", "EIF4E.p")),
     stats::setNames(data.frame(EIF4G1.cor[, c(3, 4)]), c("EIF4G1", "EIF4G1.p")),
     stats::setNames(data.frame(EIF4A1.cor[, c(3, 4)]), c("EIF4A1", "EIF4A1.p")),
-    stats::setNames(data.frame(EIF4EBP1.cor[, c(3, 4)]), c("EIF4EBP1",
-                                                           "EIF4EBP1.p"))
+    stats::setNames(data.frame(EIF4EBP1.cor[, c(3, 4)]), c(
+      "EIF4EBP1",
+      "EIF4EBP1.p"
+    ))
   )
 
- # identify posCORs for each EIF4F gene
+  # identify posCORs for each EIF4F gene
   posCOR_EIF4F <- cbind(
     EIF4E.cor$estimate > 0.3 & EIF4E.cor$p.value <= 0.05,
     EIF4G1.cor$estimate > 0.3 & EIF4G1.cor$p.value <= 0.05,
@@ -113,8 +115,10 @@
   ) %>%
     `colnames<-`(c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1"))
 
-  CORs_summary_tbl <- cbind(.summarize_counts(posCOR_EIF4F, "posCORs"),
-                            .summarize_counts(negCOR_EIF4F, "negCORs"))
+  CORs_summary_tbl <- cbind(
+    .summarize_counts(posCOR_EIF4F, "posCORs"),
+    .summarize_counts(negCOR_EIF4F, "negCORs")
+  )
 
   # CORs.counts <- .count_CORs(c4.posCOR, c4.negCOR)
 
@@ -150,12 +154,11 @@
 .correlation_coefficient <- function(gene1, gene2, df) {
   result <- stats::cor.test(df[[gene1]], df[[gene2]], method = "pearson")
 
-  res <- data.frame(gene1,
-                    gene2,
-                    result[c("estimate", "p.value", "statistic", "method")],
-                    stringsAsFactors = FALSE)
-
-  return(res)
+  return(data.frame(gene1,
+    gene2,
+    result[c("estimate", "p.value", "statistic", "method")],
+    stringsAsFactors = FALSE
+  ))
 }
 
 
@@ -180,49 +183,17 @@
 #'
 #' @keywords internal
 #'
-.summarize_counts <- function(identified_COR, COR_type){
-  COR_count <- as.data.frame(identified_COR) %>%
-    lapply(table) %>%
-    dplyr::bind_rows( .id = "column_label") %>%
-    as.data.frame() %>%
-    tibble::column_to_rownames(var = "column_label") %>%
-    dplyr::select("TRUE") %>%
-    dplyr::rename( !!COR_type := "TRUE")
-
-  return(COR_count)
+.summarize_counts <- function(identified_COR, COR_type) {
+  return(
+    as.data.frame(identified_COR) %>%
+      lapply(table) %>%
+      dplyr::bind_rows(.id = "column_label") %>%
+      as.data.frame() %>%
+      tibble::column_to_rownames(var = "column_label") %>%
+      dplyr::select("TRUE") %>%
+      dplyr::rename(!!COR_type := "TRUE")
+  )
 }
-
-
-
-
-#.count_CORs <- function(c4.posCOR, c4.negCOR) {
-#  c4 <- c4.posCOR
-#  colnames(c4) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1")
-#  df <- as.data.frame(summary(c4))
-#  # df <- as.data.frame(unclass(summary(c4)))
-#  df1 <- df[df$Freq %like% "TRUE", ]
-#  df1$Var1 <- NULL
-#  df1$Var2 <- gsub(" ", "", df1$Var2)
-#  row.names(df1) <- df1$Var2
-#  df1$Var2 <- NULL
-#  df1$Freq <- gsub("TRUE :", "", df1$Freq)
-#  df1$Freq <- as.numeric(df1$Freq)
-#  colnames(df1) <- "posCORs"
-
-#  c5 <- c4.negCOR
-#  colnames(c5) <- c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1")
-#  dt <- as.data.frame(summary(c5))
-#  dt1 <- dt[dt$Freq %like% "TRUE", ]
-#  dt1$Var1 <- NULL
-#  dt1$Var2 <- gsub(" ", "", dt1$Var2)
-#  row.names(dt1) <- dt1$Var2
-#  dt1$Var2 <- NULL
-#  dt1$Freq <- gsub("TRUE :", "", dt1$Freq)
-#  dt1$Freq <- as.numeric(dt1$Freq)
-#  colnames(dt1) <- "negCORs"
-#  df2 <- cbind(df1, dt1)
-#  return(df2)
-#}
 
 
 #' ### Correlation analysis and plotting
@@ -342,7 +313,7 @@
 #'
 #' @keywords internal
 #'
-.combine_CORs_summary <- function(COR_tbl1, sample_type1, COR_tbl2,sample_type2) {
+.combine_CORs_summary <- function(COR_tbl1, sample_type1, COR_tbl2, sample_type2) {
   EIF.cor.counts.tumor <- COR_tbl1 %>%
     tibble::add_column(label = sample_type1) %>%
     tibble::rownames_to_column(var = "gene")
@@ -351,19 +322,20 @@
     tibble::add_column(label = sample_type2) %>%
     tibble::rownames_to_column(var = "gene")
 
-  EIF.cor <- rbind(EIF.cor.counts.tumor,
-                   EIF.cor.counts.normal,
-                   make.row.names = F
-                   ) %>%
+  return(rbind(EIF.cor.counts.tumor,
+    EIF.cor.counts.normal,
+    make.row.names = F
+  ) %>%
     dplyr::mutate(label = factor(.data$label,
       levels = c("tumor", "normal"),
       labels = c("Tumors", "Healthy tissues")
     )) %>%
     dplyr::mutate(gene = factor(.data$gene,
-      levels = c("EIF4EBP1", "EIF4A1", "EIF4G1", "EIF4E")
-    ))
-
-  return(EIF.cor)
+      levels = c(
+        "EIF4EBP1", "EIF4A1",
+        "EIF4G1", "EIF4E"
+      )
+    )))
 }
 
 #' Plot bargraph for the numbers of correlating genes
@@ -516,7 +488,7 @@
       cor.data$EIF4EBP1.normal > 0.3 & cor.data$EIF4EBP1.p.normal <= 0.05 |
       cor.data$EIF4EBP1.normal < -0.3 & cor.data$EIF4EBP1.p.normal <= 0.05,
   ]))
-  #DF <- DF[, c(1, 3, 5, 7, 9, 11, 13, 15)]
+  # DF <- DF[, c(1, 3, 5, 7, 9, 11, 13, 15)]
   return(DF[, c(1, 3, 5, 7, 9, 11, 13, 15)])
 }
 
@@ -538,7 +510,8 @@
 #'
 #' @return
 #'
-#' a heatmap plot and dataframe with gene names of clustering
+#' two plots and write one PDF file as side effects, and return a data
+#'  structure that includes clustering analysis results.
 #'
 #' @importFrom ComplexHeatmap Heatmap HeatmapAnnotation anno_text draw
 #' @importFrom grid gpar unit
@@ -653,13 +626,12 @@
 #'
 .get_cluster_genes <- function(df1, df2) {
   cluster.geneID.list <- function(cluster_label) {
-    #c1 <- t(t(row.names(df1[ComplexHeatmap::row_order(df2)[[x]], ])))
-    c1 <- row.names(df1[ComplexHeatmap::row_order(df2)[[cluster_label]], ])
-    c1 <- as.data.frame(c1)
-    #c1$V1 <- as.character(c1$V1)
+    c1 <- row.names(df1[ComplexHeatmap::row_order(df2)[[cluster_label]], ]) %>%
+      as.data.frame(stringsAsFactors = FALSE) %>%
+      stats::setNames("gene")
+    # c1$V1 <- as.character(c1$V1)
     c1$entrez <- AnnotationDbi::mapIds(org.Hs.eg.db,
-      #keys = c1$V1,
-      keys = c1$c1,
+      keys = c1$gene,
       column = "ENTREZID",
       keytype = "SYMBOL",
       multiVals = "first"
@@ -670,9 +642,10 @@
   }
   cluster.num <- as.character(c(1:3))
   names(cluster.num) <- paste("cluster", 1:3)
-  #cluster.data <- lapply(cluster.num, cluster.geneID.list)
+  # cluster.data <- lapply(cluster.num, cluster.geneID.list)
   return(lapply(cluster.num, cluster.geneID.list))
 }
+
 
 #' Plot the enriched pathways from gene lists
 #'
@@ -776,8 +749,11 @@
 #'
 .plot_Corr_RNAseq_TCGA_GTEX <- function(tissue_type) {
   .TCGA_GTEX_RNAseq_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
-    dplyr::filter(if (tissue_type == "All") TRUE
-                  else .data$primary.site == tissue_type) %>%
+    dplyr::filter(if (tissue_type == "All") {
+      TRUE
+    } else {
+      .data$primary.site == tissue_type
+    }) %>%
     stats::na.omit() %>%
     # mutate_if(is.character, as.factor) %>%
     dplyr::mutate_at(c(
@@ -792,38 +768,50 @@
     dplyr::mutate_if(is.character, as.factor) %>%
     purrr::map(levels) %>%
     purrr::pluck("sample.type") %>%
-    purrr::discard(~ .x %in% c("Cell Line",
-                               "Normal Tissue",
-                               "Solid Tissue Normal"))
+    purrr::discard(~ .x %in% c(
+      "Cell Line",
+      "Normal Tissue",
+      "Solid Tissue Normal"
+    ))
 
+  # identify CORs for EIF4F genes from normal tissues
   EIF.cor.tumor <- .EIF_correlation(
     df = .TCGA_GTEX_RNAseq_sampletype_subset,
     sample_type = all.tumor.type
   )
-  .CORs_vennplot(df = EIF.cor.tumor[[3]],
-                 tissue_type = tissue_type,
-                 sample_type = "tumor",
-                 CORs_type = "posCOR")
-  .CORs_vennplot(df = EIF.cor.tumor[[4]],
-                 tissue_type = tissue_type,
-                 sample_type = "tumor",
-                 CORs_type = "negCOR")
+  .CORs_vennplot(
+    df = EIF.cor.tumor[[3]],
+    tissue_type = tissue_type,
+    sample_type = "tumor",
+    CORs_type = "posCOR"
+  )
+  .CORs_vennplot(
+    df = EIF.cor.tumor[[4]],
+    tissue_type = tissue_type,
+    sample_type = "tumor",
+    CORs_type = "negCOR"
+  )
 
-
+  # identify CORs for EIF4F genes from normal tissues
   EIF.cor.normal <- .EIF_correlation(
     df = .TCGA_GTEX_RNAseq_sampletype_subset,
     sample_type = c("Normal Tissue")
   )
-  .CORs_vennplot(df = EIF.cor.normal[[3]],
-                 tissue_type = tissue_type,
-                 sample_type = "normal",
-                 CORs_type = "posCOR")
-  .CORs_vennplot(df = EIF.cor.normal[[4]],
-                 tissue_type = tissue_type,
-                 sample_type = "normal",
-                 CORs_type = "negCOR")
+  .CORs_vennplot(
+    df = EIF.cor.normal[[3]],
+    tissue_type = tissue_type,
+    sample_type = "normal",
+    CORs_type = "posCOR"
+  )
+  .CORs_vennplot(
+    df = EIF.cor.normal[[4]],
+    tissue_type = tissue_type,
+    sample_type = "normal",
+    CORs_type = "negCOR"
+  )
 
-
+  # combine summary of CORs counts for EIF4F genes in tumors and normal tissues
+  # for bargraph comparision
   EIF.cor <- .combine_CORs_summary(
     COR_tbl1 = EIF.cor.tumor[[2]], sample_type1 = "tumor",
     COR_tbl2 = EIF.cor.normal[[2]], sample_type2 = "normal"
@@ -841,15 +829,17 @@
     coord_flip.ylim = 14000
   )
 
-
+  # combine CORs data with coefficiency value for EIF4F genes in tumors and
+  # normal tissues for clustering and heatmap analysis
   DF <- .combine_CORs_list(
     df1 = EIF.cor.tumor[[1]],
     df2 = EIF.cor.normal[[1]]
   )
   ht1 <- .CORs_coeff_heatmap(df = DF, tissue_type = tissue_type)
 
-
+  # retrieve the gene list from clusters and perform pathway enrichment analysis
   cluster.data <- .get_cluster_genes(df1 = DF, df2 = ht1)
+
   ck.GO <- clusterProfiler::compareCluster(
     geneClusters = cluster.data,
     fun = "enrichGO",
@@ -866,12 +856,12 @@
     fun = "enrichPathway",
   )
 
-
   .pathway_dotplot(df = ck.GO, pathway = "GO", tissue_type = tissue_type)
   .pathway_dotplot(df = ck.KEGG, pathway = "KEGG", tissue_type = tissue_type)
-  .pathway_dotplot(df = ck.REACTOME, pathway = "REACTOME",
-                   tissue_type = tissue_type)
-
+  .pathway_dotplot(
+    df = ck.REACTOME, pathway = "REACTOME",
+    tissue_type = tissue_type
+  )
 }
 
 #' ### Wrapper function to call all composite functions with inputs

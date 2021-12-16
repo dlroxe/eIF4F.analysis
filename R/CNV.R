@@ -152,6 +152,7 @@ initialize_cnv_data <- function() {
   # get row and column names in order
   rownames(.TCGA_pancancer_transpose) <- colnames(.TCGA_pancancer)
   colnames(.TCGA_pancancer_transpose) <- rownames(.TCGA_pancancer)
+
   return(.TCGA_pancancer_transpose)
 }
 
@@ -200,6 +201,7 @@ initialize_cnv_data <- function() {
   # get row and colnames in order
   rownames(.TCGA_pancancer_transpose) <- colnames(.TCGA_pancancer)
   colnames(.TCGA_pancancer_transpose) <- rownames(.TCGA_pancancer)
+
   return(.TCGA_pancancer_transpose)
 }
 
@@ -251,6 +253,7 @@ initialize_cnv_data <- function() {
   # get row and colnames in order
   rownames(.TCGA_pancancer_transpose) <- colnames(.TCGA_pancancer)
   colnames(.TCGA_pancancer_transpose) <- rownames(.TCGA_pancancer)
+
   return(.TCGA_pancancer_transpose)
 }
 
@@ -462,8 +465,7 @@ initialize_cnv_data <- function() {
                                levels = c("-2", "-1", "0", "1", "2"))) %>%
     dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
 
-  output <- list(.CNV_sum, gene)
-  return(output)
+  return(list(.CNV_sum, gene))
 }
 
 #' Stacked bar plots of the CNV status
@@ -674,8 +676,8 @@ initialize_cnv_data <- function() {
     ) %>%
     dplyr::mutate_if(is.character, as.factor) %>%
     dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
-  output <- list(.CNVratio_data, gene)
-  return(output)
+
+  return(list(.CNVratio_data, gene))
 }
 
 #' Box plots of the CNV ratios in tumors vs adjacent normals

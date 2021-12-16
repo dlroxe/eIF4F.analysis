@@ -9,7 +9,7 @@
 #'  expression with supply of EIF4F gene names for coexpression and differential
 #'  expression analyses.
 #'
-#' (4) wrapper function to call all master functions with inputs
+#' (4) wrapper function to call all composite functions with inputs
 
 
 #'
@@ -516,8 +516,8 @@ initialize_phosphoproteomics_data <- function() {
 #'
 #' @details
 #'
-#' This function run the composite functions [.plot_scatterplot_protein_LUAD()] and
-#'  [.plot_boxgraph_protein_CPTAC()] with EIF4F gene name as inputs.
+#' This function run the composite functions [.plot_scatterplot_protein_LUAD()]
+#' and [.plot_boxgraph_protein_CPTAC()] with EIF4F gene name as inputs.
 #'
 #' @return proteomics data analysis plots
 #'
