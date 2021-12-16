@@ -690,6 +690,7 @@
 #'
 #' @param pathway pathway name, "GO", ""REACTOME", "KEGG"
 #'
+#' @param tissue_type tissue type, the same argument of [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
 #' @return
 #'
@@ -870,6 +871,7 @@
   .pathway_dotplot(df = ck.KEGG, pathway = "KEGG", tissue_type = tissue_type)
   .pathway_dotplot(df = ck.REACTOME, pathway = "REACTOME",
                    tissue_type = tissue_type)
+
 }
 
 #' ### Wrapper function to call all composite functions with inputs
