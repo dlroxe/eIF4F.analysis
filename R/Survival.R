@@ -9,7 +9,7 @@
 #'  RNAseq and clinical data for survival analysis and plot with supply of
 #'  EIF4F gene names as values of the arguments.
 #'
-#' (4) wrapper function to call all master functions with inputs
+#' (4) wrapper function to call all composite functions with inputs
 #'
 #' ### Wrapper function for data initialization of survival and RNA-seq datasets
 ## Wrapper function for data initialization of survival and RNA-seq datasets ===
@@ -603,8 +603,8 @@ initialize_survival_data <- function() {
       "primary.disease"
     ) %>%
     # drop_na(EIF) %>%
-    dplyr::filter(if (tumor != "All") .data$primary.disease == tumor
-                  else TRUE) %>%
+    dplyr::filter(if (tumor == "All") TRUE
+                  else .data$primary.disease == tumor) %>%
     tidyr::drop_na() %>%
     # na.omit(.) %>%
     tibble::as_tibble() %>%
