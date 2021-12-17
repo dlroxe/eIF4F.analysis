@@ -102,6 +102,8 @@ initialize_cnv_data <- function() {
   ) %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "Row.names")
+
+  return(NULL)
 }
 
 #' Read CNV threshold dataset from TCGA
@@ -313,6 +315,7 @@ initialize_cnv_data <- function() {
   .CNV_sum$variable <- factor(.CNV_sum$variable,
     levels = Freq.sum[order(Freq.sum$`1`), ]$variable
   )
+
   return(.CNV_sum)
 }
 
@@ -331,12 +334,11 @@ initialize_cnv_data <- function() {
 #' It should not be used directly, only inside
 #' [.plot_bargraph_CNV_TCGA()]function.
 #'
+#' Side effect: stacked bar plots on screen and as pdf file to show the summary
+#'  table of the CNV statuses
+#'
 #' @param data summary table from
 #' `.CNV_all_cancer(.TCGA_CNV_sampletype_subset)`
-#'
-#' @return
-#'
-#' stacked bar plots showing the summary table of the CNV statuses
 #'
 #' @examples \dontrun{
 #' .CNV_sum_barplot(.CNV_all_cancer(.TCGA_CNV_sampletype_subset))
@@ -406,6 +408,8 @@ initialize_cnv_data <- function() {
     height = 9,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 #' Calculates the frequency of CNV status in individual TCGA cancer types
@@ -483,13 +487,11 @@ initialize_cnv_data <- function() {
 #' It should not be used directly, only inside
 #'  [.plot_bargraph_CNV_TCGA()] function.
 #'
+#' Side effect: stacked bar plots on screen and as saved pdf files to show
+#'  CNV status of each gene in an individual cancer type.
+#'
 #' @param df `.EIF_CNV_ind_cancer` generated inside
 #'  [.plot_bargraph_CNV_TCGA()]
-#'
-#' @return
-#'
-#' stacked bar plots for CNV status of each gene in an individual
-#'  cancer type.
 #'
 #' @examples \dontrun{
 #' lapply(.EIF_CNV_ind_cancer, .CNV_barplot)
@@ -556,9 +558,11 @@ initialize_cnv_data <- function() {
     height = 9,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
-#' Correlation coefficients for CNV values
+#' Correlation matrix for gene pairs
 #'
 #' @description
 #'
@@ -572,12 +576,10 @@ initialize_cnv_data <- function() {
 #' It should not be used directly, only inside
 #'  [.plot_matrix_CNVcorr_TCGA()] function.
 #'
+#' Side effect: the correlation matrix plot on screen and as saved pdf files
+#'
 #' @param df output of `TCGA_CNV_value \%>\% select(all_of(EIF))`
 #' generated inside [.plot_matrix_CNVcorr_TCGA()]
-#'
-#' @return
-#'
-#' stacked bar plots for CNV status of each gene in an individual cancer type.
 #'
 #' @importFrom corrplot cor.mtest corrplot
 #'
@@ -587,7 +589,7 @@ initialize_cnv_data <- function() {
 #'
 #' @examples \dontrun{
 #' TCGA_CNV_value %>%
-#'   dplyr::select(all_of(EIF_list)) %>%
+#'   dplyr::select(all_of(gene_list)) %>%
 #'   .matrix_plot()
 #' }
 #'
@@ -637,6 +639,8 @@ initialize_cnv_data <- function() {
     sig.level   = 0.05, # insig = "blank"
   )
   dev.off()
+
+  return(NULL)
 }
 
 #' Calculates the frequency of CNV status in all TCGA cancer types combined
@@ -644,7 +648,7 @@ initialize_cnv_data <- function() {
 #' @description
 #'
 #' This function selects the CNV ratio data in tumors vs
-#' adjacent normals from individual TCGA cancer types for each input gene.
+#'  adjacent normals from individual TCGA cancer types for each input gene.
 #'
 #' @details
 #'
@@ -659,7 +663,7 @@ initialize_cnv_data <- function() {
 #' @return
 #'
 #' a list with the data frame of CNV ratio of the input gene
-#' in individual TCGA cancer types and gene name
+#'  in individual TCGA cancer types and gene name
 #'
 #' @examples \dontrun{
 #' lapply(EIF, .CNVratio_tumor, df = .TCGA_CNVratio_sampletype_subset)
@@ -694,11 +698,11 @@ initialize_cnv_data <- function() {
 #' It should not be used directly, only inside [.plot_boxgraph_CNVratio_TCGA()]
 #'  function.
 #'
+#' Side effect: boxplot on screen and as saved pdf files to show CNV ratios
+#'  in tumors vs adjacent normals from individual TCGA cancer types.
+#'
 #' @param df `.EIF_CNVratio_ind_cancer` generated
 #' inside [.plot_boxgraph_CNVratio_TCGA()]
-#'
-#' @return boxplot for CNV ratios in tumors vs adjacent normals
-#' from individual TCGA cancer types.
 #'
 #' @examples \dontrun{
 #' lapply(.EIF_CNVratio_ind_cancer, .CNVratio_boxplot)
@@ -760,6 +764,8 @@ initialize_cnv_data <- function() {
     height = 9,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 
@@ -773,7 +779,7 @@ initialize_cnv_data <- function() {
 #' Provides the summary of CNV statuses of EIF4F genes in tumors from all TCGA
 #' cancer types combined and in tumors from individual TCGA cancer types
 #'
-#' @param EIF_list gene names in a vector of characters
+#' @param gene_list gene names in a vector of characters
 #'
 #' @details  This function
 #'
@@ -790,9 +796,13 @@ initialize_cnv_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_CNV_analysis()] function.
 #'
-#' @return
+#' side effect:
 #'
-#' stacked bar plots for grouped CNV status of `EIF_list` in TCGA tumors
+#' * the stacked bar plots on screen and as pdf file to show the summary
+#'  table of the CNV statuses of all `gene_list` in TCGA tumors
+#' * stacked bar plots on screen and as saved pdf files to show
+#'  CNV status of each gene in `gene_list` from an individual cancer type.
+#'
 #'
 #' @examples \dontrun{
 #' plot_bargraph_CNV_TCGA(c(
@@ -804,23 +814,25 @@ initialize_cnv_data <- function() {
 #'
 #' @keywords internal
 #'
-.plot_bargraph_CNV_TCGA <- function(EIF_list) {
+.plot_bargraph_CNV_TCGA <- function(gene_list) {
   .TCGA_CNV_sampletype_subset <- NULL
   # combine CNV data with annotation data
   .TCGA_CNV_sampletype_subset <- TCGA_CNV_sampletype %>%
-    dplyr::select(dplyr::all_of(EIF_list), "sample.type", "primary.disease")
+    dplyr::select(dplyr::all_of(gene_list), "sample.type", "primary.disease")
 
   # stacked bar plots for CNV status in combined TCGA tumors
   .CNV_all_cancer(.TCGA_CNV_sampletype_subset) %>%
     .CNV_sum_barplot()
 
   # stacked bar plots for CNV status in each TCGA tumor type
-  .EIF_CNV_ind_cancer <- lapply(EIF_list,
+  .EIF_CNV_ind_cancer <- lapply(gene_list,
     .CNV_ind_cancer,
     df = .TCGA_CNV_sampletype_subset
   )
 
   lapply(.EIF_CNV_ind_cancer, .CNV_barplot)
+
+  return(NULL)
 }
 
 
@@ -831,7 +843,7 @@ initialize_cnv_data <- function() {
 #' generates correlation matrix for eIF4F CNV in tumors
 #' from all TCGA cancer type combined
 #'
-#' @param EIF_list gene names in a vector of characters
+#' @param gene_list gene names in a vector of characters
 #'
 #' @details This function
 #'
@@ -843,9 +855,8 @@ initialize_cnv_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_CNV_analysis()] function.
 #'
-#' @return
-#'
-#' the correlation matrix plot for `EIF_list` CNV values in TCGA tumors
+#' side effect: the correlation matrix plot on screen and as saved pdf files
+#'  to show co-occurrence of `gene_list` CNV status in TCGA tumors
 #'
 #' @examples \dontrun{
 #' plot_matrix_CNVcorr_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
@@ -853,10 +864,12 @@ initialize_cnv_data <- function() {
 #'
 #' @keywords internal
 #'
-.plot_matrix_CNVcorr_TCGA <- function(EIF_list) {
+.plot_matrix_CNVcorr_TCGA <- function(gene_list) {
   TCGA_CNV_value %>%
-    dplyr::select(dplyr::all_of(EIF_list)) %>%
+    dplyr::select(dplyr::all_of(gene_list)) %>%
     .matrix_plot()
+
+  return(NULL)
 }
 
 
@@ -867,7 +880,7 @@ initialize_cnv_data <- function() {
 #' This function generates boxplot for CNV ratios in tumors vs adjacent normals
 #' from individual TCGA cancer types.
 #'
-#' @param EIF_list gene names in a vector of characters
+#' @param gene_list gene names in a vector of characters
 #'
 #' @details This function
 #'
@@ -881,9 +894,8 @@ initialize_cnv_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_CNV_analysis()] function.
 #'
-#' @return
-#'
-#' stacked bar plots for grouped CNV status of `EIF_list` in TCGA tumors
+#' side effect: the box plots on screen and as saved pdf files to show
+#'  CNV ratio of `gene_list` in TCGA tumors vs normals
 #'
 #' @examples \dontrun{
 #' plot_boxgraph_CNVratio_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
@@ -891,25 +903,27 @@ initialize_cnv_data <- function() {
 #'
 #' @keywords internal
 #'
-.plot_boxgraph_CNVratio_TCGA <- function(EIF_list) {
+.plot_boxgraph_CNVratio_TCGA <- function(gene_list) {
   .TCGA_CNVratio_sampletype_subset <- NULL
   .TCGA_CNVratio_sampletype_subset <- TCGA_CNVratio_sampletype %>%
     dplyr::select(
-      dplyr::all_of(EIF_list),
+      dplyr::all_of(gene_list),
       "sample.type",
       "primary.disease"
     )
 
-  .EIF_CNVratio_ind_cancer <- lapply(EIF_list,
+  .EIF_CNVratio_ind_cancer <- lapply(gene_list,
     .CNVratio_tumor,
     df = .TCGA_CNVratio_sampletype_subset
   )
 
   lapply(.EIF_CNVratio_ind_cancer, .CNVratio_boxplot)
+
+  return(NULL)
 }
 
 
-#' ### wrapper function to call all composite functions with inputs
+#' ### Wrapper function to call all composite functions with inputs
 ## Wrapper function to call all composite functions with inputs ================
 
 #' Perform all CNV related analysis and generate plots
@@ -926,7 +940,16 @@ initialize_cnv_data <- function() {
 #'  * [.plot_matrix_CNVcorr_TCGA()]
 #'  * [.plot_boxgraph_CNVratio_TCGA()]
 #'
-#' @return CNV analysis plots
+#' side effect:
+#'
+#'  * stacked bar plots on screen and as pdf file to show the summary
+#'  table of the CNV statuses of all EIF genes in TCGA tumors
+#'  * stacked bar plots on screen and as saved pdf files to show
+#'  CNV status of each EIF gene from an individual cancer type.
+#'  * correlation matrix plot on screen and as saved pdf files to show
+#'   co-occurrence of EIF genes CNV status in TCGA tumors
+#'  * box plots on screen and as saved pdf files to show CNV ratio
+#'   of EIF genes in TCGA tumors vs normals
 #'
 #' @export
 #'
@@ -955,4 +978,6 @@ EIF4F_CNV_analysis <- function() {
     "EIF4G1", "EIF4E", "EIF4A1", "EIF4EBP1", "EIF4G2", "EIF4G3",
     "EIF4E2", "EIF4E3", "EIF4A2", "EIF3D", "EIF4H", "EIF4B"
   ))
+
+  return(NULL)
 }

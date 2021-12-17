@@ -10,8 +10,6 @@
 #'  expression analyses.
 #'
 #' (4) wrapper function to call all composite functions with inputs
-
-
 #'
 #' ### Wrapper function for data initialization of phosphoproteomics datasets
 ## Wrapper function for data initialization of phosphoproteomics datasets ======
@@ -49,7 +47,8 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' }
 #'
 initialize_phosphoproteomics_data <- function() {
-  CPTAC_LUAD_Phos <<- readxl::read_excel(file.path(data_file_directory, "Phos.xlsx"),
+  CPTAC_LUAD_Phos <<- readxl::read_excel(file.path(data_file_directory,
+                                                   "Phos.xlsx"),
     col_names = FALSE
   )
 
@@ -67,7 +66,8 @@ initialize_phosphoproteomics_data <- function() {
     )
   ) %>%
     as.data.frame() %>%
-    dplyr::select("Aliquot (Specimen Label)", "Type", "Participant ID (case_id)") %>%
+    dplyr::select("Aliquot (Specimen Label)", "Type",
+                  "Participant ID (case_id)") %>%
     dplyr::distinct(.data$`Aliquot (Specimen Label)`, .keep_all = TRUE) # %>%
   # remove_rownames() %>%
   # column_to_rownames(var = "Aliquot (Specimen Label)")
@@ -77,33 +77,37 @@ initialize_phosphoproteomics_data <- function() {
     by.x = "case_id",
     by.y = "Participant ID (case_id)"
   ) %>%
-    dplyr::select("tumor_stage_pathological", "Aliquot (Specimen Label)", "Type") %>%
+    dplyr::select("tumor_stage_pathological", "Aliquot (Specimen Label)",
+                  "Type") %>%
     dplyr::rename("Sample" = "Aliquot (Specimen Label)") %>%
     dplyr::mutate(tumor_stage_pathological = dplyr::case_when(
       Type == "Normal" ~ "Normal",
       tumor_stage_pathological %in% c("Stage I", "Stage IA", "Stage IB") ~
-        "Stage I",
+      "Stage I",
       tumor_stage_pathological %in% c("Stage II", "Stage IIA", "Stage IIB") ~
-        "Stage II",
+      "Stage II",
       tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~
-        "Stage III",
+      "Stage III",
       tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"
     ))
 }
 
 
-#' ### Selection of RNA and protein expression data and plotting
-## selection of RNA and protein expression data and plotting ===================
+#' ### Select RNA and protein expression data and plotting
+## Select RNA and protein expression data and plotting ===================
 
 #' Scatter plots of protein coexpression
 #'
 #' @description
 #'
 #' This function should not be used directly, only inside
-#'  [.plot_scatterplot_protein_LUAD()] function.
+#'  [.plot_scatterplot_protein_CPTAC()] function.
+#'
+#' side effect: scatter plot to show correlation between two protein
+#'  expressions
 #'
 #' @param data input LUAD dataset generated from
-#'  [.plot_scatterplot_protein_LUAD()]
+#'  [.plot_scatterplot_protein_CPTAC()]
 #'
 #' @param protein01 protein name
 #'
@@ -158,6 +162,8 @@ initialize_phosphoproteomics_data <- function() {
     height = 6,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 #' Select subset of CPTAC proteomics data
@@ -171,21 +177,21 @@ initialize_phosphoproteomics_data <- function() {
 #' The function should not be used directly, only inside
 #' [.plot_boxgraph_protein_CPTAC()] function.
 #'
-#' @param EIF_list protein name, passed `EIF_list` argument from
+#' @param protein_list protein name, passed `protein_list` argument from
 #'  [.plot_boxgraph_protein_CPTAC()]
 #'
 #' @return a data frame of CPTAC LUAD  data from the input `x` genes
 #'
 #' @examples \dontrun{
-#' .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
+#' .get_CPTAC_LUAD_Proteomics_subset(protein_list)
 #' }
 #'
 #' @keywords internal
 #'
-.get_CPTAC_LUAD_Proteomics_subset <- function(EIF_list) {
-  CPTAC_LUAD_Proteomics %>%
+.get_CPTAC_LUAD_Proteomics_subset <- function(protein_list) {
+  return(CPTAC_LUAD_Proteomics %>%
     #  dplyr::select_if(names(.) %in% c(x, "Sample"))
-    dplyr::select(dplyr::any_of(EIF_list), "Sample")
+    dplyr::select(dplyr::any_of(protein_list), "Sample"))
 }
 
 #' Select subset of CPTAC phosproteomics data
@@ -193,17 +199,17 @@ initialize_phosphoproteomics_data <- function() {
 #' @description
 #'
 #' This function selected the CPTAC LUAD phosproteomics data from the
-#'  input `EIF`.
+#'  input `protein_list`.
 #'
 #' @details
 #'
 #' The function should not be used directly, only inside
 #'  [.plot_boxgraph_protein_CPTAC()] function.
 #'
-#' @param EIF_list protein name, passed `EIF_list` argument from
+#' @param protein_list protein name, passed `protein_list` argument from
 #'  [.plot_boxgraph_protein_CPTAC()]
 #'
-#' @return a data frame of CPTAC LUAD  data from the input `EIF_list` genes
+#' @return a data frame of CPTAC LUAD  data from the input `protein_list` genes
 #'
 #' @importFrom dplyr funs
 #'
@@ -212,9 +218,9 @@ initialize_phosphoproteomics_data <- function() {
 #' }
 #'
 #' @keywords internal
-.get_CPTAC_LUAD_Phosproteomics_subset <- function(EIF_list) {
-  CPTAC_LUAD_Phos %>%
-    dplyr::filter(.data$...1 %in% c(EIF_list, "Sample")) %>%
+.get_CPTAC_LUAD_Phosproteomics_subset <- function(protein_list) {
+  return(CPTAC_LUAD_Phos %>%
+    dplyr::filter(.data$...1 %in% c(protein_list, "Sample")) %>%
     # as.data.frame(.) %>%
     dplyr::mutate(phosname = paste(.data$...1, .data$...2)) %>%
     tibble::column_to_rownames(var = "phosname") %>%
@@ -222,7 +228,7 @@ initialize_phosphoproteomics_data <- function() {
     t() %>%
     tibble::as_tibble() %>%
     dplyr::mutate_at(dplyr::vars(-.data$`Sample na`), dplyr::funs(as.numeric)) %>%
-    dplyr::rename("Sample" = "Sample na")
+    dplyr::rename("Sample" = "Sample na"))
 }
 
 #' Boxplots of phosphor-proteomics data across clinic stages
@@ -231,6 +237,9 @@ initialize_phosphoproteomics_data <- function() {
 #'
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_protein_CPTAC()].
+#'
+#' side effect: boxplot to show the different expression of protein across
+#'  different clinical tumor stages
 #'
 #' @param df a data frame of the combined proteomics and prosphorylation data
 #'  generated inside [.plot_boxgraph_protein_CPTAC()]
@@ -255,7 +264,6 @@ initialize_phosphoproteomics_data <- function() {
     dplyr::filter(.data$Gene == protein_name & .data$Type == "Tumor") %>%
     dplyr::select(.data$MD) %>%
     as.numeric() %>%
-    # hline <- dataMedian$MD[dataMedian$Gene == protein_name & dataMedian$Type == "Tumor"] %>%
     round(digits = 3)
   p2 <- ggplot(
     data = df[df$Gene == protein_name, ],
@@ -345,6 +353,8 @@ initialize_phosphoproteomics_data <- function() {
     height = 6,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 #' ### Composite function for coexpression and differential expression analysis
@@ -360,11 +370,14 @@ initialize_phosphoproteomics_data <- function() {
 #' This function should not be used directly, only inside
 #'  [EIF4F_Proteomics_analysis()] function.
 #'
+#' side effects: scatter plots to show correlation between two protein
+#'  expressions
+#'
 #' @importFrom ggpubr ggscatter
 #'
 #' @keywords internal
 #'
-.plot_scatterplot_protein_LUAD <- function() {
+.plot_scatterplot_protein_CPTAC <- function() {
   LUAD.Pro <- CPTAC_LUAD_Proteomics[CPTAC_LUAD_Proteomics$Type %in% "Tumor", ]
 
   .protein_scatterplot(df = LUAD.Pro, protein01 = "EIF4E", protein02 = "EIF4G1",
@@ -431,6 +444,8 @@ initialize_phosphoproteomics_data <- function() {
                        color = "dark red")
   .protein_scatterplot(df = LUAD.Pro, protein01 = "EIF4A1", protein02 = "EIF2S3",
                        color = "dark blue")
+
+  return(NULL)
 }
 
 #' Comparison of protein and phosphorylation levels among different stages of
@@ -454,7 +469,10 @@ initialize_phosphoproteomics_data <- function() {
 #' This function should not be used directly, only inside
 #'  [EIF4F_Proteomics_analysis()] function.
 #'
-#' @param EIF_list protein names in a vector of string
+#' side effect: boxplot to show the different expression of (phospho)protein
+#'  across different clinical tumor stages
+#'
+#' @param protein_list protein names in a vector of string
 #'
 #' @return the box plots for `EIF` protein and phosphorylation values in LUAD
 #'
@@ -471,9 +489,9 @@ initialize_phosphoproteomics_data <- function() {
 #' ))
 #' }
 #'
-.plot_boxgraph_protein_CPTAC <- function(EIF_list) {
-  .CPTAC_LUAD_Proteomics_subset <- .get_CPTAC_LUAD_Proteomics_subset(EIF_list)
-  .CPTAC_LUAD_Phos_subset <- .get_CPTAC_LUAD_Phosproteomics_subset(EIF_list)
+.plot_boxgraph_protein_CPTAC <- function(protein_list) {
+  .CPTAC_LUAD_Proteomics_subset <- .get_CPTAC_LUAD_Proteomics_subset(protein_list)
+  .CPTAC_LUAD_Phos_subset <- .get_CPTAC_LUAD_Phosproteomics_subset(protein_list)
   EIF.LUAD.Phos.Proteomics.Sampletype <- list(
     .CPTAC_LUAD_Proteomics_subset,
     .CPTAC_LUAD_Phos_subset,
@@ -494,7 +512,8 @@ initialize_phosphoproteomics_data <- function() {
     dplyr::group_by(.data$Gene) %>%
     # group_by(Gene) %>%
     dplyr::summarise(NAT.mean = stats::median(.data$value)) %>%
-    dplyr::right_join(EIF.LUAD.Phos.Proteomics.Sampletype, by = "Gene") %>% # right_join is possible with the dev dplyr
+    # right_join is possible with the dev dplyr
+    dplyr::right_join(EIF.LUAD.Phos.Proteomics.Sampletype, by = "Gene") %>%
     # group_by(Gene) %>%
     dplyr::mutate(normalize = .data$value - .data$NAT.mean) # %>%
 
@@ -516,10 +535,15 @@ initialize_phosphoproteomics_data <- function() {
 #'
 #' @details
 #'
-#' This function run the composite functions [.plot_scatterplot_protein_LUAD()]
+#' This function run the composite functions [.plot_scatterplot_protein_CPTAC()]
 #' and [.plot_boxgraph_protein_CPTAC()] with EIF4F gene name as inputs.
 #'
-#' @return proteomics data analysis plots
+#' side effect:
+#'
+#' * scatter plot to show correlation between two protein expressions in CPTAC
+#'  LUAD samples
+#' * boxplot to show the different expression of protein across
+#'  different clinical tumor stages
 #'
 #' @export
 #'
@@ -528,7 +552,7 @@ initialize_phosphoproteomics_data <- function() {
 #' }
 #'
 EIF4F_Proteomics_analysis <- function() {
-  .plot_scatterplot_protein_LUAD()
+  .plot_scatterplot_protein_CPTAC()
   .plot_boxgraph_protein_CPTAC(c(
     "EIF4G1", "EIF4A1", "EIF4E", "EIF4EBP1",
     "AKT1", "MTOR", "EIF4B", "EIF4H",

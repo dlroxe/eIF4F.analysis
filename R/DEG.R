@@ -94,6 +94,8 @@ initialize_RNAseq_data <- function() {
   ) %>%
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "Row.names")
+
+  return(NULL)
 }
 
 
@@ -138,6 +140,7 @@ initialize_RNAseq_data <- function() {
   # get row and colnames in order
   rownames(.TCGA_pancancer_transpose) <- colnames(.TCGA_pancancer)
   colnames(.TCGA_pancancer_transpose) <- rownames(.TCGA_pancancer)
+
   return(.TCGA_pancancer_transpose)
 }
 
@@ -164,6 +167,7 @@ initialize_RNAseq_data <- function() {
 #' a data frame ranking genes by their mRNA expressions in lung adenocarcinoma
 #'
 #' @importFrom dplyr pull
+#'
 #' @importFrom forcats fct_reorder
 #'
 #' @examples \dontrun{
@@ -197,11 +201,14 @@ initialize_RNAseq_data <- function() {
 #' @description
 #'
 #' This function takes the output of [.RNAseq_all_gene()] function and generate
-#'  box plots of differential gene expression in an individual cancer type
+#'  box plots of differential gene expression across all TCGA cancer types
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_RNAseq_TCGA()]function.
 #'
-#' @param data
+#' Side effect: box plots on screen and as pdf file to compare relative
+#'  expression of EIF genes across all TCGA cancer type
+#'
+#' @param df
 #'
 #' output dataset from `.RNAseq_all_gene(.TCGA_GTEX_RNAseq_sampletype_subset)`,
 #'  which was generated inside [.plot_boxgraph_RNAseq_TCGA()]function.
@@ -264,6 +271,8 @@ initialize_RNAseq_data <- function() {
     height = 8,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 
@@ -319,7 +328,10 @@ initialize_RNAseq_data <- function() {
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_RNAseq_TCGA()]function.
 #'
-#' @param data
+#' Side effect: box plots on screen and as pdf file to show differential
+#'  gene expression in tumors vs NATs in TCGA cancer types
+#'
+#' @param df
 #'
 #' output dataset generated from [.RNAseq_ind_gene()] function
 #'
@@ -393,6 +405,8 @@ initialize_RNAseq_data <- function() {
     height = 9,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 
@@ -438,16 +452,26 @@ initialize_RNAseq_data <- function() {
 #' This function should not be used directly, only inside
 #'  [.plot_boxgraph_RNAseq_TCGA()] or [.plot_boxgraph_RNAratio_TCGA()] function.
 #'
-#' @param data
+#'  side effect: the violin plots on screen and as pdf file to show
+#'   differential gene expression/ratio in primary, metastatic tumors vs
+#'   adjacent normal tissues from all combined TCGA cancer types
+#'
+#' @param df
 #'
 #' output dataset generated from [.RNAseq_tumortype()] or
 #'  [.RNAratio_tumortype()] function
+#'
+#' @param y.axis.title the title name for y axis
+#'
+#' @param y.axis.break the break mark on the y axis
+#'
+#' @param dashline the position of horizontal reference line
 #'
 #' @importFrom EnvStats stat_n_text
 #'
 #' @keywords internal
 #'
-.violinplot <- function(df, y.axis.title, y.axis.break, yintercept) {
+.violinplot <- function(df, y.axis.title, y.axis.break, dashline) {
   p1 <- ggplot(
     data = df,
     # data = EIF.TCGA.RNAseq.anno.subset.long,
@@ -495,7 +519,7 @@ initialize_RNAseq_data <- function() {
       # labels = c("1","8","64","512"),
       position = "left"
     ) +
-    geom_hline(yintercept = yintercept, linetype = "dashed") +
+    geom_hline(yintercept = dashline, linetype = "dashed") +
     # for color-blind palettes
     scale_color_manual(values = c("#56B4E9", "#009E73", "#D55E00")) +
     # for color-blind palettes
@@ -532,6 +556,8 @@ initialize_RNAseq_data <- function() {
     height = 9,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 
@@ -603,90 +629,89 @@ initialize_RNAseq_data <- function() {
     gene05, gene06, gene07, gene08,
     gene09, gene10
   )
-  .RNAratio_data <- TCGA_GTEX_RNAseq_sampletype %>%
-    dplyr::select(
-      dplyr::all_of(.genes_names),
-      "sample.type",
-      "primary.disease",
-      "primary.site",
-      "study"
-    ) %>%
-    tibble::as_tibble() %>%
-    dplyr::filter(gene01 != 0 & !is.na(.data$primary.site)) %>%
-    # calculate the ratio of mRNA counts
-    dplyr::mutate(
-      (!!paste0(gene01, "+", gene04)) :=
-        log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1),
-      (!!paste0(gene09, ":", "\n", gene01)) :=
-        (!!as.name(gene09)) - (!!as.name(gene01)),
-      (!!paste0(gene09, ":", "\n", gene02)) :=
-        (!!as.name(gene09)) - (!!as.name(gene02)),
-      (!!paste0(gene10, ":", "\n", gene01)) :=
-        (!!as.name(gene10)) - (!!as.name(gene01)),
-      (!!paste0(gene10, ":", "\n", gene02)) :=
-        (!!as.name(gene10)) - (!!as.name(gene02)),
-      (!!paste0(gene05, ":", "\n", gene01)) :=
-        (!!as.name(gene05)) - (!!as.name(gene01)),
-      (!!paste0(gene05, ":", "\n", gene02)) :=
-        (!!as.name(gene05)) - (!!as.name(gene02)),
-      (!!paste0(gene07, ":", "\n", gene01)) :=
-        (!!as.name(gene07)) - (!!as.name(gene01)),
-      (!!paste0(gene07, ":", "\n", gene02)) :=
-        (!!as.name(gene07)) - (!!as.name(gene02)),
-      (!!paste0(gene09, ":", "\n", gene05)) :=
-        (!!as.name(gene09)) - (!!as.name(gene05)),
-      (!!paste0(gene10, ":", "\n", gene05)) :=
-        (!!as.name(gene10)) - (!!as.name(gene05)),
-      (!!paste0(gene09, ":", "\n", gene06)) :=
-        (!!as.name(gene09)) - (!!as.name(gene06)),
-      (!!paste0(gene10, ":", "\n", gene06)) :=
-        (!!as.name(gene10)) - (!!as.name(gene06)),
-      (!!paste0(gene01, ":", "\n", gene04)) :=
-        (!!as.name(gene01)) - (!!as.name(gene04)),
-      (!!paste0(gene02, ":", "\n", gene01)) :=
-        (!!as.name(gene02)) - (!!as.name(gene01)),
-      (!!paste0(gene06, ":", "\n", gene05)) :=
-        (!!as.name(gene06)) - (!!as.name(gene05)),
-      (!!paste0(gene05, ":", "\n", gene07)) :=
-        (!!as.name(gene05)) - (!!as.name(gene07)),
-      (!!paste0(gene09, ":", "\n", gene10)) :=
-        (!!as.name(gene09)) - (!!as.name(gene10)),
-      (!!paste0(gene05, ":", "\n", gene01, "+", gene04)) :=
-        (!!as.name(gene05)) -
-        log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1),
-      (!!paste0(gene09, ":", "\n", gene01, "+", gene04)) :=
-        (!!as.name(gene09)) -
-        log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1)
-    ) %>%
-    dplyr::select(
-      (!!paste0(gene09, ":", "\n", gene01)),
-      (!!paste0(gene09, ":", "\n", gene02)),
-      (!!paste0(gene10, ":", "\n", gene01)),
-      (!!paste0(gene10, ":", "\n", gene02)),
-      (!!paste0(gene05, ":", "\n", gene01)),
-      (!!paste0(gene05, ":", "\n", gene02)),
-      (!!paste0(gene07, ":", "\n", gene01)),
-      (!!paste0(gene07, ":", "\n", gene02)),
-      (!!paste0(gene09, ":", "\n", gene05)),
-      (!!paste0(gene10, ":", "\n", gene05)),
-      (!!paste0(gene09, ":", "\n", gene06)),
-      (!!paste0(gene10, ":", "\n", gene06)),
-      (!!paste0(gene01, ":", "\n", gene04)),
-      (!!paste0(gene02, ":", "\n", gene01)),
-      (!!paste0(gene06, ":", "\n", gene05)),
-      (!!paste0(gene05, ":", "\n", gene07)),
-      (!!paste0(gene09, ":", "\n", gene10)),
-      (!!paste0(gene05, ":", "\n", gene01, "+", gene04)),
-      (!!paste0(gene09, ":", "\n", gene01, "+", gene04)),
-      "sample.type",
-      "primary.disease",
-      "primary.site",
-      "study"
-    ) %>%
-    dplyr::mutate_if(is.character, as.factor) %>%
-    stats::na.omit()
 
-  return(.RNAratio_data)
+  return(TCGA_GTEX_RNAseq_sampletype %>%
+           dplyr::select(
+             dplyr::all_of(.genes_names),
+             "sample.type",
+             "primary.disease",
+             "primary.site",
+             "study"
+           ) %>%
+           tibble::as_tibble() %>%
+           dplyr::filter(gene01 != 0 & !is.na(.data$primary.site)) %>%
+           # calculate the ratio of mRNA counts
+           dplyr::mutate(
+             (!!paste0(gene01, "+", gene04)) :=
+               log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1),
+             (!!paste0(gene09, ":", "\n", gene01)) :=
+               (!!as.name(gene09)) - (!!as.name(gene01)),
+             (!!paste0(gene09, ":", "\n", gene02)) :=
+               (!!as.name(gene09)) - (!!as.name(gene02)),
+             (!!paste0(gene10, ":", "\n", gene01)) :=
+               (!!as.name(gene10)) - (!!as.name(gene01)),
+             (!!paste0(gene10, ":", "\n", gene02)) :=
+               (!!as.name(gene10)) - (!!as.name(gene02)),
+             (!!paste0(gene05, ":", "\n", gene01)) :=
+               (!!as.name(gene05)) - (!!as.name(gene01)),
+             (!!paste0(gene05, ":", "\n", gene02)) :=
+               (!!as.name(gene05)) - (!!as.name(gene02)),
+             (!!paste0(gene07, ":", "\n", gene01)) :=
+               (!!as.name(gene07)) - (!!as.name(gene01)),
+             (!!paste0(gene07, ":", "\n", gene02)) :=
+               (!!as.name(gene07)) - (!!as.name(gene02)),
+             (!!paste0(gene09, ":", "\n", gene05)) :=
+               (!!as.name(gene09)) - (!!as.name(gene05)),
+             (!!paste0(gene10, ":", "\n", gene05)) :=
+               (!!as.name(gene10)) - (!!as.name(gene05)),
+             (!!paste0(gene09, ":", "\n", gene06)) :=
+               (!!as.name(gene09)) - (!!as.name(gene06)),
+             (!!paste0(gene10, ":", "\n", gene06)) :=
+               (!!as.name(gene10)) - (!!as.name(gene06)),
+             (!!paste0(gene01, ":", "\n", gene04)) :=
+               (!!as.name(gene01)) - (!!as.name(gene04)),
+             (!!paste0(gene02, ":", "\n", gene01)) :=
+               (!!as.name(gene02)) - (!!as.name(gene01)),
+             (!!paste0(gene06, ":", "\n", gene05)) :=
+               (!!as.name(gene06)) - (!!as.name(gene05)),
+             (!!paste0(gene05, ":", "\n", gene07)) :=
+               (!!as.name(gene05)) - (!!as.name(gene07)),
+             (!!paste0(gene09, ":", "\n", gene10)) :=
+               (!!as.name(gene09)) - (!!as.name(gene10)),
+             (!!paste0(gene05, ":", "\n", gene01, "+", gene04)) :=
+               (!!as.name(gene05)) -
+               log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1),
+             (!!paste0(gene09, ":", "\n", gene01, "+", gene04)) :=
+               (!!as.name(gene09)) -
+               log2(2**(!!as.name(gene01)) + 2**(!!as.name(gene04)) - 1)
+           ) %>%
+           dplyr::select(
+             (!!paste0(gene09, ":", "\n", gene01)),
+             (!!paste0(gene09, ":", "\n", gene02)),
+             (!!paste0(gene10, ":", "\n", gene01)),
+             (!!paste0(gene10, ":", "\n", gene02)),
+             (!!paste0(gene05, ":", "\n", gene01)),
+             (!!paste0(gene05, ":", "\n", gene02)),
+             (!!paste0(gene07, ":", "\n", gene01)),
+             (!!paste0(gene07, ":", "\n", gene02)),
+             (!!paste0(gene09, ":", "\n", gene05)),
+             (!!paste0(gene10, ":", "\n", gene05)),
+             (!!paste0(gene09, ":", "\n", gene06)),
+             (!!paste0(gene10, ":", "\n", gene06)),
+             (!!paste0(gene01, ":", "\n", gene04)),
+             (!!paste0(gene02, ":", "\n", gene01)),
+             (!!paste0(gene06, ":", "\n", gene05)),
+             (!!paste0(gene05, ":", "\n", gene07)),
+             (!!paste0(gene09, ":", "\n", gene10)),
+             (!!paste0(gene05, ":", "\n", gene01, "+", gene04)),
+             (!!paste0(gene09, ":", "\n", gene01, "+", gene04)),
+             "sample.type",
+             "primary.disease",
+             "primary.site",
+             "study"
+           ) %>%
+           dplyr::mutate_if(is.character, as.factor) %>%
+           stats::na.omit())
 }
 
 #' Select RNA ratio data for plotting
@@ -708,33 +733,32 @@ initialize_RNAseq_data <- function() {
 #' @keywords internal
 #'
 .RNAratio_selection <- function(df, gene_ratio) {
-  .RNAratio_data <- df %>%
-    dplyr::filter(.data$study == "TCGA") %>%
-    droplevels() %>%
-    dplyr::mutate(sample.type = dplyr::case_when(
-      sample.type != "Solid Tissue Normal" ~ "Tumor",
-      sample.type == "Solid Tissue Normal" ~ "NAT"
-    )) %>%
-    dplyr::select(
-      dplyr::all_of(gene_ratio),
-      "sample.type",
-      "primary.disease",
-      "primary.site",
-      "study"
-    ) %>%
-    reshape2::melt(
-      id = c(
-        "sample.type",
-        "primary.disease",
-        "primary.site",
-        "study"
-      ),
-      value.name = "RNAseq"
-    ) %>%
-    dplyr::mutate_if(is.character, as.factor) %>%
-    dplyr::mutate(primary.disease = forcats::fct_rev(.data$primary.disease))
-
-  return(.RNAratio_data)
+  return(df %>%
+           dplyr::filter(.data$study == "TCGA") %>%
+           droplevels() %>%
+           dplyr::mutate(sample.type = dplyr::case_when(
+             sample.type != "Solid Tissue Normal" ~ "Tumor",
+             sample.type == "Solid Tissue Normal" ~ "NAT"
+           )) %>%
+           dplyr::select(
+             dplyr::all_of(gene_ratio),
+             "sample.type",
+             "primary.disease",
+             "primary.site",
+             "study"
+           ) %>%
+           reshape2::melt(
+             id = c(
+               "sample.type",
+               "primary.disease",
+               "primary.site",
+               "study"
+             ),
+             value.name = "RNAseq"
+           ) %>%
+           dplyr::mutate_if(is.character, as.factor) %>%
+           dplyr::mutate(
+             primary.disease = forcats::fct_rev(.data$primary.disease)))
 }
 
 
@@ -745,9 +769,18 @@ initialize_RNAseq_data <- function() {
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_RNAratio_TCGA()]function.
 #'
-#' @param data
+#' side effect: the box plots on screen and as pdf file to show differential
+#'  RNA ratios across tumors
+#'
+#' @param df
 #'
 #' output dataset generated from [.RNAratio_selection()] function
+#'
+#' @param dashline the position of horizontal reference line
+#'
+#' @param ylimit the lower and upper limit of the axis scale
+#'
+#' @param filename the name for the output file
 #'
 #' @keywords internal
 #'
@@ -813,6 +846,8 @@ initialize_RNAseq_data <- function() {
     height = 8,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 
@@ -874,7 +909,7 @@ initialize_RNAseq_data <- function() {
 
 
 #' ### Composite functions to call DEG gene analysis and plotting
-## composite functions to call DEG gene analysis and plotting =====================
+## Composite functions to call DEG gene analysis and plotting =====================
 
 #' Compare the expression of EIF4F genes
 #'
@@ -887,7 +922,7 @@ initialize_RNAseq_data <- function() {
 #'  metastatic tumors vs adjacent normal tissues from all TCGA cancer types
 #'  combined.
 #'
-#' @param EIF_list
+#' @param gene_list
 #'
 #' gene names in a vector of characters
 #'
@@ -911,9 +946,15 @@ initialize_RNAseq_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_DEG_analysis()] function.
 #'
-#' @return
+#' side effect:
 #'
-#' box plots for differential gene expression of `EIF_list` in TCGA tumors
+#'  * box plots on screen and as pdf file to compare relative gene
+#'  expression in across all TCGA cancer types
+#'  * box plots on screen and as pdf file to show differential
+#'  gene expression in tumors vs NATs in TCGA cancer types
+#'  * violin plots on screen and as pdf file to show
+#'   differential gene expression in primary, metastatic tumors vs
+#'   adjacent normal tissues from all combined TCGA cancer types
 #'
 #' @keywords internal
 #'
@@ -925,10 +966,10 @@ initialize_RNAseq_data <- function() {
 #' ))
 #' }
 #'
-.plot_boxgraph_RNAseq_TCGA <- function(EIF_list) {
+.plot_boxgraph_RNAseq_TCGA <- function(gene_list) {
   .TCGA_GTEX_RNAseq_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
-      dplyr::all_of(EIF_list),
+      dplyr::all_of(gene_list),
       "sample.type",
       "primary.disease",
       "primary.site",
@@ -954,7 +995,7 @@ initialize_RNAseq_data <- function() {
     .RNAseq_grouped_boxplot()
 
   # boxplot to compare RNA-seq of one gene in tumor vs adjacent normal
-  RNAseq.ind.gene.df <- lapply(EIF_list, .RNAseq_ind_gene,
+  RNAseq.ind.gene.df <- lapply(gene_list, .RNAseq_ind_gene,
     df = .TCGA_GTEX_RNAseq_sampletype_subset
   )
   lapply(RNAseq.ind.gene.df, .RNAseq_boxplot)
@@ -964,8 +1005,10 @@ initialize_RNAseq_data <- function() {
     .violinplot(
       y.axis.title = "normalized RNA counts",
       y.axis.break = c(128, 2048, 32768),
-      yintercept = NULL
+      dashline = NULL
     )
+
+  return(NULL)
 }
 
 #' Compare the RNA ratios between EIF4F genes
@@ -990,6 +1033,13 @@ initialize_RNAseq_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_DEG_analysis()] function.
 #'
+#' side effect:
+#'
+#'  * box plots on screen and as pdf file to show differential
+#'  RNA ratios in tumors vs NATs in TCGA cancer type
+#'  * violin plots on screen and as pdf file to show
+#'   differential gene ratios in primary, metastatic tumors vs
+#'   adjacent normal tissues from all combined TCGA cancer types
 #'
 #' @param gene01
 #' gene name as a string
@@ -1021,9 +1071,6 @@ initialize_RNAseq_data <- function() {
 #' @param gene10
 #' gene name as a string
 #'
-#' @return
-#'
-#' box plots for RNA ratios among input argument in TCGA tumors
 #'
 #' @examples \dontrun{
 #' .plot_boxgraph_RNAratio_TCGA(
@@ -1085,20 +1132,15 @@ initialize_RNAseq_data <- function() {
     (paste0(gene09, ":", "\n", gene10)), (paste0(gene01, ":", "\n", gene04)),
     (paste0(gene05, ":", "\n", gene01, "+", gene04)),
     (paste0(gene09, ":", "\n", gene01, "+", gene04))
-    # "EIF4G1:\nEIF4E", "EIF4A1:\nEIF4E",
-    # "EIF4A2:\nEIF4E", "EIF4G3:\nEIF4E",
-    # "EIF4G3:\nEIF4E2", "EIF4G1:\nEIF4G3",
-    # "EIF4G2:\nEIF4G1", "EIF4E2:\nEIF4E",
-    # "EIF4A1:\nEIF4A2", "EIF4E:\nEIF4EBP1",
-    # "EIF4G1:\nEIF4E+EIF4EBP1",
-    # "EIF4A1:\nEIF4E+EIF4EBP1"
   )) %>%
     .violinplot(
       y.axis.title = "Ratio of RNA counts",
       # y.axis.break = c(1, 128, 2048, 32768)
       y.axis.break = c(0.125, 1, 4, 8, 64, 512),
-      yintercept = c(1, 4)
+      dashline = c(1, 4)
     )
+
+  return(NULL)
 }
 
 
@@ -1118,7 +1160,20 @@ initialize_RNAseq_data <- function() {
 #'  * [.plot_boxgraph_RNAseq_TCGA()]
 #'  * [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' @return DEG analysis plots
+#' side effect:
+#'
+#'  * box plots on screen and as pdf file to compare relative gene
+#'   expression in across all TCGA cancer types
+#'  * box plots on screen and as pdf file to show differential
+#'  gene expression in tumors vs NATs in TCGA cancer types
+#'  * violin plots on screen and as pdf file to show
+#'   differential gene expression in primary, metastatic tumors vs
+#'   adjacent normal tissues from all combined TCGA cancer types
+#'  * box plots on screen and as pdf file to show differential
+#'  RNA ratios in tumors vs NATs in TCGA cancer type
+#'  * violin plots on screen and as pdf file to show
+#'   differential gene ratios in primary, metastatic tumors vs
+#'   adjacent normal tissues from all combined TCGA cancer types
 #'
 #' @export
 #'
@@ -1137,4 +1192,6 @@ EIF4F_DEG_analysis <- function() {
     gene05 = "EIF4G1", gene06 = "EIF4G2", gene07 = "EIF4G3", gene08 = "EIF3D",
     gene09 = "EIF4A1", gene10 = "EIF4A2"
   )
+
+  return(NULL)
 }

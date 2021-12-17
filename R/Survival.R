@@ -12,7 +12,7 @@
 #' (4) wrapper function to call all composite functions with inputs
 #'
 #' ### Wrapper function for data initialization of survival and RNA-seq datasets
-## Wrapper function for data initialization of survival and RNA-seq datasets ===
+## Wrapper function for data initialization of survival and RNA-seq ============
 
 #' @noRd
 # due to NSE notes in R CMD check
@@ -97,6 +97,8 @@ initialize_survival_data <- function() {
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "rn") %>%
     dplyr::filter(.data$sample.type != "Solid Tissue Normal")
+
+  return(NULL)
 }
 
 #' Read the RNAseq data from TCGA
@@ -163,6 +165,9 @@ initialize_survival_data <- function() {
 #'
 #' It should not be used directly, only inside [.plot_KM_RNAseq_TCGA()]
 #'  function.
+#'
+#' side effect: KM curve plots for TCGA patients with gene expression in their
+#'  tumors
 #'
 #' @param gene gene name, passed `EIF` argument from [.plot_KM_RNAseq_TCGA()]
 #'
@@ -263,6 +268,8 @@ initialize_survival_data <- function() {
     height = 6,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 
@@ -278,7 +285,7 @@ initialize_survival_data <- function() {
 #' It should not be used directly, only inside [.plot_CoxPH_RNAseq_TCGA()]
 #'  function.
 #'
-#' @param gene gene names, passed `EIF_list` argument from
+#' @param gene gene names, passed `gene_list` argument from
 #' [.plot_CoxPH_RNAseq_TCGA()]
 #'
 #' @param data `df1` generated inside [.plot_CoxPH_RNAseq_TCGA()]
@@ -330,31 +337,29 @@ initialize_survival_data <- function() {
     dplyr::rename("pinteraction" = "p") %>%
     tibble::rownames_to_column()
 
-  data1 <- dplyr::full_join(res.cox,
-                            test.ph,
-                            by = c("factor.id" = "rowname")) %>%
-    # as.data.frame(.) %>%
-    dplyr::mutate(dplyr::across(7:11, round, 3)) %>%
-    dplyr::mutate(dplyr::across(4:6, round, 2)) %>%
-    dplyr::mutate(np = nrow(df)) %>%
-    dplyr::mutate(HRCI = paste0(.data$HR,
-                         " (",
-                         .data$Lower_CI,
-                         "-",
-                         .data$Upper_CI, ")")) %>%
-    dplyr::mutate(p = dplyr::case_when(
-      p < 0.001 ~ "<0.001",
-      # p > 0.05 ~ paste(p,"*"),
-      TRUE ~ as.character(p)
-    )) %>%
-    dplyr::mutate(pinteraction = dplyr::case_when(
-      pinteraction < 0.001 ~ "<0.001",
-      pinteraction > 0.05 ~ paste(pinteraction, "*"),
-      TRUE ~ as.character(pinteraction)
-    )) %>%
-    dplyr::arrange(dplyr::desc(.data$HR))
-
-  return(data1)
+  return(dplyr::full_join(res.cox,
+                          test.ph,
+                          by = c("factor.id" = "rowname")) %>%
+           # as.data.frame(.) %>%
+           dplyr::mutate(dplyr::across(7:11, round, 3)) %>%
+           dplyr::mutate(dplyr::across(4:6, round, 2)) %>%
+           dplyr::mutate(np = nrow(df)) %>%
+           dplyr::mutate(HRCI = paste0(.data$HR,
+                                       " (",
+                                       .data$Lower_CI,
+                                       "-",
+                                       .data$Upper_CI, ")")) %>%
+           dplyr::mutate(p = dplyr::case_when(
+             p < 0.001 ~ "<0.001",
+             # p > 0.05 ~ paste(p,"*"),
+             TRUE ~ as.character(p)
+           )) %>%
+           dplyr::mutate(pinteraction = dplyr::case_when(
+             pinteraction < 0.001 ~ "<0.001",
+             pinteraction > 0.05 ~ paste(pinteraction, "*"),
+             TRUE ~ as.character(pinteraction)
+           )) %>%
+           dplyr::arrange(dplyr::desc(.data$HR)))
 }
 
 
@@ -368,7 +373,7 @@ initialize_survival_data <- function() {
 #' @details It should not be used directly, only inside
 #' [.plot_CoxPH_RNAseq_TCGA()] function.
 #'
-#' @param gene gene names, passed `EIF_list` argument from
+#' @param gene gene names, passed `gene_list` argument from
 #' [.plot_CoxPH_RNAseq_TCGA()]
 #'
 #' @param data `df1` generated inside [.plot_CoxPH_RNAseq_TCGA()]
@@ -417,30 +422,28 @@ initialize_survival_data <- function() {
     tibble::rownames_to_column() %>%
     dplyr::filter(.data$rowname != "GLOBAL") # remove the global test result for graph
 
-  data1 <- dplyr::full_join(res.cox,
-                            test.ph,
-                            by = c("factor.id" = "rowname")) %>%
-    dplyr::mutate(dplyr::across(7:11, round, 3)) %>%
-    dplyr::mutate(dplyr::across(4:6, round, 2)) %>%
-    dplyr::mutate(np = nrow(df)) %>%
-    dplyr::mutate(HRCI = paste0(.data$HR,
-                         " (",
-                         .data$Lower_CI,
-                         "-",
-                         .data$Upper_CI, ")")) %>%
-    dplyr::mutate(p = dplyr::case_when(
-      p < 0.001 ~ "<0.001",
-      # p > 0.05 ~ paste(p,"*"),
-      TRUE ~ as.character(p)
-    )) %>%
-    dplyr::mutate(pinteraction = dplyr::case_when(
-      pinteraction < 0.001 ~ "<0.001",
-      pinteraction > 0.05 ~ paste(pinteraction, "*"),
-      TRUE ~ as.character(pinteraction)
-    )) %>%
-    dplyr::arrange(dplyr::desc(.data$HR))
-
-  return(data1)
+  return(dplyr::full_join(res.cox,
+                          test.ph,
+                          by = c("factor.id" = "rowname")) %>%
+           dplyr::mutate(dplyr::across(7:11, round, 3)) %>%
+           dplyr::mutate(dplyr::across(4:6, round, 2)) %>%
+           dplyr::mutate(np = nrow(df)) %>%
+           dplyr::mutate(HRCI = paste0(.data$HR,
+                                       " (",
+                                       .data$Lower_CI,
+                                       "-",
+                                       .data$Upper_CI, ")")) %>%
+           dplyr::mutate(p = dplyr::case_when(
+             p < 0.001 ~ "<0.001",
+             # p > 0.05 ~ paste(p,"*"),
+             TRUE ~ as.character(p)
+           )) %>%
+           dplyr::mutate(pinteraction = dplyr::case_when(
+             pinteraction < 0.001 ~ "<0.001",
+             pinteraction > 0.05 ~ paste(pinteraction, "*"),
+             TRUE ~ as.character(pinteraction)
+           )) %>%
+           dplyr::arrange(dplyr::desc(.data$HR)))
 }
 
 
@@ -450,6 +453,9 @@ initialize_survival_data <- function() {
 #'
 #' This function should not be used directly,
 #' only inside [.plot_CoxPH_RNAseq_TCGA()] function.
+#'
+#' side effects: forest graph showing the relation between survival of TCGA
+#'  patients and EIF expression in their tumors from regression model
 #'
 #' @param data output dataset generated from [.univariable_analysis()] or
 #' [.multivariable_analysis()] function
@@ -549,6 +555,8 @@ initialize_survival_data <- function() {
   )
   print(p)
   dev.off()
+
+  return(NULL)
 }
 
 
@@ -574,7 +582,7 @@ initialize_survival_data <- function() {
 #' This function should not be used directly, only inside
 #'  [EIF4F_Survival_analysis()] function.
 #'
-#' @param EIF gene name
+#' @param gene_name gene name
 #'
 #' @param cutoff percentage of gene expression for patient stratification
 #'
@@ -582,22 +590,24 @@ initialize_survival_data <- function() {
 #'
 #' @return
 #'
-#' KM curve plots for TCGA patients with expression of `EIF` in their tumors
+#' KM curve plots for TCGA patients with expression of `gene_name` in their
+#'  tumors
 #'
 #' @importFrom survival Surv
 #'
 #' @importFrom stats quantile
 #'
 #' @examples \dontrun{
-#' plot.km.EIF.tumor(EIF = "EIF4E", cutoff = 0.2, tumor = "lung adenocarcinoma")
+#' plot.km.EIF.tumor(gene_name = "EIF4E", cutoff = 0.2,
+#' tumor = "lung adenocarcinoma")
 #' }
 #'
 #' @keywords internal
 #'
-.plot_KM_RNAseq_TCGA <- function(EIF, cutoff, tumor) {
+.plot_KM_RNAseq_TCGA <- function(gene_name, cutoff, tumor) {
   df <- TCGA_RNAseq_OS_sampletype %>%
     dplyr::select(
-      dplyr::all_of(EIF),
+      dplyr::all_of(gene_name),
       "OS",
       "OS.time",
       "sample.type",
@@ -609,13 +619,15 @@ initialize_survival_data <- function() {
     tidyr::drop_na() %>%
     # na.omit(.) %>%
     tibble::as_tibble() %>%
-    dplyr::rename(RNAseq = EIF) %>%
+    dplyr::rename(RNAseq = gene_name) %>%
     dplyr::mutate(Group = dplyr::case_when(
       RNAseq < stats::quantile(RNAseq, cutoff) ~ "Bottom %",
       RNAseq > stats::quantile(RNAseq, (1 - cutoff)) ~ "Top %"
     )) %>%
     dplyr::mutate(SurvObj = survival::Surv(.data$OS.time, .data$OS == 1))
-  .KM_curve(gene = EIF, data = df, cutoff = cutoff, tumor = tumor)
+  .KM_curve(gene = gene_name, data = df, cutoff = cutoff, tumor = tumor)
+
+  return(NULL)
 }
 
 
@@ -639,14 +651,15 @@ initialize_survival_data <- function() {
 #' This function should not be used directly, only inside
 #'  [EIF4F_Survival_analysis()] function.
 #'
-#' @param EIF_list gene names in a vector of characters
+#' @param gene_list gene names in a vector of characters
 #'
 #' @param tumor all tumor types or specific type
 #'
 #' @return
 #'
 #' forest graph showing the relation between survival of TCGA patients
-#'  and expression of `EIF` in their tumors
+#'  and expression of `gene_list` in their tumors by univariable and
+#'  multivariable regression models
 #'
 #' @importFrom tidyr drop_na
 #'
@@ -660,11 +673,11 @@ initialize_survival_data <- function() {
 #'
 #' @keywords internal
 #'
-.plot_CoxPH_RNAseq_TCGA <- function(EIF_list, tumor) {
+.plot_CoxPH_RNAseq_TCGA <- function(gene_list, tumor) {
   df1 <- TCGA_RNAseq_OS_sampletype %>%
     dplyr::filter(.data$sample.type != "Solid Tissue Normal") %>%
     dplyr::select(
-      dplyr::all_of(EIF_list),
+      dplyr::all_of(gene_list),
       "OS",
       "OS.time",
       "sample.type",
@@ -680,7 +693,7 @@ initialize_survival_data <- function() {
   # perform Cox-PH univariable analysis and plot the results
   univariable.result <- .univariable_analysis(
     df = df1,
-    covariate_names = EIF_list
+    covariate_names = gene_list
   )
   .forest_graph(
     data = univariable.result,
@@ -711,7 +724,7 @@ initialize_survival_data <- function() {
   # perform Cox-PH multivariable analysis and plot the results
   multivariable.result <- .multivariable_analysis(
     df = df1,
-    covariate_names = EIF_list
+    covariate_names = gene_list
   )
   .forest_graph(
     data = multivariable.result,
@@ -738,6 +751,8 @@ initialize_survival_data <- function() {
       c(0.4, 3.2)
     }
   )
+
+  return(NULL)
 }
 
 
@@ -758,7 +773,13 @@ initialize_survival_data <- function() {
 #' * [.plot_KM_RNAseq_TCGA()]
 #' * [.plot_CoxPH_RNAseq_TCGA()]
 #'
-#' @return Survival analysis plots
+#' side effect:
+#'
+#' * KM curve plots for TCGA patients with gene expression in their
+#'  tumors
+#' * forest graph showing the relation between survival of TCGA
+#'  patients and EIF expression in their tumors by univariable and
+#'  multivariable regression models
 #'
 #' @export
 #'
@@ -837,4 +858,6 @@ EIF4F_Survival_analysis <- function() {
     "MTOR", # "RPS6KB1",
     "MYC"
   ), "lung adenocarcinoma")
+
+  return(NULL)
 }

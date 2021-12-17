@@ -68,7 +68,7 @@
 #'
 #' @param number_of_dimension number of components kept in the final results
 #'
-#' @return PCA results
+#' @return PCA result
 #'
 #' @importFrom FactoMineR PCA
 #'
@@ -79,13 +79,11 @@
 #' @keywords internal
 #'
 .RNAseq_PCA <- function(df, number_of_dimension) {
-  res.pca <- FactoMineR::PCA(df, # remove column with characters
-    scale.unit = TRUE,
-    ncp = number_of_dimension,
-    graph = FALSE
-  )
-
-  return(res.pca)
+  return(FactoMineR::PCA(df, # remove column with characters
+                         scale.unit = TRUE,
+                         ncp = number_of_dimension,
+                         graph = FALSE
+  ))
 }
 
 #' Perform imputPCA on proteomics data
@@ -122,12 +120,12 @@
     df %>% dplyr::select_if(is.numeric),
     ncp = nb$ncp
   )
-  res.pca <- FactoMineR::PCA(res.comp$completeObs,
-    scale.unit = TRUE,
-    ncp = number_of_dimension,
-    graph = FALSE
-  )
-  return(res.pca)
+
+  return(FactoMineR::PCA(res.comp$completeObs,
+                         scale.unit = TRUE,
+                         ncp = number_of_dimension,
+                         graph = FALSE
+  ))
 }
 
 #' Plot PCA results as biplot, scree and matrix plots
@@ -136,6 +134,17 @@
 #'
 #' This function draw biplot, screen and matrix plots for PCA results
 #'  from selected RNAseq data generated from [.get_df_subset()].
+#'
+#' side effects:
+#'
+#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
+#'   clusters of samples based on their similarity and loading plot shows how
+#'   strongly each characteristic influences a principal component.
+#'
+#'  * matrix plot shows tje quality of representation of the variables.
+#'
+#'  * scree plot displays how much variation each principal component captures
+#'   from the data.
 #'
 #' @param res.pca PCA results from selected RNAseq data
 #'
@@ -149,8 +158,6 @@
 #' @param color color scheme used for individual sample on the PCA
 #'
 #' @param folder sub directory name to store the output files
-#'
-#' @return PCA bioplot, matrix, scree plot
 #'
 #' @importFrom corrplot corrplot
 #'
@@ -294,6 +301,8 @@
     addCoef.col = "black",
     tl.col = "black"
   )
+
+  return(NULL)
 }
 
 #' Plot subgroups of PCA results as biplots
@@ -303,6 +312,12 @@
 #' This function draw biplot for PCA results
 #'  from TCGA and GTEX combined data from
 #' `.get_df_subset(.TCGA_GTEX_sampletype_subset, "All")`.
+#'
+#' side effects:
+#'
+#' * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
+#'  clusters of samples based on their similarity and loading plot shows how
+#'  strongly each characteristic influences a principal component.
 #'
 #' @param res.pca PCA results from from TCGA and GTEX combined RNAseq data
 #'
@@ -316,8 +331,6 @@
 #' @param color color scheme used for individual sample on the PCA
 #'
 #' @param folder sub directory name to store the output files
-#'
-#' @return PCA bioplot
 #'
 #' @importFrom factoextra fviz_contrib fviz_eig fviz_pca_biplot get_pca_var
 #'
@@ -382,6 +395,8 @@
     height = 8,
     useDingbats = FALSE
   )
+
+  return(NULL)
 }
 
 
@@ -392,7 +407,7 @@
 #'
 #' @description This function
 #'
-#' * selects RNAseq data of `EIF_list` genes of specific sample types from
+#' * selects RNAseq data of `gene_list` genes of specific sample types from
 #'  `TCGA_GTEX_RNAseq_sampletype` by [.get_df_subset()].
 #' * performs three PCAs by [.RNAseq_PCA()] on
 #'   (i) tumors samples from all TCGA cancer types,
@@ -405,9 +420,18 @@
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' @param EIF_list gene names in a vector of characters
+#' side effects:
 #'
-#' @return PCA biplot, matrix, scree plot
+#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
+#'   clusters of samples based on their similarity and loading plot shows how
+#'   strongly each characteristic influences a principal component.
+#'
+#'  * matrix plot shows tje quality of representation of the variables.
+#'
+#'  * scree plot displays how much variation each principal component captures
+#'   from the data.
+#'
+#' @param gene_list gene names in a vector of characters
 #'
 #' @importFrom FactoMineR PCA
 #'
@@ -420,10 +444,10 @@
 #' ))
 #' }
 #'
-.plot_PCA_TCGA_GTEX <- function(EIF_list) {
+.plot_PCA_TCGA_GTEX <- function(gene_list) {
   .TCGA_GTEX_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
-      dplyr::all_of(EIF_list),
+      dplyr::all_of(gene_list),
       "sample.type",
       "primary.disease",
       "primary.site",
@@ -540,6 +564,8 @@
     column_name = "primary.disease",
     color = col_vector
   )
+
+  return(NULL)
 }
 
 
@@ -547,7 +573,7 @@
 #'
 #' @description This function
 #'
-#' * selects RNAseq data of `EIF_list` genes in TCGA tumors and GTEx healthy
+#' * selects RNAseq data of `gene_list` genes in TCGA tumors and GTEx healthy
 #'  tissues with the same `tissue` of origin from `TCGA_GTEX_RNAseq_sampletype`,
 #'  by [.get_df_subset()].
 #' * performs PCA on combined tumor and healthy samples by [.RNAseq_PCA()],
@@ -556,11 +582,20 @@
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' @param EIF_list gene names in a vector of characters
+#' side effects:
+#'
+#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
+#'   clusters of samples based on their similarity and loading plot shows how
+#'   strongly each characteristic influences a principal component.
+#'
+#'  * matrix plot shows tje quality of representation of the variables.
+#'
+#'  * scree plot displays how much variation each principal component captures
+#'   from the data.
+#'
+#' @param gene_list gene names in a vector of characters
 #'
 #' @param sample_type tissue type
-#'
-#' @return PCA bioplot, matrix, scree plot
 #'
 #' @importFrom FactoMineR PCA
 #'
@@ -573,10 +608,10 @@
 #' ), "Lung")
 #' }
 #'
-.plot_PCA_TCGA_GTEX_tumor <- function(EIF_list, sample_type) {
+.plot_PCA_TCGA_GTEX_tumor <- function(gene_list, sample_type) {
   .TCGA_GTEX_sampletype_subset <- TCGA_GTEX_RNAseq_sampletype %>%
     dplyr::select(
-      dplyr::all_of(EIF_list),
+      dplyr::all_of(gene_list),
       "sample.type",
       "primary.disease",
       "primary.site",
@@ -617,6 +652,8 @@
     color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
     folder = "Lung"
   )
+
+  return(NULL)
 }
 
 
@@ -634,9 +671,18 @@
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' @param EIF_list gene names in a vector of characters
+#' side effects:
 #'
-#' @return PCA bioplot, matrix, scree plot
+#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
+#'   clusters of samples based on their similarity and loading plot shows how
+#'   strongly each characteristic influences a principal component.
+#'
+#'  * matrix plot shows tje quality of representation of the variables.
+#'
+#'  * scree plot displays how much variation each principal component captures
+#'   from the data.
+#'
+#' @param gene_list gene names in a vector of characters
 #'
 #' @keywords internal
 #'
@@ -647,7 +693,7 @@
 #' ), "Lung")
 #' }
 #'
-.plot_PCA_CPTAC_LUAD <- function(EIF_list) {
+.plot_PCA_CPTAC_LUAD <- function(gene_list) {
   CPTAC.LUAD.Proteomics.Sample.subset <- CPTAC_LUAD_Proteomics %>%
     tibble::column_to_rownames(var = "Sample") %>%
     dplyr::mutate(Type = factor(.data$Type,
@@ -661,7 +707,7 @@
       )
     )) %>%
     dplyr::select(
-      dplyr::all_of(EIF_list),
+      dplyr::all_of(gene_list),
       "Type"
     ) %>%
     # as.data.frame(.) %>%
@@ -679,6 +725,8 @@
     color = c("#D55E00", "#009E73"),
     folder = "Lung"
   )
+
+  return(NULL)
 }
 
 
@@ -695,7 +743,16 @@
 #'  * [.plot_PCA_TCGA_GTEX_tumor()]
 #'  * [.plot_PCA_CPTAC_LUAD()]
 #'
-#' @return PCA plots
+#' side effects:
+#'
+#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
+#'   clusters of samples based on their similarity and loading plot shows how
+#'   strongly each characteristic influences a principal component.
+#'
+#'  * matrix plot shows tje quality of representation of the variables.
+#'
+#'  * scree plot displays how much variation each principal component captures
+#'   from the data.
 #'
 #' @export
 #'
@@ -711,11 +768,13 @@ EIF4F_PCA <- function() {
 
   lapply(c("Lung", "Brain", "Breast", "Colon", "Pancreas", "Prostate", "Skin"),
          .plot_PCA_TCGA_GTEX_tumor,
-         EIF_list = c("EIF4G1", "EIF4A1", "EIF4E",
+         gene_list = c("EIF4G1", "EIF4A1", "EIF4E",
                       "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"))
 
   .plot_PCA_CPTAC_LUAD(c(
     "EIF4E", "EIF4G1", "EIF4A1", "PABPC1",
     "MKNK1", "MKNK2", "EIF4EBP1"
   ))
+
+  return(NULL)
 }
