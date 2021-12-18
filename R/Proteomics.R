@@ -218,6 +218,7 @@ initialize_phosphoproteomics_data <- function() {
 #' }
 #'
 #' @keywords internal
+#'
 .get_CPTAC_LUAD_Phosproteomics_subset <- function(protein_list) {
   return(CPTAC_LUAD_Phos %>%
     dplyr::filter(.data$...1 %in% c(protein_list, "Sample")) %>%
@@ -358,7 +359,7 @@ initialize_phosphoproteomics_data <- function() {
 }
 
 #' ### Composite function for coexpression and differential expression analysis
-## Composite function for coexpression and differential expression analysis =======
+## Composite function for coexpression and differential expression analysis ====
 
 #' protein-protein coexpression in CPTAC LUAD
 #'
@@ -521,6 +522,8 @@ initialize_phosphoproteomics_data <- function() {
     .protein_boxplot,
     df = Normalization
   )
+
+  return(NULL)
 }
 
 #' ### Wrapper function to call all composite functions with inputs
@@ -558,4 +561,6 @@ EIF4F_Proteomics_analysis <- function() {
     "AKT1", "MTOR", "EIF4B", "EIF4H",
     "MKNK1", "MKNK2"
   ))
+
+  return(NULL)
 }

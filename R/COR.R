@@ -526,7 +526,9 @@
 #' a data structure that includes clustering analysis results.
 #'
 #' @importFrom ComplexHeatmap Heatmap HeatmapAnnotation anno_text draw
+#'
 #' @importFrom grid gpar unit
+#'
 #' @importFrom circlize colorRamp2
 #'
 #' @examples \dontrun{
@@ -629,6 +631,7 @@
 #' a heatmap plot and dataframe with gene names of clustering
 #'
 #' @importFrom ComplexHeatmap row_order
+#'
 #' @importFrom AnnotationDbi mapIds
 #'
 #' @examples \dontrun{
