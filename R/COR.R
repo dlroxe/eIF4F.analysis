@@ -99,7 +99,8 @@
 
   # identify posCORs for each EIF4F gene
   posCOR_EIF4F <- cbind(
-    EIF4E.cor$estimate > 0.3 & EIF4E.cor$p.value <= 0.05,
+    .is_significant_poscor(EIF4E.cor$estimate, EIF4E.cor$p.value),
+    # etc.
     EIF4G1.cor$estimate > 0.3 & EIF4G1.cor$p.value <= 0.05,
     EIF4A1.cor$estimate > 0.3 & EIF4A1.cor$p.value <= 0.05,
     EIF4EBP1.cor$estimate > 0.3 & EIF4EBP1.cor$p.value <= 0.05
@@ -108,7 +109,8 @@
 
   # identify negCORs for each EIF4F gene
   negCOR_EIF4F <- cbind(
-    EIF4E.cor$estimate < -0.3 & EIF4E.cor$p.value <= 0.05,
+    .is_significant_negcor(EIF4E.cor$estimate, EIF4E.cor$p.value),
+    # etc.
     EIF4G1.cor$estimate < -0.3 & EIF4G1.cor$p.value <= 0.05,
     EIF4A1.cor$estimate < -0.3 & EIF4A1.cor$p.value <= 0.05,
     EIF4EBP1.cor$estimate < -0.3 & EIF4EBP1.cor$p.value <= 0.05
@@ -481,9 +483,9 @@
     )
   )
   DF <- as.matrix(na.omit(cor.data[
-    cor.data$EIF4E.tumor > 0.3 & cor.data$EIF4E.p.tumor <= 0.05 |
-      cor.data$EIF4E.tumor < -0.3 & cor.data$EIF4E.p.tumor <= 0.05 |
-      cor.data$EIF4G1.tumor > 0.3 & cor.data$EIF4G1.p.tumor <= 0.05 |
+    .is_significant_correlation(cor.data$EIF4E.tumor, cor.data$EIF4E.p.tumor)
+    | .is_significant_correlation(cor.data$EIF4G1.tumor, cor.data$EIF4G1.p.tumor)
+    | # etc.
       cor.data$EIF4G1.tumor < -0.3 & cor.data$EIF4G1.p.tumor <= 0.05 |
       cor.data$EIF4A1.tumor > 0.3 & cor.data$EIF4A1.p.tumor <= 0.05 |
       cor.data$EIF4A1.tumor < -0.3 & cor.data$EIF4A1.p.tumor <= 0.05 |
@@ -502,6 +504,18 @@
   return(DF[, c(1, 3, 5, 7, 9, 11, 13, 15)])
 }
 
+.is_significant_correlation <-function(magnitude, pvalue) {
+  return(.is_significant_poscor(magnitude, pvalue)
+         || .is_significant_negcor(magnitude, pvalue))
+}
+
+.is_significant_poscor <- function(magnitude, pvalue) {
+  return(magnitude > 0.3 && pvalue <= 0.05)
+}
+
+.is_significant_negcor <- function(magnitude, pvalue) {
+  return(magnitude < -0.3 && pvalue <= 0.05)
+}
 
 #' Visualize associations between different sources of correlation data and
 #'  reveal potential pattern
