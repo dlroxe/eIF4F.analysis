@@ -79,9 +79,9 @@
 #'
 .RNAseq_PCA <- function(df, number_of_dimension) {
   return(FactoMineR::PCA(df, # remove column with characters
-                         scale.unit = TRUE,
-                         ncp = number_of_dimension,
-                         graph = FALSE
+    scale.unit = TRUE,
+    ncp = number_of_dimension,
+    graph = FALSE
   ))
 }
 
@@ -121,9 +121,9 @@
   )
 
   return(FactoMineR::PCA(res.comp$completeObs,
-                         scale.unit = TRUE,
-                         ncp = number_of_dimension,
-                         graph = FALSE
+    scale.unit = TRUE,
+    ncp = number_of_dimension,
+    graph = FALSE
   ))
 }
 
@@ -272,11 +272,11 @@
     useDingbats = FALSE
   )
 
-  if (sample_type == "All") {
-    title <- "PCA (Healthy Tissues + Tumors)"
-    } else {
-      title <- paste0("PCA (", sample_type, ")")
-    }
+  #if (sample_type == "All") {
+  #  title <- "PCA (Healthy Tissues + Tumors)"
+  #} else {
+  #  title <- paste0("PCA (", sample_type, ")")
+  #}
 
   var <- factoextra::get_pca_var(res.pca)
   pdf(file.path(
@@ -290,7 +290,7 @@
   corrplot::corrplot(var$cos2, # cos2 is better than contribute
     title = paste("PCA", .biplot_title(sample_type)),
     method = "color",
-    mar = c(0,0,2,0),  #fix title cut off
+    mar = c(0, 0, 2, 0), # fix title cut off
     # is.corr     = FALSE,
     tl.cex = 1.5,
     number.cex = 1.5,
@@ -301,7 +301,7 @@
   dev.off()
   corrplot::corrplot(var$cos2, # cos2 is better than contribute
     title = paste("PCA", .biplot_title(sample_type)),
-    mar = c(0,0,2,0), #fix title cut off
+    mar = c(0, 0, 2, 0), # fix title cut off
     # is.corr = FALSE,
     tl.cex = 1.5,
     number.cex = 1.5,
@@ -776,9 +776,12 @@ EIF4F_PCA <- function() {
   ))
 
   lapply(c("Lung", "Brain", "Breast", "Colon", "Pancreas", "Prostate", "Skin"),
-         .plot_PCA_TCGA_GTEX_tumor,
-         gene_list = c("EIF4G1", "EIF4A1", "EIF4E",
-                      "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"))
+    .plot_PCA_TCGA_GTEX_tumor,
+    gene_list = c(
+      "EIF4G1", "EIF4A1", "EIF4E",
+      "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"
+    )
+  )
 
   .plot_PCA_CPTAC_LUAD(c(
     "EIF4E", "EIF4G1", "EIF4A1", "PABPC1",
