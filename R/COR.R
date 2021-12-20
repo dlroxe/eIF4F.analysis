@@ -100,20 +100,27 @@
   # identify posCORs for each EIF4F gene
   posCOR_EIF4F <- cbind(
     .is_significant_poscor(EIF4E.cor$estimate, EIF4E.cor$p.value),
-    # etc.
-    EIF4G1.cor$estimate > 0.3 & EIF4G1.cor$p.value <= 0.05,
-    EIF4A1.cor$estimate > 0.3 & EIF4A1.cor$p.value <= 0.05,
-    EIF4EBP1.cor$estimate > 0.3 & EIF4EBP1.cor$p.value <= 0.05
+    .is_significant_poscor(EIF4G1.cor$estimate, EIF4G1.cor$p.value),
+    .is_significant_poscor(EIF4A1.cor$estimate, EIF4A1.cor$p.value),
+    .is_significant_poscor(EIF4EBP1.cor$estimate, EIF4EBP1.cor$p.value)
   ) %>%
     `colnames<-`(c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1"))
+
+  #posCOR_EIF4F <- cbind(
+  #  EIF4E.cor$estimate > 0.3 & EIF4E.cor$p.value <= 0.05,
+  #  EIF4G1.cor$estimate > 0.3 & EIF4G1.cor$p.value <= 0.05,
+  #  EIF4A1.cor$estimate > 0.3 & EIF4A1.cor$p.value <= 0.05,
+  #  EIF4EBP1.cor$estimate > 0.3 & EIF4EBP1.cor$p.value <= 0.05
+  #) %>%
+  #  `colnames<-`(c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1"))
+
 
   # identify negCORs for each EIF4F gene
   negCOR_EIF4F <- cbind(
     .is_significant_negcor(EIF4E.cor$estimate, EIF4E.cor$p.value),
-    # etc.
-    EIF4G1.cor$estimate < -0.3 & EIF4G1.cor$p.value <= 0.05,
-    EIF4A1.cor$estimate < -0.3 & EIF4A1.cor$p.value <= 0.05,
-    EIF4EBP1.cor$estimate < -0.3 & EIF4EBP1.cor$p.value <= 0.05
+    .is_significant_negcor(EIF4G1.cor$estimate, EIF4G1.cor$p.value),
+    .is_significant_negcor(EIF4A1.cor$estimate, EIF4A1.cor$p.value),
+    .is_significant_negcor(EIF4EBP1.cor$estimate, EIF4EBP1.cor$p.value)
   ) %>%
     `colnames<-`(c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1"))
 
@@ -121,8 +128,6 @@
     .summarize_counts(posCOR_EIF4F, "posCORs"),
     .summarize_counts(negCOR_EIF4F, "negCORs")
   )
-
-  # CORs.counts <- .count_CORs(c4.posCOR, c4.negCOR)
 
   ## four output values: cor.data for the heatmap function and CORs.counts for
   ## bargraph function, c4.posCOR, c4.negCOR for Venn plots
@@ -161,6 +166,52 @@
     result[c("estimate", "p.value", "statistic", "method")],
     stringsAsFactors = FALSE
   ))
+}
+
+#' Select positive correlating genes based on coeffeciency and pvalue
+#'
+#' @description
+#'
+#' This function selects positive correlating genes based on coeffeciency and
+#'  pvalue.
+#'
+#' It should not be used directly, only inside [.EIF_correlation()]
+#'  function.
+#'
+#' @param magnitude correlation coefficiency value
+#'
+#' @param pvalue p value for pearson correlation
+#'
+#' @return a dataframe of positive correlating gene with correlation
+#'  coefficiency and p value
+#'
+#' @keywords internal
+#'
+.is_significant_poscor <- function(magnitude, pvalue) {
+  return(magnitude > 0.3 & pvalue <= 0.05)
+}
+
+#' Select negative correlating genes based on coeffeciency and pvalue
+#'
+#' @description
+#'
+#' This function selects negative correlating genes based on coeffeciency and
+#'  pvalue.
+#'
+#' It should not be used directly, only inside [.EIF_correlation()]
+#'  function.
+#'
+#' @param magnitude correlation coefficiency value
+#'
+#' @param pvalue p value for pearson correlation
+#'
+#' @return a dataframe of negative correlating gene with correlation
+#'  coefficiency and p value
+#'
+#' @keywords internal
+#'
+.is_significant_negcor <- function(magnitude, pvalue) {
+  return(magnitude < -0.3 & pvalue <= 0.05)
 }
 
 
@@ -485,37 +536,43 @@
   DF <- as.matrix(na.omit(cor.data[
     .is_significant_correlation(cor.data$EIF4E.tumor, cor.data$EIF4E.p.tumor)
     | .is_significant_correlation(cor.data$EIF4G1.tumor, cor.data$EIF4G1.p.tumor)
-    | # etc.
-      cor.data$EIF4G1.tumor < -0.3 & cor.data$EIF4G1.p.tumor <= 0.05 |
-      cor.data$EIF4A1.tumor > 0.3 & cor.data$EIF4A1.p.tumor <= 0.05 |
-      cor.data$EIF4A1.tumor < -0.3 & cor.data$EIF4A1.p.tumor <= 0.05 |
-      cor.data$EIF4EBP1.tumor > 0.3 & cor.data$EIF4EBP1.p.tumor <= 0.05 |
-      cor.data$EIF4EBP1.tumor < -0.3 & cor.data$EIF4EBP1.p.tumor <= 0.05 |
-      cor.data$EIF4E.normal > 0.3 & cor.data$EIF4E.p.normal <= 0.05 |
-      cor.data$EIF4E.normal < -0.3 & cor.data$EIF4E.p.normal <= 0.05 |
-      cor.data$EIF4G1.normal > 0.3 & cor.data$EIF4G1.p.normal <= 0.05 |
-      cor.data$EIF4G1.normal < -0.3 & cor.data$EIF4G1.p.normal <= 0.05 |
-      cor.data$EIF4A1.normal > 0.3 & cor.data$EIF4A1.p.normal <= 0.05 |
-      cor.data$EIF4A1.normal < -0.3 & cor.data$EIF4A1.p.normal <= 0.05 |
-      cor.data$EIF4EBP1.normal > 0.3 & cor.data$EIF4EBP1.p.normal <= 0.05 |
-      cor.data$EIF4EBP1.normal < -0.3 & cor.data$EIF4EBP1.p.normal <= 0.05,
+    | .is_significant_correlation(cor.data$EIF4A1.tumor, cor.data$EIF4A1.p.tumor)
+    | .is_significant_correlation(cor.data$EIF4EBP1.tumor, cor.data$EIF4EBP1.p.tumor)
+    | .is_significant_correlation(cor.data$EIF4E.normal, cor.data$EIF4E.p.normal)
+    | .is_significant_correlation(cor.data$EIF4G1.normal, cor.data$EIF4G1.p.normal)
+    | .is_significant_correlation(cor.data$EIF4A1.normal, cor.data$EIF4A1.p.normal)
+    | .is_significant_correlation(cor.data$EIF4EBP1.normal, cor.data$EIF4EBP1.p.normal),
   ]))
 
   return(DF[, c(1, 3, 5, 7, 9, 11, 13, 15)])
 }
 
-.is_significant_correlation <-function(magnitude, pvalue) {
+
+#' Select both positive and negative correlating genes based on
+#'  coeffeciency and pvalue
+#'
+#' @description
+#'
+#' This function selects both positive and negative correlating genes based on
+#'  coeffeciency and pvalue.
+#'
+#' It should not be used directly, only inside [.combine_CORs_list()]
+#'  function.
+#'
+#' @param magnitude correlation coefficiency value
+#'
+#' @param pvalue p value for pearson correlation
+#'
+#' @return a dataframe of both positive and negative correlating gene with
+#'  correlation coefficiency and p value
+#'
+#' @keywords internal
+#'
+.is_significant_correlation <- function(magnitude, pvalue) {
   return(.is_significant_poscor(magnitude, pvalue)
-         || .is_significant_negcor(magnitude, pvalue))
+         | .is_significant_negcor(magnitude, pvalue))
 }
 
-.is_significant_poscor <- function(magnitude, pvalue) {
-  return(magnitude > 0.3 && pvalue <= 0.05)
-}
-
-.is_significant_negcor <- function(magnitude, pvalue) {
-  return(magnitude < -0.3 && pvalue <= 0.05)
-}
 
 #' Visualize associations between different sources of correlation data and
 #'  reveal potential pattern
@@ -849,7 +906,7 @@
   )
 
   # combine summary of CORs counts for EIF4F genes in tumors and normal tissues
-  # for bargraph comparision
+  # for bargraph comparison
   EIF.cor <- .combine_CORs_summary(
     COR_tbl1 = EIF.cor.tumor[[2]], sample_type1 = "tumor",
     COR_tbl2 = EIF.cor.normal[[2]], sample_type2 = "normal"
