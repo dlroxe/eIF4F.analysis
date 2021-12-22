@@ -164,22 +164,25 @@
 #' @description
 #'
 #' A helper function draws biplot, screen and matrix plots for PCA results
-#'  from the selected RNAseq data generated from [.get_df_subset()], and uses
-#'  [.biplot_title()] to generate plot title with sample type information.
+#'
+#' @details  This function
+#'  * uses RNAseq data generated from [.get_df_subset()] for PCA
+#'  * calls [.biplot_title()] to generate plot title using the input argument
+#'   `sample_type`
 #'
 #' It should not be used directly, only inside [.plot_PCA_TCGA_GTEX()],
 #'  [.plot_PCA_TCGA_GTEX_tumor()], or [.plot_PCA_CPTAC_LUAD()] function.
 #'
-#' side effects:
+#' Side effects:
 #'
-#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
-#'   clusters of samples based on their similarity and loading plot shows how
-#'   strongly each characteristic influences a principal component.
-#'
-#'  * matrix plot shows tje quality of representation of the variables.
-#'
-#'  * scree plot displays how much variation each principal component captures
-#'   from the data.
+#' (1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+#'  PCA score plot shows the clusters of samples based on their similarity and
+#'  loading plot shows how strongly each characteristic influences a principal
+#'  component.
+#' (2) matrix plots on screen and as pdf files to show the quality of
+#'  representation of the variables.
+#' (3) scree plots on screen and as pdf files to display how much variation
+#'  each principal component captures from the data.
 #'
 #' @family helper function for PCA plotting
 #'
@@ -324,19 +327,24 @@
 
 #' @title Plot subgroups of PCA results as biplots
 #'
-#' @description
+#' @description A helper function draws biplots of selected PCA results from
+#'  TCGA and GTEX combined data.
 #'
-#' This function draw biplot for PCA results from TCGA and GTEX combined data:
-#'  `.get_df_subset(.TCGA_GTEX_sampletype_subset, "All")` and uses
-#'  [.biplot_title()] to generate plot title with sample type information.
+#' @details This function
+#'
+#'  * uses RNAseq data generated from `.get_df_subset(.TCGA_GTEX_sampletype_subset, "All")`
+#'    for PCA
+#'  * calls [.biplot_title()] to generate plot title using the input argument
+#'   `sample_type`
 #'
 #' It should not be used directly, only inside [.plot_PCA_TCGA_GTEX()] function.
 #'
-#' side effects:
+#' Side effects:
 #'
-#' * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
-#'  clusters of samples based on their similarity and loading plot shows how
-#'  strongly each characteristic influences a principal component.
+#' (1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+#'  PCA score plot shows the clusters of samples based on their similarity and
+#'  loading plot shows how strongly each characteristic influences a principal
+#'  component.
 #'
 #' @family helper function for PCA plotting
 #'
@@ -425,14 +433,17 @@
 
 #' @title Perform PCA on RNAseq data from all tumors and healthy tissues
 #'
-#' @description This function
+#' @description A composite function call PCA on RNAseq data from all tumors
+#'  and healthy tissues and plot results
+#'
+#' @details  This function
 #'
 #' * selects RNAseq data of `gene_list` genes of specific sample types from
 #'  `TCGA_GTEX_RNAseq_sampletype` by [.get_df_subset()].
-#' * performs three PCAs by [.RNAseq_PCA()] on
-#'   (1) tumors samples from all TCGA cancer types
-#'   (2) healthy tissue samples from all GTEx healthy tissue types
-#'   (3) TCGA tumors and GTEx healthy tissue samples combined
+#' * performs three PCAs by [.RNAseq_PCA()] on \enumerate{
+#'   \item tumors samples from all TCGA cancer types
+#'   \item healthy tissue samples from all GTEx healthy tissue types
+#'   \item TCGA tumors and GTEx healthy tissue samples combined}
 #' * generates biplot, screen plot and matrix plots by [.biplot()]
 #' * generates subset biplots for PCA results of combined TCGA tumors and
 #'  GTEx healthy tissues with [.selected_biplot()] function
@@ -440,16 +451,20 @@
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' side effects:
+#' Side effects:
 #'
-#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
-#'   clusters of samples based on their similarity and loading plot shows how
-#'   strongly each characteristic influences a principal component.
-#'  * matrix plot shows the quality of representation of the variables.
-#'  * scree plot displays how much variation each principal component captures
-#'   from the data.
+#' (1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+#'  PCA score plot shows the clusters of samples based on their similarity and
+#'  loading plot shows how strongly each characteristic influences a principal
+#'  component.
 #'
-#' @family composite function to call call PCA and plot results
+#' (2) matrix plots on screen and as pdf files to show the quality of
+#'  representation of the variables.
+#'
+#' (3) scree plots on screen and as pdf files to display how much variation
+#'  each principal component captures from the data.
+#'
+#' @family composite function to call PCA and plot results
 #'
 #' @param gene_list gene names in a vector of characters
 #'
@@ -589,10 +604,13 @@
 }
 
 
-#' @title Perform PCA on RNAseq data from one tumor type and matched
-#'  healthy tissue
+#' @title Perform PCA on RNAseq data from one tumor type and its matched healthy
+#'  tissue
 #'
-#' @description This function
+#' @description A composite function performs PCA on RNAseq data from one
+#'  tumor type and its matched healthy tissue, and plot results
+#'
+#' @details This function
 #'
 #' * selects RNAseq data of `gene_list` genes in TCGA tumors and GTEx healthy
 #'  tissues with the same `tissue` of origin from `TCGA_GTEX_RNAseq_sampletype`,
@@ -603,16 +621,18 @@
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' side effects:
+#' Side effects:
 #'
-#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
-#'   clusters of samples based on their similarity and loading plot shows how
-#'   strongly each characteristic influences a principal component.
-#'  * matrix plot shows the quality of representation of the variables.
-#'  * scree plot displays how much variation each principal component captures
-#'   from the data.
+#' (1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+#'  PCA score plot shows the clusters of samples based on their similarity and
+#'  loading plot shows how strongly each characteristic influences a principal
+#'  component.
+#' (2) matrix plots on screen and as pdf files to show the quality of
+#'  representation of the variables.
+#' (3) scree plots on screen and as pdf files to display how much variation
+#'  each principal component captures from the data.
 #'
-#' @family composite function to call call PCA and plot results
+#' @family composite function to call PCA and plot results
 #'
 #' @param gene_list gene names in a vector of characters
 #'
@@ -625,8 +645,7 @@
 #' @examples \dontrun{
 #' .plot_PCA_TCGA_GTEX_tumor(c(
 #'   "EIF4G1", "EIF4A1", "EIF4E",
-#'   "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"
-#' ), "Lung")
+#'   "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"), "Lung")
 #' }
 #'
 .plot_PCA_TCGA_GTEX_tumor <- function(gene_list, sample_type) {
@@ -681,8 +700,10 @@
 #' @title Perform PCA on proteomics data from CPATC LUADs and matched healthy
 #'  lung tissues
 #'
-#' @description This function performs standard PCA on
+#' @description A composite function performs imputed PCA on CPATC LUADs
+#'  proteomics data and plot the results
 #'
+#' @details  This function
 #' * selects proteomics data from `CPTAC_LUAD_Proteomics` prepared by
 #'  [initialize_proteomics_data()].
 #' * performs imputed PCA on combined tumors from CPTAC LUAD and and
@@ -692,26 +713,27 @@
 #' This function should not be used directly, only inside [EIF4F_PCA()]
 #'  function.
 #'
-#' side effects:
+#' Side effects:
 #'
-#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
-#'   clusters of samples based on their similarity and loading plot shows how
-#'   strongly each characteristic influences a principal component.
-#'  * matrix plot shows the quality of representation of the variables.
-#'  * scree plot displays how much variation each principal component captures
-#'   from the data.
+#' (1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+#'  PCA score plot shows the clusters of samples based on their similarity and
+#'  loading plot shows how strongly each characteristic influences a principal
+#'  component.
+#' (2) matrix plots on screen and as pdf files to show the quality of
+#'  representation of the variables.
+#' (3) scree plots on screen and as pdf files to display how much variation
+#'  each principal component captures from the data.
 #'
-#' @family composite function to call call PCA and plot results
+#' @family composite function to call PCA and plot results
 #'
 #' @param gene_list gene names in a vector of characters
 #'
 #' @keywords internal
 #'
 #' @examples \dontrun{
-#' .plot_PCA_TCGA_GTEX_tumor(c(
-#'   "EIF4G1", "EIF4A1", "EIF4E",
-#'   "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"
-#' ), "Lung")
+#' .plot_PCA_CPTAC_LUAD(c(
+#'  "EIF4E", "EIF4G1", "EIF4A1", "PABPC1",
+#'  "MKNK1", "MKNK2", "EIF4EBP1"))
 #' }
 #'
 .plot_PCA_CPTAC_LUAD <- function(gene_list) {
@@ -763,14 +785,16 @@
 #'  * [.plot_PCA_TCGA_GTEX_tumor()]
 #'  * [.plot_PCA_CPTAC_LUAD()]
 #'
-#' side effects:
+#' Side effects:
 #'
-#'  * PCA biplot (PCA score plot + loading plot): PCA score plot shows the
-#'   clusters of samples based on their similarity and loading plot shows how
-#'   strongly each characteristic influences a principal component.
-#'  * matrix plot shows the quality of representation of the variables.
-#'  * scree plot displays how much variation each principal component captures
-#'   from the data.
+#' (1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+#'  PCA score plot shows the clusters of samples based on their similarity and
+#'  loading plot shows how strongly each characteristic influences a principal
+#'  component.
+#' (2) matrix plots on screen and as pdf files to show the quality of
+#'  representation of the variables.
+#' (3) scree plots on screen and as pdf files to display how much variation
+#'  each principal component captures from the data.
 #'
 #' @family wrapper function to call all composite functions with inputs
 #'

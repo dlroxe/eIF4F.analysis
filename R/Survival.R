@@ -24,9 +24,9 @@ TCGA_RNAseq_OS_sampletype <- NULL
 #'
 #' A wrapper function to read RNA-seq and survival datasets from TCGA.
 #'
-#' side effects:
+#' Side effects:
 #'
-#' (1)`TCGA_RNAseq_OS_sampletype` a merged dataset from
+#' (1) `TCGA_RNAseq_OS_sampletype` a merged dataset from
 #'  `.TCGA_RNAseq`, `.TCGA_OS` and `.TCGA_sampletype`.
 #'
 #'  * `.TCGA_RNAseq`: the RNAseq data from TCGA generated from
@@ -118,7 +118,6 @@ initialize_survival_data <- function() {
 #'  function.
 #'
 #' @family helper function for data initialization
-
 #'
 #' @return
 #'
@@ -171,7 +170,8 @@ initialize_survival_data <- function() {
 #' It should not be used directly, only inside [.plot_KM_RNAseq_TCGA()]
 #'  function.
 #'
-#' side effects: KM curve plots for TCGA patients with gene expression in their
+#' Side effects:
+#' (1) KM curve plots for TCGA patients with gene expression in their
 #'  tumors
 #'
 #' @family helper function for survival analysis
@@ -299,7 +299,7 @@ initialize_survival_data <- function() {
 #'
 #' @param data `df1` generated inside [.plot_CoxPH_RNAseq_TCGA()]
 #'
-#' @param covariate_names gene names from the input arguement
+#' @param covariate_names gene names from the input argument
 #' of [.plot_CoxPH_RNAseq_TCGA()]
 #'
 #' @return a table of univariable Cox-PH
@@ -594,6 +594,11 @@ initialize_survival_data <- function() {
 #' This function should not be used directly, only inside
 #'  [EIF4F_Survival_analysis()] function.
 #'
+#' Side effects:
+#'
+#' (1) KM curve plots on screen and as pdf files to correlate patient survival
+#'  probability with expression of `gene_name` in their tumors
+#'
 #' @family composite function to call survival analysis and plotting
 #'
 #' @param gene_name gene name
@@ -601,12 +606,7 @@ initialize_survival_data <- function() {
 #' @param cutoff percentage of gene expression for patient stratification
 #'
 #' @param tumor all tumor types or specific type
-#'
-#' @return
-#'
-#' KM curve plots for TCGA patients with expression of `gene_name` in their
-#'  tumors
-#'
+#
 #' @importFrom survival Surv
 #'
 #' @importFrom stats quantile
@@ -665,17 +665,17 @@ initialize_survival_data <- function() {
 #' This function should not be used directly, only inside
 #'  [EIF4F_Survival_analysis()] function.
 #'
+#' Side effects:
+#'
+#' (1) forest graphs on screen and as pdf file to show the relation between
+#'  survival of TCGA patients and expression of `gene_list` in their tumors
+#'  by univariable and multivariable regression models
+#'
 #' @family composite function to call survival analysis and plotting
 #'
 #' @param gene_list gene names in a vector of characters
 #'
 #' @param tumor all tumor types or specific type
-#'
-#' @return
-#'
-#' forest graph showing the relation between survival of TCGA patients
-#'  and expression of `gene_list` in their tumors by univariable and
-#'  multivariable regression models
 #'
 #' @importFrom tidyr drop_na
 #'
@@ -790,11 +790,12 @@ initialize_survival_data <- function() {
 #'
 #' side effects:
 #'
-#' * KM curve plots for TCGA patients with gene expression in their
-#'  tumors
-#' * forest graph showing the relation between survival of TCGA
-#'  patients and EIF expression in their tumors by univariable and
-#'  multivariable regression models
+#' (1) KM curve plots on screen and as pdf files to correlate patient survival
+#'  probability with gene expression in their tumors
+#'
+#' (2) forest graphs on screen and as pdf file to show the relation between
+#'  survival of TCGA patients and gene expression in their tumors
+#'  by univariable and multivariable regression models
 #'
 #' @family wrapper function to call all composite functions with inputs
 #'

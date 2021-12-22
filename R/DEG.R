@@ -338,7 +338,9 @@ initialize_RNAseq_data <- function() {
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_RNAseq_TCGA()]function.
 #'
-#' Side effect: box plots on screen and as pdf file to show differential
+#' Side effects:
+#'
+#' (1) box plots on screen and as pdf file to show differential
 #'  gene expression in tumors vs NATs in TCGA cancer types
 #'
 #' @family helper function for differential expression plotting
@@ -466,7 +468,8 @@ initialize_RNAseq_data <- function() {
 #' This function should not be used directly, only inside
 #'  [.plot_boxgraph_RNAseq_TCGA()] or [.plot_boxgraph_RNAratio_TCGA()] function.
 #'
-#'  side effect: the violin plots on screen and as pdf file to show
+#'  Side effect:
+#'  (1) the violin plots on screen and as pdf file to show
 #'   differential gene expression/ratio in primary, metastatic tumors vs
 #'   adjacent normal tissues from all combined TCGA cancer types
 #'
@@ -579,7 +582,9 @@ initialize_RNAseq_data <- function() {
 
 #' @title Calculate RNA ratios
 #'
-#' @description This function
+#' @description A helper function calculates the RNA ratios between genes
+#'
+#' @details This function
 #'
 #'  * select the of RNAseq data of input genes from all TCGA samples, using the
 #'   data frame `TCGA_GTEX_RNAseq_sampletype` prepared by the function
@@ -790,7 +795,8 @@ initialize_RNAseq_data <- function() {
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_RNAratio_TCGA()]function.
 #'
-#' side effect: the box plots on screen and as pdf file to show differential
+#' Side effects:
+#' (1)the box plots on screen and as pdf files to show differential
 #'  RNA ratios across tumors
 #'
 #' @family helper function for differential expression plotting
@@ -974,11 +980,13 @@ initialize_RNAseq_data <- function() {
 #'
 #' side effects:
 #'
-#'  * box plots on screen and as pdf file to compare relative gene
+#'  (1) box plots on screen and as pdf file to compare relative gene
 #'  expression in across all TCGA cancer types
-#'  * box plots on screen and as pdf file to show differential
+#'
+#'  (2) box plots on screen and as pdf file to show differential
 #'  gene expression in tumors vs NATs in TCGA cancer types
-#'  * violin plots on screen and as pdf file to show
+#'
+#'  (3) violin plots on screen and as pdf file to show
 #'   differential gene expression in primary, metastatic tumors vs
 #'   adjacent normal tissues from all combined TCGA cancer types
 #'
@@ -1062,9 +1070,10 @@ initialize_RNAseq_data <- function() {
 #'
 #' side effects:
 #'
-#'  * box plots on screen and as pdf file to show differential
+#'  (1) box plots on screen and as pdf file to show differential
 #'  RNA ratios in tumors vs NATs in TCGA cancer type
-#'  * violin plots on screen and as pdf file to show
+#'
+#'  (2) violin plots on screen and as pdf file to show
 #'   differential gene ratios in primary, metastatic tumors vs
 #'   adjacent normal tissues from all combined TCGA cancer types
 #'
@@ -1188,18 +1197,22 @@ initialize_RNAseq_data <- function() {
 #'  * [.plot_boxgraph_RNAseq_TCGA()]
 #'  * [.plot_boxgraph_RNAratio_TCGA()]
 #'
-#' side effect:
+#' Side effects:
 #'
-#'  * box plots on screen and as pdf file to compare relative gene
+#' (1) box plots on screen and as pdf file to compare relative gene
 #'   expression in across all TCGA cancer types
-#'  * box plots on screen and as pdf file to show differential
+#'
+#' (2) box plots on screen and as pdf file to show differential
 #'  gene expression in tumors vs NATs in TCGA cancer types
-#'  * violin plots on screen and as pdf file to show
+#'
+#' (3) violin plots on screen and as pdf file to show
 #'   differential gene expression in primary, metastatic tumors vs
 #'   adjacent normal tissues from all combined TCGA cancer types
-#'  * box plots on screen and as pdf file to show differential
+#'
+#' (4) box plots on screen and as pdf file to show differential
 #'  RNA ratios in tumors vs NATs in TCGA cancer type
-#'  * violin plots on screen and as pdf file to show
+#'
+#' (5) violin plots on screen and as pdf file to show
 #'   differential gene ratios in primary, metastatic tumors vs
 #'   adjacent normal tissues from all combined TCGA cancer types
 #'

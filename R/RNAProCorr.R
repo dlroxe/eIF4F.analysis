@@ -26,7 +26,7 @@ CPTAC_LUAD_RNAseq <- NULL
 #' A wrapper function reads all proteomics related datasets from CCLE and
 #'  CPTAC LUAD.
 #'
-#' side effects:
+#' @details Side effects:
 #'
 #' (1) `CCLE_RNAseq`: the RNAseq data of CCLE from the download dataset
 #'  `CCLE_expression_full.csv`
@@ -104,22 +104,22 @@ initialize_proteomics_data <- function() {
               ~ suppressWarnings(as.numeric(.)))
 }
 
-#' ### Select EIF RNA/pro data and plotting
+
 ## Select EIF RNA/pro data and plotting ================================
 
-#' Select subset of CCLE RNAseq data
-#' @description
+#' @title Select subset of CCLE RNAseq data
 #'
-#' This function selected the CCLE RNAseq data from the input `EIF`.
+#' @description A helper function selects the CCLE RNAseq data of the input gene
+#'  `EIF`.
 #'
-#' @details
-#'
-#' The function should not be used directly, only inside
+#' @details The function should not be used directly, only inside
 #'  [.plot_scatter_RNApro_CCLE()] function.
 #'
 #' @param gene_name gene name
 #'
 #' @return a data frame of CCLE RNAseq data from the input `gene_name` genes
+#'
+#' @family helper function for RNA protein correlation analysis
 #'
 #' @importFrom dplyr starts_with
 #'
@@ -135,20 +135,19 @@ initialize_proteomics_data <- function() {
     dplyr::select("DepMap_ID", dplyr::starts_with((!!paste(gene_name, "(ENSG")))))
 }
 
-#' Select subset of CCLE proteomics data
+#' @title Select subset of CCLE proteomics data
 #'
-#' @description
+#' @description A helper function selects the CCLE proteomics data from the
+#'  input gene `gene_name`.
 #'
-#' This function selected the CCLE proteomics data from the input `gene_name`.
-#'
-#' @details
-#'
-#' The function should not be used directly, only inside
+#' @details The function should not be used directly, only inside
 #'  [.plot_scatter_RNApro_CCLE()] function.
 #'
 #' @param gene_name gene name
 #'
 #' @return a data frame of CCLE proteomics data from the input `gene_name`
+#'
+#' @family helper function for RNA protein correlation analysis
 #'
 #' @importFrom dplyr across
 #'
@@ -193,14 +192,17 @@ initialize_proteomics_data <- function() {
   return(.CCLE_Proteomics_subset)
 }
 
-#' Scatter plots of correlation between RNAseq and proteomics data
+#' @title Scatter plots of correlation between RNAseq and proteomics data
 #'
-#' @description
+#' @description A helper function plots RNAseq and proteomics data in scatter
+#'  plot and analyzes the correlation
 #'
-#' This function should not be used directly, only inside
+#' @details This function should not be used directly, only inside
 #'  [.plot_scatter_RNApro_CCLE()] or [.plot_scatter_RNApro_LUAD()] function.
 #'
-#' side effect: scatter plot to show correlation between RNA and protein
+#' Side effects:
+#'
+#' (1) scatter plots to show correlation between RNA and protein
 #'  expressions
 #'
 #' @param df dataframe of both RNAseq and proteomics generated inside
@@ -208,6 +210,8 @@ initialize_proteomics_data <- function() {
 #' @param gene_name protein or gene name
 #'
 #' @param cohort database name. `CCLE` or `LUAD`
+#'
+#' @family helper function for RNA protein correlation analysis
 #'
 #' @importFrom ggpubr ggscatter
 #'
@@ -251,17 +255,15 @@ initialize_proteomics_data <- function() {
   return(NULL)
 }
 
-#' ### Composite function to perform RNA protein correlation
+
 ## Composite function to perform RNA protein correlation =======================
 
-#' Correlation between CCLE RNAseq and proteomics data
+#' @title Correlation between CCLE RNAseq and proteomics data
 #'
 #' @description
 #'
-#' This function generates correlation scatter plot for eIF4F RNAseq and
+#' A composite function generates correlation scatter plot for eIF4F RNAseq and
 #' proteomics data from CCLE.
-#'
-#' @param gene_name gene name
 #'
 #' @details
 #'
@@ -276,8 +278,14 @@ initialize_proteomics_data <- function() {
 #' This function should not be used directly, only inside
 #' [EIF4F_RNA_pro_correlation()] function.
 #'
-#' side effect: scatter plot to show correlation between RNA and protein of
+#' Side effects:
+#' (1) scatter plot to show correlation between RNA and protein of
 #'  input `gene_name` expressions in CCLE samples
+#'
+#' @param gene_name gene name
+#'
+#' @family composite function to call RNA protein correlation analysis and
+#'  plotting
 #'
 #' @keywords internal
 #'
@@ -302,13 +310,11 @@ initialize_proteomics_data <- function() {
   return(NULL)
 }
 
-#' Correlation between LUAD RNAseq and proteomics data
+#' @title Correlation between LUAD RNAseq and proteomics data
 #'
 #' @description
-#' This function generates correlation scatter plot for eIF4F RNAseq and
+#' A composite function generates correlation scatter plot for eIF4F RNAseq and
 #' proteomics data from LUAD.
-#'
-#' @param gene_name gene name
 #'
 #' @details This function
 #'
@@ -322,8 +328,14 @@ initialize_proteomics_data <- function() {
 #' This function should not be used directly, only inside
 #'  [EIF4F_RNA_pro_correlation()] function.
 #'
-#' side effect: scatter plot to show correlation between RNA and protein
+#' Side effects:
+#' (1) scatter plot to show correlation between RNA and protein
 #'  expressions of input `gene_name` in CPTAC LUAD samples
+#'
+#' @param gene_name gene name
+#'
+#' @family composite function to call RNA protein correlation analysis and
+#'  plotting
 #'
 #' @keywords internal
 #'
@@ -354,7 +366,7 @@ initialize_proteomics_data <- function() {
 
 ## Wrapper function to call all composite functions with inputs ================
 
-#' Perform PCA and generate plots
+#' @title Perform PCA and generate plots
 #'
 #' @description
 #'
@@ -366,12 +378,12 @@ initialize_proteomics_data <- function() {
 #' This function run the composite functions [.plot_scatter_RNApro_CCLE()] and
 #'  [.plot_scatter_RNApro_LUAD()] with EIF4F gene name as inputs.
 #'
-#' side effect:
+#' Side effects:
 #'
-#'  * scatter plot to show correlation between EIF4F RNA and protein
+#' (1) scatter plot to show correlation between EIF4F RNA and protein
 #'  expressions in CCLE samples
 #'
-#'  * scatter plot to show correlation between EIF4F RNA and protein
+#' (2) scatter plot to show correlation between EIF4F RNA and protein
 #'  expressions in CPTAC LUAD samples
 #'
 #' @family wrapper function to call all composite functions with inputs

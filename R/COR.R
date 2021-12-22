@@ -180,7 +180,7 @@
 }
 
 
-#' @title Select positive correlating genes based on coeffeciency and pvalue
+#' @title Select positive correlating genes based on coefficiency and pvalue
 #'
 #' @description
 #'
@@ -194,9 +194,9 @@
 #'
 #' @param magnitude correlation coefficiency value
 #'
-#' @param pvalue p value for pearson correlation
+#' @param pvalue p value for Pearson correlation
 #'
-#' @return a dataframe of positive correlating gene with correlation
+#' @return a data frame of positive correlating gene with correlation
 #'  coefficiency and p value
 #'
 #' @keywords internal
@@ -206,11 +206,11 @@
 }
 
 
-#' @title Select negative correlating genes based on coeffeciency and pvalue
+#' @title Select negative correlating genes based on coefficiency and pvalue
 #'
 #' @description
 #'
-#' A helper function selects negative correlating genes based on incoefficiency
+#' A helper function selects negative correlating genes based on coefficiency
 #'  and pvalue.
 #'
 #' It should not be used directly, only inside [.EIF_correlation()]
@@ -220,7 +220,7 @@
 #'
 #' @param magnitude correlation coefficiency value
 #'
-#' @param pvalue p value for pearson correlation
+#' @param pvalue p value for Pearson correlation
 #'
 #' @return a dataframe of negative correlating gene with correlation
 #'  coefficiency and p value
@@ -280,7 +280,9 @@
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
 #'
-#' side effects: Venn diagrams on screen and as pdf file to show the overlap of
+#' Side effects:
+#'
+#' (1) Venn diagrams on screen and as pdf file to show the overlap of
 #'  EIF correlating genes
 #'
 #' @family helper function for correlation analysis plotting
@@ -292,8 +294,6 @@
 #' @param sample_type tumor or normal for the title of Venn diagram
 #'
 #' @param CORs_type posCOR or negCORs for the title of Venn diagram
-#'
-#' @return vennDiagram for posCOR or negCORs
 #'
 #' @importFrom eulerr euler
 #'
@@ -432,7 +432,9 @@
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
 #'
-#' side effects: bar graphs on screen and as pdf file to show the numbers of
+#' Side effects:
+#'
+#' (1) bar graphs on screen and as pdf file to show the numbers of
 #'  identified correlating genes for each EIF4F subunit
 #'
 #' @family helper function for correlation analysis plotting
@@ -441,7 +443,7 @@
 #'
 #' @param tissue_type input argument of [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
-#' @param CORs_type posCOR or negCORs for the title of Venn diagram
+#' @param CORs_type posCORs or negCORs for the title of Venn diagram
 #'
 #' @param coord_flip.ylim the limit of y axis in the bar plot
 #'
@@ -536,7 +538,7 @@
 #'
 #' @return
 #'
-#' data frame with posCOR or negCOR from both tumors and healthy tissue samples
+#' data frame with posCORs or negCORs from both tumors and healthy tissue samples
 #'
 #' @importFrom stats setNames
 #'
@@ -583,12 +585,12 @@
 
 
 #' @title Select both positive and negative correlating genes based on
-#'  coeffeciency and pvalue
+#'  coefficiency and pvalue
 #'
 #' @description
 #'
 #' This function selects both positive and negative correlating genes based on
-#'  coeffeciency and pvalue.
+#'  coefficiency and pvalue.
 #'
 #' It should not be used directly, only inside [.combine_CORs_list()]
 #'  function.
@@ -597,9 +599,9 @@
 #'
 #' @param magnitude correlation coefficiency value
 #'
-#' @param pvalue p value for pearson correlation
+#' @param pvalue p value for Pearson correlation
 #'
-#' @return a dataframe of both positive and negative correlating gene with
+#' @return a data frame of both positive and negative correlating gene with
 #'  correlation coefficiency and p value
 #'
 #' @keywords internal
@@ -621,7 +623,9 @@
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
 #'
-#' side effects: heatmap on screen and as pdf file to show correlation strength
+#' Side effects:
+#'
+#' (1) heatmap on screen and as pdf file to show correlation strength
 #'  and clustering pattern of EIF4F correlating genes.
 #'
 #' @family helper function for correlation analysis plotting
@@ -782,7 +786,9 @@
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
 #'
-#' side effects: dotplot on screen and as pdf file to show the enriched pathways
+#' Side effects:
+#'
+#' (1) dotplot on screen and as pdf file to show the enriched pathways
 #'  in the genes from different clusters in the heatmap
 #'
 #' @family helper function for correlation analysis plotting
@@ -858,22 +864,25 @@
 #'  clustering results in heatmap with [.CORs_coeff_heatmap()]
 #' * retrieve the gene names from the clusters in heatmap with
 #'  [.get_cluster_genes()]
-#' * performs the pathways enrichement analysis on the retrieved gene list and
+#' * performs the pathways enrichment analysis on the retrieved gene list and
 #'  plot the results with [.pathway_dotplot()]
 #'
 #' This function should not be used directly, only inside
 #'  [EIF4F_Corrgene_analysis()] function.
 #'
-#' side effects:
+#' Side effects:
 #'
-#' * Venn diagrams on screen and as pdf file to show the overlap of
+#' (1) Venn diagrams on screen and as pdf file to show the overlap of
 #'  EIF correlating genes identify from RNAseq of `tissue_type`
-#' * bar graphs on screen and as pdf file to show the numbers of
+#'
+#' (2) bar graphs on screen and as pdf file to show the numbers of
 #'  identified correlating genes for each EIF4F subunit identify from
 #'  RNAseq of `tissue_type`
-#' * heatmap on screen and as pdf file to show correlation strength
-#'  and clustering pattern of EIF4F correlating genes.
-#' * dotplot on screen and as pdf file to show the enriched pathways
+#'
+#' (3) heatmap on screen and as pdf file to show correlation strength
+#'  and clustering pattern of EIF4F correlating genes
+#'
+#' (4) dotplot on screen and as pdf file to show the enriched pathways
 #'  in the genes from different clusters in the heatmap
 #'
 #' @family composite function to call correlation analysis and plotting
@@ -1024,16 +1033,19 @@
 #'  * "Lung" for lung cancer types (LUAD and LUSC of TCGA) and healthy lung
 #'   tissues of GTEx
 #'
-#' side effects
+#' Side effects:
 #'
-#' * Venn diagrams on screen and as pdf file to show the overlap of
+#' (1) Venn diagrams on screen and as pdf file to show the overlap of
 #'  EIF correlating genes identify from RNAseq of `tissue_type`
-#' * bar graphs on screen and as pdf file to show the numbers of
+#'
+#' (2) bar graphs on screen and as pdf file to show the numbers of
 #'  identified correlating genes for each EIF4F subunit identify from
 #'  RNAseq of `tissue_type`
-#' * heatmap on screen and as pdf file to show correlation strength
+#'
+#' (3) heatmap on screen and as pdf file to show correlation strength
 #'  and clustering pattern of EIF4F correlating genes.
-#' * dotplot on screen and as pdf file to show the enriched pathways
+#'
+#' (4) dotplot on screen and as pdf file to show the enriched pathways
 #'  in the genes from different clusters in the heatmap
 #'
 #' @family wrapper function to call all composite functions with inputs

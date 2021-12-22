@@ -27,8 +27,7 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #' A wrapper function reads all CNV related datasets from TCGA and its side effects
 #'  are three global variables.
 #'
-#'
-#' @details side effects:
+#' @details Side effects:
 #'
 #' (1) `TCGA_CNV_value`: the unthreshold CNV value data generated as the output
 #'  [.get_TCGA_CNV_value()], which imports the download dataset
@@ -593,7 +592,9 @@ initialize_cnv_data <- function() {
 #' It should not be used directly, only inside
 #'  [.plot_matrix_CNVcorr_TCGA()] function.
 #'
-#' Side effect: the correlation matrix plot on screen and as saved pdf files
+#' Side effects:
+#'
+#' (1) the correlation matrix plot on screen and as saved pdf files
 #'
 #' @family helper function for CNV data plotting
 #'
@@ -718,7 +719,9 @@ initialize_cnv_data <- function() {
 #' It should not be used directly, only inside [.plot_boxgraph_CNVratio_TCGA()]
 #'  function.
 #'
-#' Side effect: boxplot on screen and as saved pdf files to show CNV ratios
+#' Side effects:
+#'
+#' (1) boxplot on screen and as saved pdf files to show CNV ratios
 #'  in tumors vs adjacent normals from individual TCGA cancer types.
 #'
 #' @family helper function for CNV data plotting
@@ -818,12 +821,13 @@ initialize_cnv_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_CNV_analysis()] function.
 #'
-#' side effect:
+#' Side effects:
 #'
-#' * the stacked bar plots on screen and as pdf file to show the summary
+#' (1) the stacked bar plots on screen and as pdf file to show the summary
 #'  table of the CNV statuses of all `gene_list` in TCGA tumors
-#' * stacked bar plots on screen and as saved pdf files to show
-#'  CNV status of each gene in `gene_list` from an individual cancer type.
+#'
+#' (2) stacked bar plots on screen and as saved pdf files to show
+#'  CNV status of each gene in `gene_list` from an individual cancer type
 #'
 #' @family composite function to call CNV data analysis and plotting
 #'
@@ -919,8 +923,10 @@ initialize_cnv_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_CNV_analysis()] function.
 #'
-#' side effect: the box plots on screen and as saved pdf files to show
-#'  CNV ratio of `gene_list` in TCGA tumors vs normals
+#' Side effects:
+#'
+#' (1) the box plots on screen and as saved pdf files to show CNV ratio of
+#'  `gene_list` in TCGA tumors vs normals
 #'
 #' @family composite function to call CNV data analysis and plotting
 #'
@@ -966,15 +972,18 @@ initialize_cnv_data <- function() {
 #'  * [.plot_matrix_CNVcorr_TCGA()]
 #'  * [.plot_boxgraph_CNVratio_TCGA()]
 #'
-#' side effect:
+#' Side effect:
 #'
-#'  * stacked bar plots on screen and as pdf file to show the summary
+#' (1) stacked bar plots on screen and as pdf file to show the summary
 #'  table of the CNV statuses of all EIF genes in TCGA tumors
-#'  * stacked bar plots on screen and as saved pdf files to show
-#'  CNV status of each EIF gene from an individual cancer type.
-#'  * correlation matrix plot on screen and as saved pdf files to show
+#'
+#' (2) stacked bar plots on screen and as saved pdf files to show
+#'  CNV status of each EIF gene from an individual cancer type
+#'
+#' (3) correlation matrix plot on screen and as saved pdf files to show
 #'   co-occurrence of EIF genes CNV status in TCGA tumors
-#'  * box plots on screen and as saved pdf files to show CNV ratio
+#'
+#' (4) box plots on screen and as saved pdf files to show CNV ratio
 #'   of EIF genes in TCGA tumors vs normals
 #'
 #' @family wrapper function to call all composite functions with inputs

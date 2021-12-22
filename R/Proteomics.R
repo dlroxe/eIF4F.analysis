@@ -18,12 +18,13 @@
 ## due to NSE notes in R CMD check
 CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 
-#' Read all phosphoproteomics related datasets from CPTAC LUAD
+
+#' @title Read all phosphoproteomics related datasets from CPTAC LUAD
 #'
-#' @description
+#' @description A wrapper function reads all phosphoproteomics related datasets
+#'  from CPTAC LUAD.
 #'
-#' A wrapper function reads all phosphoproteomics related datasets from CPTAC LUAD.
-#' Side effects:
+#' @details Side effects:
 #'
 #' (1) `CPTAC_LUAD_Phos`: the phosphoproteomics data of CPTAC LUAD from the
 #'  download data `Phos.xlsx`
@@ -95,20 +96,19 @@ initialize_phosphoproteomics_data <- function() {
 }
 
 
-#' ### Select RNA and protein expression data and plotting
 ## Select RNA and protein expression data and plotting ===================
 
-#' Scatter plots of protein coexpression
+#' @title Scatter plots of protein coexpression
 #'
-#' @description
+#' @description A helper function for protein coexpression analysis
 #'
 #' This function should not be used directly, only inside
 #'  [.plot_scatterplot_protein_CPTAC()] function.
 #'
-#' side effect: scatter plot to show correlation between two protein
-#'  expressions
+#' Side effects:
+#' (1) scatter plot to show correlation between two protein expressions
 #'
-#' @param data input LUAD dataset generated from
+#' @param df a subset LUAD dataset generated from
 #'  [.plot_scatterplot_protein_CPTAC()]
 #'
 #' @param protein01 protein name
@@ -118,6 +118,8 @@ initialize_phosphoproteomics_data <- function() {
 #' @param color color scheme for the scatter plot
 #'
 #' @importFrom ggpubr ggscatter
+#'
+#' @family helper function for protein coexpression analysis
 #'
 #' @keywords internal
 #'
@@ -168,11 +170,12 @@ initialize_phosphoproteomics_data <- function() {
   return(NULL)
 }
 
-#' Select subset of CPTAC proteomics data
+#' @title Select subset of CPTAC proteomics data
 #'
 #' @description
 #'
-#' This function selected the CPTAC LUAD proteomics data from the input `x`.
+#' This function selected the CPTAC LUAD proteomics data from the input proteins
+#'  `protein_list`.
 #'
 #' @details
 #'
@@ -182,7 +185,9 @@ initialize_phosphoproteomics_data <- function() {
 #' @param protein_list protein name, passed `protein_list` argument from
 #'  [.plot_boxgraph_protein_CPTAC()]
 #'
-#' @return a data frame of CPTAC LUAD  data from the input `x` genes
+#' @return a data frame of CPTAC LUAD  data from the input `protein_list` genes
+#'
+#' @family helper function for protein coexpression analysis
 #'
 #' @examples \dontrun{
 #' .get_CPTAC_LUAD_Proteomics_subset(protein_list)
@@ -196,11 +201,11 @@ initialize_phosphoproteomics_data <- function() {
     dplyr::select(dplyr::any_of(protein_list), "Sample"))
 }
 
-#' Select subset of CPTAC phosproteomics data
+#' @title Select subset of CPTAC phosproteomics data
 #'
 #' @description
 #'
-#' This function selected the CPTAC LUAD phosproteomics data from the
+#' This function selected the CPTAC LUAD phosphoproteomics data from the
 #'  input `protein_list`.
 #'
 #' @details
@@ -212,6 +217,8 @@ initialize_phosphoproteomics_data <- function() {
 #'  [.plot_boxgraph_protein_CPTAC()]
 #'
 #' @return a data frame of CPTAC LUAD  data from the input `protein_list` genes
+#'
+#' @family helper function for protein coexpression analysis
 #'
 #' @importFrom dplyr funs
 #'
@@ -234,20 +241,25 @@ initialize_phosphoproteomics_data <- function() {
     dplyr::rename("Sample" = "Sample na"))
 }
 
-#' Boxplots of phosphor-proteomics data across clinic stages
+#' @title Boxplots of phosphor-proteomics data across clinic stages
 #'
-#' @description
+#' @description A helper function draws boxplots for protein differential
+#'  expression across clinical stages
 #'
+#' @details
 #' This function should not be used directly,
 #'  only inside [.plot_boxgraph_protein_CPTAC()].
 #'
-#' side effect: boxplot to show the different expression of protein across
+#' Side effects:
+#' (1) boxplots to show the different expression of protein across
 #'  different clinical tumor stages
 #'
-#' @param df a data frame of the combined proteomics and prosphorylation data
+#' @param df a data frame of the combined proteomics and phosphorylation data
 #'  generated inside [.plot_boxgraph_protein_CPTAC()]
 #'
 #' @param protein_name protein name
+#'
+#' @family helper function for protein coexpression analysis
 #'
 #' @importFrom dplyr ungroup
 #'
@@ -360,21 +372,24 @@ initialize_phosphoproteomics_data <- function() {
   return(NULL)
 }
 
-#' ### Composite function for coexpression and differential expression analysis
+
 ## Composite function for coexpression and differential expression analysis ====
 
-#' protein-protein coexpression in CPTAC LUAD
+#' @title protein-protein coexpression in CPTAC LUAD
 #'
-#' @description
+#' @description A composite function for coexpression and differential
+#'  expression analysis
 #'
-#' This function selects proteomics data from CPTAC LUAD dataset and protein
-#'  coexpression analysis
-#'
-#' This function should not be used directly, only inside
+#' @details This function should not be used directly, only inside
 #'  [EIF4F_Proteomics_analysis()] function.
 #'
-#' side effects: scatter plots to show correlation between two protein
+#' Side effects:
+#'
+#' (1) scatter plots to show correlation between two protein
 #'  expressions
+#'
+#' @family composite function to call protein coexpression and differential
+#'  expression analysis
 #'
 #' @importFrom ggpubr ggscatter
 #'
@@ -451,33 +466,33 @@ initialize_phosphoproteomics_data <- function() {
   return(NULL)
 }
 
-#' Comparison of protein and phosphorylation levels among different stages of
-#' LUAD
+#' @title Comparison of protein and phosphorylation levels among different
+#'  stages of LUAD
 #'
-#' @description
+#' @description A composite function analyzes differential expression of eIF4F protein and
+#'  phosphorylation in CPTAC LUAD data and plots results as boxplots
 #'
-#' This function generates boxplot for eIF4F proteomics and prosphorylation data
-#'  from CPTAC LUAD.
+#' @details This function
 #'
-#' @details
-#'
-#' This function merges the LUAD proteomics values from EIF4F genes
+#' * merges the LUAD proteomics values from EIF4F genes
 #'  in the data frame prepared from [.get_CPTAC_LUAD_Proteomics_subset()] and
 #'  phosphoproteomics data of the same protein in the data frame prepared
 #'  from [.get_CPTAC_LUAD_Phosproteomics_subset()].
 #'
-#' Then it uses the combined data to compare the abundance across different
-#'  tumor stages, and plot the result with the function [.protein_boxplot()]
+#' * uses the combined data to compare the abundance across different
+#'  tumor stages, and plot the results with the function [.protein_boxplot()]
 #'
 #' This function should not be used directly, only inside
 #'  [EIF4F_Proteomics_analysis()] function.
 #'
-#' side effect: boxplot to show the different expression of (phospho)protein
+#' Side effects:
+#' (1) boxplot to show the different expression of (phospho)protein
 #'  across different clinical tumor stages
 #'
 #' @param protein_list protein names in a vector of string
 #'
-#' @return the box plots for `EIF` protein and phosphorylation values in LUAD
+#' @family composite function to call protein coexpression and differential
+#'  expression analysis
 #'
 #' @importFrom dplyr group_by right_join summarise
 #'
@@ -531,23 +546,22 @@ initialize_phosphoproteomics_data <- function() {
 
 ## Wrapper function to call all composite functions with inputs ================
 
-#' Analyze co-expression among EIF4F subunits and differential expression
+#' @title Analyze co-expression among EIF4F subunits and differential expression
 #'
-#' @description
-#'
-#' A wrapper function to call two composite functions for protein coexpression
-#'  and differential expression.
+#' @description A wrapper function to call two composite functions for protein
+#'  coexpression and differential expression.
 #'
 #' @details
 #'
 #' This function run the composite functions [.plot_scatterplot_protein_CPTAC()]
 #' and [.plot_boxgraph_protein_CPTAC()] with EIF4F gene name as inputs.
 #'
-#' side effect:
+#' Side effects:
 #'
-#' * scatter plot to show correlation between two protein expressions in CPTAC
+#' (1) scatter plot to show correlation between two protein expressions in CPTAC
 #'  LUAD samples
-#' * boxplot to show the different expression of protein across
+#'
+#' (2) boxplot to show the different expression of protein across
 #'  different clinical tumor stages
 #'
 #' @family wrapper function to call all composite functions with inputs
