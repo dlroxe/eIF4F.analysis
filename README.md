@@ -33,7 +33,7 @@ package.
 
 [Install dependent libraries](#install-dependent-libraries)
 
-[Load eIF4F.analysis package](#load-eif4f.analysis-package)
+[Load package](#load-package)
 
 [Session information](#session-information)
 
@@ -73,9 +73,9 @@ Information” section below.
 
 ## Install RStudio/R
 
-1.  Download & install R 4.1, if not already installed. 
+1.  Download & install R 4.1, if not already installed.
 2.  Download & install RStudio, if not already installed.
-    (<https://www.rstudio.com/products/rstudio/download/>).  
+    <https://www.rstudio.com/products/rstudio/download/>
 
 ## Download data-sets
 
@@ -87,7 +87,7 @@ Download.sh
 bash ~/github/eIF4F.analysis/Script/Download.sh
 ```
 
-`Download.sh` is a bash script to download all needed datasets (TGCA,
+`Download.sh` is a bash script to download all needed datasets (TCGA,
 GTEx, CPTAC, CCLE and etc) from URLs and unzip them. `Download.sh` will
 create the `~/Downloads/EIF_data` directory to store all downloaded
 datasets.
@@ -169,7 +169,7 @@ gunzip ${DATA_FILE_DIRECTORY}/*.gz
 
 **CRITICAL**: If the root directory path `~/Downloads/EIF_data` does not
 suit, they may be adjusted trivially in these lines near the top of the
-`Download.sh` script. 
+`Download.sh` script.
 
 ## File directories
 
@@ -209,7 +209,7 @@ BiocManager::install(bio_pkgs)
 lapply(bio_pkgs, require, character.only = TRUE)
 ```
 
-## Load eIF4F.analysis package
+## Load package
 
 Load `eIF4F.analysis` in the R console.
 

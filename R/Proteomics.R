@@ -1,17 +1,17 @@
-#' ## Co-expression among EIF4F subunits and differential expression
-#' This R script contains four sections.
-#'
-#' (1) LUAD phospho-proteomics data preparation
-#'
-#' (2) selection of RNA and protein expression data and plotting
-#'
-#' (3) composite functions to execute a pipeline of functions to select related
-#'  expression with supply of EIF4F gene names for coexpression and differential
-#'  expression analyses.
-#'
-#' (4) wrapper function to call all composite functions with inputs
-#'
-#' ### Wrapper function for data initialization of phosphoproteomics datasets
+# Co-expression among EIF4F subunits and differential expression
+# This R script contains four sections.
+#
+# (1) LUAD phospho-proteomics data preparation
+#
+# (2) selection of RNA and protein expression data and plotting
+#
+# (3) composite functions to execute a pipeline of functions to select related
+#  expression with supply of EIF4F gene names for coexpression and differential
+#  expression analyses.
+#
+# (4) wrapper function to call all composite functions with inputs
+#
+
 ## Wrapper function for data initialization of phosphoproteomics datasets ======
 
 #' @noRd
@@ -22,19 +22,21 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #'
 #' @description
 #'
-#' This function reads all phosphoproteomics related datasets from CPTAC LUAD.
+#' A wrapper function reads all phosphoproteomics related datasets from CPTAC LUAD.
 #' Side effects:
 #'
 #' (1) `CPTAC_LUAD_Phos`: the phosphoproteomics data of CPTAC LUAD from the
 #'  download data `Phos.xlsx`
+#'
 #' (2) `CPTAC_LUAD_Clinic_Sampletype`: a merged dataset from two data frames.
 #'  It provides the annotation data about sample types (tumor or healthy tissues)
 #'  and tumors stages of each sample
-#'  * `.CPTAC_LUAD_Clinic`, the CPTAC clinical data from the download dataset
-#'  `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx`
-#'  * `.CPTAC_LUAD_sampletype`, the CPTAC annotation data from the download
-#'  dataset `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`
+#'   * `.CPTAC_LUAD_Clinic`, the CPTAC clinical data from the download dataset
+#'   `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx`
+#'   * `.CPTAC_LUAD_sampletype`, the CPTAC annotation data from the download
+#'   dataset `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`
 #'
+#' @family wrapper function for data initialization
 #'
 #' @importFrom dplyr case_when
 #'
@@ -526,7 +528,7 @@ initialize_phosphoproteomics_data <- function() {
   return(NULL)
 }
 
-#' ### Wrapper function to call all composite functions with inputs
+
 ## Wrapper function to call all composite functions with inputs ================
 
 #' Analyze co-expression among EIF4F subunits and differential expression
@@ -547,6 +549,8 @@ initialize_phosphoproteomics_data <- function() {
 #'  LUAD samples
 #' * boxplot to show the different expression of protein across
 #'  different clinical tumor stages
+#'
+#' @family wrapper function to call all composite functions with inputs
 #'
 #' @export
 #'

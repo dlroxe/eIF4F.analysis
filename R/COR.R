@@ -1,28 +1,43 @@
-#' ## Analyses on EIF4F correlating genes (CORs)
-#' This R script contains four sections.
-#'
-#' (1) identify positively or negatively correlating genes of EIF4F
-#'
-#' (2) analyze and plot the correlating genes
-#'
-#' (3) composite functions to execute a pipeline of functions to select related
-#'  RNASeq data for correlation analyses and plotting.
-#'
-#' (4) wrapper function that serves as the entry point for this file
-#'
-#' ### Identify correlating genes for EIF4F genes
+# Analyses on EIF4F correlating genes (CORs)
+# This R script contains four sections.
+#
+# (1) identify positively or negatively correlating genes of EIF4F
+#
+# (2) analyze and plot the correlating genes
+#
+# (3) composite functions to execute a pipeline of functions to select related
+#  RNASeq data for correlation analyses and plotting.
+#
+# (4) wrapper function that serves as the entry point for this file
+#
+
+
 ## Identify correlating genes for EIF4F genes ==================================
 
-#' Identify EIF4F correlating genes
+#' @title Identify EIF4F correlating genes
 #'
-#' @description
+#' @description This function
 #'
-#' This function calculates the correlation efficiency between each EIF4F gene
-#'  and the rest of cellular mRNAs to identify the significantly correlating
-#'  genes.
+#' * takes the data frame
+#'  `.TCGA_GTEX_RNAseq_sampletype_subset` and `sample_type` information
+#'  generated inside [.plot_Corr_RNAseq_TCGA_GTEX()]
+#'
+#' * calculates the correlation coefficiency between each EIF4F gene
+#'  and the rest of cellular mRNAs with [.correlation_coefficient()]
+#'
+#' * combines the correlation coefficiency data from EIF4E, EIF4A1, EIF4G1, and
+#'  EIF4EBP1
+#'
+#' * selects positive correlating genes with [.is_significant_poscor()] and
+#'  negative correlating genes with [.is_significant_negcor()]
+#'
+#' * summarizes the total number of posCORs or negCORs identified for
+#'  each EIF4F gene with [.summarize_counts()]
 #'
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
+#'
+#' @family helper function to identify correlating genes for EIF4F genes
 #'
 #' @param df the data frame `.TCGA_GTEX_RNAseq_sampletype_subset` generated
 #'  inside [.plot_Corr_RNAseq_TCGA_GTEX()]
@@ -33,9 +48,10 @@
 #' @return
 #'
 #' a list output with four elements:
-#'  * cor.data for the heatmap
-#'  * CORs.counts for bargraph
-#'  * c4.posCOR and c4.negCOR for Venn plots
+#'  * `cor_value_combined` for the heatmap
+#'  * `CORs_summary_tbl` for bargraph
+#'  * `posCOR_EIF4F` for Venn plots
+#'  * `negCOR_EIF4F` for Venn plots
 #'
 #' @importFrom AnnotationDbi mapIds
 #'
@@ -106,15 +122,6 @@
   ) %>%
     `colnames<-`(c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1"))
 
-  #posCOR_EIF4F <- cbind(
-  #  EIF4E.cor$estimate > 0.3 & EIF4E.cor$p.value <= 0.05,
-  #  EIF4G1.cor$estimate > 0.3 & EIF4G1.cor$p.value <= 0.05,
-  #  EIF4A1.cor$estimate > 0.3 & EIF4A1.cor$p.value <= 0.05,
-  #  EIF4EBP1.cor$estimate > 0.3 & EIF4EBP1.cor$p.value <= 0.05
-  #) %>%
-  #  `colnames<-`(c("EIF4E", "EIF4G1", "EIF4A1", "EIF4EBP1"))
-
-
   # identify negCORs for each EIF4F gene
   negCOR_EIF4F <- cbind(
     .is_significant_negcor(EIF4E.cor$estimate, EIF4E.cor$p.value),
@@ -129,21 +136,25 @@
     .summarize_counts(negCOR_EIF4F, "negCORs")
   )
 
-  ## four output values: cor.data for the heatmap function and CORs.counts for
-  ## bargraph function, c4.posCOR, c4.negCOR for Venn plots
+  ## four output values:
+  ## cor_value_combined for the heatmap function
+  ## CORs_summary_tbl for the bargraph function
+  ## posCOR_EIF4F and negCOR_EIF4F for Venn plots
   return(list(cor_value_combined, CORs_summary_tbl, posCOR_EIF4F, negCOR_EIF4F))
 }
 
 
-#' Calculate the correlation co-efficiency between two gene expressions
+#' @title Calculate the correlation co-efficiency between two gene expressions
 #'
 #' @description
 #'
-#' This function calculates the correlation co-efficiency between two gene
+#' A helper function calculates the correlation co-efficiency between two gene
 #'  expressions, using the RNAseq expression dataset.
 #'
 #' It should not be used directly, only inside [.EIF_correlation()]
 #'  function.
+#'
+#' @family helper function to identify correlating genes for EIF4F genes
 #'
 #' @param gene1 gene name
 #'
@@ -168,15 +179,18 @@
   ))
 }
 
-#' Select positive correlating genes based on coeffeciency and pvalue
+
+#' @title Select positive correlating genes based on coeffeciency and pvalue
 #'
 #' @description
 #'
-#' This function selects positive correlating genes based on coeffeciency and
-#'  pvalue.
+#' A helper function selects positive correlating genes based on coefficiency
+#'  and pvalue.
 #'
 #' It should not be used directly, only inside [.EIF_correlation()]
 #'  function.
+#'
+#' @family helper function to identify correlating genes for EIF4F genes
 #'
 #' @param magnitude correlation coefficiency value
 #'
@@ -191,15 +205,18 @@
   return(magnitude > 0.3 & pvalue <= 0.05)
 }
 
-#' Select negative correlating genes based on coeffeciency and pvalue
+
+#' @title Select negative correlating genes based on coeffeciency and pvalue
 #'
 #' @description
 #'
-#' This function selects negative correlating genes based on coeffeciency and
-#'  pvalue.
+#' A helper function selects negative correlating genes based on incoefficiency
+#'  and pvalue.
 #'
 #' It should not be used directly, only inside [.EIF_correlation()]
 #'  function.
+#'
+#' @family helper function to identify correlating genes for EIF4F genes
 #'
 #' @param magnitude correlation coefficiency value
 #'
@@ -215,15 +232,17 @@
 }
 
 
-#' Summary of total number of CORs identified for each EIF4F gene
+#' @title Summary of total number of CORs identified for each EIF4F gene
 #'
 #' @description
 #'
-#' This function yields the total number of posCORs or negCORs identified for
+#' This function summarizes the total number of posCORs or negCORs identified for
 #'  each EIF4F gene
 #'
 #' It should not be used directly, only inside [.EIF_correlation()]
 #'  function.
+#'
+#' @family helper function to identify correlating genes for EIF4F genes
 #'
 #' @param identified_COR a data frame with logic statement for each gene tested
 #'
@@ -249,10 +268,9 @@
 }
 
 
-#' ### Correlation analysis and plotting
 ## Correlation analysis and plotting ===========================================
 
-#' Plot Venn diagrams for correlating genes
+#' @title Plot Venn diagrams for correlating genes
 #'
 #' @description
 #'
@@ -264,6 +282,8 @@
 #'
 #' side effects: Venn diagrams on screen and as pdf file to show the overlap of
 #'  EIF correlating genes
+#'
+#' @family helper function for correlation analysis plotting
 #'
 #' @param df correlation data
 #'
@@ -280,7 +300,11 @@
 #' @importFrom limma vennCounts vennDiagram
 #'
 #' @examples \dontrun{
-#' .Cors_vennplot(df = EIF.cor.tumor[[3]], x = x, z = "tumor", CORs = "posCOR")
+#' .CORs_vennplot(
+#' df = EIF.cor.tumor[[3]],
+#' tissue_type = tissue_type,
+#' sample_type = "tumor",
+#' CORs_type = "posCOR")
 #' }
 #'
 #' @keywords internal
@@ -314,7 +338,6 @@
   p2 <- plot(pos.Venn2,
     # key = TRUE,
     main = paste(tissue_type, sample_type, CORs_type),
-    # main = paste(z, Cor),
     lwd = 0,
     fill = c(
       "#999999", "#009E73",
@@ -342,7 +365,8 @@
   return(NULL)
 }
 
-#' Combine the summary of number of posCORs or negCORs from sample types
+
+#' @title Combine the summary of number of posCORs or negCORs from sample types
 #'
 #' @description
 #'
@@ -351,6 +375,8 @@
 #'
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
+#'
+#' @family helper function for correlation analysis
 #'
 #' @param COR_tbl1 a COR summary table of specific sample type `EIF.cor.tumor[[2]]`
 #'
@@ -364,14 +390,14 @@
 #'
 #' @examples \dontrun{
 #' .combine_CORs_summary(
-#'   df1 = EIF.cor.tumor[[2]],
-#'   df2 = EIF.cor.normal[[2]]
-#' )
+#' COR_tbl1 = EIF.cor.tumor[[2]], sample_type1 = "tumor",
+#' COR_tbl2 = EIF.cor.normal[[2]], sample_type2 = "normal")
 #' }
 #'
 #' @keywords internal
 #'
-.combine_CORs_summary <- function(COR_tbl1, sample_type1, COR_tbl2, sample_type2) {
+.combine_CORs_summary <- function(COR_tbl1, sample_type1,
+                                  COR_tbl2, sample_type2) {
   EIF.cor.counts.tumor <- COR_tbl1 %>%
     tibble::add_column(label = sample_type1) %>%
     tibble::rownames_to_column(var = "gene")
@@ -396,7 +422,7 @@
     )))
 }
 
-#' Plot bargraph for the numbers of correlating genes
+#' @title Plot bargraph for the numbers of correlating genes
 #'
 #' @description
 #'
@@ -409,6 +435,8 @@
 #' side effects: bar graphs on screen and as pdf file to show the numbers of
 #'  identified correlating genes for each EIF4F subunit
 #'
+#' @family helper function for correlation analysis plotting
+#'
 #' @param df combined CORs summary table
 #'
 #' @param tissue_type input argument of [.plot_Corr_RNAseq_TCGA_GTEX()]
@@ -420,15 +448,17 @@
 #' @return bargraph for the numbers of posCOR or negCORs
 #'
 #' @examples \dontrun{
-#' .Cors_bargraph(
-#'   df = EIF.cor, tissue_type = tissue_type,
-#'   CORs_type = "posCORs", coord_flip.ylim = 14000
-#' )
+#' .CORs_summary_bargraph(
+#'  df = EIF.cor,
+#'  tissue_type = tissue_type,
+#'  CORs_type = "posCORs",
+#'  coord_flip.ylim = 14000)
 #' }
 #'
 #' @keywords internal
 #'
-.CORs_summary_bargraph <- function(df, tissue_type, CORs_type, coord_flip.ylim) {
+.CORs_summary_bargraph <- function(df, tissue_type,
+                                   CORs_type, coord_flip.ylim) {
   p1 <- ggplot(
     data = df,
     aes_string(
@@ -485,16 +515,20 @@
 }
 
 
-#' Combine all the EIF4F correlating gene data from tumor and healthy tissues
+#' @title Combine all the EIF4F correlating gene data from tumor and healthy
+#'  tissues
 #'
-#' @description
+#' @description This function
 #'
-#' This function combines all the EIF4F correlating genes and their correlation
+#' * combines all the EIF4F correlating genes and their correlation
 #'  coefficients to a data frame, with the data generated from
 #'  [.EIF_correlation()].
+#' * selects significant correlating genes with [.is_significant_correlation()]
 #'
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
+#'
+#' @family helper function for correlation analysis
 #'
 #' @param df1 `cor_value_combined` of `EIF.cor.tumor[[2]]`
 #'
@@ -548,7 +582,7 @@
 }
 
 
-#' Select both positive and negative correlating genes based on
+#' @title Select both positive and negative correlating genes based on
 #'  coeffeciency and pvalue
 #'
 #' @description
@@ -558,6 +592,8 @@
 #'
 #' It should not be used directly, only inside [.combine_CORs_list()]
 #'  function.
+#'
+#' @family helper function for correlation analysis
 #'
 #' @param magnitude correlation coefficiency value
 #'
@@ -574,8 +610,8 @@
 }
 
 
-#' Visualize associations between different sources of correlation data and
-#'  reveal potential pattern
+#' @title Visualize associations between different sources of correlation data
+#'  and reveal potential pattern
 #'
 #' @description
 #'
@@ -587,6 +623,8 @@
 #'
 #' side effects: heatmap on screen and as pdf file to show correlation strength
 #'  and clustering pattern of EIF4F correlating genes.
+#'
+#' @family helper function for correlation analysis plotting
 #'
 #' @param df combined COR data generated from [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
@@ -603,7 +641,7 @@
 #' @importFrom circlize colorRamp2
 #'
 #' @examples \dontrun{
-#' .combine_COR_list(df1 = EIF.cor.tumor[[1]], df2 = EIF.cor.normal[[1]])
+#' .CORs_coeff_heatmap(df = DF, tissue_type = tissue_type)
 #' }
 #'
 #' @keywords internal
@@ -680,7 +718,7 @@
 }
 
 
-#' Retrieve the gene names from each cluster in heatmap
+#' @title Retrieve the gene names from each cluster in heatmap
 #'
 #' @description
 #'
@@ -690,12 +728,12 @@
 #' It should not be used directly, only inside [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'  function.
 #'
+#' @family helper function for correlation analysis
 #'
 #' @param df1 combined COR data generated from [.combine_CORs_list()]
 #'
 #' @param df2 gene name in the order of heatmap generated from
 #'  [.CORs_coeff_heatmap()]
-#'
 #'
 #' @return
 #'
@@ -734,7 +772,7 @@
 }
 
 
-#' Plot the enriched pathways from gene lists
+#' @title Plot the enriched pathways from gene lists
 #'
 #' @description
 #'
@@ -747,17 +785,21 @@
 #' side effects: dotplot on screen and as pdf file to show the enriched pathways
 #'  in the genes from different clusters in the heatmap
 #'
+#' @family helper function for correlation analysis plotting
+#'
 #' @param df pathway enrichment analysis results generated from
 #'  [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
 #' @param pathway pathway name, "GO", ""REACTOME", "KEGG"
 #'
-#' @param tissue_type tissue type, the same argument of [.plot_Corr_RNAseq_TCGA_GTEX()]
+#' @param tissue_type tissue type, the same argument of
+#'  [.plot_Corr_RNAseq_TCGA_GTEX()]
 #'
 #' @importFrom clusterProfiler dotplot
 #'
 #' @examples \dontrun{
-#' .pathway_dotplot(df = ck.REACTOME, p = "REACTOME", tissue_type = tissue_type)
+#' .pathway_dotplot(df = ck.REACTOME, pathway = "REACTOME",
+#'  tissue_type = tissue_type)
 #' }
 #'
 #' @keywords internal
@@ -796,42 +838,47 @@
 }
 
 
-#' ### Composite functions to analyze the EIF4F CORs
 ## Composite functions to analyze the EIF4F CORs ===============================
 
-#' Perform correlation analysis on RNAseq data from all tumors and healthy
-#'  tissues
+#' @title Perform correlation analysis on RNAseq data from all tumors and
+#'  healthy tissues
 #'
 #' @description This function
 #'
 #' * finds correlating genes of EIF4F from `TCGA_GTEX_RNAseq_sampletype`
 #'  RNAseq data generated by [initialize_RNAseq_data()].
 #' * identifies positively or negatively correlating genes from tumor or
-#'  healthy samples,
-#' * finds the overlap of CORs for EIF4F subunits with Vennplot,
-#' * compares the number of CORs for EIF4F subunits with bargraph,
-#' * visualizes the correlation strength with heatmap,
-#' * founds enriched pathways within correlating genes
+#'  healthy samples by [.EIF_correlation()],
+#' * finds the overlap of CORs for EIF4F subunits with [.CORs_vennplot()],
+#' * compares the number of CORs for EIF4F subunits with
+#'  [.combine_CORs_summary()] and plot the results in bargraph
+#'  with [.CORs_summary_bargraph()]
+#' * compares the correlation strength of CORs from healthy tissues and tumors
+#'  from merged data frame generated from [.combine_CORs_list()] and visualizes
+#'  clustering results in heatmap with [.CORs_coeff_heatmap()]
+#' * retrieve the gene names from the clusters in heatmap with
+#'  [.get_cluster_genes()]
+#' * performs the pathways enrichement analysis on the retrieved gene list and
+#'  plot the results with [.pathway_dotplot()]
 #'
 #' This function should not be used directly, only inside
 #'  [EIF4F_Corrgene_analysis()] function.
 #'
-#' side effects
+#' side effects:
 #'
 #' * Venn diagrams on screen and as pdf file to show the overlap of
 #'  EIF correlating genes identify from RNAseq of `tissue_type`
-#'
 #' * bar graphs on screen and as pdf file to show the numbers of
 #'  identified correlating genes for each EIF4F subunit identify from
 #'  RNAseq of `tissue_type`
-#'
 #' * heatmap on screen and as pdf file to show correlation strength
 #'  and clustering pattern of EIF4F correlating genes.
-#'
 #' * dotplot on screen and as pdf file to show the enriched pathways
 #'  in the genes from different clusters in the heatmap
 #'
-#' @param x all tissue/tumor types or one specific type
+#' @family composite function to call correlation analysis and plotting
+#'
+#' @param tissue_type all tissue/tumor types or one specific type
 #'
 #' @importFrom purrr map pluck discard
 #'
@@ -953,18 +1000,16 @@
 
   .pathway_dotplot(df = ck.GO, pathway = "GO", tissue_type = tissue_type)
   .pathway_dotplot(df = ck.KEGG, pathway = "KEGG", tissue_type = tissue_type)
-  .pathway_dotplot(
-    df = ck.REACTOME, pathway = "REACTOME",
-    tissue_type = tissue_type
-  )
+  .pathway_dotplot(df = ck.REACTOME, pathway = "REACTOME",
+                   tissue_type = tissue_type)
 
   return(NULL)
 }
 
-#' ### Wrapper function to call all composite functions with inputs
+
 ## Wrapper function to call all composite functions with inputs ================
 
-#' Perform PCA and generate plots
+#' @title Perform PCA and generate plots
 #'
 #' @description
 #'
@@ -983,16 +1028,15 @@
 #'
 #' * Venn diagrams on screen and as pdf file to show the overlap of
 #'  EIF correlating genes identify from RNAseq of `tissue_type`
-#'
 #' * bar graphs on screen and as pdf file to show the numbers of
 #'  identified correlating genes for each EIF4F subunit identify from
 #'  RNAseq of `tissue_type`
-#'
 #' * heatmap on screen and as pdf file to show correlation strength
 #'  and clustering pattern of EIF4F correlating genes.
-#'
 #' * dotplot on screen and as pdf file to show the enriched pathways
 #'  in the genes from different clusters in the heatmap
+#'
+#' @family wrapper function to call all composite functions with inputs
 #'
 #' @export
 #'

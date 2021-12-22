@@ -1,18 +1,17 @@
-#' ## Correlation between RNA and protein levels for EIF4F
-#' This R script contains four sections.
-#'
-#' (1) CCLE and LUAD proteomics data preparation
-#'
-#' (2) selection of RNA and protein expression data and plotting
-#'
-#' (3) composite functions to execute a pipeline of functions to select related
-#'  expression with supply of EIF4F gene names for correlation analysis and
-#'  plotting.
-#'
-#' (4) wrapper function to call all master functions with inputs
-#'
-#'
-#' ### Wrapper function for data initialization of RNA and proteomics datasets
+# Correlation between RNA and protein levels for EIF4F
+# This R script contains four sections.
+#
+# (1) CCLE and LUAD proteomics data preparation
+#
+# (2) selection of RNA and protein expression data and plotting
+#
+# (3) composite functions to execute a pipeline of functions to select related
+#  expression with supply of EIF4F gene names for correlation analysis and
+#  plotting.
+#
+# (4) wrapper function to call all master functions with inputs
+#
+
 ## Wrapper function for data initialization of RNA and proteomics datasets =====
 
 #' @noRd
@@ -24,20 +23,26 @@ CPTAC_LUAD_RNAseq <- NULL
 #'
 #' @description
 #'
-#' This function reads all proteomics related datasets from CCLE and CPTAC LUAD.
+#' A wrapper function reads all proteomics related datasets from CCLE and
+#'  CPTAC LUAD.
 #'
 #' side effects:
 #'
 #' (1) `CCLE_RNAseq`: the RNAseq data of CCLE from the download dataset
 #'  `CCLE_expression_full.csv`
+#'
 #' (2) `CCLE_Anno`: the annotation data of CCLE from `sample_info.csv`
+#'
 #' (3) `CCLE_Proteomics`: the proteomics data of CCLE from
 #'  `protein_quant_current_normalized.csv`
+#'
 #' (4) `CPTAC_LUAD_Proteomics`: the proteomics data with annotation of CPTAC
 #'  LUAD study from the download data file `Protein.xlsx`
+#'
 #' (5) `CPTAC_LUAD_RNAseq`: the RNAseq data of CPTAC LUAD samples from
 #'  the download data file `RNA.xlsx`
 #'
+#' @family wrapper function for data initialization
 #'
 #' @importFrom readxl read_excel
 #'
@@ -346,7 +351,7 @@ initialize_proteomics_data <- function() {
   return(NULL)
 }
 
-#' ### Wrapper function to call all composite functions with inputs
+
 ## Wrapper function to call all composite functions with inputs ================
 
 #' Perform PCA and generate plots
@@ -368,6 +373,8 @@ initialize_proteomics_data <- function() {
 #'
 #'  * scatter plot to show correlation between EIF4F RNA and protein
 #'  expressions in CPTAC LUAD samples
+#'
+#' @family wrapper function to call all composite functions with inputs
 #'
 #' @export
 #'

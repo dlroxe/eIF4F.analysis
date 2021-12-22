@@ -1,50 +1,52 @@
-#' ## Survival analyses on EIF4F gene expression in TCGA tumors
-#' This R script contains four sections.
-#'
-#' (1) RNAseq and clinical data preparation
-#'
-#' (2) functions to analyze KM and cox analyses as well as plotting
-#'
-#' (3) composite functions to execute a pipeline of functions to select related
-#'  RNAseq and clinical data for survival analysis and plot with supply of
-#'  EIF4F gene names as values of the arguments.
-#'
-#' (4) wrapper function to call all composite functions with inputs
-#'
-#' ### Wrapper function for data initialization of survival and RNA-seq datasets
+# Survival analyses on EIF4F gene expression in TCGA tumors
+# This R script contains four sections.
+#
+# (1) RNAseq and clinical data preparation
+#
+# (2) functions to analyze KM and cox analyses as well as plotting
+#
+# (3) composite functions to execute a pipeline of functions to select related
+#  RNAseq and clinical data for survival analysis and plot with supply of
+#  EIF4F gene names as values of the arguments.
+#
+# (4) wrapper function to call all composite functions with inputs
+#
+
 ## Wrapper function for data initialization of survival and RNA-seq ============
 
 #' @noRd
 # due to NSE notes in R CMD check
 TCGA_RNAseq_OS_sampletype <- NULL
 
-#' Read RNA-seq and survival datasets from TCGA
+#' @title Read RNA-seq and survival datasets from TCGA
 #'
 #' @description
 #'
-#' This function reads RNA-seq and survival datasets from TCGA.
+#' A wrapper function to read RNA-seq and survival datasets from TCGA.
 #'
-#' side effect:
+#' side effects:
 #'
 #' (1)`TCGA_RNAseq_OS_sampletype` a merged dataset from
 #'  `.TCGA_RNAseq`, `.TCGA_OS` and `.TCGA_sampletype`.
 #'
-#' * `.TCGA_RNAseq`: the RNAseq data from TCGA generated from
+#'  * `.TCGA_RNAseq`: the RNAseq data from TCGA generated from
 #'  [.get_TCGA_RNAseq()], which imports the dataset
 #'  `EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena`.
 #'
-#' * `.TCGA.OS`: the clinical data from
+#'  * `.TCGA.OS`: the clinical data from
 #'  `Survival_SupplementalTable_S1_20171025_xena_sp`. We select three columns:
 #'   `OS` for overall survival status, `OS.time` for overall survival time and
 #'   `sample` for sample ID of each patient.
 #'
-#' * `.TCGA_sampletype`: the annotation data from the
+#'  * `.TCGA_sampletype`: the annotation data from the
 #'  `TCGA_phenotype_denseDataOnlyDownload.tsv` dataset. We select two columns
 #'  `sample.type` that annotates malignant tissues, and `primary.disease`
 #'  that annotates cancer types for each sample.
 #'
 #' Only malignant tissue (Solid normal tissues are excluded) are selected for
 #'  survival analysis
+#'
+#' @family wrapper function for data initialization
 #'
 #' @importFrom purrr reduce
 #'
@@ -101,11 +103,11 @@ initialize_survival_data <- function() {
   return(NULL)
 }
 
-#' Read the RNAseq data from TCGA
+#' @title Read the RNAseq data from TCGA
 #'
 #' @description
 #'
-#' This function reads the RNAseq data from TCGA
+#' A helper function reads the RNAseq data from TCGA
 #' `EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena`.
 #'
 #' @details
@@ -114,6 +116,9 @@ initialize_survival_data <- function() {
 #'  NAs in the dataset.
 #' It should not be used directly, only inside [initialize_survival_data()]
 #'  function.
+#'
+#' @family helper function for data initialization
+
 #'
 #' @return
 #'
@@ -150,24 +155,26 @@ initialize_survival_data <- function() {
   return(.TCGA_RNAseq_transpose)
 }
 
-#' ### Survival analysis and plotting
+
 ## Survival analysis and plotting ==============================================
 
 
-#' Kaplan Meier survival analyses of gene expression
+#' @title Kaplan Meier survival analyses of gene expression
 #'
 #' @description
 #'
-#' This function correlates the gene expression within tumor samples with patient
-#'  overall survival time from TCGA study groups
+#' A helper function correlates the gene expression within tumor samples with
+#'  patient overall survival time from TCGA study groups
 #'
 #' @details
 #'
 #' It should not be used directly, only inside [.plot_KM_RNAseq_TCGA()]
 #'  function.
 #'
-#' side effect: KM curve plots for TCGA patients with gene expression in their
+#' side effects: KM curve plots for TCGA patients with gene expression in their
 #'  tumors
+#'
+#' @family helper function for survival analysis
 #'
 #' @param gene gene name, passed `EIF` argument from [.plot_KM_RNAseq_TCGA()]
 #'
@@ -273,17 +280,19 @@ initialize_survival_data <- function() {
 }
 
 
-#' Univariable Cox-PH analyses of gene expression
+#' @title Univariable Cox-PH analyses of gene expression
 #'
 #' @description
 #'
-#' This function generates univariable regression model of the gene expression
-#'  within tumor samples and patient overall survival time TCGA.
+#' A helper function generates univariable regression model of the gene
+#'  expression within tumor samples and patient overall survival time TCGA.
 #'
 #' @details
 #'
 #' It should not be used directly, only inside [.plot_CoxPH_RNAseq_TCGA()]
 #'  function.
+#'
+#' @family helper function for survival analysis
 #'
 #' @param gene gene names, passed `gene_list` argument from
 #' [.plot_CoxPH_RNAseq_TCGA()]
@@ -363,7 +372,7 @@ initialize_survival_data <- function() {
 }
 
 
-#' Multivariable Cox-PH analyses of gene expression
+#' @title Multivariable Cox-PH analyses of gene expression
 #'
 #' @description
 #'
@@ -372,6 +381,8 @@ initialize_survival_data <- function() {
 #'
 #' @details It should not be used directly, only inside
 #' [.plot_CoxPH_RNAseq_TCGA()] function.
+#'
+#' @family helper function for survival analysis
 #'
 #' @param gene gene names, passed `gene_list` argument from
 #' [.plot_CoxPH_RNAseq_TCGA()]
@@ -447,7 +458,7 @@ initialize_survival_data <- function() {
 }
 
 
-#' Forest plots of COX-PH results
+#' @title Forest plots of COX-PH results
 #'
 #' @description
 #'
@@ -456,6 +467,8 @@ initialize_survival_data <- function() {
 #'
 #' side effects: forest graph showing the relation between survival of TCGA
 #'  patients and EIF expression in their tumors from regression model
+#'
+#' @family helper function for survival analysis plotting
 #'
 #' @param data output dataset generated from [.univariable_analysis()] or
 #' [.multivariable_analysis()] function
@@ -560,10 +573,9 @@ initialize_survival_data <- function() {
 }
 
 
-#' ### Composite functions to call survival analysis and plotting
 ## Composite functions to call Survival analysis and plotting ==================
 
-#' Survival analyses of TCGA patients with expression in their tumors by
+#' @title Survival analyses of TCGA patients with expression in their tumors by
 #'  Kaplan Meier method
 #'
 #' @description
@@ -581,6 +593,8 @@ initialize_survival_data <- function() {
 #'
 #' This function should not be used directly, only inside
 #'  [EIF4F_Survival_analysis()] function.
+#'
+#' @family composite function to call survival analysis and plotting
 #'
 #' @param gene_name gene name
 #'
@@ -631,7 +645,7 @@ initialize_survival_data <- function() {
 }
 
 
-#' Survival analyses of TCGA patients with expression in their tumors by
+#' @title Survival analyses of TCGA patients with expression in their tumors by
 #'  Cox-PH method
 #'
 #' @description
@@ -650,6 +664,8 @@ initialize_survival_data <- function() {
 #'
 #' This function should not be used directly, only inside
 #'  [EIF4F_Survival_analysis()] function.
+#'
+#' @family composite function to call survival analysis and plotting
 #'
 #' @param gene_list gene names in a vector of characters
 #'
@@ -756,10 +772,9 @@ initialize_survival_data <- function() {
 }
 
 
-#' ### Wrapper function to call all composite functions with inputs
 ## Wrapper function to call all composite functions with inputs ================
 
-#' Perform all related survival analysis and generate plots
+#' @title Perform all related survival analysis and generate plots
 #'
 #' @description
 #'
@@ -773,13 +788,15 @@ initialize_survival_data <- function() {
 #' * [.plot_KM_RNAseq_TCGA()]
 #' * [.plot_CoxPH_RNAseq_TCGA()]
 #'
-#' side effect:
+#' side effects:
 #'
 #' * KM curve plots for TCGA patients with gene expression in their
 #'  tumors
 #' * forest graph showing the relation between survival of TCGA
 #'  patients and EIF expression in their tumors by univariable and
 #'  multivariable regression models
+#'
+#' @family wrapper function to call all composite functions with inputs
 #'
 #' @export
 #'
