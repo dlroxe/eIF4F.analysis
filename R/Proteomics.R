@@ -102,7 +102,7 @@ initialize_phosphoproteomics_data <- function() {
 #'
 #' @description A helper function for protein coexpression analysis
 #'
-#' This function should not be used directly, only inside
+#' @details This function should not be used directly, only inside
 #'  [.plot_scatterplot_protein_CPTAC()] function.
 #'
 #' Side effects:
@@ -203,9 +203,7 @@ initialize_phosphoproteomics_data <- function() {
 
 #' @title Select subset of CPTAC phosproteomics data
 #'
-#' @description
-#'
-#' This function selected the CPTAC LUAD phosphoproteomics data from the
+#' @description This function selected the CPTAC LUAD phosphoproteomics data from the
 #'  input `protein_list`.
 #'
 #' @details
@@ -246,11 +244,11 @@ initialize_phosphoproteomics_data <- function() {
 #' @description A helper function draws boxplots for protein differential
 #'  expression across clinical stages
 #'
-#' @details
-#' This function should not be used directly,
+#' @details This function should not be used directly,
 #'  only inside [.plot_boxgraph_protein_CPTAC()].
 #'
 #' Side effects:
+#'
 #' (1) boxplots to show the different expression of protein across
 #'  different clinical tumor stages
 #'

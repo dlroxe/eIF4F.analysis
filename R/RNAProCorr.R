@@ -19,7 +19,7 @@
 CCLE_RNAseq <- CCLE_Anno <- CCLE_Proteomics <- CPTAC_LUAD_Proteomics <- NULL
 CPTAC_LUAD_RNAseq <- NULL
 
-#' Read all proteomics related datasets from CCLE and CPTAC LUAD
+#' @title Read all proteomics related datasets from CCLE and CPTAC LUAD
 #'
 #' @description
 #'
@@ -265,13 +265,13 @@ initialize_proteomics_data <- function() {
 #' A composite function generates correlation scatter plot for eIF4F RNAseq and
 #' proteomics data from CCLE.
 #'
-#' @details
+#' @details This function
 #'
-#' This function merge the CCLE RNAseq values from EIF4F genes in the data frame
+#' * merges the CCLE RNAseq values from EIF4F genes in the data frame
 #'  prepared from [.get_CCLE_RNAseq_subset()] and proteomics data of the same
 #'  protein in the data frame prepared from [.get_CCLE_Proteomics_subset()].
 #'
-#' Then it uses the combined data to calculate the correlation coefficients
+#' * uses the combined data to calculate the correlation coefficients
 #'  between protein and RNA levels, and plot the result with the function
 #'  [.RNApro_scatterplot()]
 #'
@@ -279,6 +279,7 @@ initialize_proteomics_data <- function() {
 #' [EIF4F_RNA_pro_correlation()] function.
 #'
 #' Side effects:
+#'
 #' (1) scatter plot to show correlation between RNA and protein of
 #'  input `gene_name` expressions in CCLE samples
 #'
@@ -329,6 +330,7 @@ initialize_proteomics_data <- function() {
 #'  [EIF4F_RNA_pro_correlation()] function.
 #'
 #' Side effects:
+#'
 #' (1) scatter plot to show correlation between RNA and protein
 #'  expressions of input `gene_name` in CPTAC LUAD samples
 #'
