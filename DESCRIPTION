@@ -42,7 +42,6 @@ Imports:
     rlang,
     scales,
     stats,
-    stats4,
     stringr,
     survival,
     survivalAnalysis,
@@ -58,3 +57,4 @@ Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.2
 Roxygen: list(markdown = TRUE)
+URL: https://a3609640.github.io/eIF4F.analysis/

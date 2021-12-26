@@ -12,7 +12,6 @@
 #' @import org.Hs.eg.db
 #' @import RColorBrewer
 #' @import ReactomePA
-#' @import stats4
 #' @import stringr
 #' @import tibble
 #' @import tidyr

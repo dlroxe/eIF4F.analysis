@@ -193,14 +193,13 @@ be a useful way to install them all.
 BiocManager::install(version = "3.14")
 
 bio_pkgs <- c(
-  "AnnotationDbi", "base", "BiocGenerics", "circlize", 
-  "clusterProfiler", "ComplexHeatmap", "corrplot", "data.table",
-  "dplyr", "EnvStats", "eulerr", "factoextra", "FactoMineR", 
-  "forcats", "forestplot", "ggfortify", "ggplot2", "ggpubr", 
-  "graphics", "grDevices", "grid", "lattice", "limma", "missMDA",
-  "org.Hs.eg.db", "purrr", "RColorBrewer", "ReactomePA", "readr", 
-  "readxl", "reshape2", "scales", "stats", "stats4", "stringr", 
-  "survival", "survivalAnalysis", "tibble", "tidyr")
+  "AnnotationDbi", "circlize",  "clusterProfiler", "ComplexHeatmap", "corrplot", 
+  "data.table", "dplyr", "EnvStats", "eulerr", "factoextra", "FactoMineR", 
+  "forcats", "forestplot", "ggfortify", "ggplot2", "ggpubr",  "graphics", 
+  "grDevices", "grid", "limma", "missMDA", "org.Hs.eg.db", "purrr", 
+  "RColorBrewer", "ReactomePA", "readr",  "readxl", "reshape2", "scales", 
+  "stats", "stringr", "survival", "survivalAnalysis", "tibble", "tidyr", 
+  "tidyselect")
 
 # install required packages
 BiocManager::install(bio_pkgs)
