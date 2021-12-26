@@ -2,27 +2,36 @@
 % Please edit documentation in R/COR.R
 \name{EIF4F_Corrgene_analysis}
 \alias{EIF4F_Corrgene_analysis}
-\title{\subsection{Wrapper function to call all master functions with inputs}{
-
-Perform PCA and generate plots
-}}
+\title{Perform PCA and generate plots}
 \usage{
 EIF4F_Corrgene_analysis()
 }
-\value{
-correlating gene analysis plots
-}
 \description{
-A wrapper function to call all master functions for PCA with inputs
+A wrapper function to call all composite functions for PCA with inputs
 }
 \details{
-This function run the master functions  \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
+This function run the composite functions  \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
 with two inputs.
 \itemize{
 \item "All" for all cancer types of TCGA and all healthy tissues types of GTEx.
 \item "Lung" for lung cancer types (LUAD and LUSC of TCGA) and healthy lung
 tissues of GTEx
 }
+
+Side effects:
+
+(1) Venn diagrams on screen and as pdf file to show the overlap of
+EIF correlating genes identify from RNAseq of \code{tissue_type}
+
+(2) bar graphs on screen and as pdf file to show the numbers of
+identified correlating genes for each EIF4F subunit identify from
+RNAseq of \code{tissue_type}
+
+(3) heatmap on screen and as pdf file to show correlation strength
+and clustering pattern of EIF4F correlating genes.
+
+(4) dotplot on screen and as pdf file to show the enriched pathways
+in the genes from different clusters in the heatmap
 }
 \examples{
 \dontrun{
@@ -30,3 +39,13 @@ EIF4F_Corrgene_analysis()
 }
 
 }
+\seealso{
+Other wrapper function to call all composite functions with inputs: 
+\code{\link{EIF4F_CNV_analysis}()},
+\code{\link{EIF4F_DEG_analysis}()},
+\code{\link{EIF4F_PCA}()},
+\code{\link{EIF4F_Proteomics_analysis}()},
+\code{\link{EIF4F_RNA_pro_correlation}()},
+\code{\link{EIF4F_Survival_analysis}()}
+}
+\concept{wrapper function to call all composite functions with inputs}

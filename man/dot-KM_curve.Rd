@@ -2,10 +2,7 @@
 % Please edit documentation in R/Survival.R
 \name{.KM_curve}
 \alias{.KM_curve}
-\title{\subsection{Survival analysis and plotting}{
-
-Kaplan Meier survival analyses of gene expression
-}}
+\title{Kaplan Meier survival analyses of gene expression}
 \usage{
 .KM_curve(gene, data, cutoff, tumor)
 }
@@ -22,12 +19,16 @@ Kaplan Meier survival analyses of gene expression
 a KM plot
 }
 \description{
-This function correlate the gene expression within tumor samples with patient
-overall survival time from TCGA tumors.
+A helper function correlates the gene expression within tumor samples with
+patient overall survival time from TCGA study groups
 }
 \details{
 It should not be used directly, only inside \code{\link[=.plot_KM_RNAseq_TCGA]{.plot_KM_RNAseq_TCGA()}}
 function.
+
+Side effects:
+(1) KM curve plots for TCGA patients with gene expression in their
+tumors
 }
 \examples{
 \dontrun{
@@ -35,4 +36,10 @@ function.
 }
 
 }
+\seealso{
+Other helper function for survival analysis: 
+\code{\link{.multivariable_analysis}()},
+\code{\link{.univariable_analysis}()}
+}
+\concept{helper function for survival analysis}
 \keyword{internal}

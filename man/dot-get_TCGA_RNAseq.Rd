@@ -10,7 +10,7 @@
 a data frame that contains the RNAseq data from TCGA
 }
 \description{
-This function reads the RNAseq data from TCGA
+A helper function reads the RNAseq data from TCGA
 \code{EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena}.
 }
 \details{
@@ -25,4 +25,12 @@ function.
 }
 
 }
+\seealso{
+Other helper function for data initialization: 
+\code{\link{.get_TCGA_CNV_ratio}()},
+\code{\link{.get_TCGA_CNV_value}()},
+\code{\link{.get_TCGA_CNV}()},
+\code{\link{.get_TCGA_GTEX_RNAseq}()}
+}
+\concept{helper function for data initialization}
 \keyword{internal}

@@ -11,8 +11,10 @@ a data frame that contains CNV threshold data for all TCGA tumor
 }
 \description{
 This function reads the threshold CNV data
-\code{Gistic2_CopyNumber_Gistic2_all_thresholded.by_genes},
-which groups the CNV values in tumors into five categories.
+\code{Gistic2_CopyNumber_Gistic2_all_thresholded.by_genes}, which grouped the
+CNV values with thresholds 3+, 3, 2, 1, 0, to represent high-level copy
+number gain, low-level copy number gain, diploid, shallow deletion, or
+deep deletion.
 }
 \details{
 The function also removes possible duplicated tumor samples and
@@ -27,4 +29,12 @@ function.
 }
 
 }
+\seealso{
+Other helper function for data initialization: 
+\code{\link{.get_TCGA_CNV_ratio}()},
+\code{\link{.get_TCGA_CNV_value}()},
+\code{\link{.get_TCGA_GTEX_RNAseq}()},
+\code{\link{.get_TCGA_RNAseq}()}
+}
+\concept{helper function for data initialization}
 \keyword{internal}

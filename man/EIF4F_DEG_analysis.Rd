@@ -2,22 +2,40 @@
 % Please edit documentation in R/DEG.R
 \name{EIF4F_DEG_analysis}
 \alias{EIF4F_DEG_analysis}
-\title{Perform all CNV related analysis and generate plots}
+\title{Perform differential gene expression or ratio analysis and
+generate plots}
 \usage{
 EIF4F_DEG_analysis()
 }
-\value{
-DEG analysis plots
-}
 \description{
-A wrapper function to call all master functions for CNV analysis with inputs
+A wrapper function to call all composite functions for differential gene
+expression or ratio analysis with inputs
 }
 \details{
-This function run two master functions together, with inputs:
+This function run two composite functions together, with inputs:
 \itemize{
 \item \code{\link[=.plot_boxgraph_RNAseq_TCGA]{.plot_boxgraph_RNAseq_TCGA()}}
 \item \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}
 }
+
+Side effects:
+
+(1) box plots on screen and as pdf file to compare relative gene
+expression in across all TCGA cancer types
+
+(2) box plots on screen and as pdf file to show differential
+gene expression in tumors vs NATs in TCGA cancer types
+
+(3) violin plots on screen and as pdf file to show
+differential gene expression in primary, metastatic tumors vs
+adjacent normal tissues from all combined TCGA cancer types
+
+(4) box plots on screen and as pdf file to show differential
+RNA ratios in tumors vs NATs in TCGA cancer type
+
+(5) violin plots on screen and as pdf file to show
+differential gene ratios in primary, metastatic tumors vs
+adjacent normal tissues from all combined TCGA cancer types
 }
 \examples{
 \dontrun{
@@ -25,3 +43,13 @@ EIF4F_DEG_analysis()
 }
 
 }
+\seealso{
+Other wrapper function to call all composite functions with inputs: 
+\code{\link{EIF4F_CNV_analysis}()},
+\code{\link{EIF4F_Corrgene_analysis}()},
+\code{\link{EIF4F_PCA}()},
+\code{\link{EIF4F_Proteomics_analysis}()},
+\code{\link{EIF4F_RNA_pro_correlation}()},
+\code{\link{EIF4F_Survival_analysis}()}
+}
+\concept{wrapper function to call all composite functions with inputs}

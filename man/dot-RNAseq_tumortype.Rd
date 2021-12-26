@@ -2,8 +2,8 @@
 % Please edit documentation in R/DEG.R
 \name{.RNAseq_tumortype}
 \alias{.RNAseq_tumortype}
-\title{Analyzes differential gene expression in primary, metastatic tumors vs
-adjacent normal tissues from all TCGA cancer types combined}
+\title{Select gene expression data in primary, metastatic tumors vs adjacent normal
+tissues from all TCGA cancer types combined}
 \usage{
 .RNAseq_tumortype(df)
 }
@@ -22,4 +22,13 @@ and \verb{solid tissue normal} for comparison.
 It should not be used directly, only inside \code{\link[=.plot_boxgraph_RNAseq_TCGA]{.plot_boxgraph_RNAseq_TCGA()}}
 function.
 }
+\seealso{
+Other helper function for differential expression analysis: 
+\code{\link{.RNAratio_calculation}()},
+\code{\link{.RNAratio_selection}()},
+\code{\link{.RNAratio_tumortype}()},
+\code{\link{.RNAseq_all_gene}()},
+\code{\link{.RNAseq_ind_gene}()}
+}
+\concept{helper function for differential expression analysis}
 \keyword{internal}

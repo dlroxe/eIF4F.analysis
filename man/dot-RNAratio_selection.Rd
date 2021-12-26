@@ -4,16 +4,27 @@
 \alias{.RNAratio_selection}
 \title{Select RNA ratio data for plotting}
 \usage{
-.RNAratio_selection(df, x)
+.RNAratio_selection(df, gene_ratio)
 }
 \arguments{
 \item{df}{output dataset generated from \code{\link[=.RNAratio_calculation]{.RNAratio_calculation()}} function}
 
-\item{x}{input argument for selected variables generated
+\item{gene_ratio}{gene ratio name
+
+input argument for selected variables generated
 from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}} function}
 }
 \description{
 This function should not be used directly,
 only inside \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}function.
 }
+\seealso{
+Other helper function for differential expression analysis: 
+\code{\link{.RNAratio_calculation}()},
+\code{\link{.RNAratio_tumortype}()},
+\code{\link{.RNAseq_all_gene}()},
+\code{\link{.RNAseq_ind_gene}()},
+\code{\link{.RNAseq_tumortype}()}
+}
+\concept{helper function for differential expression analysis}
 \keyword{internal}

@@ -2,18 +2,12 @@
 % Please edit documentation in R/DEG.R
 \name{.plot_boxgraph_RNAseq_TCGA}
 \alias{.plot_boxgraph_RNAseq_TCGA}
-\title{\subsection{master functions to call DEG gene analysis and plotting}{
-
-Compare the expression of EIF4F genes
-}}
+\title{Compare the expression of EIF4F genes}
 \usage{
-.plot_boxgraph_RNAseq_TCGA(EIF.list)
+.plot_boxgraph_RNAseq_TCGA(gene_list)
 }
 \arguments{
-\item{EIF.list}{gene names in a vector of characters}
-}
-\value{
-box plots for differential gene expression of \code{EIF.list} in TCGA tumors
+\item{gene_list}{gene names in a vector of characters}
 }
 \description{
 This function generates a summary box plot to compare the expression of all
@@ -26,12 +20,14 @@ combined.
 \details{
 This function
 \itemize{
-\item selects RNASeq and sample type data from input gene
-in the data frame \code{TCGA_GTEX_RNAseq_sampletype} prepared
-from \code{\link[=initialize_RNAseq_data]{initialize_RNAseq_data()}}.
-\item With the subset data \code{.TCGA_GTEX_RNAseq_sampletype_subset}, compares the
-mRNA expression of all inquired genes with the functions \code{\link[=.RNAseq_all_gene]{.RNAseq_all_gene()}}
-and plot the results as a bar plot with \code{\link[=.RNAseq_grouped_boxplot]{.RNAseq_grouped_boxplot()}}
+\item selects RNASeq of input genes and columns including \code{sample.type},
+\code{primary.disease}, and \code{primary.site},from the data frame
+\code{TCGA_GTEX_RNAseq_sampletype} that was prepared by the function
+\code{\link[=initialize_RNAseq_data]{initialize_RNAseq_data()}} to produce a subset data frame called
+\code{.TCGA_GTEX_RNAseq_sampletype_subset}
+\item with the subset data, calls the functions \code{\link[=.RNAseq_all_gene]{.RNAseq_all_gene()}} to compare
+relative mRNA expression of all inquired genes and calls the functions
+\code{\link[=.RNAseq_grouped_boxplot]{.RNAseq_grouped_boxplot()}} plot the results as a grouped box plot.
 \item performs differential expression analysis for each gene across all
 tumors types with the function \code{\link[=.RNAseq_ind_gene]{.RNAseq_ind_gene()}} and plots with
 \code{\link[=.RNAseq_boxplot]{.RNAseq_boxplot()}}.
@@ -42,6 +38,18 @@ types combined with the function \code{\link[=.RNAseq_tumortype]{.RNAseq_tumorty
 }
 
 It should not be used directly, only inside \code{\link[=EIF4F_DEG_analysis]{EIF4F_DEG_analysis()}} function.
+
+side effects:
+
+(1) box plots on screen and as pdf file to compare relative gene
+expression in across all TCGA cancer types
+
+(2) box plots on screen and as pdf file to show differential
+gene expression in tumors vs NATs in TCGA cancer types
+
+(3) violin plots on screen and as pdf file to show
+differential gene expression in primary, metastatic tumors vs
+adjacent normal tissues from all combined TCGA cancer types
 }
 \examples{
 \dontrun{
@@ -53,4 +61,5 @@ It should not be used directly, only inside \code{\link[=EIF4F_DEG_analysis]{EIF
 }
 
 }
+\concept{composite function to call DEG gene analysis and plotting}
 \keyword{internal}

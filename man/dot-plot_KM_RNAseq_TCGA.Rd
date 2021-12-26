@@ -2,23 +2,17 @@
 % Please edit documentation in R/Survival.R
 \name{.plot_KM_RNAseq_TCGA}
 \alias{.plot_KM_RNAseq_TCGA}
-\title{\subsection{Master functions to call survival analysis and plotting}{
-
-Survival analyses of TCGA patients with expression in their tumors by
-Kaplan Meier method
-}}
+\title{Survival analyses of TCGA patients with expression in their tumors by
+Kaplan Meier method}
 \usage{
-.plot_KM_RNAseq_TCGA(EIF, cutoff, tumor)
+.plot_KM_RNAseq_TCGA(gene_name, cutoff, tumor)
 }
 \arguments{
-\item{EIF}{gene name}
+\item{gene_name}{gene name}
 
 \item{cutoff}{percentage of gene expression for patient stratification}
 
 \item{tumor}{all tumor types or specific type}
-}
-\value{
-KM curve plots for TCGA patients with expression of \code{EIF} in their tumors
 }
 \description{
 This function generates a Kaplan Meier plot to compare the expression of
@@ -36,11 +30,22 @@ gene expression, and plot the results as a KM curve plot by \code{\link[=.KM_cur
 
 This function should not be used directly, only inside
 \code{\link[=EIF4F_Survival_analysis]{EIF4F_Survival_analysis()}} function.
+
+Side effects:
+
+(1) KM curve plots on screen and as pdf files to correlate patient survival
+probability with expression of \code{gene_name} in their tumors
 }
 \examples{
 \dontrun{
-plot.km.EIF.tumor(EIF = "EIF4E", cutoff = 0.2, tumor = "lung adenocarcinoma")
+plot.km.EIF.tumor(gene_name = "EIF4E", cutoff = 0.2,
+tumor = "lung adenocarcinoma")
 }
 
 }
+\seealso{
+Other composite function to call survival analysis and plotting: 
+\code{\link{.plot_CoxPH_RNAseq_TCGA}()}
+}
+\concept{composite function to call survival analysis and plotting}
 \keyword{internal}

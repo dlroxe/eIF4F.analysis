@@ -5,11 +5,13 @@
 \title{Analyzes differential RNA ratios in primary, metastatic tumors vs
 adjacent normal tissues from all TCGA cancer types combined}
 \usage{
-.RNAratio_tumortype(df, x)
+.RNAratio_tumortype(df, gene_ratio)
 }
 \arguments{
 \item{df}{\code{.RNAratio_tumortype(.RNAratio_data)} generated
 inside \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+
+\item{gene_ratio}{}
 }
 \value{
 a data frame of differential RNA ratios in tumors vs adjacent normal tissues
@@ -23,4 +25,13 @@ and \verb{solid tissue normal} for comparison.
 It should not be used directly, only
 inside \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}} function.
 }
+\seealso{
+Other helper function for differential expression analysis: 
+\code{\link{.RNAratio_calculation}()},
+\code{\link{.RNAratio_selection}()},
+\code{\link{.RNAseq_all_gene}()},
+\code{\link{.RNAseq_ind_gene}()},
+\code{\link{.RNAseq_tumortype}()}
+}
+\concept{helper function for differential expression analysis}
 \keyword{internal}

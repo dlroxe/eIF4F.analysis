@@ -5,16 +5,12 @@
 \title{Survival analyses of TCGA patients with expression in their tumors by
 Cox-PH method}
 \usage{
-.plot_CoxPH_RNAseq_TCGA(EIF.list, tumor)
+.plot_CoxPH_RNAseq_TCGA(gene_list, tumor)
 }
 \arguments{
-\item{EIF.list}{gene names in a vector of characters}
+\item{gene_list}{gene names in a vector of characters}
 
 \item{tumor}{all tumor types or specific type}
-}
-\value{
-forest graph showing the relation between survival of TCGA patients
-and expression of \code{EIF} in their tumors
 }
 \description{
 This function makes regression models between the gene expression within
@@ -33,6 +29,12 @@ and multivariable regression models with \code{\link[=.multivariable_analysis]{.
 
 This function should not be used directly, only inside
 \code{\link[=EIF4F_Survival_analysis]{EIF4F_Survival_analysis()}} function.
+
+Side effects:
+
+(1) forest graphs on screen and as pdf file to show the relation between
+survival of TCGA patients and expression of \code{gene_list} in their tumors
+by univariable and multivariable regression models
 }
 \examples{
 \dontrun{
@@ -44,4 +46,9 @@ This function should not be used directly, only inside
 }
 
 }
+\seealso{
+Other composite function to call survival analysis and plotting: 
+\code{\link{.plot_KM_RNAseq_TCGA}()}
+}
+\concept{composite function to call survival analysis and plotting}
 \keyword{internal}

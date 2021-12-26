@@ -4,13 +4,10 @@
 \alias{.plot_boxgraph_CNVratio_TCGA}
 \title{CNV ratios in tumors vs adjacent normal tissues across tumor types}
 \usage{
-.plot_boxgraph_CNVratio_TCGA(EIF_list)
+.plot_boxgraph_CNVratio_TCGA(gene_list)
 }
 \arguments{
-\item{EIF_list}{gene names in a vector of characters}
-}
-\value{
-stacked bar plots for grouped CNV status of \code{EIF_list} in TCGA tumors
+\item{gene_list}{gene names in a vector of characters}
 }
 \description{
 This function generates boxplot for CNV ratios in tumors vs adjacent normals
@@ -29,6 +26,11 @@ and plots the CNV results and \code{\link[=.CNVratio_boxplot]{.CNVratio_boxplot(
 }
 
 It should not be used directly, only inside \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
+
+Side effects:
+
+(1) the box plots on screen and as saved pdf files to show CNV ratio of
+\code{gene_list} in TCGA tumors vs normals
 }
 \examples{
 \dontrun{
@@ -36,4 +38,9 @@ plot_boxgraph_CNVratio_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 }
 
 }
+\seealso{
+Other composite function to call CNV data analysis and plotting: 
+\code{\link{.plot_bargraph_CNV_TCGA}()}
+}
+\concept{composite function to call CNV data analysis and plotting}
 \keyword{internal}

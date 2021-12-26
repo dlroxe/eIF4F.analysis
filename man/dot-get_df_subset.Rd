@@ -2,46 +2,27 @@
 % Please edit documentation in R/PCA.R
 \name{.get_df_subset}
 \alias{.get_df_subset}
-\title{\subsection{PCA on EIF4F expression in GTEx, TCGA, and combined studies}{
-
-This R script contains four sections.
-}}
+\title{Select RNAseq data based on the sample types}
 \usage{
-.get_df_subset(df, x)
+.get_df_subset(df, sample_type)
 }
 \arguments{
 \item{df}{\code{.TCGA_GTEX_sampletype_subset} generated inside
 \code{\link[=.plot_PCA_TCGA_GTEX]{.plot_PCA_TCGA_GTEX()}}}
 
-\item{x}{selected sample types}
+\item{sample.type}{selected sample types}
 }
 \value{
 a subset dataframe from \code{.TCGA_GTEX_sampletype_subset} for indicate
 sample types
 }
 \description{
-This function selects the RNAseq data of primary tumors (TCGA), metastatic
+A helper function selects the RNAseq data of primary tumors (TCGA), metastatic
 tumors (TCGA), healthy tissues (GTEX) or all sample types combined (all),
 from dataframe \code{.TCGA_GTEX_sampletype_subset}.
 
 It should not be used directly, only inside \code{\link[=.plot_PCA_TCGA_GTEX]{.plot_PCA_TCGA_GTEX()}} or
 \code{\link[=.plot_PCA_TCGA_GTEX_tumor]{.plot_PCA_TCGA_GTEX_tumor()}} function.
-}
-\details{
-(1) select TCGA RNA-seq dataset for PCA.
-
-(2) perform PCA or imputed PCA and plot the PCA results as biplots or
-selected biplots
-
-(3) master functions to execute a pipeline of functions to select related
-RNAseq data for PCA and plot with supply of EIF4F gene names as values of
-the arguments.
-
-(4) wrapper function to call all master functions with inputs
-\subsection{Select TCGA RNA-seq data for PCA}{
-
-Select RNAseq data based on the sample types
-}
 }
 \examples{
 \dontrun{
@@ -49,4 +30,6 @@ Select RNAseq data based on the sample types
 }
 
 }
+\concept{helper function to select RNA-seq data from specific study groups
+for PCA}
 \keyword{internal}

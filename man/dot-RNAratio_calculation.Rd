@@ -2,50 +2,69 @@
 % Please edit documentation in R/DEG.R
 \name{.RNAratio_calculation}
 \alias{.RNAratio_calculation}
-\title{Calculate RNA ratios in tumors vs adjacent normal tissues}
+\title{Calculate RNA ratios}
 \usage{
 .RNAratio_calculation(
-  EIF4E,
-  EIF4E2,
-  EIF4E3,
-  EIF4EBP1,
-  EIF4G1,
-  EIF4G2,
-  EIF4G3,
-  EIF3D,
-  EIF4A1,
-  EIF4A2
+  gene01 = "EIF4E",
+  gene02 = "EIF4E2",
+  gene03 = "EIF4E3",
+  gene04 = "EIF4EBP1",
+  gene05 = "EIF4G1",
+  gene06 = "EIF4G2",
+  gene07 = "EIF4G3",
+  gene08 = "EIF3D",
+  gene09 = "EIF4A1",
+  gene10 = "EIF4A2"
 )
 }
 \arguments{
-\item{EIF4E}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene01}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF4E2}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene02}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF4E3}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene03}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF4EBP1}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene04}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF4G1}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene05}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF4G2}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene06}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF4G3}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene07}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF3D}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene08}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF4A1}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene09}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 
-\item{EIF4A2}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
+\item{gene10}{gene name, same input from \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}}
 }
 \value{
 a data frame of differential RNA ratios in tumors vs adjacent normal tissues
 from individual TCGA cancer types
 }
 \description{
-This function calculates the RNA ratio data from TCGA samples including all
+A helper function calculates the RNA ratios between genes
+}
+\details{
+This function
+\itemize{
+\item select the of RNAseq data of input genes from all TCGA samples, using the
+data frame \code{TCGA_GTEX_RNAseq_sampletype} prepared by the function
+\code{\link[=initialize_RNAseq_data]{initialize_RNAseq_data()}}.
+\item calculates the RNA ratio data in each TCGA samples including
 tumors and solid tissue normal samples for comparison.
+}
+
 It should not be used directly, only inside \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}
 function.
 }
+\seealso{
+Other helper function for differential expression analysis: 
+\code{\link{.RNAratio_selection}()},
+\code{\link{.RNAratio_tumortype}()},
+\code{\link{.RNAseq_all_gene}()},
+\code{\link{.RNAseq_ind_gene}()},
+\code{\link{.RNAseq_tumortype}()}
+}
+\concept{helper function for differential expression analysis}
 \keyword{internal}

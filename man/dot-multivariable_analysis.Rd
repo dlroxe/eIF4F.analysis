@@ -10,7 +10,7 @@
 \item{covariate_names}{gene names from the input argument of
 \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}}
 
-\item{gene}{gene names, passed \code{EIF.list} argument from
+\item{gene}{gene names, passed \code{gene_list} argument from
 \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}}
 
 \item{data}{\code{df1} generated inside \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}}
@@ -32,4 +32,10 @@ It should not be used directly, only inside
 }
 
 }
+\seealso{
+Other helper function for survival analysis: 
+\code{\link{.KM_curve}()},
+\code{\link{.univariable_analysis}()}
+}
+\concept{helper function for survival analysis}
 \keyword{internal}

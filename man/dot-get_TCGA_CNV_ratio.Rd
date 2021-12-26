@@ -11,9 +11,10 @@ a data frame that contains CNV ratio data for each tumor
 }
 \description{
 This function reads the CNV ratio data
-\code{broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena},
-which calculates the ratios of CNV value in each tumor to the average
-CNV value from normals in the same cancer type.
+\code{broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena}, in which
+CNV ratios were calculated by dividing, for each gene, the estimated
+gene-level CNV values in malignant tumors to the average CNV value in
+normal adjacent tissues (NATs) of the same cancer type.
 }
 \details{
 The function also removes possible duplicated tumor samples and
@@ -28,4 +29,12 @@ function.
 }
 
 }
+\seealso{
+Other helper function for data initialization: 
+\code{\link{.get_TCGA_CNV_value}()},
+\code{\link{.get_TCGA_CNV}()},
+\code{\link{.get_TCGA_GTEX_RNAseq}()},
+\code{\link{.get_TCGA_RNAseq}()}
+}
+\concept{helper function for data initialization}
 \keyword{internal}

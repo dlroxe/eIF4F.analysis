@@ -2,10 +2,7 @@
 % Please edit documentation in R/CNV.R
 \name{.CNV_all_cancer}
 \alias{.CNV_all_cancer}
-\title{\subsection{CNV data analysis and plotting}{
-
-Calculates the frequency of CNV status in all TCGA cancer types combined
-}}
+\title{Calculates the frequency of CNV status in all TCGA cancer types combined}
 \usage{
 .CNV_all_cancer(df)
 }
@@ -31,4 +28,10 @@ It should not be used directly, only inside
 }
 
 }
+\seealso{
+Other helper function for CNV data analysis: 
+\code{\link{.CNV_ind_cancer}()},
+\code{\link{.CNVratio_tumor}()}
+}
+\concept{helper function for CNV data analysis}
 \keyword{internal}

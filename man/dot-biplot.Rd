@@ -4,36 +4,61 @@
 \alias{.biplot}
 \title{Plot PCA results as biplot, scree and matrix plots}
 \usage{
-.biplot(res.pca, df, x, y, color, folder)
+.biplot(res.pca, df, sample_type, column_name, color, folder)
 }
 \arguments{
 \item{res.pca}{PCA results from selected RNAseq data}
 
 \item{df}{selected RNAseq data with sample type annotation}
 
-\item{x}{selected sample types for plot label}
+\item{sample_type}{selected sample types for plot label}
 
-\item{y}{type of primary diseases or healthy tissues for color of individuals}
+\item{column_name}{column name of annotation of primary diseases or
+healthy tissues for color of individuals}
 
 \item{color}{color scheme used for individual sample on the PCA}
 
 \item{folder}{sub directory name to store the output files}
 }
-\value{
-PCA bioplot, matrix, scree plot
-}
 \description{
-This function draw biplot, screen and matrix plots for PCA results
-from selected RNAseq data generated from \code{\link[=.get_df_subset]{.get_df_subset()}}.
+A helper function draws biplot, screen and matrix plots for PCA results
+}
+\details{
+This function
+\itemize{
+\item uses RNAseq data generated from \code{\link[=.get_df_subset]{.get_df_subset()}} for PCA
+\item calls \code{\link[=.biplot_title]{.biplot_title()}} to generate plot title using the input argument
+\code{sample_type}
+}
+
+It should not be used directly, only inside \code{\link[=.plot_PCA_TCGA_GTEX]{.plot_PCA_TCGA_GTEX()}},
+\code{\link[=.plot_PCA_TCGA_GTEX_tumor]{.plot_PCA_TCGA_GTEX_tumor()}}, or \code{\link[=.plot_PCA_CPTAC_LUAD]{.plot_PCA_CPTAC_LUAD()}} function.
+
+Side effects:
+
+(1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+PCA score plot shows the clusters of samples based on their similarity and
+loading plot shows how strongly each characteristic influences a principal
+component.
+(2) matrix plots on screen and as pdf files to show the quality of
+representation of the variables.
+(3) scree plots on screen and as pdf files to display how much variation
+each principal component captures from the data.
 }
 \examples{
 \dontrun{
 .biplot(
   res.pca = .RNAseq_PCA(df[[1]], 10), df = df[[2]],
-  x = "Metastatic Tumor (TCGA)",
+  sample_type = "Metastatic Tumor (TCGA)",
   y = "primary.disease", color = col_vector, folder = "TCGA"
 )
 }
 
 }
+\seealso{
+Other helper function for PCA plotting: 
+\code{\link{.biplot_title}()},
+\code{\link{.selected_biplot}()}
+}
+\concept{helper function for PCA plotting}
 \keyword{internal}

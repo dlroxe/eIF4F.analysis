@@ -4,28 +4,43 @@
 \alias{.selected_biplot}
 \title{Plot subgroups of PCA results as biplots}
 \usage{
-.selected_biplot(res.pca, df, x, y, color)
+.selected_biplot(res.pca, df, sample_type, column_name, color)
 }
 \arguments{
 \item{res.pca}{PCA results from from TCGA and GTEX combined RNAseq data}
 
 \item{df}{combined RNAseq data with sample type annotation}
 
-\item{x}{sample types for plot labeling}
+\item{sample_type}{sample types for plot labeling}
 
-\item{y}{type of primary diseases or healthy tissues for color of individuals}
+\item{column_name}{column name of annotation of primary diseases or
+healthy tissues for color of individuals}
 
 \item{color}{color scheme used for individual sample on the PCA}
 
 \item{folder}{sub directory name to store the output files}
 }
-\value{
-PCA bioplot
-}
 \description{
-This function draw biplot for PCA results
-from TCGA and GTEX combined data from
-\code{.get_df_subset(.TCGA_GTEX_sampletype_subset, "All")}.
+A helper function draws biplots of selected PCA results from
+TCGA and GTEX combined data.
+}
+\details{
+This function
+\itemize{
+\item uses RNAseq data generated from \code{.get_df_subset(.TCGA_GTEX_sampletype_subset, "All")}
+for PCA
+\item calls \code{\link[=.biplot_title]{.biplot_title()}} to generate plot title using the input argument
+\code{sample_type}
+}
+
+It should not be used directly, only inside \code{\link[=.plot_PCA_TCGA_GTEX]{.plot_PCA_TCGA_GTEX()}} function.
+
+Side effects:
+
+(1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+PCA score plot shows the clusters of samples based on their similarity and
+loading plot shows how strongly each characteristic influences a principal
+component.
 }
 \examples{
 \dontrun{
@@ -40,4 +55,10 @@ from TCGA and GTEX combined data from
 }
 
 }
+\seealso{
+Other helper function for PCA plotting: 
+\code{\link{.biplot_title}()},
+\code{\link{.biplot}()}
+}
+\concept{helper function for PCA plotting}
 \keyword{internal}

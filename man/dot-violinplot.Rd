@@ -5,14 +5,32 @@
 \title{Violin plots of differential gene expression/ratio in primary,
 metastatic tumors vs adjacent normal tissues}
 \usage{
-.violinplot(df, y.axis.title, y.axis.break, yintercept)
+.violinplot(df, y.axis.title, y.axis.break, dashline)
 }
 \arguments{
-\item{data}{output dataset generated from \code{\link[=.RNAseq_tumortype]{.RNAseq_tumortype()}} or
+\item{df}{output dataset generated from \code{\link[=.RNAseq_tumortype]{.RNAseq_tumortype()}} or
 \code{\link[=.RNAratio_tumortype]{.RNAratio_tumortype()}} function}
+
+\item{y.axis.title}{the title name for y axis}
+
+\item{y.axis.break}{the break mark on the y axis}
+
+\item{dashline}{the position of horizontal reference line}
 }
 \description{
 This function should not be used directly, only inside
 \code{\link[=.plot_boxgraph_RNAseq_TCGA]{.plot_boxgraph_RNAseq_TCGA()}} or \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}} function.
+
+Side effect:
+(1) the violin plots on screen and as pdf file to show
+differential gene expression/ratio in primary, metastatic tumors vs
+adjacent normal tissues from all combined TCGA cancer types
 }
+\seealso{
+Other helper function for differential expression plotting: 
+\code{\link{.RNAratio_boxplot}()},
+\code{\link{.RNAseq_boxplot}()},
+\code{\link{.RNAseq_grouped_boxplot}()}
+}
+\concept{helper function for differential expression plotting}
 \keyword{internal}

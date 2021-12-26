@@ -2,18 +2,12 @@
 % Please edit documentation in R/CNV.R
 \name{.plot_bargraph_CNV_TCGA}
 \alias{.plot_bargraph_CNV_TCGA}
-\title{\subsection{master function to call CNV data analysis and plotting}{
-
-Summary of CNV statuses in bar plots
-}}
+\title{Summary of CNV statuses in bar plots}
 \usage{
-.plot_bargraph_CNV_TCGA(EIF_list)
+.plot_bargraph_CNV_TCGA(gene_list)
 }
 \arguments{
-\item{EIF_list}{gene names in a vector of characters}
-}
-\value{
-stacked bar plots for grouped CNV status of \code{EIF_list} in TCGA tumors
+\item{gene_list}{gene names in a vector of characters}
 }
 \description{
 Provides the summary of CNV statuses of EIF4F genes in tumors from all TCGA
@@ -35,6 +29,14 @@ and plots the CNV results and \code{\link[=.CNV_barplot]{.CNV_barplot()}}
 }
 
 It should not be used directly, only inside \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
+
+Side effects:
+
+(1) the stacked bar plots on screen and as pdf file to show the summary
+table of the CNV statuses of all \code{gene_list} in TCGA tumors
+
+(2) stacked bar plots on screen and as saved pdf files to show
+CNV status of each gene in \code{gene_list} from an individual cancer type
 }
 \examples{
 \dontrun{
@@ -46,4 +48,9 @@ plot_bargraph_CNV_TCGA(c(
 }
 
 }
+\seealso{
+Other composite function to call CNV data analysis and plotting: 
+\code{\link{.plot_boxgraph_CNVratio_TCGA}()}
+}
+\concept{composite function to call CNV data analysis and plotting}
 \keyword{internal}

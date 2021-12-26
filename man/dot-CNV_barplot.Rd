@@ -10,10 +10,6 @@
 \item{df}{\code{.EIF_CNV_ind_cancer} generated inside
 \code{\link[=.plot_bargraph_CNV_TCGA]{.plot_bargraph_CNV_TCGA()}}}
 }
-\value{
-stacked bar plots for CNV status of each gene in an individual
-cancer type.
-}
 \description{
 This function generates stacked bar plots for CNV status of
 each gene in an individual cancer type.
@@ -24,6 +20,9 @@ This plot function uses dataset generated from
 
 It should not be used directly, only inside
 \code{\link[=.plot_bargraph_CNV_TCGA]{.plot_bargraph_CNV_TCGA()}} function.
+
+Side effect: stacked bar plots on screen and as saved pdf files to show
+CNV status of each gene in an individual cancer type.
 }
 \examples{
 \dontrun{
@@ -31,4 +30,11 @@ lapply(.EIF_CNV_ind_cancer, .CNV_barplot)
 }
 
 }
+\seealso{
+Other helper function for CNV data plotting: 
+\code{\link{.CNV_sum_barplot}()},
+\code{\link{.CNVratio_boxplot}()},
+\code{\link{.matrix_plot}()}
+}
+\concept{helper function for CNV data plotting}
 \keyword{internal}

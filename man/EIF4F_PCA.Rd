@@ -2,26 +2,31 @@
 % Please edit documentation in R/PCA.R
 \name{EIF4F_PCA}
 \alias{EIF4F_PCA}
-\title{\subsection{Wrapper function to call all master functions with inputs}{
-
-Perform PCA and generate plots
-}}
+\title{Perform PCA and generate plots}
 \usage{
 EIF4F_PCA()
 }
-\value{
-CNV analysis plots
-}
 \description{
-A wrapper function to call all master functions for PCA
+A wrapper function to call all composite functions for PCA
 }
 \details{
-This function run three master functions together:
+This function run three composite functions together:
 \itemize{
 \item \code{\link[=.plot_PCA_TCGA_GTEX]{.plot_PCA_TCGA_GTEX()}}
 \item \code{\link[=.plot_PCA_TCGA_GTEX_tumor]{.plot_PCA_TCGA_GTEX_tumor()}}
 \item \code{\link[=.plot_PCA_CPTAC_LUAD]{.plot_PCA_CPTAC_LUAD()}}
 }
+
+Side effects:
+
+(1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+PCA score plot shows the clusters of samples based on their similarity and
+loading plot shows how strongly each characteristic influences a principal
+component.
+(2) matrix plots on screen and as pdf files to show the quality of
+representation of the variables.
+(3) scree plots on screen and as pdf files to display how much variation
+each principal component captures from the data.
 }
 \examples{
 \dontrun{
@@ -29,3 +34,13 @@ EIF4F_PCA()
 }
 
 }
+\seealso{
+Other wrapper function to call all composite functions with inputs: 
+\code{\link{EIF4F_CNV_analysis}()},
+\code{\link{EIF4F_Corrgene_analysis}()},
+\code{\link{EIF4F_DEG_analysis}()},
+\code{\link{EIF4F_Proteomics_analysis}()},
+\code{\link{EIF4F_RNA_pro_correlation}()},
+\code{\link{EIF4F_Survival_analysis}()}
+}
+\concept{wrapper function to call all composite functions with inputs}

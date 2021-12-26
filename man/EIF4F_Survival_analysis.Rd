@@ -2,26 +2,29 @@
 % Please edit documentation in R/Survival.R
 \name{EIF4F_Survival_analysis}
 \alias{EIF4F_Survival_analysis}
-\title{\subsection{Wrapper function to call all master functions with inputs}{
-
-Perform all related survival analysis and generate plots
-}}
+\title{Perform all related survival analysis and generate plots}
 \usage{
 EIF4F_Survival_analysis()
 }
-\value{
-Survival analysis plots
-}
 \description{
-A wrapper function to call all master functions for survival analysis with
+A wrapper function to call all composite functions for survival analysis with
 inputs
 }
 \details{
-This function runs two master functions together with inputs:
+This function runs two composite functions together with inputs:
 \itemize{
 \item \code{\link[=.plot_KM_RNAseq_TCGA]{.plot_KM_RNAseq_TCGA()}}
 \item \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}
 }
+
+side effects:
+
+(1) KM curve plots on screen and as pdf files to correlate patient survival
+probability with gene expression in their tumors
+
+(2) forest graphs on screen and as pdf file to show the relation between
+survival of TCGA patients and gene expression in their tumors
+by univariable and multivariable regression models
 }
 \examples{
 \dontrun{
@@ -29,3 +32,13 @@ EIF4F_Survival_analysis()
 }
 
 }
+\seealso{
+Other wrapper function to call all composite functions with inputs: 
+\code{\link{EIF4F_CNV_analysis}()},
+\code{\link{EIF4F_Corrgene_analysis}()},
+\code{\link{EIF4F_DEG_analysis}()},
+\code{\link{EIF4F_PCA}()},
+\code{\link{EIF4F_Proteomics_analysis}()},
+\code{\link{EIF4F_RNA_pro_correlation}()}
+}
+\concept{wrapper function to call all composite functions with inputs}

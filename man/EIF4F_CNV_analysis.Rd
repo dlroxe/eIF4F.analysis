@@ -2,26 +2,34 @@
 % Please edit documentation in R/CNV.R
 \name{EIF4F_CNV_analysis}
 \alias{EIF4F_CNV_analysis}
-\title{\subsection{wrapper function to call all master functions with inputs}{
-
-Perform all CNV related analysis and generate plots
-}}
+\title{Perform all CNV related analysis and generate plots}
 \usage{
 EIF4F_CNV_analysis()
 }
-\value{
-CNV analysis plots
-}
 \description{
-A wrapper function to call all master functions for CNV analysis with inputs
+A wrapper function to call all composite functions for CNV analysis with inputs
 }
 \details{
-This function run three master functions together with inputs:
+This function run three composite functions together with inputs:
 \itemize{
 \item \code{\link[=.plot_bargraph_CNV_TCGA]{.plot_bargraph_CNV_TCGA()}}
 \item \code{\link[=.plot_matrix_CNVcorr_TCGA]{.plot_matrix_CNVcorr_TCGA()}}
 \item \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}}
 }
+
+Side effect:
+
+(1) stacked bar plots on screen and as pdf file to show the summary
+table of the CNV statuses of all EIF genes in TCGA tumors
+
+(2) stacked bar plots on screen and as saved pdf files to show
+CNV status of each EIF gene from an individual cancer type
+
+(3) correlation matrix plot on screen and as saved pdf files to show
+co-occurrence of EIF genes CNV status in TCGA tumors
+
+(4) box plots on screen and as saved pdf files to show CNV ratio
+of EIF genes in TCGA tumors vs normals
 }
 \examples{
 \dontrun{
@@ -29,3 +37,13 @@ EIF4F_CNV_analysis()
 }
 
 }
+\seealso{
+Other wrapper function to call all composite functions with inputs: 
+\code{\link{EIF4F_Corrgene_analysis}()},
+\code{\link{EIF4F_DEG_analysis}()},
+\code{\link{EIF4F_PCA}()},
+\code{\link{EIF4F_Proteomics_analysis}()},
+\code{\link{EIF4F_RNA_pro_correlation}()},
+\code{\link{EIF4F_Survival_analysis}()}
+}
+\concept{wrapper function to call all composite functions with inputs}

@@ -4,13 +4,13 @@
 \alias{.CNV_ind_cancer}
 \title{Calculates the frequency of CNV status in individual TCGA cancer types}
 \usage{
-.CNV_ind_cancer(df, x)
+.CNV_ind_cancer(df, gene)
 }
 \arguments{
 \item{df}{\code{.TCGA_CNV_sampletype_subset} generated inside
 \code{\link[=.plot_bargraph_CNV_TCGA]{.plot_bargraph_CNV_TCGA()}}}
 
-\item{x}{one gene from the input argument of
+\item{gene}{one gene from the input argument of
 \code{\link[=.plot_bargraph_CNV_TCGA]{.plot_bargraph_CNV_TCGA()}}}
 }
 \value{
@@ -31,4 +31,10 @@ lapply(EIF, .CNV_ind_cancer, df = .TCGA_CNV_sampletype_subset)
 }
 
 }
+\seealso{
+Other helper function for CNV data analysis: 
+\code{\link{.CNV_all_cancer}()},
+\code{\link{.CNVratio_tumor}()}
+}
+\concept{helper function for CNV data analysis}
 \keyword{internal}

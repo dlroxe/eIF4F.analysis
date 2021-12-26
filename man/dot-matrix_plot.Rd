@@ -2,17 +2,13 @@
 % Please edit documentation in R/CNV.R
 \name{.matrix_plot}
 \alias{.matrix_plot}
-\title{Correlation coefficients for CNV values}
+\title{Correlation matrix for gene pairs}
 \usage{
 .matrix_plot(df)
 }
 \arguments{
 \item{df}{output of \verb{TCGA_CNV_value \\\%>\\\% select(all_of(EIF))}
 generated inside \code{\link[=.plot_matrix_CNVcorr_TCGA]{.plot_matrix_CNVcorr_TCGA()}}}
-}
-\value{
-stacked bar plots for CNV status of each gene in
-an individual cancer type.
 }
 \description{
 This function calculates the correlation coefficients
@@ -23,13 +19,24 @@ This plot function uses dataset \code{TCGA_CNV_value} generated
 from \code{\link[=initialize_cnv_data]{initialize_cnv_data()}} function.
 It should not be used directly, only inside
 \code{\link[=.plot_matrix_CNVcorr_TCGA]{.plot_matrix_CNVcorr_TCGA()}} function.
+
+Side effects:
+
+(1) the correlation matrix plot on screen and as saved pdf files
 }
 \examples{
 \dontrun{
 TCGA_CNV_value \%>\%
-  dplyr::select(all_of(EIF_list)) \%>\%
+  dplyr::select(all_of(gene_list)) \%>\%
   .matrix_plot()
 }
 
 }
+\seealso{
+Other helper function for CNV data plotting: 
+\code{\link{.CNV_barplot}()},
+\code{\link{.CNV_sum_barplot}()},
+\code{\link{.CNVratio_boxplot}()}
+}
+\concept{helper function for CNV data plotting}
 \keyword{internal}

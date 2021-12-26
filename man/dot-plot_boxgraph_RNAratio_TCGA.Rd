@@ -5,41 +5,38 @@
 \title{Compare the RNA ratios between EIF4F genes}
 \usage{
 .plot_boxgraph_RNAratio_TCGA(
-  EIF4E,
-  EIF4E2,
-  EIF4E3,
-  EIF4EBP1,
-  EIF4G1,
-  EIF4G2,
-  EIF4G3,
-  EIF3D,
-  EIF4A1,
-  EIF4A2
+  gene01,
+  gene02,
+  gene03,
+  gene04,
+  gene05,
+  gene06,
+  gene07,
+  gene08,
+  gene09,
+  gene10
 )
 }
 \arguments{
-\item{EIF4E}{gene name as a string}
+\item{gene01}{gene name as a string}
 
-\item{EIF4E2}{gene name as a string}
+\item{gene02}{gene name as a string}
 
-\item{EIF4E3}{gene name as a string}
+\item{gene03}{gene name as a string}
 
-\item{EIF4EBP1}{gene name as a string}
+\item{gene04}{gene name as a string}
 
-\item{EIF4G1}{gene name as a string}
+\item{gene05}{gene name as a string}
 
-\item{EIF4G2}{gene name as a string}
+\item{gene06}{gene name as a string}
 
-\item{EIF4G3}{gene name as a string}
+\item{gene07}{gene name as a string}
 
-\item{EIF3D}{gene name as a string}
+\item{gene08}{gene name as a string}
 
-\item{EIF4A1}{gene name as a string}
+\item{gene09}{gene name as a string}
 
-\item{EIF4A2}{gene name as a string}
-}
-\value{
-box plots for RNA ratios among input argument in TCGA tumors
+\item{gene10}{gene name as a string}
 }
 \description{
 This function generates box plots to compare the RNA ratios between EIF4F
@@ -50,18 +47,25 @@ adjacent normal tissues from all TCGA cancer types combined.
 \details{
 This function
 \itemize{
-\item analyzes the ratios of mRNA levels between input genes within
-each TCGA sample, in the data frame \code{TCGA_GTEX_RNAseq_sampletype} prepared
-from \code{\link[=initialize_RNAseq_data]{initialize_RNAseq_data()}}.
 \item calculates RNA ratio across individual tumor types from all cancers with
-the function \code{\link[=.RNAratio_calculation]{.RNAratio_calculation()}}, select the ratio data with
-\code{\link[=.RNAratio_selection]{.RNAratio_selection()}} and plots with \code{\link[=.RNAratio_boxplot]{.RNAratio_boxplot()}}.
+the function \code{\link[=.RNAratio_calculation]{.RNAratio_calculation()}},
+\item select the ratio data with \code{\link[=.RNAratio_selection]{.RNAratio_selection()}} and make boxplot with
+\code{\link[=.RNAratio_boxplot]{.RNAratio_boxplot()}}.
 \item compares RNA ratio in primary, metastatic tumors vs adjacent
 normal tissues from all TCGA cancer types combined with the function
 \code{\link[=.RNAratio_tumortype]{.RNAratio_tumortype()}} and plots with \code{\link[=.violinplot]{.violinplot()}}.
 }
 
 It should not be used directly, only inside \code{\link[=EIF4F_DEG_analysis]{EIF4F_DEG_analysis()}} function.
+
+side effects:
+
+(1) box plots on screen and as pdf file to show differential
+RNA ratios in tumors vs NATs in TCGA cancer type
+
+(2) violin plots on screen and as pdf file to show
+differential gene ratios in primary, metastatic tumors vs
+adjacent normal tissues from all combined TCGA cancer types
 }
 \examples{
 \dontrun{
@@ -73,4 +77,5 @@ It should not be used directly, only inside \code{\link[=EIF4F_DEG_analysis]{EIF
 }
 
 }
+\concept{composite functions to call DEG gene analysis and plotting}
 \keyword{internal}

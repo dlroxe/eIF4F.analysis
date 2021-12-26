@@ -7,10 +7,10 @@
 .univariable_analysis(df, covariate_names)
 }
 \arguments{
-\item{covariate_names}{gene names from the input arguement
+\item{covariate_names}{gene names from the input argument
 of \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}}
 
-\item{gene}{gene names, passed \code{EIF.list} argument from
+\item{gene}{gene names, passed \code{gene_list} argument from
 \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}}
 
 \item{data}{\code{df1} generated inside \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}}
@@ -19,8 +19,8 @@ of \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}}
 a table of univariable Cox-PH
 }
 \description{
-This function generates univariable regression model of the gene expression
-within tumor samples and patient overall survival time TCGA.
+A helper function generates univariable regression model of the gene
+expression within tumor samples and patient overall survival time TCGA.
 }
 \details{
 It should not be used directly, only inside \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}}
@@ -32,4 +32,10 @@ function.
 }
 
 }
+\seealso{
+Other helper function for survival analysis: 
+\code{\link{.KM_curve}()},
+\code{\link{.multivariable_analysis}()}
+}
+\concept{helper function for survival analysis}
 \keyword{internal}

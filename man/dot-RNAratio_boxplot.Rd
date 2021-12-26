@@ -7,10 +7,27 @@
 .RNAratio_boxplot(df, dashline, ylimit, filename)
 }
 \arguments{
-\item{data}{output dataset generated from \code{\link[=.RNAratio_selection]{.RNAratio_selection()}} function}
+\item{df}{output dataset generated from \code{\link[=.RNAratio_selection]{.RNAratio_selection()}} function}
+
+\item{dashline}{the position of horizontal reference line}
+
+\item{ylimit}{the lower and upper limit of the axis scale}
+
+\item{filename}{the name for the output file}
 }
 \description{
 This function should not be used directly,
 only inside \code{\link[=.plot_boxgraph_RNAratio_TCGA]{.plot_boxgraph_RNAratio_TCGA()}}function.
+
+Side effects:
+(1)the box plots on screen and as pdf files to show differential
+RNA ratios across tumors
 }
+\seealso{
+Other helper function for differential expression plotting: 
+\code{\link{.RNAseq_boxplot}()},
+\code{\link{.RNAseq_grouped_boxplot}()},
+\code{\link{.violinplot}()}
+}
+\concept{helper function for differential expression plotting}
 \keyword{internal}

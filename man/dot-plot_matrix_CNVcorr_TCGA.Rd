@@ -4,13 +4,10 @@
 \alias{.plot_matrix_CNVcorr_TCGA}
 \title{Correlation matrix for CNV values}
 \usage{
-.plot_matrix_CNVcorr_TCGA(EIF_list)
+.plot_matrix_CNVcorr_TCGA(gene_list)
 }
 \arguments{
-\item{EIF_list}{gene names in a vector of characters}
-}
-\value{
-the correlation matrix plot for \code{EIF_list} CNV values in TCGA tumors
+\item{gene_list}{gene names in a vector of characters}
 }
 \description{
 generates correlation matrix for eIF4F CNV in tumors
@@ -27,6 +24,9 @@ between every two genes and plot the correlation matrix with the function
 }
 
 It should not be used directly, only inside \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
+
+side effect: the correlation matrix plot on screen and as saved pdf files
+to show co-occurrence of \code{gene_list} CNV status in TCGA tumors
 }
 \examples{
 \dontrun{
@@ -34,4 +34,5 @@ plot_matrix_CNVcorr_TCGA(c("EIF4A1", "EIF4E", "EIF4EBP1", "EIF4G1"))
 }
 
 }
+\concept{Composite function to call CNV data analysis and plotting}
 \keyword{internal}

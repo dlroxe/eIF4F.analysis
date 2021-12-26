@@ -21,5 +21,9 @@
 \description{
 This function should not be used directly,
 only inside \code{\link[=.plot_CoxPH_RNAseq_TCGA]{.plot_CoxPH_RNAseq_TCGA()}} function.
+
+side effects: forest graph showing the relation between survival of TCGA
+patients and EIF expression in their tumors from regression model
 }
+\concept{helper function for survival analysis plotting}
 \keyword{internal}

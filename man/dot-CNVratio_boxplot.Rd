@@ -10,10 +10,6 @@
 \item{df}{\code{.EIF_CNVratio_ind_cancer} generated
 inside \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}}}
 }
-\value{
-boxplot for CNV ratios in tumors vs adjacent normals
-from individual TCGA cancer types.
-}
 \description{
 This function generates boxplot for CNV ratios in tumors
 vs adjacent normals from individual TCGA cancer types.
@@ -23,6 +19,11 @@ This plot function uses dataset \code{.TCGA_CNVratio_sampletype_subset}
 generated from \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}} function.
 It should not be used directly, only inside \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}}
 function.
+
+Side effects:
+
+(1) boxplot on screen and as saved pdf files to show CNV ratios
+in tumors vs adjacent normals from individual TCGA cancer types.
 }
 \examples{
 \dontrun{
@@ -30,4 +31,11 @@ lapply(.EIF_CNVratio_ind_cancer, .CNVratio_boxplot)
 }
 
 }
+\seealso{
+Other helper function for CNV data plotting: 
+\code{\link{.CNV_barplot}()},
+\code{\link{.CNV_sum_barplot}()},
+\code{\link{.matrix_plot}()}
+}
+\concept{helper function for CNV data plotting}
 \keyword{internal}

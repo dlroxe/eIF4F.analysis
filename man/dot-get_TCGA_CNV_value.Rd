@@ -26,4 +26,12 @@ function.
 }
 
 }
+\seealso{
+Other helper function for data initialization: 
+\code{\link{.get_TCGA_CNV_ratio}()},
+\code{\link{.get_TCGA_CNV}()},
+\code{\link{.get_TCGA_GTEX_RNAseq}()},
+\code{\link{.get_TCGA_RNAseq}()}
+}
+\concept{helper function for data initialization}
 \keyword{internal}

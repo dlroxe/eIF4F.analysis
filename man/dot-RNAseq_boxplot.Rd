@@ -7,10 +7,24 @@
 .RNAseq_boxplot(df)
 }
 \arguments{
-\item{data}{output dataset generated from \code{\link[=.RNAseq_ind_gene]{.RNAseq_ind_gene()}} function}
+\item{df}{output dataset generated from \code{\link[=.RNAseq_ind_gene]{.RNAseq_ind_gene()}} function}
 }
 \description{
+This function takes the output of \code{\link[=.RNAseq_ind_gene]{.RNAseq_ind_gene()}} and generate box plots
+for differential gene expression in tumors vs NATs in TCGA cancer types
 This function should not be used directly,
 only inside \code{\link[=.plot_boxgraph_RNAseq_TCGA]{.plot_boxgraph_RNAseq_TCGA()}}function.
+
+Side effects:
+
+(1) box plots on screen and as pdf file to show differential
+gene expression in tumors vs NATs in TCGA cancer types
 }
+\seealso{
+Other helper function for differential expression plotting: 
+\code{\link{.RNAratio_boxplot}()},
+\code{\link{.RNAseq_grouped_boxplot}()},
+\code{\link{.violinplot}()}
+}
+\concept{helper function for differential expression plotting}
 \keyword{internal}

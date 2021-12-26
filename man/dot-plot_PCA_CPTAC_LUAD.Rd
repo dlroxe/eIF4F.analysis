@@ -2,34 +2,54 @@
 % Please edit documentation in R/PCA.R
 \name{.plot_PCA_CPTAC_LUAD}
 \alias{.plot_PCA_CPTAC_LUAD}
-\title{Perform PCA on proteomics data from CPATC LUADs and matched healthy lung
-tissues}
+\title{Perform PCA on proteomics data from CPATC LUADs and matched healthy
+lung tissues}
 \usage{
-.plot_PCA_CPTAC_LUAD(EIF.list)
+.plot_PCA_CPTAC_LUAD(gene_list)
 }
 \arguments{
-\item{EIF.list}{gene names in a vector of characters}
-}
-\value{
-PCA bioplot, matrix, scree plot
+\item{gene_list}{gene names in a vector of characters}
 }
 \description{
-This function performs standard PCA on selected proteomics data from
-\code{CPTAC_LUAD_Proteomics} prepared by \code{\link[=initialize_proteomics_data]{initialize_proteomics_data()}}.
-
-It perform PCA on combined tumors from CPTAC LUAD and and
-matched healthy lung tissues.
+A composite function performs imputed PCA on CPATC LUADs
+proteomics data and plot the results
+}
+\details{
+This function
+\itemize{
+\item selects proteomics data from \code{CPTAC_LUAD_Proteomics} prepared by
+\code{\link[=initialize_proteomics_data]{initialize_proteomics_data()}}.
+\item performs imputed PCA on combined tumors from CPTAC LUAD and and
+matched healthy lung tissues, by \code{\link[=.protein_imputePCA]{.protein_imputePCA()}}.
+\item plots results as biplot, scree and matrix plots by \code{\link[=.biplot]{.biplot()}}
+}
 
 This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}}
 function.
+
+Side effects:
+
+(1) PCA biplots (PCA score plot + loading plot) on screen and as pdf files:
+PCA score plot shows the clusters of samples based on their similarity and
+loading plot shows how strongly each characteristic influences a principal
+component.
+(2) matrix plots on screen and as pdf files to show the quality of
+representation of the variables.
+(3) scree plots on screen and as pdf files to display how much variation
+each principal component captures from the data.
 }
 \examples{
 \dontrun{
-.plot_PCA_TCGA_GTEX_tumor(c(
-  "EIF4G1", "EIF4A1", "EIF4E",
-  "EIF4EBP1", "PABPC1", "MKNK1", "MKNK2"
-), "Lung")
+.plot_PCA_CPTAC_LUAD(c(
+ "EIF4E", "EIF4G1", "EIF4A1", "PABPC1",
+ "MKNK1", "MKNK2", "EIF4EBP1"))
 }
 
 }
+\seealso{
+Other composite function to call PCA and plot results: 
+\code{\link{.plot_PCA_TCGA_GTEX_tumor}()},
+\code{\link{.plot_PCA_TCGA_GTEX}()}
+}
+\concept{composite function to call PCA and plot results}
 \keyword{internal}

@@ -2,10 +2,7 @@
 % Please edit documentation in R/DEG.R
 \name{.RNAseq_all_gene}
 \alias{.RNAseq_all_gene}
-\title{\subsection{Differential expression analysis and plotting}{
-
-Compares expressions among genes in tumor samples
-}}
+\title{Compares expressions among genes in tumor samples}
 \usage{
 .RNAseq_all_gene(df)
 }
@@ -14,12 +11,12 @@ Compares expressions among genes in tumor samples
 inside \code{\link[=.plot_boxgraph_RNAseq_TCGA]{.plot_boxgraph_RNAseq_TCGA()}}}
 }
 \value{
-a data frame ranking genes by their mRNA expressions in
-lung adenocarcinoma
+a data frame ranking genes by their mRNA expressions in lung adenocarcinoma
 }
 \description{
-This function selects the RNAseq data from TCGA samples,
-excludes \verb{Solid Tissue Normal} and ranks the genes by their mRNA expression.
+This function selects the RNAseq data from TCGA samples, excludes
+samples with label of \verb{Solid Tissue Normal} and ranks the genes by their
+mRNA expression.
 It should not be used directly, only inside \code{\link[=.plot_boxgraph_RNAseq_TCGA]{.plot_boxgraph_RNAseq_TCGA()}}
 function.
 }
@@ -29,4 +26,13 @@ function.
 }
 
 }
+\seealso{
+Other helper function for differential expression analysis: 
+\code{\link{.RNAratio_calculation}()},
+\code{\link{.RNAratio_selection}()},
+\code{\link{.RNAratio_tumortype}()},
+\code{\link{.RNAseq_ind_gene}()},
+\code{\link{.RNAseq_tumortype}()}
+}
+\concept{helper function for differential expression analysis}
 \keyword{internal}

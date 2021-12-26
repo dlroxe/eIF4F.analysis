@@ -10,9 +10,6 @@
 \item{data}{summary table from
 \code{.CNV_all_cancer(.TCGA_CNV_sampletype_subset)}}
 }
-\value{
-stacked bar plots showing the summary table of the CNV statuses
-}
 \description{
 This function generates the stacked bar plots to the summary
 of CNV statuses
@@ -23,6 +20,9 @@ This plot function uses dataset generated from
 
 It should not be used directly, only inside
 \code{\link[=.plot_bargraph_CNV_TCGA]{.plot_bargraph_CNV_TCGA()}}function.
+
+Side effect: stacked bar plots on screen and as pdf file to show the summary
+table of the CNV statuses
 }
 \examples{
 \dontrun{
@@ -30,4 +30,11 @@ It should not be used directly, only inside
 }
 
 }
+\seealso{
+Other helper function for CNV data plotting: 
+\code{\link{.CNV_barplot}()},
+\code{\link{.CNVratio_boxplot}()},
+\code{\link{.matrix_plot}()}
+}
+\concept{helper function for CNV data plotting}
 \keyword{internal}

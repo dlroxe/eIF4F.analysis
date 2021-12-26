@@ -4,13 +4,13 @@
 \alias{.CNVratio_tumor}
 \title{Calculates the frequency of CNV status in all TCGA cancer types combined}
 \usage{
-.CNVratio_tumor(df, x)
+.CNVratio_tumor(df, gene)
 }
 \arguments{
 \item{df}{\code{.TCGA_CNVratio_sampletype_subset} generated inside
 \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}}}
 
-\item{x}{one gene from the input argument of \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}}}
+\item{gene}{one gene from the input argument of \code{\link[=.plot_boxgraph_CNVratio_TCGA]{.plot_boxgraph_CNVratio_TCGA()}}}
 }
 \value{
 a list with the data frame of CNV ratio of the input gene
@@ -30,4 +30,10 @@ lapply(EIF, .CNVratio_tumor, df = .TCGA_CNVratio_sampletype_subset)
 }
 
 }
+\seealso{
+Other helper function for CNV data analysis: 
+\code{\link{.CNV_all_cancer}()},
+\code{\link{.CNV_ind_cancer}()}
+}
+\concept{helper function for CNV data analysis}
 \keyword{internal}

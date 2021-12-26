@@ -7,20 +7,28 @@
 initialize_survival_data()
 }
 \description{
-This function reads RNA-seq and survival datasets from TCGA.
+A wrapper function to read RNA-seq and survival datasets from TCGA.
 
-side effect: \code{TCGA_RNAseq_OS_sampletype} the merged dataset from
-\code{.TCGA_RNAseq}, \code{.TCGA_OS} and \code{.TCGA_sampletype}
+Side effects:
+
+(1) \code{TCGA_RNAseq_OS_sampletype} a merged dataset from
+\code{.TCGA_RNAseq}, \code{.TCGA_OS} and \code{.TCGA_sampletype}.
 \itemize{
 \item \code{.TCGA_RNAseq}: the RNAseq data from TCGA generated from
-\code{\link[=.get_TCGA_RNAseq]{.get_TCGA_RNAseq()}}
-\item \code{.TCGA_OS}: the annotation data from the
-\code{Survival_SupplementalTable_S1_20171025_xena_sp} dataset with selection of
-\code{OS} and \code{OS.time} columns.
+\code{\link[=.get_TCGA_RNAseq]{.get_TCGA_RNAseq()}}, which imports the dataset
+\code{EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena}.
+\item \code{.TCGA.OS}: the clinical data from
+\code{Survival_SupplementalTable_S1_20171025_xena_sp}. We select three columns:
+\code{OS} for overall survival status, \code{OS.time} for overall survival time and
+\code{sample} for sample ID of each patient.
 \item \code{.TCGA_sampletype}: the annotation data from the
-\code{TCGA_phenotype_denseDataOnlyDownload.tsv} dataset with selection of
-\code{sample.type} and \code{primary.disease} columns.
+\code{TCGA_phenotype_denseDataOnlyDownload.tsv} dataset. We select two columns
+\code{sample.type} that annotates malignant tissues, and \code{primary.disease}
+that annotates cancer types for each sample.
 }
+
+Only malignant tissue (Solid normal tissues are excluded) are selected for
+survival analysis
 }
 \examples{
 \dontrun{
@@ -28,3 +36,12 @@ initialize_survival_data()
 }
 
 }
+\seealso{
+Other wrapper function for data initialization: 
+\code{\link{initialize_RNAseq_data}()},
+\code{\link{initialize_cnv_data}()},
+\code{\link{initialize_data}()},
+\code{\link{initialize_phosphoproteomics_data}()},
+\code{\link{initialize_proteomics_data}()}
+}
+\concept{wrapper function for data initialization}
