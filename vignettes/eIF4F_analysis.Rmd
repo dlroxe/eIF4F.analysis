@@ -29,14 +29,56 @@ Run the `initialize_dir()` command to create the sub-directories under `~/Docume
 initialize_dir()
 ```
 
-Load all needed TCGA, GTEX, CPTAC and CCLE datasets download by `1-download.sh` for the following analyses.
+Load the font types, size and orientation for plotting functions.
+
+```{r, eval = FALSE}
+initialize_format()
+```
+
+Load all needed TCGA, GTEX, CPTAC and CCLE datasets download by `Download.sh` for the following analyses.
 
 ```{r, eval = FALSE}
 initialize_data()
 ```
 
-Load the font types, size and orientation for plotting functions.
+Perform CNV analysis.
 
 ```{r, eval = FALSE}
-initialize_format()
+EIF4F_CNV_analysis()
+```
+
+Perform differential gene expression/ratio analysis.
+
+```{r, eval = FALSE}
+EIF4F_DEG_analysis()
+```
+
+Perform gene expression and survival analysis.
+
+```{r, eval = FALSE}
+EIF4F_Survival_analysis()
+```
+
+Perform PCA.
+
+```{r, eval = FALSE}
+EIF4F_PCA()
+```
+
+Perform correlating gene analysis.
+
+```{r, eval = FALSE}
+EIF4F_Corrgene_analysis()
+```
+
+Perform RNA protein expression correlation analysis.
+
+```{r, eval = FALSE}
+EIF4F_RNA_pro_correlation()
+```
+
+Perform (phospho)proteomics analysis.
+
+```{r, eval = FALSE}
+EIF4F_Proteomics_analysis()
 ```
