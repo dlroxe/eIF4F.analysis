@@ -3,3 +3,7 @@
 ^LICENSE\.md$
 ^README\.Rmd$
 ^Script$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
