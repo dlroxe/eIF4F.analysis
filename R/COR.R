@@ -355,7 +355,7 @@
   print(p2)
   ggplot2::ggsave(
     path = file.path(output_directory, "CORs"),
-    filename = paste("all", tissue_type, sample_type, CORs_type, "Venn.pdf"),
+    filename = paste(tissue_type, sample_type, CORs_type, "Venn.pdf"),
     plot = p2,
     width = 6,
     height = 6,
@@ -506,7 +506,7 @@
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "CORs"),
-    filename = paste0("all ", tissue_type, CORs_type, ".pdf"),
+    filename = paste(tissue_type, CORs_type, "bargraph", ".pdf"),
     plot = p1,
     width = 8,
     height = 8,
@@ -705,7 +705,7 @@
 
   pdf(file.path(
     path = file.path(output_directory, "CORs"),
-    filename = paste(tissue_type, " tumors heatmap.pdf")
+    filename = paste(tissue_type, "tumors heatmap.pdf")
   ),
   width = 8,
   height = 10,
@@ -833,7 +833,7 @@
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "CORs"),
-    filename = paste(tissue_type, " tumors", pathway, ".pdf"),
+    filename = paste(tissue_type, " tumors enriched", pathway, ".pdf"),
     plot = p1,
     width = 10,
     height = 10,

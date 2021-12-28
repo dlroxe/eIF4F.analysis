@@ -250,7 +250,7 @@
   print(biplot)
   ggplot2::ggsave(
     path = file.path(output_directory, "PCA", folder),
-    filename = paste("PCA", sample_type, ".pdf"),
+    filename = paste0("PCA ", sample_type, ".pdf"),
     plot = biplot,
     width = 8,
     height = 8,
@@ -282,7 +282,7 @@
 
   ggplot2::ggsave(
     path = file.path(output_directory, "PCA", folder),
-    filename = paste("eig", sample_type, ".pdf"),
+    filename = paste0("scree ", sample_type, ".pdf"),
     plot = eig,
     width = 8,
     height = 8,
@@ -292,7 +292,7 @@
   var <- factoextra::get_pca_var(res.pca)
   pdf(file.path(
     path = file.path(output_directory, "PCA", folder),
-    filename = paste("matrix", sample_type, ".pdf")
+    filename = paste0("matrix ", sample_type, ".pdf")
   ),
   width = 9,
   height = 9,
@@ -417,8 +417,8 @@
     )
   print(biplot)
   ggplot2::ggsave(
-    path = file.path(output_directory, "PCA", "All"),
-    filename = paste0("EIFPCAall", sample_type, column_name, ".pdf"),
+    path = file.path(output_directory, "PCA", "TCGA tumor + GTEX healthy"),
+    filename = paste("Selected", sample_type, column_name, ".pdf"),
     plot = biplot,
     width = 8,
     height = 8,
@@ -520,7 +520,7 @@
     sample_type = "Primary Tumor (TCGA)",
     column_name = "primary.disease",
     color = col_vector,
-    folder = "TCGA"
+    folder = "TCGA tumor"
   )
 
   df <- .get_df_subset(.TCGA_GTEX_sampletype_subset, "Metastatic Tumor (TCGA)")
@@ -530,7 +530,7 @@
     sample_type = "Metastatic Tumor (TCGA)",
     column_name = "primary.disease",
     color = col_vector,
-    folder = "TCGA"
+    folder = "TCGA tumor"
   )
 
   df <- .get_df_subset(.TCGA_GTEX_sampletype_subset, "Healthy Tissue (GTEx)")
@@ -540,7 +540,7 @@
     sample_type = "Healthy Tissue (GTEx)",
     column_name = "primary.site",
     color = col_vector,
-    folder = "GTEX"
+    folder = "GTEX healthy"
   )
 
 
@@ -552,7 +552,7 @@
     sample_type = "All",
     column_name = "sample.type",
     color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
-    folder = "All"
+    folder = "TCGA tumor + GTEX healthy"
   )
 
   .selected_biplot(
@@ -690,7 +690,7 @@
     sample_type = sample_type,
     column_name = "sample.type",
     color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
-    folder = "Lung"
+    folder = "matched tumor and healthy"
   )
 
   return(NULL)
@@ -766,7 +766,7 @@
     sample_type = "LUAD(CPTAC)",
     column_name = "Type",
     color = c("#D55E00", "#009E73"),
-    folder = "Lung"
+    folder = "LUAD"
   )
 
   return(NULL)

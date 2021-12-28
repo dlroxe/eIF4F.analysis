@@ -157,8 +157,8 @@ initialize_phosphoproteomics_data <- function() {
   print(p1)
 
   ggplot2::ggsave(
-    path = file.path(output_directory, "Proteomics"),
-    filename = paste(protein01, protein02, "cor.pdf"),
+    path = file.path(output_directory, "Proteomics", "COEXP"),
+    filename = paste(protein01, protein02, "correlation.pdf"),
     plot = p1,
     #width = 3,
     #height = 3,
@@ -357,8 +357,8 @@ initialize_phosphoproteomics_data <- function() {
     )
   print(p2)
   ggplot2::ggsave(
-    path = file.path(output_directory, "Proteomics"),
-    filename = paste0(stringr::str_remove(protein_name, ":"), "pro.pdf"),
+    path = file.path(output_directory, "Proteomics", "DIFFEXP"),
+    filename = paste0(stringr::str_remove(protein_name, ":"), ".pdf"),
     plot = p2,
     #width = 3,
     #height = 3,

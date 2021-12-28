@@ -273,7 +273,7 @@ initialize_RNAseq_data <- function() {
 
   ggplot2::ggsave(
     path = file.path(output_directory, "DEG"),
-    filename = "RNAseqGroupedBoxplot.pdf",
+    filename = "EIF RNAseq Grouped Boxplot.pdf",
     plot = p1,
     width = 16.5,
     height = 8,
@@ -413,7 +413,7 @@ initialize_RNAseq_data <- function() {
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "DEG"),
-    filename = paste0(df[[2]], "tumorvsnormal.pdf"),
+    filename = paste(df[[2]], "pancancer RNAseq.pdf"),
     plot = p1,
     width = 7.5,
     height = 9,
@@ -569,7 +569,7 @@ initialize_RNAseq_data <- function() {
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "DEG"),
-    filename = paste(y.axis.title, " violin.pdf"),
+    filename = paste(y.axis.title, "violin.pdf"),
     plot = p1,
     width = 18,
     height = 9,
@@ -1135,7 +1135,7 @@ initialize_RNAseq_data <- function() {
     )),
     dashline = 1,
     ylimit = c(0, 25),
-    filename = "RNAratio1.pdf"
+    filename = "EIF4F RNA ratio plot1.pdf"
   )
 
   .RNAratio_boxplot(
@@ -1147,7 +1147,7 @@ initialize_RNAseq_data <- function() {
     )),
     dashline = 4,
     ylimit = c(0, 25),
-    filename = "RNAratio2.pdf"
+    filename = "EIF4F RNA ratio plot2.pdf"
   )
 
   .RNAratio_boxplot(
@@ -1158,7 +1158,7 @@ initialize_RNAseq_data <- function() {
     )),
     dashline = 1,
     ylimit = c(0, 5),
-    filename = "RNAratio3.pdf"
+    filename = "EIF4F RNA ratio plot3.pdf"
   )
 
   .RNAratio_tumortype(RNAratio.data, c(

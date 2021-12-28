@@ -53,19 +53,23 @@ initialize_dir <- function() {
              showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(output_directory, "PCA"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "PCA", "All"),
+  dir.create(file.path(output_directory, "PCA", "TCGA tumor + GTEX healthy"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "PCA", "TCGA"),
+  dir.create(file.path(output_directory, "PCA", "TCGA tumor"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "PCA", "GTEX"),
+  dir.create(file.path(output_directory, "PCA", "GTEX healthy"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "PCA", "Lung"),
+  dir.create(file.path(output_directory, "PCA", "matched tumor and healthy"),
+             showWarnings = FALSE, recursive = TRUE)
+  dir.create(file.path(output_directory, "PCA", "LUAD"),
              showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(output_directory, "CORs"),
              showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(output_directory, "RNApro"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "Proteomics"),
+  dir.create(file.path(output_directory, "Proteomics","COEXP"),
+             showWarnings = FALSE, recursive = TRUE)
+  dir.create(file.path(output_directory, "Proteomics","DIFFEXP"),
              showWarnings = FALSE, recursive = TRUE)
 }
 

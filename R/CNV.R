@@ -414,7 +414,7 @@ initialize_cnv_data <- function() {
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "CNV"),
-    filename = "EIFCNVsum.pdf",
+    filename = "EIF CNV summary.pdf",
     plot = p1,
     width = 9,
     height = 9,
@@ -568,7 +568,7 @@ initialize_cnv_data <- function() {
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "CNV"),
-    filename = paste0(df[[2]], "pancancerCNV.pdf"),
+    filename = paste(df[[2]], "pancancer CNV.pdf"),
     plot = p1,
     width = 7.5,
     height = 9,
@@ -637,7 +637,7 @@ initialize_cnv_data <- function() {
   print(p1) # print correlation matrix on the screen
   # save correlation plot as a pdf file
   pdf(
-    file.path(output_directory, "CNV", "EIFCNVcormatrix.pdf"),
+    file.path(output_directory, "CNV", "EIF CNV Corrmatrix.pdf"),
     width = 9,
     height = 9,
     useDingbats = FALSE
@@ -783,7 +783,7 @@ initialize_cnv_data <- function() {
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "CNV"),
-    filename = paste0(df[[2]], "pancancerCNVratio.pdf"),
+    filename = paste0(df[[2]], "pancancer CNVratio.pdf"),
     plot = p1,
     width = 7,
     height = 9,

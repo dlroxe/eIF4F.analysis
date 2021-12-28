@@ -269,7 +269,7 @@ initialize_survival_data <- function() {
   print(KM)
   ggplot2::ggsave(
     path = file.path(output_directory, "Survival", "KM"),
-    filename = paste(gene, cutoff, tumor, "tumors KM.pdf"),
+    filename = paste(gene, cutoff, "cutoff", tumor, "tumors KM.pdf"),
     plot = KM,
     width = 6,
     height = 6,
@@ -714,11 +714,11 @@ initialize_survival_data <- function() {
   .forest_graph(
     data = univariable.result,
     output.file = if (tumor == "All") {
-      file.path(output_directory, "Survival", "CoxPH", "EIFUniCox.pdf")
+      file.path(output_directory, "Survival", "CoxPH", "All uniCox.pdf")
     } else {
       # paste0(output_directory, "/Survival/", tumor, "EIFUniCox.pdf")
       file.path(output_directory, "Survival", "CoxPH",
-                paste0(tumor, "EIFUniCox.pdf"))
+                paste(tumor, "uniCox.pdf"))
     },
     plot.title = if (tumor == "All") {
       "Univariable Cox proportional-hazards regression analysis (all tumor types)"
@@ -745,11 +745,11 @@ initialize_survival_data <- function() {
   .forest_graph(
     data = multivariable.result,
     output.file = if (tumor == "All") {
-      file.path(output_directory, "Survival", "CoxPH", "EIFmultiCox.pdf")
+      file.path(output_directory, "Survival", "CoxPH", "all multiCox.pdf")
     } else {
       # paste0(output_directory, "/Survival/", tumor, "EIFmultiCox.pdf")
       file.path(output_directory, "Survival", "CoxPH",
-                paste0(tumor, "EIFmultiCox.pdf"))
+                paste(tumor, "multiCox.pdf"))
     },
     plot.title = if (tumor == "All") {
       "Multivariable Cox proportional-hazards regression analysis (all tumor types)"
