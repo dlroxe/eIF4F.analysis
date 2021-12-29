@@ -217,7 +217,7 @@ The version information of R, Linux and attached or loaded packages for
 developing this package is the following.
 
 ``` r
-─ Session info ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+─ Session info ─────────────────────────────────────────────────────────────────
  setting  value
  version  R version 4.1.1 (2021-08-10)
  os       Pop!_OS 20.04 LTS
@@ -231,7 +231,7 @@ developing this package is the following.
  rstudio  2021.09.0-preview+341 Ghost Orchid (desktop)
  pandoc   2.14.0.3 @ /usr/lib/rstudio/bin/pandoc/ (via rmarkdown)
 
-─ Packages ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+─ Packages ─────────────────────────────────────────────────────────────────────
  ! package          * version  date (UTC) lib source
    abind              1.4-5    2016-07-21 [1] CRAN (R 4.1.1)
    AnnotationDbi    * 1.56.2   2021-11-09 [1] Bioconductor
@@ -428,7 +428,7 @@ developing this package is the following.
  [3] /usr/lib/R/site-library
  [4] /usr/lib/R/library
 
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+────────────────────────────────────────────────────────────────────────────────
 ```
 
 ## Tutorials
