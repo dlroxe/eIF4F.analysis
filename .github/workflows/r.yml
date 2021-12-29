@@ -16,7 +16,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         r-version: ['4.1.1']
@@ -27,9 +27,11 @@ jobs:
         uses: r-lib/actions/setup-r@f57f1301a053485946083d7a45022b278929a78a
         with:
           r-version: ${{ matrix.r-version }}
+      - name: Install Ubuntu Packages
+        run: |
+          sudo apt install -y libcurl4-openssl-dev      
       - name: Install dependencies
         run: |
-          sudo apt install -y libcurl4-openssl-dev
           install.packages(c("remotes", "curl", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
