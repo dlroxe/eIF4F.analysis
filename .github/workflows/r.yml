@@ -29,6 +29,7 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - name: Install dependencies
         run: |
+          sudo apt install -y libcurl4-openssl-dev
           install.packages(c("remotes", "curl", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
