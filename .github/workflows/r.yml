@@ -32,7 +32,17 @@ jobs:
           sudo apt install -y libcurl4-openssl-dev      
       - name: Install dependencies
         run: |
-          install.packages(c("remotes", "curl", "rcmdcheck"))
+          install.packages(c("remotes", "curl", "rcmdcheck", "BiocManager"))
+          BiocManager::install(version = "3.14")
+          bio_pkgs <- c(
+            "AnnotationDbi", "circlize",  "clusterProfiler", "ComplexHeatmap", "corrplot", 
+            "data.table", "devtools", "dplyr", "EnvStats", "eulerr", "factoextra", 
+            "FactoMineR", "forcats", "forestplot", "ggfortify", "ggplot2", "ggpubr", 
+            "graphics", "grDevices", "grid", "limma", "missMDA", "org.Hs.eg.db", "purrr", 
+            "RColorBrewer", "ReactomePA", "readr",  "readxl", "reshape2", "scales", 
+            "stats", "stringr", "survival", "survivalAnalysis", "tibble", "tidyr", 
+            "tidyselect")
+          BiocManager::install(bio_pkgs)
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
