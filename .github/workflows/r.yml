@@ -29,7 +29,7 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - name: Install Ubuntu Packages
         run: |
-          sudo apt install -y libcurl4-openssl-dev
+          sudo apt install -y libcurl4-openssl-dev pandoc texlive-latex-base texlive-fonts-recommended texlive-fonts-extra texlive-latex-extra
       - name: Install remotes, curl, rcmdcheck
         run: |
           install.packages(c("remotes", "curl", "rcmdcheck"))
