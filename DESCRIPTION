@@ -33,7 +33,6 @@ Imports:
     magrittr,
     missMDA,
     org.Hs.eg.db,
-    pandoc,
     purrr,
     RColorBrewer,
     ReactomePA,
