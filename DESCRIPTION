@@ -34,7 +34,6 @@ Imports:
     missMDA,
     org.Hs.eg.db,
     purrr,
-    rcmdcheck,
     RColorBrewer,
     ReactomePA,
     readr,
