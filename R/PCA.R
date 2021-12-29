@@ -441,7 +441,7 @@
 #' * selects RNAseq data of `gene_list` genes of specific sample types from
 #'  `TCGA_GTEX_RNAseq_sampletype` by [.get_df_subset()].
 #' * performs three PCAs by [.RNAseq_PCA()] on \enumerate{
-#'   \item tumors samples from all TCGA cancer types
+#'   \item tumor samples from all TCGA cancer types
 #'   \item healthy tissue samples from all GTEx healthy tissue types
 #'   \item TCGA tumors and GTEx healthy tissue samples combined}
 #' * generates biplot, screen plot and matrix plots by [.biplot()]
@@ -627,8 +627,10 @@
 #'  PCA score plot shows the clusters of samples based on their similarity and
 #'  loading plot shows how strongly each characteristic influences a principal
 #'  component.
+#'
 #' (2) matrix plots on screen and as pdf files to show the quality of
 #'  representation of the variables.
+#'
 #' (3) scree plots on screen and as pdf files to display how much variation
 #'  each principal component captures from the data.
 #'
@@ -719,8 +721,10 @@
 #'  PCA score plot shows the clusters of samples based on their similarity and
 #'  loading plot shows how strongly each characteristic influences a principal
 #'  component.
+#'
 #' (2) matrix plots on screen and as pdf files to show the quality of
 #'  representation of the variables.
+#'
 #' (3) scree plots on screen and as pdf files to display how much variation
 #'  each principal component captures from the data.
 #'
@@ -791,8 +795,10 @@
 #'  PCA score plot shows the clusters of samples based on their similarity and
 #'  loading plot shows how strongly each characteristic influences a principal
 #'  component.
+#'
 #' (2) matrix plots on screen and as pdf files to show the quality of
 #'  representation of the variables.
+#'
 #' (3) scree plots on screen and as pdf files to display how much variation
 #'  each principal component captures from the data.
 #'

@@ -19,7 +19,7 @@ This function
 \item selects RNAseq data of \code{gene_list} genes of specific sample types from
 \code{TCGA_GTEX_RNAseq_sampletype} by \code{\link[=.get_df_subset]{.get_df_subset()}}.
 \item performs three PCAs by \code{\link[=.RNAseq_PCA]{.RNAseq_PCA()}} on \enumerate{
-\item tumors samples from all TCGA cancer types
+\item tumor samples from all TCGA cancer types
 \item healthy tissue samples from all GTEx healthy tissue types
 \item TCGA tumors and GTEx healthy tissue samples combined}
 \item generates biplot, screen plot and matrix plots by \code{\link[=.biplot]{.biplot()}}

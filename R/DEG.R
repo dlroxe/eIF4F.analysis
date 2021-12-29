@@ -978,7 +978,7 @@ initialize_RNAseq_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_DEG_analysis()] function.
 #'
-#' side effects:
+#' Side effects:
 #'
 #'  (1) box plots on screen and as pdf file to compare relative gene
 #'  expression in across all TCGA cancer types
@@ -1068,7 +1068,7 @@ initialize_RNAseq_data <- function() {
 #'
 #' It should not be used directly, only inside [EIF4F_DEG_analysis()] function.
 #'
-#' side effects:
+#' Side effects:
 #'
 #'  (1) box plots on screen and as pdf file to show differential
 #'  RNA ratios in tumors vs NATs in TCGA cancer type

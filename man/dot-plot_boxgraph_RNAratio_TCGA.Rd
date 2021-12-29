@@ -58,7 +58,7 @@ normal tissues from all TCGA cancer types combined with the function
 
 It should not be used directly, only inside \code{\link[=EIF4F_DEG_analysis]{EIF4F_DEG_analysis()}} function.
 
-side effects:
+Side effects:
 
 (1) box plots on screen and as pdf file to show differential
 RNA ratios in tumors vs NATs in TCGA cancer type

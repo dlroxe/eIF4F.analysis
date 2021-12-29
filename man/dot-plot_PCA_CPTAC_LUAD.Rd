@@ -33,8 +33,10 @@ Side effects:
 PCA score plot shows the clusters of samples based on their similarity and
 loading plot shows how strongly each characteristic influences a principal
 component.
+
 (2) matrix plots on screen and as pdf files to show the quality of
 representation of the variables.
+
 (3) scree plots on screen and as pdf files to display how much variation
 each principal component captures from the data.
 }

@@ -39,7 +39,7 @@ types combined with the function \code{\link[=.RNAseq_tumortype]{.RNAseq_tumorty
 
 It should not be used directly, only inside \code{\link[=EIF4F_DEG_analysis]{EIF4F_DEG_analysis()}} function.
 
-side effects:
+Side effects:
 
 (1) box plots on screen and as pdf file to compare relative gene
 expression in across all TCGA cancer types
