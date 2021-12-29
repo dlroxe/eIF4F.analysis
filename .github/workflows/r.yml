@@ -29,10 +29,13 @@ jobs:
           r-version: ${{ matrix.r-version }}
       - name: Install Ubuntu Packages
         run: |
-          sudo apt install -y libcurl4-openssl-dev      
-      - name: Install dependencies
+          sudo apt install -y libcurl4-openssl-dev
+      - name: Install remotes, curl, rcmdcheck
         run: |
-          install.packages(c("remotes", "curl", "rcmdcheck", "BiocManager"))
+          install.packages(c("remotes", "curl", "rcmdcheck"))
+      - name: Install BiocManager dependencies
+        run: |
+          install.packages(c("BiocManager"))
           BiocManager::install(version = "3.14")
           bio_pkgs <- c(
             "AnnotationDbi", "circlize",  "clusterProfiler", "ComplexHeatmap", "corrplot", 
@@ -43,6 +46,8 @@ jobs:
             "stats", "stringr", "survival", "survivalAnalysis", "tibble", "tidyr", 
             "tidyselect")
           BiocManager::install(bio_pkgs)
+      - name: Install other dependencies
+        run: |
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
       - name: Check
