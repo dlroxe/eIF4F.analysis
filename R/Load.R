@@ -12,29 +12,34 @@ output_directory <- "~/Documents/EIF_output"
 #'
 #' @details Side effects:
 #'
-#' (1) output directory for CNV analysis results `~/Documents/EIF_output/CNV`
+#' (1) output directory for CNV analysis results
+#'  * `~/Documents/EIF_output/CNV`
 #'
 #' (2) output directory for differential gene expression and ratio analysis
-#'  results `~/Documents/EIF_output/DEG`
+#'  results
+#'  * `~/Documents/EIF_output/DEG`
 #'
 #' (3) output directories for survival analysis results
 #'  * `~/Documents/EIF_output/Survival/KM`
 #'  * `~/Documents/EIF_output/Survival/CoxPH`
 #'
 #' (4) output directory for PCA results
-#'  * `~/Documents/EIF_output/PCA/All`
-#'  * `~/Documents/EIF_output/PCA/TCGA`
-#'  * `~/Documents/EIF_output/PCA/GTEX`
-#'  * `~/Documents/EIF_output/PCA/Lung`
+#'  * `~/Documents/EIF_output/PCA/TCGA_tumor+GTEX_healthy`
+#'  * `~/Documents/EIF_output/PCA/TCGA_tumor`
+#'  * `~/Documents/EIF_output/PCA/GTEX_healthy`
+#'  * `~/Documents/EIF_output/PCA/matched_tumor_and_healthy`
+#'  * `~/Documents/EIF_output/PCA/LUAD`
 #'
 #' (5) output directory for analysis results on EIF4F correlating genes
-#'  `~/Documents/EIF_output/CORs`
+#'  * `~/Documents/EIF_output/CORs`
 #'
 #' (6) output directory for correlation analysis between RNA and protein levels
-#'  `~/Documents/EIF_output/RNApro`
+#'  * `~/Documents/EIF_output/RNApro`
 #'
 #' (7) output directory for co-expression analysis among EIF4F subunits and
-#'  their differential expression `~/Documents/EIF_output/Proteomics`
+#'  their differential expression
+#'  * `~/Documents/EIF_output/Proteomics/COEXP`
+#'  * `~/Documents/EIF_output/Proteomics/DIFFEXP`
 #'
 #' @export
 #'
@@ -53,13 +58,13 @@ initialize_dir <- function() {
              showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(output_directory, "PCA"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "PCA", "TCGA tumor + GTEX healthy"),
+  dir.create(file.path(output_directory, "PCA", "TCGA_tumor+GTEX_healthy"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "PCA", "TCGA tumor"),
+  dir.create(file.path(output_directory, "PCA", "TCGA_tumor"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "PCA", "GTEX healthy"),
+  dir.create(file.path(output_directory, "PCA", "GTEX_healthy"),
              showWarnings = FALSE, recursive = TRUE)
-  dir.create(file.path(output_directory, "PCA", "matched tumor and healthy"),
+  dir.create(file.path(output_directory, "PCA", "matched_tumor_and_healthy"),
              showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(output_directory, "PCA", "LUAD"),
              showWarnings = FALSE, recursive = TRUE)

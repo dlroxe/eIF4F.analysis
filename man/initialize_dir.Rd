@@ -12,10 +12,16 @@ A wrapper function sets up the output directories
 \details{
 Side effects:
 
-(1) output directory for CNV analysis results \verb{~/Documents/EIF_output/CNV}
+(1) output directory for CNV analysis results
+\itemize{
+\item \verb{~/Documents/EIF_output/CNV}
+}
 
 (2) output directory for differential gene expression and ratio analysis
-results \verb{~/Documents/EIF_output/DEG}
+results
+\itemize{
+\item \verb{~/Documents/EIF_output/DEG}
+}
 
 (3) output directories for survival analysis results
 \itemize{
@@ -25,20 +31,29 @@ results \verb{~/Documents/EIF_output/DEG}
 
 (4) output directory for PCA results
 \itemize{
-\item \verb{~/Documents/EIF_output/PCA/All}
-\item \verb{~/Documents/EIF_output/PCA/TCGA}
-\item \verb{~/Documents/EIF_output/PCA/GTEX}
-\item \verb{~/Documents/EIF_output/PCA/Lung}
+\item \verb{~/Documents/EIF_output/PCA/TCGA_tumor+GTEX_healthy}
+\item \verb{~/Documents/EIF_output/PCA/TCGA_tumor}
+\item \verb{~/Documents/EIF_output/PCA/GTEX_healthy}
+\item \verb{~/Documents/EIF_output/PCA/matched_tumor_and_healthy}
+\item \verb{~/Documents/EIF_output/PCA/LUAD}
 }
 
 (5) output directory for analysis results on EIF4F correlating genes
-\verb{~/Documents/EIF_output/CORs}
+\itemize{
+\item \verb{~/Documents/EIF_output/CORs}
+}
 
 (6) output directory for correlation analysis between RNA and protein levels
-\verb{~/Documents/EIF_output/RNApro}
+\itemize{
+\item \verb{~/Documents/EIF_output/RNApro}
+}
 
 (7) output directory for co-expression analysis among EIF4F subunits and
-their differential expression \verb{~/Documents/EIF_output/Proteomics}
+their differential expression
+\itemize{
+\item \verb{~/Documents/EIF_output/Proteomics/COEXP}
+\item \verb{~/Documents/EIF_output/Proteomics/DIFFEXP}
+}
 }
 \examples{
 \dontrun{

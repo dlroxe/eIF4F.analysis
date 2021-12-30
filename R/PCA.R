@@ -417,7 +417,7 @@
     )
   print(biplot)
   ggplot2::ggsave(
-    path = file.path(output_directory, "PCA", "TCGA tumor + GTEX healthy"),
+    path = file.path(output_directory, "PCA", "TCGA_tumor+GTEX_healthy"),
     filename = paste("Selected", sample_type, column_name, ".pdf"),
     plot = biplot,
     width = 8,
@@ -520,7 +520,7 @@
     sample_type = "Primary Tumor (TCGA)",
     column_name = "primary.disease",
     color = col_vector,
-    folder = "TCGA tumor"
+    folder = "TCGA_tumor"
   )
 
   df <- .get_df_subset(.TCGA_GTEX_sampletype_subset, "Metastatic Tumor (TCGA)")
@@ -530,7 +530,7 @@
     sample_type = "Metastatic Tumor (TCGA)",
     column_name = "primary.disease",
     color = col_vector,
-    folder = "TCGA tumor"
+    folder = "TCGA_tumor"
   )
 
   df <- .get_df_subset(.TCGA_GTEX_sampletype_subset, "Healthy Tissue (GTEx)")
@@ -540,7 +540,7 @@
     sample_type = "Healthy Tissue (GTEx)",
     column_name = "primary.site",
     color = col_vector,
-    folder = "GTEX healthy"
+    folder = "GTEX_healthy"
   )
 
 
@@ -552,7 +552,7 @@
     sample_type = "All",
     column_name = "sample.type",
     color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
-    folder = "TCGA tumor + GTEX healthy"
+    folder = "TCGA_tumor+GTEX_healthy"
   )
 
   .selected_biplot(
@@ -692,7 +692,7 @@
     sample_type = sample_type,
     column_name = "sample.type",
     color = c("#D55E00", "#009E73", "#CC79A7", "#0072B2"),
-    folder = "matched tumor and healthy"
+    folder = "matched_tumor_and_healthy"
   )
 
   return(NULL)
