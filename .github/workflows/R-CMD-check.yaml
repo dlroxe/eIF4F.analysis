@@ -20,6 +20,9 @@ jobs:
       - uses: r-lib/actions/setup-r@v1
         with:
           use-public-rspm: true
+      - name: Install Ubuntu Packages
+        run: |
+          sudo apt install libglpk-dev          
 
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
