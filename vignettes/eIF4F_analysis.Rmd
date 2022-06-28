@@ -1,6 +1,6 @@
 ---
 title: "eIF4F_analysis"
-output: rmarkdown::html_vignette
+output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{eIF4F_analysis}
   %\VignetteEngine{knitr::rmarkdown}
@@ -14,20 +14,28 @@ knitr::opts_chunk$set(
 )
 ```
 
+## Library installation
+
 Load eIF4F.analysis library.
 
-```{r setup}
-# install.packages("devtools")
-# devtools::install_github("a3609640/eIF4F.analysis")
+```{r, eval = FALSE}
+# install eIF4F.analysis package 
+devtools::install_github("a3609640/eIF4F.analysis")
 # load eif4F.analysis	
 library(eIF4F.analysis)
 ```
 
+## Library initialization
+
+### Create output directories
+
 Run the `initialize_dir()` command to create the sub-directories under `~/Documents/EIF_output` to store the output files.
 
-```{r}
+```{r, eval = FALSE}
 initialize_dir()
 ```
+
+### Define font format
 
 Load the font types, size and orientation for plotting functions.
 
@@ -35,49 +43,51 @@ Load the font types, size and orientation for plotting functions.
 initialize_format()
 ```
 
+### Load omics datasets
+
 Load all needed TCGA, GTEX, CPTAC and CCLE datasets download by `Download.sh` for the following analyses.
 
 ```{r, eval = FALSE}
 initialize_data()
 ```
 
-Perform CNV analysis.
+## Perform CNV analysis
 
 ```{r, eval = FALSE}
 EIF4F_CNV_analysis()
 ```
 
-Perform differential gene expression/ratio analysis.
+## Perform differential gene expression/ratio analysis
 
 ```{r, eval = FALSE}
 EIF4F_DEG_analysis()
 ```
 
-Perform gene expression and survival analysis.
+## Perform gene expression and survival analysis
 
 ```{r, eval = FALSE}
 EIF4F_Survival_analysis()
 ```
 
-Perform PCA.
+## Perform PCA
 
 ```{r, eval = FALSE}
 EIF4F_PCA()
 ```
 
-Perform correlating gene analysis.
+## Perform correlating gene analysis
 
 ```{r, eval = FALSE}
 EIF4F_Corrgene_analysis()
 ```
 
-Perform RNA protein expression correlation analysis.
+## Perform RNA protein expression correlation analysis
 
 ```{r, eval = FALSE}
 EIF4F_RNA_pro_correlation()
 ```
 
-Perform (phospho)proteomics analysis.
+## Perform (phospho)proteomics analysis
 
 ```{r, eval = FALSE}
 EIF4F_Proteomics_analysis()

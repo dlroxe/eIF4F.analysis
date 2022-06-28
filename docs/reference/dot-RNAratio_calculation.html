@@ -17,7 +17,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -54,46 +54,67 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">.RNAratio_calculation</span><span class="op">(</span>
-  gene01 <span class="op">=</span> <span class="st">"EIF4E"</span>,
-  gene02 <span class="op">=</span> <span class="st">"EIF4E2"</span>,
-  gene03 <span class="op">=</span> <span class="st">"EIF4E3"</span>,
-  gene04 <span class="op">=</span> <span class="st">"EIF4EBP1"</span>,
-  gene05 <span class="op">=</span> <span class="st">"EIF4G1"</span>,
-  gene06 <span class="op">=</span> <span class="st">"EIF4G2"</span>,
-  gene07 <span class="op">=</span> <span class="st">"EIF4G3"</span>,
-  gene08 <span class="op">=</span> <span class="st">"EIF3D"</span>,
-  gene09 <span class="op">=</span> <span class="st">"EIF4A1"</span>,
-  gene10 <span class="op">=</span> <span class="st">"EIF4A2"</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.RNAratio_calculation</span><span class="op">(</span></span>
+<span>  gene01 <span class="op">=</span> <span class="st">"EIF4E"</span>,</span>
+<span>  gene02 <span class="op">=</span> <span class="st">"EIF4E2"</span>,</span>
+<span>  gene03 <span class="op">=</span> <span class="st">"EIF4E3"</span>,</span>
+<span>  gene04 <span class="op">=</span> <span class="st">"EIF4EBP1"</span>,</span>
+<span>  gene05 <span class="op">=</span> <span class="st">"EIF4G1"</span>,</span>
+<span>  gene06 <span class="op">=</span> <span class="st">"EIF4G2"</span>,</span>
+<span>  gene07 <span class="op">=</span> <span class="st">"EIF4G3"</span>,</span>
+<span>  gene08 <span class="op">=</span> <span class="st">"EIF3D"</span>,</span>
+<span>  gene09 <span class="op">=</span> <span class="st">"EIF4A1"</span>,</span>
+<span>  gene10 <span class="op">=</span> <span class="st">"EIF4A2"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>gene01</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene02</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene03</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene04</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene05</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene06</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene07</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene08</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene09</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
+
 <dt>gene10</dt>
 <dd><p>gene name, same input from <code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a data frame of differential RNA ratios in tumors vs adjacent normal tissues
+    
+
+<p>a data frame of differential RNA ratios in tumors vs adjacent normal tissues
 from individual TCGA cancer types</p>
     </div>
     <div class="section level2">
@@ -125,7 +146,7 @@ function.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

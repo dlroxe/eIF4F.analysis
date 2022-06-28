@@ -21,7 +21,7 @@ one gene in TCGA cancer types."><!-- mathjax --><script src="https://cdnjs.cloud
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -60,17 +60,22 @@ one gene in TCGA cancer types.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">.plot_KM_RNAseq_TCGA</span><span class="op">(</span><span class="va">gene_name</span>, <span class="va">cutoff</span>, <span class="va">tumor</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.plot_KM_RNAseq_TCGA</span><span class="op">(</span><span class="va">gene_name</span>, <span class="va">cutoff</span>, <span class="va">tumor</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>gene_name</dt>
 <dd><p>gene name</p></dd>
+
+
 <dt>cutoff</dt>
 <dd><p>percentage of gene expression for patient stratification</p></dd>
+
+
 <dt>tumor</dt>
 <dd><p>all tumor types or specific type</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -93,11 +98,11 @@ probability with expression of <code>gene_name</code> in their tumors</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">plot.km.EIF.tumor</span><span class="op">(</span>gene_name <span class="op">=</span> <span class="st">"EIF4E"</span>, cutoff <span class="op">=</span> <span class="fl">0.2</span>,</span>
-<span class="r-in">tumor <span class="op">=</span> <span class="st">"lung adenocarcinoma"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">plot.km.EIF.tumor</span><span class="op">(</span>gene_name <span class="op">=</span> <span class="st">"EIF4E"</span>, cutoff <span class="op">=</span> <span class="fl">0.2</span>,</span></span>
+<span class="r-in"><span>tumor <span class="op">=</span> <span class="st">"lung adenocarcinoma"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -109,7 +114,7 @@ probability with expression of <code>gene_name</code> in their tumors</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

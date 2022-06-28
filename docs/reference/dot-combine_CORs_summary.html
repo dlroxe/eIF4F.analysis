@@ -23,7 +23,7 @@ function."><!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/m
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -63,23 +63,32 @@ function.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">.combine_CORs_summary</span><span class="op">(</span><span class="va">COR_tbl1</span>, <span class="va">sample_type1</span>, <span class="va">COR_tbl2</span>, <span class="va">sample_type2</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.combine_CORs_summary</span><span class="op">(</span><span class="va">COR_tbl1</span>, <span class="va">sample_type1</span>, <span class="va">COR_tbl2</span>, <span class="va">sample_type2</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>COR_tbl1</dt>
 <dd><p>a COR summary table of specific sample type <code>EIF.cor.tumor[[2]]</code></p></dd>
+
+
 <dt>sample_type1</dt>
 <dd><p>the label of sample type where <code>COR_df1</code> is derived from</p></dd>
+
+
 <dt>COR_tbl2</dt>
 <dd><p>a COR summary table of specific sample type <code>EIF.cor.normal[[2]]</code></p></dd>
+
+
 <dt>sample_type2</dt>
 <dd><p>the label of sample type where <code>COR_df2</code> is derived from</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a data frame with combined COR summary table</p>
+    
+
+<p>a data frame with combined COR summary table</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -91,12 +100,12 @@ function.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">.combine_CORs_summary</span><span class="op">(</span></span>
-<span class="r-in">COR_tbl1 <span class="op">=</span> <span class="va">EIF.cor.tumor</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, sample_type1 <span class="op">=</span> <span class="st">"tumor"</span>,</span>
-<span class="r-in">COR_tbl2 <span class="op">=</span> <span class="va">EIF.cor.normal</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, sample_type2 <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">.combine_CORs_summary</span><span class="op">(</span></span></span>
+<span class="r-in"><span>COR_tbl1 <span class="op">=</span> <span class="va">EIF.cor.tumor</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, sample_type1 <span class="op">=</span> <span class="st">"tumor"</span>,</span></span>
+<span class="r-in"><span>COR_tbl2 <span class="op">=</span> <span class="va">EIF.cor.normal</span><span class="op">[[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span>, sample_type2 <span class="op">=</span> <span class="st">"normal"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -108,7 +117,7 @@ function.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

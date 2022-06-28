@@ -19,7 +19,7 @@ expression within tumor samples and patient overall survival time TCGA."><!-- ma
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -57,7 +57,7 @@ expression within tumor samples and patient overall survival time TCGA.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">.univariable_analysis</span><span class="op">(</span><span class="va">df</span>, <span class="va">covariate_names</span><span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.univariable_analysis</span><span class="op">(</span><span class="va">df</span>, <span class="va">covariate_names</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -65,15 +65,22 @@ expression within tumor samples and patient overall survival time TCGA.</p>
     <dl><dt>covariate_names</dt>
 <dd><p>gene names from the input argument
 of <code><a href="dot-plot_CoxPH_RNAseq_TCGA.html">.plot_CoxPH_RNAseq_TCGA()</a></code></p></dd>
+
+
 <dt>gene</dt>
 <dd><p>gene names, passed <code>gene_list</code> argument from
 <code><a href="dot-plot_CoxPH_RNAseq_TCGA.html">.plot_CoxPH_RNAseq_TCGA()</a></code></p></dd>
+
+
 <dt>data</dt>
 <dd><p><code>df1</code> generated inside <code><a href="dot-plot_CoxPH_RNAseq_TCGA.html">.plot_CoxPH_RNAseq_TCGA()</a></code></p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>a table of univariable Cox-PH</p>
+    
+
+<p>a table of univariable Cox-PH</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -89,10 +96,10 @@ function.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">.univariable_analysis</span><span class="op">(</span>df <span class="op">=</span> <span class="va">df1</span>, covariate_names <span class="op">=</span> <span class="va">EIF</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">.univariable_analysis</span><span class="op">(</span>df <span class="op">=</span> <span class="va">df1</span>, covariate_names <span class="op">=</span> <span class="va">EIF</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -104,7 +111,7 @@ function.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>

@@ -33,7 +33,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
@@ -63,8 +63,11 @@
   </div>
 </nav><div class="container template-article">
 
+
+
+
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>eIF4F_analysis</h1>
             
       
@@ -74,45 +77,88 @@
 
     
     
+<div class="section level2">
+<h2 id="library-installation">Library installation<a class="anchor" aria-label="anchor" href="#library-installation"></a>
+</h2>
 <p>Load eIF4F.analysis library.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="co"># devtools::install_github("a3609640/eIF4F.analysis")</span>
-<span class="co"># load eif4F.analysis   </span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/a3609640/eIF4F.analysis" class="external-link">eIF4F.analysis</a></span><span class="op">)</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; </span></code></pre></div>
-<p>Run the <code><a href="../reference/initialize_dir.html">initialize_dir()</a></code> command to create the sub-directories under <code>~/Documents/EIF_output</code> to store the output files.</p>
+<code class="sourceCode R"><span><span class="co"># install eIF4F.analysis package </span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"a3609640/eIF4F.analysis"</span><span class="op">)</span></span>
+<span><span class="co"># load eif4F.analysis   </span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/a3609640/eIF4F.analysis" class="external-link">eIF4F.analysis</a></span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="library-initialization">Library initialization<a class="anchor" aria-label="anchor" href="#library-initialization"></a>
+</h2>
+<div class="section level3">
+<h3 id="create-output-directories">Create output directories<a class="anchor" aria-label="anchor" href="#create-output-directories"></a>
+</h3>
+<p>Run the <code><a href="../reference/initialize_dir.html">initialize_dir()</a></code> command to create the
+sub-directories under <code>~/Documents/EIF_output</code> to store the
+output files.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/initialize_dir.html">initialize_dir</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/initialize_dir.html">initialize_dir</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="define-font-format">Define font format<a class="anchor" aria-label="anchor" href="#define-font-format"></a>
+</h3>
 <p>Load the font types, size and orientation for plotting functions.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/initialize_format.html">initialize_format</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Load all needed TCGA, GTEX, CPTAC and CCLE datasets download by <code>Download.sh</code> for the following analyses.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/initialize_format.html">initialize_format</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="load-omics-datasets">Load omics datasets<a class="anchor" aria-label="anchor" href="#load-omics-datasets"></a>
+</h3>
+<p>Load all needed TCGA, GTEX, CPTAC and CCLE datasets download by
+<code>Download.sh</code> for the following analyses.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/initialize_data.html">initialize_data</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Perform CNV analysis.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/initialize_data.html">initialize_data</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+</div>
+<div class="section level2">
+<h2 id="perform-cnv-analysis">Perform CNV analysis<a class="anchor" aria-label="anchor" href="#perform-cnv-analysis"></a>
+</h2>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/EIF4F_CNV_analysis.html">EIF4F_CNV_analysis</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Perform differential gene expression/ratio analysis.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/EIF4F_CNV_analysis.html">EIF4F_CNV_analysis</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="perform-differential-gene-expressionratio-analysis">Perform differential gene expression/ratio analysis<a class="anchor" aria-label="anchor" href="#perform-differential-gene-expressionratio-analysis"></a>
+</h2>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/EIF4F_DEG_analysis.html">EIF4F_DEG_analysis</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Perform gene expression and survival analysis.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/EIF4F_DEG_analysis.html">EIF4F_DEG_analysis</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="perform-gene-expression-and-survival-analysis">Perform gene expression and survival analysis<a class="anchor" aria-label="anchor" href="#perform-gene-expression-and-survival-analysis"></a>
+</h2>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/EIF4F_Survival_analysis.html">EIF4F_Survival_analysis</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Perform PCA.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/EIF4F_Survival_analysis.html">EIF4F_Survival_analysis</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="perform-pca">Perform PCA<a class="anchor" aria-label="anchor" href="#perform-pca"></a>
+</h2>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/EIF4F_PCA.html">EIF4F_PCA</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Perform correlating gene analysis.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/EIF4F_PCA.html">EIF4F_PCA</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="perform-correlating-gene-analysis">Perform correlating gene analysis<a class="anchor" aria-label="anchor" href="#perform-correlating-gene-analysis"></a>
+</h2>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/EIF4F_Corrgene_analysis.html">EIF4F_Corrgene_analysis</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Perform RNA protein expression correlation analysis.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/EIF4F_Corrgene_analysis.html">EIF4F_Corrgene_analysis</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="perform-rna-protein-expression-correlation-analysis">Perform RNA protein expression correlation analysis<a class="anchor" aria-label="anchor" href="#perform-rna-protein-expression-correlation-analysis"></a>
+</h2>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/EIF4F_RNA_pro_correlation.html">EIF4F_RNA_pro_correlation</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<p>Perform (phospho)proteomics analysis.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/EIF4F_RNA_pro_correlation.html">EIF4F_RNA_pro_correlation</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="perform-phosphoproteomics-analysis">Perform (phospho)proteomics analysis<a class="anchor" aria-label="anchor" href="#perform-phosphoproteomics-analysis"></a>
+</h2>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/EIF4F_Proteomics_analysis.html">EIF4F_Proteomics_analysis</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-  </main>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/EIF4F_Proteomics_analysis.html">EIF4F_Proteomics_analysis</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+  </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 
@@ -124,7 +170,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer>

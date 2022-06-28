@@ -23,7 +23,7 @@ adjacent normal tissues from all TCGA cancer types combined."><!-- mathjax --><s
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div id="navbar" class="collapse navbar-collapse ms-2">
+    <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item">
   <a class="nav-link" href="../reference/index.html">Reference</a>
 </li>
@@ -63,42 +63,61 @@ adjacent normal tissues from all TCGA cancer types combined.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">.plot_boxgraph_RNAratio_TCGA</span><span class="op">(</span>
-  <span class="va">gene01</span>,
-  <span class="va">gene02</span>,
-  <span class="va">gene03</span>,
-  <span class="va">gene04</span>,
-  <span class="va">gene05</span>,
-  <span class="va">gene06</span>,
-  <span class="va">gene07</span>,
-  <span class="va">gene08</span>,
-  <span class="va">gene09</span>,
-  <span class="va">gene10</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">.plot_boxgraph_RNAratio_TCGA</span><span class="op">(</span></span>
+<span>  <span class="va">gene01</span>,</span>
+<span>  <span class="va">gene02</span>,</span>
+<span>  <span class="va">gene03</span>,</span>
+<span>  <span class="va">gene04</span>,</span>
+<span>  <span class="va">gene05</span>,</span>
+<span>  <span class="va">gene06</span>,</span>
+<span>  <span class="va">gene07</span>,</span>
+<span>  <span class="va">gene08</span>,</span>
+<span>  <span class="va">gene09</span>,</span>
+<span>  <span class="va">gene10</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>gene01</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene02</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene03</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene04</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene05</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene06</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene07</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene08</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene09</dt>
 <dd><p>gene name as a string</p></dd>
+
+
 <dt>gene10</dt>
 <dd><p>gene name as a string</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
@@ -120,14 +139,14 @@ adjacent normal tissues from all combined TCGA cancer types</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in"><span class="fu">.plot_boxgraph_RNAratio_TCGA</span><span class="op">(</span></span>
-<span class="r-in">  EIF4E <span class="op">=</span> <span class="st">"EIF4E"</span>, EIF4E2 <span class="op">=</span> <span class="st">"EIF4E2"</span>,</span>
-<span class="r-in">  EIF4E3 <span class="op">=</span> <span class="st">"EIF4E3"</span>, EIF4EBP1 <span class="op">=</span> <span class="st">"EIF4EBP1"</span>, EIF4G1 <span class="op">=</span> <span class="st">"EIF4G1"</span>, EIF4G2 <span class="op">=</span> <span class="st">"EIF4G2"</span>,</span>
-<span class="r-in">  EIF4G3 <span class="op">=</span> <span class="st">"EIF4G3"</span>, EIF3D <span class="op">=</span> <span class="st">"EIF3D"</span>, EIF4A1 <span class="op">=</span> <span class="st">"EIF4A1"</span>, EIF4A2 <span class="op">=</span> <span class="st">"EIF4A2"</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
-<span class="r-in"></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span><span class="fu">.plot_boxgraph_RNAratio_TCGA</span><span class="op">(</span></span></span>
+<span class="r-in"><span>  EIF4E <span class="op">=</span> <span class="st">"EIF4E"</span>, EIF4E2 <span class="op">=</span> <span class="st">"EIF4E2"</span>,</span></span>
+<span class="r-in"><span>  EIF4E3 <span class="op">=</span> <span class="st">"EIF4E3"</span>, EIF4EBP1 <span class="op">=</span> <span class="st">"EIF4EBP1"</span>, EIF4G1 <span class="op">=</span> <span class="st">"EIF4G1"</span>, EIF4G2 <span class="op">=</span> <span class="st">"EIF4G2"</span>,</span></span>
+<span class="r-in"><span>  EIF4G3 <span class="op">=</span> <span class="st">"EIF4G3"</span>, EIF3D <span class="op">=</span> <span class="st">"EIF3D"</span>, EIF4A1 <span class="op">=</span> <span class="st">"EIF4A1"</span>, EIF4A2 <span class="op">=</span> <span class="st">"EIF4A2"</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -139,7 +158,7 @@ adjacent normal tissues from all combined TCGA cancer types</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.1.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer></div>
