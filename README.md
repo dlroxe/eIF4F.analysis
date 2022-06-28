@@ -80,10 +80,10 @@ The work here depends upon many R libraries. The following command may
 be a useful way to install them all.
 
 ``` r
-# use Bioconductor version 3.14 for package installation
+# use Bioconductor version 3.15 for package installation
 if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
-BiocManager::install(version = "3.14")
+BiocManager::install(version = "3.15")
 
 # install required packages
 bio_pkgs <- c(
