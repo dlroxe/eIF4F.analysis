@@ -169,6 +169,7 @@ col_vector <- NULL
 #' }
 #'
 initialize_format <- function() {
+  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
 
   assign("black_bold_tahoma_7",
          element_text(color = "black",
