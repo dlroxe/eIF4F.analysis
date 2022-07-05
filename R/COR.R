@@ -467,8 +467,8 @@
       x = "gene",
       y = CORs_type,
       # y = !!sym(CORs_type), # quote the passed variable CORs_type
-      fill = "label",
-      color = "label"),
+      #color = "label",
+      fill = "label"),
   ) +
     geom_bar(
       stat = "identity",
