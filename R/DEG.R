@@ -89,13 +89,15 @@ initialize_RNAseq_data <- function() {
     )
   # }
 
-  TCGA_GTEX_RNAseq_sampletype <<- merge(.TCGA_GTEX_RNAseq,
-    .TCGA_GTEX_sampletype,
-    by    = "row.names",
-    all.x = TRUE
-  ) %>%
-    tibble::remove_rownames() %>%
-    tibble::column_to_rownames(var = "Row.names")
+  assign("TCGA_GTEX_RNAseq_sampletype",
+         merge(.TCGA_GTEX_RNAseq,
+               .TCGA_GTEX_sampletype,
+               by    = "row.names",
+               all.x = TRUE
+         ) %>%
+           tibble::remove_rownames() %>%
+           tibble::column_to_rownames(var = "Row.names"),
+         envir = parent.env(environment()))
 
   return(NULL)
 }

@@ -50,10 +50,12 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' }
 #'
 initialize_phosphoproteomics_data <- function() {
-  CPTAC_LUAD_Phos <<- readxl::read_excel(file.path(data_file_directory,
-                                                   "Phos.xlsx"),
-    col_names = FALSE
-  )
+  assign("CPTAC_LUAD_Phos",
+         readxl::read_excel(file.path(data_file_directory,
+                                      "Phos.xlsx"),
+                            col_names = FALSE
+         ),
+         envir = parent.env(environment()))
 
   .CPTAC_LUAD_Clinic <- readxl::read_excel(file.path(
     data_file_directory,
@@ -75,24 +77,27 @@ initialize_phosphoproteomics_data <- function() {
   # remove_rownames() %>%
   # column_to_rownames(var = "Aliquot (Specimen Label)")
 
-  CPTAC_LUAD_Clinic_Sampletype <<- merge(.CPTAC_LUAD_Clinic,
-    .CPTAC_LUAD_sampletype,
-    by.x = "case_id",
-    by.y = "Participant ID (case_id)"
-  ) %>%
-    dplyr::select("tumor_stage_pathological", "Aliquot (Specimen Label)",
-                  "Type") %>%
-    dplyr::rename("Sample" = "Aliquot (Specimen Label)") %>%
-    dplyr::mutate(tumor_stage_pathological = dplyr::case_when(
-      Type == "Normal" ~ "Normal",
-      tumor_stage_pathological %in% c("Stage I", "Stage IA", "Stage IB") ~
-      "Stage I",
-      tumor_stage_pathological %in% c("Stage II", "Stage IIA", "Stage IIB") ~
-      "Stage II",
-      tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~
-      "Stage III",
-      tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"
-    ))
+  assign("CPTAC_LUAD_Clinic_Sampletype",
+         merge(.CPTAC_LUAD_Clinic,
+               .CPTAC_LUAD_sampletype,
+               by.x = "case_id",
+               by.y = "Participant ID (case_id)"
+         ) %>%
+           dplyr::select("tumor_stage_pathological", "Aliquot (Specimen Label)",
+                         "Type") %>%
+           dplyr::rename("Sample" = "Aliquot (Specimen Label)") %>%
+           dplyr::mutate(tumor_stage_pathological = dplyr::case_when(
+             Type == "Normal" ~ "Normal",
+             tumor_stage_pathological %in% c("Stage I", "Stage IA", "Stage IB") ~
+               "Stage I",
+             tumor_stage_pathological %in% c("Stage II", "Stage IIA", "Stage IIB") ~
+               "Stage II",
+             tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~
+               "Stage III",
+             tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"
+           )),
+         envir = parent.env(environment()))
+
 }
 
 

@@ -53,55 +53,66 @@ CPTAC_LUAD_RNAseq <- NULL
 #' }
 #'
 initialize_proteomics_data <- function() {
-  CCLE_RNAseq <<- fread(
-    file.path(
-      data_file_directory,
-      "CCLE_expression_full.csv"
-    ),
-    data.table = FALSE
-  )
+  assign("CCLE_RNAseq",
+         fread(
+           file.path(
+             data_file_directory,
+             "CCLE_expression_full.csv"
+           ),
+           data.table = FALSE
+         ),
+         envir = parent.env(environment()))
 
-  CCLE_Anno <<- fread(
-    file.path(
-      data_file_directory,
-      "sample_info.csv"
-    ),
-    data.table = FALSE
-  ) %>% dplyr::select(1, 2)
+  assign("CCLE_Anno",
+         fread(
+           file.path(
+             data_file_directory,
+             "sample_info.csv"
+           ),
+           data.table = FALSE
+         ) %>% dplyr::select(1, 2),
+         envir = parent.env(environment()))
 
-  CCLE_Proteomics <<- fread(
-    file.path(
-      data_file_directory,
-      "protein_quant_current_normalized.csv"
-    ),
-    data.table = FALSE
-  )
+  assign("CCLE_Proteomics",
+         fread(
+           file.path(
+             data_file_directory,
+             "protein_quant_current_normalized.csv"
+           ),
+           data.table = FALSE
+         ),
+         envir = parent.env(environment()))
 
-  CPTAC_LUAD_Proteomics <<- readxl::read_excel(
-    file.path(data_file_directory, "Protein.xlsx"),
-    col_names = FALSE
-  ) %>%
-    # as.data.frame(.) %>%
-    dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
-    tibble::column_to_rownames(var = "...1") %>%
-    t() %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate_at(dplyr::vars(-.data$Type, -.data$Sample),
-              # exclude two columns convert character to number
-              ~ suppressWarnings(as.numeric(.)))
+  assign("CPTAC_LUAD_Proteomics",
+         readxl::read_excel(
+           file.path(data_file_directory, "Protein.xlsx"),
+           col_names = FALSE
+         ) %>%
+           # as.data.frame(.) %>%
+           dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
+           tibble::column_to_rownames(var = "...1") %>%
+           t() %>%
+           tibble::as_tibble() %>%
+           dplyr::mutate_at(dplyr::vars(-.data$Type, -.data$Sample),
+                            # exclude two columns convert character to number
+                            ~ suppressWarnings(as.numeric(.))),
+         envir = parent.env(environment()))
 
-  CPTAC_LUAD_RNAseq <<- readxl::read_excel(
-    file.path(data_file_directory, "RNA.xlsx"),
-    col_names = FALSE
-  ) %>%
-    # as_tibble(.) %>%
-    dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
-    tibble::column_to_rownames(var = "...1") %>%
-    t() %>%
-    tibble::as_tibble() %>%
-    dplyr::mutate_at(dplyr::vars(-.data$Type, -.data$Sample),
-              # exclude two columns convert character to number
-              ~ suppressWarnings(as.numeric(.)))
+  assign("CPTAC_LUAD_RNAseq",
+         readxl::read_excel(
+           file.path(data_file_directory, "RNA.xlsx"),
+           col_names = FALSE
+         ) %>%
+           # as_tibble(.) %>%
+           dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
+           tibble::column_to_rownames(var = "...1") %>%
+           t() %>%
+           tibble::as_tibble() %>%
+           dplyr::mutate_at(dplyr::vars(-.data$Type, -.data$Sample),
+                            # exclude two columns convert character to number
+                            ~ suppressWarnings(as.numeric(.))),
+         envir = parent.env(environment()))
+
 }
 
 

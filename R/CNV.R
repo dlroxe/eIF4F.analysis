@@ -66,8 +66,9 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #'  }
 #'
 initialize_cnv_data <- function() {
-  # .TCGA_CNV <- .TCGA_CNV_ratio <- .TCGA_sampletype <- NULL
-  TCGA_CNV_value <<- .get_TCGA_CNV_value()
+  assign("TCGA_CNV_value",
+         .get_TCGA_CNV_value(),
+         envir = parent.env(environment()))
 
   .TCGA_CNV <- .get_TCGA_CNV()
 
@@ -88,22 +89,26 @@ initialize_cnv_data <- function() {
       "primary.disease" = "_primary_disease"
     )
 
-  TCGA_CNV_sampletype <<- merge(.TCGA_CNV,
-                                .TCGA_sampletype,
-                                by    = "row.names",
-                                all.x = TRUE
-                              ) %>%
-    dplyr::filter(.data$sample.type != "Solid Tissue Normal") %>%
-    tibble::remove_rownames() %>%
-    tibble::column_to_rownames(var = "Row.names")
+  assign("TCGA_CNV_sampletype",
+         merge(.TCGA_CNV,
+               .TCGA_sampletype,
+               by    = "row.names",
+               all.x = TRUE
+         ) %>%
+           dplyr::filter(.data$sample.type != "Solid Tissue Normal") %>%
+           tibble::remove_rownames() %>%
+           tibble::column_to_rownames(var = "Row.names"),
+         envir = parent.env(environment()))
 
-  TCGA_CNVratio_sampletype <<- merge(.TCGA_CNV_ratio,
-    .TCGA_sampletype,
-    by    = "row.names",
-    all.x = TRUE
-  ) %>%
-    tibble::remove_rownames() %>%
-    tibble::column_to_rownames(var = "Row.names")
+  assign("TCGA_CNVratio_sampletype",
+         merge(.TCGA_CNV_ratio,
+               .TCGA_sampletype,
+               by    = "row.names",
+               all.x = TRUE
+         ) %>%
+           tibble::remove_rownames() %>%
+           tibble::column_to_rownames(var = "Row.names"),
+         envir = parent.env(environment()))
 
   return(NULL)
 }

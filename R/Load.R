@@ -3,7 +3,6 @@
 data_file_directory <- "~/Downloads/EIF_data"
 output_directory <- "~/Documents/EIF_output"
 
-
 #' @title Set output directories
 #'
 #' @description A wrapper function sets up the output directories
@@ -139,11 +138,17 @@ initialize_dir <- function() {
 #' }
 #'
 initialize_data <- function() {
-  initialize_cnv_data()
-  initialize_RNAseq_data()
-  initialize_survival_data()
-  initialize_proteomics_data()
-  initialize_phosphoproteomics_data()
+  tryCatch({
+    rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
+    initialize_cnv_data()
+    initialize_RNAseq_data()
+    initialize_survival_data()
+    initialize_proteomics_data()
+    initialize_phosphoproteomics_data()
+  },
+  finally = {
+    rlang::env_binding_lock(parent.env(environment()), nms = NULL)
+  })
 }
 
 
@@ -169,20 +174,22 @@ col_vector <- NULL
 #' }
 #'
 initialize_format <- function() {
-  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
+  parent_env <- parent.env(environment())
+
+  rlang::env_binding_unlock(parent_env, nms = NULL)
 
   assign("black_bold_tahoma_7",
          element_text(color = "black",
                       face = "bold",
                       size = 7),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
 
   assign("black_bold_12",
          element_text(color = "black",
                       face = "bold",
                       size = 12),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
   assign("black_bold_12_45",
          element_text(
@@ -192,20 +199,20 @@ initialize_format <- function() {
            angle = 45,
            hjust = 1
          ),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
   assign("black_bold_16",
          element_text(color = "black",
                       face = "bold",
                       size = 16),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
   assign("black_bold_16_right",
          element_text(color = "black",
                       face = "bold",
                       size = 16,
                       angle = 90),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
   assign("black_bold_16_45",
          element_text(
@@ -215,7 +222,7 @@ initialize_format <- function() {
            angle = 45,
            hjust = 1
          ),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
   assign("black_bold_16_90",
          element_text(
@@ -226,7 +233,7 @@ initialize_format <- function() {
            hjust = 1,
            vjust = 0.5
          ),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
   assign("black_bold_18",
          element_text(
@@ -234,13 +241,13 @@ initialize_format <- function() {
            face = "bold",
            size = 18
          ),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
   assign("col_vector",
          color(),
-         envir = parent.env(environment()))
+         envir = parent_env)
 
-  #col_vector <<- color()
+  rlang::env_binding_lock(parent.env(environment()), nms = NULL)
 }
 
 
