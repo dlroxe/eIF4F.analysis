@@ -1018,7 +1018,7 @@
 
 ## Wrapper function to call all composite functions with inputs ================
 
-#' @title Perform PCA and generate plots
+#' @title Perform differential correlation analyses and generate plots
 #'
 #' @description
 #'

@@ -12,7 +12,7 @@
 # (4) wrapper function to call all master functions with inputs
 #
 
-## Wrapper function for data initialization of CNV related datasets ============
+## Internal function for data initialization of CNV related datasets ============
 
 #' @noRd
 ## due to NSE notes in R CMD check
@@ -195,7 +195,7 @@ initialize_cnv_data <- function() {
 #' @keywords internal
 #'
 .get_TCGA_CNV_value <- function() {
-  .TCGA_pancancer <- fread(
+  .TCGA_pancancer <- data.table::fread(
     file.path(
       data_file_directory,
       "Gistic2_CopyNumber_Gistic2_all_data_by_genes"
@@ -249,7 +249,7 @@ initialize_cnv_data <- function() {
 #' @keywords internal
 #'
 .get_TCGA_CNV_ratio <- function() {
-  .TCGA_pancancer <- fread(
+  .TCGA_pancancer <- data.table::fread(
     file.path(
       data_file_directory,
       "broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena"

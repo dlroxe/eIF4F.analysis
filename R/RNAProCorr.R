@@ -379,7 +379,7 @@ initialize_proteomics_data <- function() {
 
 ## Wrapper function to call all composite functions with inputs ================
 
-#' @title Perform PCA and generate plots
+#' @title Perform RNA protein correlation and generate scatter plots
 #'
 #' @description
 #'

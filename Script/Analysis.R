@@ -1,4 +1,4 @@
-devtools::load_all()
+#devtools::load_all()
 
 library(eIF4F.analysis)
 
@@ -21,3 +21,4 @@ EIF4F_Corrgene_analysis()
 EIF4F_RNA_pro_correlation()
 
 EIF4F_Proteomics_analysis()
+
