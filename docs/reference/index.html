@@ -109,10 +109,10 @@
         <td><p>Read all phosphoproteomics related datasets from CPTAC LUAD</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="cnv-analysis">CNV analysis <a href="#cnv-analysis" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"></p><p>CNV analyses of EIF genes in TCGA data</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="exported-function">Exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -120,7 +120,7 @@
         </td>
         <td><p>Perform all CNV related analysis and generate plots</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="internal-composite-functions-to-call-cnv-data-analysis-and-plotting">internal composite functions to call CNV data analysis and plotting <a href="#internal-composite-functions-to-call-cnv-data-analysis-and-plotting" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="internal-composite-functions-to-call-cnv-data-analysis-and-plotting">Internal composite functions to call CNV data analysis and plotting <a href="#internal-composite-functions-to-call-cnv-data-analysis-and-plotting" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -136,7 +136,7 @@
         </td>
         <td><p>CNV ratios in tumors vs adjacent normal tissues across tumor types</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="internal-functions-for-cnv-data-analysis">internal functions for CNV data analysis <a href="#internal-functions-for-cnv-data-analysis" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="internal-functions-for-cnv-data-analysis">Internal functions for CNV data analysis <a href="#internal-functions-for-cnv-data-analysis" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -152,7 +152,7 @@
         </td>
         <td><p>Calculates the frequency of CNV status in individual TCGA cancer types</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="internal-functions-for-plotting">internal functions for plotting <a href="#internal-functions-for-plotting" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="internal-functions-for-plotting">Internal functions for plotting <a href="#internal-functions-for-plotting" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -172,7 +172,7 @@
         </td>
         <td><p>Box plots of the CNV ratios in tumors vs adjacent normals</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="internal-functions-for-processing-cnv-related-datasets">internal functions for processing CNV related datasets <a href="#internal-functions-for-processing-cnv-related-datasets" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="internal-functions-for-processing-cnv-related-datasets">Internal functions for processing CNV related datasets <a href="#internal-functions-for-processing-cnv-related-datasets" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -189,10 +189,10 @@
         <td><p>Read CNV ratio dataset from TCGA</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="deg-analysis">DEG analysis <a href="#deg-analysis" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"></p><p>Differential gene expression (ratio) analysis of EIF4F genes in TCGA</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="exported-function">Exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -201,8 +201,79 @@
         <td><p>Perform differential gene expression or ratio analysis and
 generate plots</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="survival-analysis">Survival analysis <a href="#survival-analysis" class="anchor" aria-hidden="true"></a></h2>
+          <h3 id="internal-composite-functions-to-call-deg-gene-analysis-and-plotting">Internal composite functions to call DEG gene analysis and plotting <a href="#internal-composite-functions-to-call-deg-gene-analysis-and-plotting" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-plot_boxgraph_RNAseq_TCGA.html">.plot_boxgraph_RNAseq_TCGA()</a></code> </p>
+        </td>
+        <td><p>Compare the expression of EIF4F genes</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-plot_boxgraph_RNAratio_TCGA.html">.plot_boxgraph_RNAratio_TCGA()</a></code> </p>
+        </td>
+        <td><p>Compare the RNA ratios between EIF4F genes</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-differential-expression-analysis">Internal functions for differential expression analysis <a href="#internal-functions-for-differential-expression-analysis" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-RNAseq_all_gene.html">.RNAseq_all_gene()</a></code> </p>
+        </td>
+        <td><p>Compares expressions among genes in tumor samples</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-RNAseq_ind_gene.html">.RNAseq_ind_gene()</a></code> </p>
+        </td>
+        <td><p>Analyzes differential gene expression in tumors vs adjacent normal tissues</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-RNAseq_tumortype.html">.RNAseq_tumortype()</a></code> </p>
+        </td>
+        <td><p>Select gene expression data in primary, metastatic tumors vs adjacent normal
+tissues from all TCGA cancer types combined</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-RNAratio_calculation.html">.RNAratio_calculation()</a></code> </p>
+        </td>
+        <td><p>Calculate RNA ratios</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-RNAratio_selection.html">.RNAratio_selection()</a></code> </p>
+        </td>
+        <td><p>Select RNA ratio data for plotting</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-RNAratio_tumortype.html">.RNAratio_tumortype()</a></code> </p>
+        </td>
+        <td><p>Analyzes differential RNA ratios in primary, metastatic tumors vs
+adjacent normal tissues from all TCGA cancer types combined</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-differential-expression-analysis-plotting">Internal functions for differential expression analysis plotting <a href="#internal-functions-for-differential-expression-analysis-plotting" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-RNAseq_grouped_boxplot.html">.RNAseq_grouped_boxplot()</a></code> </p>
+        </td>
+        <td><p>Grouped box plots of RNA expression across tumors</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-RNAseq_boxplot.html">.RNAseq_boxplot()</a></code> </p>
+        </td>
+        <td><p>Box plots of differential gene expression across tumors</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-violinplot.html">.violinplot()</a></code> </p>
+        </td>
+        <td><p>Violin plots of differential gene expression/ratio in primary,
+metastatic tumors vs adjacent normal tissues</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-RNAratio_boxplot.html">.RNAratio_boxplot()</a></code> </p>
+        </td>
+        <td><p>Box plots of differential RNA ratios across tumors</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-processing-deg-related-datasets">Internal functions for processing DEG related datasets <a href="#internal-functions-for-processing-deg-related-datasets" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-get_TCGA_GTEX_RNAseq.html">.get_TCGA_GTEX_RNAseq()</a></code> </p>
+        </td>
+        <td><p>Read recomputed RNAseq data from both TCGA and GTEx</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="survival-analysis">Survival analysis <a href="#survival-analysis" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Survival analyses on EIF4F gene expression in TCGA tumors</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
@@ -212,6 +283,52 @@ generate plots</p></td>
           <p><code><a href="EIF4F_Survival_analysis.html">EIF4F_Survival_analysis()</a></code> </p>
         </td>
         <td><p>Perform all related survival analysis and generate plots</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-composite-functions-to-call-survival-analysis-and-plotting">Internal composite functions to call survival analysis and plotting <a href="#internal-composite-functions-to-call-survival-analysis-and-plotting" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-plot_KM_RNAseq_TCGA.html">.plot_KM_RNAseq_TCGA()</a></code> </p>
+        </td>
+        <td><p>Survival analyses of TCGA patients with expression in their tumors by
+Kaplan Meier method</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-plot_CoxPH_RNAseq_TCGA.html">.plot_CoxPH_RNAseq_TCGA()</a></code> </p>
+        </td>
+        <td><p>Survival analyses of TCGA patients with expression in their tumors by
+Cox-PH method</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-survival-analysis">Internal functions for survival analysis <a href="#internal-functions-for-survival-analysis" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-KM_curve.html">.KM_curve()</a></code> </p>
+        </td>
+        <td><p>Kaplan Meier survival analyses of gene expression</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-univariable_analysis.html">.univariable_analysis()</a></code> </p>
+        </td>
+        <td><p>Univariable Cox-PH analyses of gene expression</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-multivariable_analysis.html">.multivariable_analysis()</a></code> </p>
+        </td>
+        <td><p>Multivariable Cox-PH analyses of gene expression</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-survival-analysis-plotting">Internal functions for survival analysis plotting <a href="#internal-functions-for-survival-analysis-plotting" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-forest_graph.html">.forest_graph()</a></code> </p>
+        </td>
+        <td><p>Forest plots of COX-PH results</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-processing-survival-related-datasets">Internal functions for processing survival related datasets <a href="#internal-functions-for-processing-survival-related-datasets" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-get_TCGA_RNAseq.html">.get_TCGA_RNAseq()</a></code> </p>
+        </td>
+        <td><p>Read the RNAseq data from TCGA</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="pca-analysis">PCA analysis <a href="#pca-analysis" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>

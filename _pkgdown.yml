@@ -1,85 +1,112 @@
 title: eIF4F.analysis
-
 url: https://a3609640.github.io/eIF4F.analysis/
-
 template:
   params:
     bootswatch: flatly
+    theme: arrow-dark
     ganalytics: UA-12345678-0
-
+navbar:
+  structure:
+    left:
+    - intro
+    - reference
+    - articles
+    - tutorials
+    - news
+    right:
+    - search
+    - github
 reference:
-  - title: Initialization
-  - subtitle: Directory initialization
-    #desc: Set input and output directories
-    contents:
-      - initialize_dir
-  - subtitle: Format initialization
-    #desc: Set format for font and color of plots
-    contents:
-      - initialize_format
-  - subtitle: Data initialization
-    desc: reads datasets from the download data files
-    contents:
-      - initialize_data
-      - initialize_cnv_data
-      - initialize_RNAseq_data
-      - initialize_survival_data
-      - initialize_proteomics_data
-      - initialize_phosphoproteomics_data
+- title: Initialization
+- subtitle: Directory initialization
+  contents: initialize_dir
+- subtitle: Format initialization
+  contents: initialize_format
+- subtitle: Data initialization
+  desc: reads datasets from the download data files
+  contents:
+  - initialize_data
+  - initialize_cnv_data
+  - initialize_RNAseq_data
+  - initialize_survival_data
+  - initialize_proteomics_data
+  - initialize_phosphoproteomics_data
+- title: CNV analysis
+  desc: CNV analyses of EIF genes in TCGA data
+- subtitle: Exported function
+  contents: EIF4F_CNV_analysis
+- subtitle: Internal composite functions to call CNV data analysis and plotting
+  contents:
+  - .plot_bargraph_CNV_TCGA
+  - .plot_matrix_CNVcorr_TCGA
+  - .plot_boxgraph_CNVratio_TCGA
+- subtitle: Internal functions for CNV data analysis
+  contents:
+  - .CNV_all_cancer
+  - .CNV_sum_barplot
+  - .CNV_ind_cancer
+- subtitle: Internal functions for plotting
+  contents:
+  - .CNV_barplot
+  - .matrix_plot
+  - .CNVratio_tumor
+  - .CNVratio_boxplot
+- subtitle: Internal functions for processing CNV related datasets
+  contents:
+  - .get_TCGA_CNV
+  - .get_TCGA_CNV_value
+  - .get_TCGA_CNV_ratio
+- title: DEG analysis
+  desc: Differential gene expression (ratio) analysis of EIF4F genes in TCGA
+- subtitle: Exported function
+  contents: EIF4F_DEG_analysis
+- subtitle: Internal composite functions to call DEG gene analysis and plotting
+  contents:
+  - .plot_boxgraph_RNAseq_TCGA
+  - .plot_boxgraph_RNAratio_TCGA
+- subtitle: Internal functions for differential expression analysis
+  contents:
+  - .RNAseq_all_gene
+  - .RNAseq_ind_gene
+  - .RNAseq_tumortype
+  - .RNAratio_calculation
+  - .RNAratio_selection
+  - .RNAratio_tumortype
+- subtitle: Internal functions for differential expression analysis plotting
+  contents:
+  - .RNAseq_grouped_boxplot
+  - .RNAseq_boxplot
+  - .violinplot
+  - .RNAratio_boxplot
+- subtitle: Internal functions for processing DEG related datasets
+  contents: .get_TCGA_GTEX_RNAseq
+- title: Survival analysis
+  desc: Survival analyses on EIF4F gene expression in TCGA tumors
+- subtitle: exported function
+  contents: EIF4F_Survival_analysis
+- subtitle: Internal composite functions to call survival analysis and plotting
+  contents:
+  - .plot_KM_RNAseq_TCGA
+  - .plot_CoxPH_RNAseq_TCGA
+- subtitle: Internal functions for survival analysis
+  contents:
+  - .KM_curve
+  - .univariable_analysis
+  - .multivariable_analysis
+- subtitle: Internal functions for survival analysis plotting
+  contents: .forest_graph
+- subtitle: Internal functions for processing survival related datasets
+  contents: .get_TCGA_RNAseq
+- title: PCA analysis
+- subtitle: exported function
+  contents: EIF4F_PCA
+- title: Correlation analysis
+- subtitle: exported function
+  contents: EIF4F_Corrgene_analysis
+- title: RNA protein Correlation analysis
+- subtitle: exported function
+  contents: EIF4F_RNA_pro_correlation
+- title: RNA protein Correlation analysis
+- subtitle: exported function
+  contents: EIF4F_Proteomics_analysis
 
-  - title: CNV analysis
-  - subtitle: exported function
-    contents:
-      - EIF4F_CNV_analysis
-  - subtitle: internal composite functions to call CNV data analysis and plotting
-    contents:
-      - .plot_bargraph_CNV_TCGA
-      - .plot_matrix_CNVcorr_TCGA
-      - .plot_boxgraph_CNVratio_TCGA
-  - subtitle: internal functions for CNV data analysis
-    contents:
-      - .CNV_all_cancer
-      - .CNV_sum_barplot
-      - .CNV_ind_cancer
-  - subtitle: internal functions for plotting
-    contents:
-      - .CNV_barplot
-      - .matrix_plot
-      - .CNVratio_tumor
-      - .CNVratio_boxplot
-  - subtitle: internal functions for processing CNV related datasets
-    contents:
-      - .get_TCGA_CNV
-      - .get_TCGA_CNV_value
-      - .get_TCGA_CNV_ratio
-
-  - title: DEG analysis
-  - subtitle: exported function
-    contents:
-      - EIF4F_DEG_analysis
-
-  - title: Survival analysis
-  - subtitle: exported function
-    contents:
-      - EIF4F_Survival_analysis
-
-  - title: PCA analysis
-  - subtitle: exported function
-    contents:
-      - EIF4F_PCA
-
-  - title: Correlation analysis
-  - subtitle: exported function
-    contents:
-      - EIF4F_Corrgene_analysis
-
-
-  - title: RNA protein Correlation analysis
-  - subtitle: exported function
-    contents:
-      - EIF4F_RNA_pro_correlation
-
-  - title: RNA protein Correlation analysis
-  - subtitle: exported function
-    contents:
-      - EIF4F_Proteomics_analysis
