@@ -2,7 +2,7 @@
 % Please edit documentation in R/RNAProCorr.R
 \name{EIF4F_RNA_pro_correlation}
 \alias{EIF4F_RNA_pro_correlation}
-\title{Perform PCA and generate plots}
+\title{Perform RNA protein correlation and generate scatter plots}
 \usage{
 EIF4F_RNA_pro_correlation()
 }

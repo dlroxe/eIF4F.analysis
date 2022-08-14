@@ -2,7 +2,7 @@
 % Please edit documentation in R/COR.R
 \name{EIF4F_Corrgene_analysis}
 \alias{EIF4F_Corrgene_analysis}
-\title{Perform PCA and generate plots}
+\title{Perform differential correlation analyses and generate plots}
 \usage{
 EIF4F_Corrgene_analysis()
 }
