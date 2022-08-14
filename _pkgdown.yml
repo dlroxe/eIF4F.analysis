@@ -1,4 +1,85 @@
-url: https://a3609640.github.io/eIF4F.analysis/
-template:
-  bootstrap: 5
+title: eIF4F.analysis
 
+url: https://a3609640.github.io/eIF4F.analysis/
+
+template:
+  params:
+    bootswatch: flatly
+    ganalytics: UA-12345678-0
+
+reference:
+  - title: Initialization
+  - subtitle: Directory initialization
+    #desc: Set input and output directories
+    contents:
+      - initialize_dir
+  - subtitle: Format initialization
+    #desc: Set format for font and color of plots
+    contents:
+      - initialize_format
+  - subtitle: Data initialization
+    desc: reads datasets from the download data files
+    contents:
+      - initialize_data
+      - initialize_cnv_data
+      - initialize_RNAseq_data
+      - initialize_survival_data
+      - initialize_proteomics_data
+      - initialize_phosphoproteomics_data
+
+  - title: CNV analysis
+  - subtitle: exported function
+    contents:
+      - EIF4F_CNV_analysis
+  - subtitle: internal composite functions to call CNV data analysis and plotting
+    contents:
+      - .plot_bargraph_CNV_TCGA
+      - .plot_matrix_CNVcorr_TCGA
+      - .plot_boxgraph_CNVratio_TCGA
+  - subtitle: internal functions for CNV data analysis
+    contents:
+      - .CNV_all_cancer
+      - .CNV_sum_barplot
+      - .CNV_ind_cancer
+  - subtitle: internal functions for plotting
+    contents:
+      - .CNV_barplot
+      - .matrix_plot
+      - .CNVratio_tumor
+      - .CNVratio_boxplot
+  - subtitle: internal functions for processing CNV related datasets
+    contents:
+      - .get_TCGA_CNV
+      - .get_TCGA_CNV_value
+      - .get_TCGA_CNV_ratio
+
+  - title: DEG analysis
+  - subtitle: exported function
+    contents:
+      - EIF4F_DEG_analysis
+
+  - title: Survival analysis
+  - subtitle: exported function
+    contents:
+      - EIF4F_Survival_analysis
+
+  - title: PCA analysis
+  - subtitle: exported function
+    contents:
+      - EIF4F_PCA
+
+  - title: Correlation analysis
+  - subtitle: exported function
+    contents:
+      - EIF4F_Corrgene_analysis
+
+
+  - title: RNA protein Correlation analysis
+  - subtitle: exported function
+    contents:
+      - EIF4F_RNA_pro_correlation
+
+  - title: RNA protein Correlation analysis
+  - subtitle: exported function
+    contents:
+      - EIF4F_Proteomics_analysis
