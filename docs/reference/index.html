@@ -331,7 +331,7 @@ Cox-PH method</p></td>
         <td><p>Read the RNAseq data from TCGA</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="pca-analysis">PCA analysis <a href="#pca-analysis" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
+          <p class="section-desc"></p><p>PCA on EIF4F expression in GTEx, or/and TCGA studies</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
@@ -342,11 +342,65 @@ Cox-PH method</p></td>
         </td>
         <td><p>Perform PCA and generate plots</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="correlation-analysis">Correlation analysis <a href="#correlation-analysis" class="anchor" aria-hidden="true"></a></h2>
+          <h3 id="internal-composite-functions-to-call-call-pca-and-plot-results">Internal composite functions to call call PCA and plot results <a href="#internal-composite-functions-to-call-call-pca-and-plot-results" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-plot_PCA_TCGA_GTEX.html">.plot_PCA_TCGA_GTEX()</a></code> </p>
+        </td>
+        <td><p>Perform PCA on RNAseq data from all tumors and healthy tissues</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-plot_PCA_TCGA_GTEX_tumor.html">.plot_PCA_TCGA_GTEX_tumor()</a></code> </p>
+        </td>
+        <td><p>Perform PCA on RNAseq data from one tumor type and its matched healthy
+tissue</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-plot_PCA_CPTAC_LUAD.html">.plot_PCA_CPTAC_LUAD()</a></code> </p>
+        </td>
+        <td><p>Perform PCA on proteomics data from CPATC LUADs and matched healthy
+lung tissues</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="internal-functions-to-perform-pca-or-imputed-pca">Internal functions to perform PCA or imputed PCA <a href="#internal-functions-to-perform-pca-or-imputed-pca" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-RNAseq_PCA.html">.RNAseq_PCA()</a></code> </p>
+        </td>
+        <td><p>Perform PCA on RNAseq data</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-protein_imputePCA.html">.protein_imputePCA()</a></code> </p>
+        </td>
+        <td><p>Perform imputPCA on proteomics data</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-biplot_title.html">.biplot_title()</a></code> </p>
+        </td>
+        <td><p>Generate title for PCA plots</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-to-plot-the-pca-results">Internal functions to plot the PCA results <a href="#internal-functions-to-plot-the-pca-results" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-biplot.html">.biplot()</a></code> </p>
+        </td>
+        <td><p>Plot PCA results as biplot, scree and matrix plots</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-selected_biplot.html">.selected_biplot()</a></code> </p>
+        </td>
+        <td><p>Plot subgroups of PCA results as biplots</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-to-select-rna-seq-data-from-specific-study-groups-for-pca">Internal functions to select RNA-seq data from specific study groups for PCA <a href="#internal-functions-to-select-rna-seq-data-from-specific-study-groups-for-pca" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-get_df_subset.html">.get_df_subset()</a></code> </p>
+        </td>
+        <td><p>Select RNAseq data based on the sample types</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="cor-analysis">COR analysis <a href="#cor-analysis" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Analyses on EIF4F correlating genes (CORs)</p>
+        </th>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="exported-function">Exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -354,8 +408,80 @@ Cox-PH method</p></td>
         </td>
         <td><p>Perform differential correlation analyses and generate plots</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="rna-protein-correlation-analysis">RNA protein Correlation analysis <a href="#rna-protein-correlation-analysis" class="anchor" aria-hidden="true"></a></h2>
+          <h3 id="internal-composite-functions-to-analyze-the-eif-f-cors">Internal composite functions to analyze the EIF4F CORs <a href="#internal-composite-functions-to-analyze-the-eif-f-cors" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-plot_Corr_RNAseq_TCGA_GTEX.html">.plot_Corr_RNAseq_TCGA_GTEX()</a></code> </p>
+        </td>
+        <td><p>Perform correlation analysis on RNAseq data from all tumors and
+healthy tissues</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-to-identify-correlating-genes-for-eif-f-genes">Internal functions to identify correlating genes for EIF4F genes <a href="#internal-functions-to-identify-correlating-genes-for-eif-f-genes" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-EIF_correlation.html">.EIF_correlation()</a></code> </p>
+        </td>
+        <td><p>Identify EIF4F correlating genes</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-correlation_coefficient.html">.correlation_coefficient()</a></code> </p>
+        </td>
+        <td><p>Calculate the correlation co-efficiency between two gene expressions</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-is_significant_poscor.html">.is_significant_poscor()</a></code> </p>
+        </td>
+        <td><p>Select positive correlating genes based on coefficiency and pvalue</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-is_significant_negcor.html">.is_significant_negcor()</a></code> </p>
+        </td>
+        <td><p>Select negative correlating genes based on coefficiency and pvalue</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-summarize_counts.html">.summarize_counts()</a></code> </p>
+        </td>
+        <td><p>Summary of total number of CORs identified for each EIF4F gene</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-correlation-analysis-and-plotting">Internal functions for correlation analysis and plotting <a href="#internal-functions-for-correlation-analysis-and-plotting" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-CORs_vennplot.html">.CORs_vennplot()</a></code> </p>
+        </td>
+        <td><p>Plot Venn diagrams for correlating genes</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-combine_CORs_summary.html">.combine_CORs_summary()</a></code> </p>
+        </td>
+        <td><p>Combine the summary of number of posCORs or negCORs from sample types</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-CORs_summary_bargraph.html">.CORs_summary_bargraph()</a></code> </p>
+        </td>
+        <td><p>Plot bargraph for the numbers of correlating genes</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-combine_CORs_list.html">.combine_CORs_list()</a></code> </p>
+        </td>
+        <td><p>Combine all the EIF4F correlating gene data from tumor and healthy
+tissues</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-is_significant_correlation.html">.is_significant_correlation()</a></code> </p>
+        </td>
+        <td><p>Select both positive and negative correlating genes based on
+coefficiency and pvalue</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-CORs_coeff_heatmap.html">.CORs_coeff_heatmap()</a></code> </p>
+        </td>
+        <td><p>Visualize associations between different sources of correlation data
+and reveal potential pattern</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-get_cluster_genes.html">.get_cluster_genes()</a></code> </p>
+        </td>
+        <td><p>Retrieve the gene names from each cluster in heatmap</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-pathway_dotplot.html">.pathway_dotplot()</a></code> </p>
+        </td>
+        <td><p>Plot the enriched pathways from gene lists</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="rna-protein-correlation-analysis">RNA protein Correlation analysis <a href="#rna-protein-correlation-analysis" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Correlation between RNA and protein levels for EIF4F</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
@@ -366,8 +492,40 @@ Cox-PH method</p></td>
         </td>
         <td><p>Perform RNA protein correlation and generate scatter plots</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h2 id="rna-protein-correlation-analysis">RNA protein Correlation analysis <a href="#rna-protein-correlation-analysis" class="anchor" aria-hidden="true"></a></h2>
+          <h3 id="internal-composite-function-to-perform-rna-protein-correlation">Internal composite function to perform RNA protein correlation <a href="#internal-composite-function-to-perform-rna-protein-correlation" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-plot_scatter_RNApro_CCLE.html">.plot_scatter_RNApro_CCLE()</a></code> </p>
+        </td>
+        <td><p>Correlation between CCLE RNAseq and proteomics data</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-plot_scatter_RNApro_LUAD.html">.plot_scatter_RNApro_LUAD()</a></code> </p>
+        </td>
+        <td><p>Correlation between LUAD RNAseq and proteomics data</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-to-select-eif-rna-pro-data">Internal functions to select EIF RNA/pro data <a href="#internal-functions-to-select-eif-rna-pro-data" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-get_CCLE_RNAseq_subset.html">.get_CCLE_RNAseq_subset()</a></code> </p>
+        </td>
+        <td><p>Select subset of CCLE RNAseq data</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-get_CCLE_Proteomics_subset.html">.get_CCLE_Proteomics_subset()</a></code> </p>
+        </td>
+        <td><p>Select subset of CCLE proteomics data</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-to-plot-rna-protein-correlation">Internal functions to plot RNA protein correlation <a href="#internal-functions-to-plot-rna-protein-correlation" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-RNApro_scatterplot.html">.RNApro_scatterplot()</a></code> </p>
+        </td>
+        <td><p>Scatter plots of correlation between RNAseq and proteomics data</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h2 id="phoproteomics-and-phosphoproteomics-analysis">Phoproteomics and phosphoproteomics analysis <a href="#phoproteomics-and-phosphoproteomics-analysis" class="anchor" aria-hidden="true"></a></h2>
+          <p class="section-desc"></p><p>Co-expression and differential expression analysis of EIF4F subunits</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
@@ -377,6 +535,39 @@ Cox-PH method</p></td>
           <p><code><a href="EIF4F_Proteomics_analysis.html">EIF4F_Proteomics_analysis()</a></code> </p>
         </td>
         <td><p>Analyze co-expression among EIF4F subunits and differential expression</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-composite-function-for-coexpression-and-differential-expression-analysis">Internal composite function for coexpression and differential expression analysis <a href="#internal-composite-function-for-coexpression-and-differential-expression-analysis" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-plot_scatterplot_protein_CPTAC.html">.plot_scatterplot_protein_CPTAC()</a></code> </p>
+        </td>
+        <td><p>protein-protein coexpression in CPTAC LUAD</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-plot_boxgraph_protein_CPTAC.html">.plot_boxgraph_protein_CPTAC()</a></code> </p>
+        </td>
+        <td><p>Comparison of protein and phosphorylation levels among different
+stages of LUAD</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-function-to-select-rna-and-protein-expression-data-and-plotting">Internal function to select RNA and protein expression data and plotting <a href="#internal-function-to-select-rna-and-protein-expression-data-and-plotting" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-protein_scatterplot.html">.protein_scatterplot()</a></code> </p>
+        </td>
+        <td><p>Scatter plots of protein coexpression</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-get_CPTAC_LUAD_Proteomics_subset.html">.get_CPTAC_LUAD_Proteomics_subset()</a></code> </p>
+        </td>
+        <td><p>Select subset of CPTAC proteomics data</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-get_CPTAC_LUAD_Phosproteomics_subset.html">.get_CPTAC_LUAD_Phosproteomics_subset()</a></code> </p>
+        </td>
+        <td><p>Select subset of CPTAC phosproteomics data</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-protein_boxplot.html">.protein_boxplot()</a></code> </p>
+        </td>
+        <td><p>Boxplots of phosphor-proteomics data across clinic stages</p></td>
       </tr></tbody></table></div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

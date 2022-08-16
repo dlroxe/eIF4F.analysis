@@ -31,6 +31,7 @@ reference:
   - initialize_survival_data
   - initialize_proteomics_data
   - initialize_phosphoproteomics_data
+
 - title: CNV analysis
   desc: CNV analyses of EIF genes in TCGA data
 - subtitle: Exported function
@@ -56,6 +57,7 @@ reference:
   - .get_TCGA_CNV
   - .get_TCGA_CNV_value
   - .get_TCGA_CNV_ratio
+
 - title: DEG analysis
   desc: Differential gene expression (ratio) analysis of EIF4F genes in TCGA
 - subtitle: Exported function
@@ -80,6 +82,7 @@ reference:
   - .RNAratio_boxplot
 - subtitle: Internal functions for processing DEG related datasets
   contents: .get_TCGA_GTEX_RNAseq
+
 - title: Survival analysis
   desc: Survival analyses on EIF4F gene expression in TCGA tumors
 - subtitle: exported function
@@ -97,16 +100,85 @@ reference:
   contents: .forest_graph
 - subtitle: Internal functions for processing survival related datasets
   contents: .get_TCGA_RNAseq
+
 - title: PCA analysis
+  desc: PCA on EIF4F expression in GTEx, or/and TCGA studies
 - subtitle: exported function
   contents: EIF4F_PCA
-- title: Correlation analysis
-- subtitle: exported function
-  contents: EIF4F_Corrgene_analysis
-- title: RNA protein Correlation analysis
-- subtitle: exported function
-  contents: EIF4F_RNA_pro_correlation
-- title: RNA protein Correlation analysis
-- subtitle: exported function
-  contents: EIF4F_Proteomics_analysis
+- subtitle: Internal composite functions to call call PCA and plot results
+  contents:
+  - .plot_PCA_TCGA_GTEX
+  - .plot_PCA_TCGA_GTEX_tumor
+  - .plot_PCA_CPTAC_LUAD
+- subtitle: Internal functions to perform PCA or imputed PCA
+  contents:
+  - .RNAseq_PCA
+  - .protein_imputePCA
+  - .biplot_title
+- subtitle: Internal functions to plot the PCA results
+  contents:
+  - .biplot
+  - .selected_biplot
+- subtitle: Internal functions to select RNA-seq data from specific study groups for PCA
+  contents:
+  - .get_df_subset
 
+- title: COR analysis
+  desc: Analyses on EIF4F correlating genes (CORs)
+- subtitle: Exported function
+  contents:
+  - EIF4F_Corrgene_analysis
+- subtitle: Internal composite functions to analyze the EIF4F CORs
+  contents:
+  - .plot_Corr_RNAseq_TCGA_GTEX
+- subtitle: Internal functions to identify correlating genes for EIF4F genes
+  contents:
+  - .EIF_correlation
+  - .correlation_coefficient
+  - .is_significant_poscor
+  - .is_significant_negcor
+  - .summarize_counts
+- subtitle: Internal functions for correlation analysis and plotting
+  contents:
+  - .CORs_vennplot
+  - .combine_CORs_summary
+  - .CORs_summary_bargraph
+  - .combine_CORs_list
+  - .is_significant_correlation
+  - .CORs_coeff_heatmap
+  - .get_cluster_genes
+  - .pathway_dotplot
+
+- title: RNA protein Correlation analysis
+  desc: Correlation between RNA and protein levels for EIF4F
+- subtitle: exported function
+  contents:
+  - EIF4F_RNA_pro_correlation
+- subtitle: Internal composite function to perform RNA protein correlation
+  contents:
+  - .plot_scatter_RNApro_CCLE
+  - .plot_scatter_RNApro_LUAD
+- subtitle: Internal functions to select EIF RNA/pro data
+  contents:
+  - .get_CCLE_RNAseq_subset
+  - .get_CCLE_Proteomics_subset
+- subtitle: Internal functions to plot RNA protein correlation
+  contents:
+  - .RNApro_scatterplot
+
+
+- title: Phoproteomics and phosphoproteomics analysis
+  desc: Co-expression and differential expression analysis of EIF4F subunits
+- subtitle: exported function
+  contents:
+  - EIF4F_Proteomics_analysis
+- subtitle: Internal composite function for coexpression and differential expression analysis
+  contents:
+  - .plot_scatterplot_protein_CPTAC
+  - .plot_boxgraph_protein_CPTAC
+- subtitle: Internal function to select RNA and protein expression data and plotting
+  contents:
+  - .protein_scatterplot
+  - .get_CPTAC_LUAD_Proteomics_subset
+  - .get_CPTAC_LUAD_Phosproteomics_subset
+  - .protein_boxplot
