@@ -16,12 +16,15 @@ navbar:
     right:
     - search
     - github
+
 reference:
 - title: Initialization
 - subtitle: Directory initialization
-  contents: initialize_dir
+  contents:
+  - 'initialize_dir'
 - subtitle: Format initialization
-  contents: initialize_format
+  contents:
+  - initialize_format
 - subtitle: Data initialization
   desc: reads datasets from the download data files
   contents:
@@ -35,7 +38,8 @@ reference:
 - title: CNV analysis
   desc: CNV analyses of EIF genes in TCGA data
 - subtitle: Exported function
-  contents: EIF4F_CNV_analysis
+  contents:
+  - EIF4F_CNV_analysis
 - subtitle: Internal composite functions to call CNV data analysis and plotting
   contents:
   - .plot_bargraph_CNV_TCGA
@@ -81,7 +85,8 @@ reference:
   - .violinplot
   - .RNAratio_boxplot
 - subtitle: Internal functions for processing DEG related datasets
-  contents: .get_TCGA_GTEX_RNAseq
+  contents:
+  - .get_TCGA_GTEX_RNAseq
 
 - title: Survival analysis
   desc: Survival analyses on EIF4F gene expression in TCGA tumors
@@ -97,9 +102,11 @@ reference:
   - .univariable_analysis
   - .multivariable_analysis
 - subtitle: Internal functions for survival analysis plotting
-  contents: .forest_graph
+  contents:
+  - .forest_graph
 - subtitle: Internal functions for processing survival related datasets
-  contents: .get_TCGA_RNAseq
+  contents:
+  - .get_TCGA_RNAseq
 
 - title: PCA analysis
   desc: PCA on EIF4F expression in GTEx, or/and TCGA studies
