@@ -129,7 +129,8 @@ sudo apt install subversion # on Linux
 svn export https://github.com/a3609640/eIF4F.analysis/trunk/Script
 ```
 
-Run `Download.sh` from `Script` folder of our GitHub repository.
+Run `Download.sh` from `Script` folder downloaded from our GitHub
+repository.
 
 ``` bash
 bash ~/Script/Download.sh
