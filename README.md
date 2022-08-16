@@ -9,9 +9,12 @@
 [![R](https://github.com/a3609640/eIF4F.analysis/actions/workflows/r.yml/badge.svg)](https://github.com/a3609640/eIF4F.analysis/actions/workflows/r.yml)
 <!-- badges: end -->
 
-The goal of eIF4F.analysis is to understand function and regulation of
-interactions among translation initiation complex proteins across tumor
-types
+eIF4F.analysis is an R-based computational pipeline to understand
+function and regulation of interactions among translation initiation
+complex proteins across tumor types. This package provides a toolkit for
+analyses including copy number status, prognosis, subunit abundance and
+stoichiometry, gene coexpression and pathway activity, and mRNA/protein
+correlation, all using publicly available multi-omics data.
 
 ## Before you begin
 
@@ -26,7 +29,8 @@ package.
 
 [Install eIF4F analysis package](#install-eif4f-analysis-package)
 
-[Download datasets](#download-datasets)
+[Download datasets and analysis
+script](#download-datasets-and-analysis-script)
 
 [File directories](#file-directories)
 
@@ -70,7 +74,7 @@ Information” section below.
 
 ## Install RStudio/R
 
-1.  Download & install R 4.1, if not already installed.
+1.  Download & install R 4.2.1, if not already installed.
 2.  Download & install RStudio, if not already installed.
     <https://www.rstudio.com/products/rstudio/download/>
 
@@ -113,12 +117,22 @@ devtools::install_github("a3609640/eIF4F.analysis")
 library(eIF4F.analysis)
 ```
 
-## Download datasets
+## Download datasets and analysis script
+
+Download `Script` folder of our GitHub repository. `Script` folder
+contains two scripts: `Download.sh` and `Analysis.R`.
+
+``` bash
+# if Subversion is not install, install it with the following command line
+sudo apt install subversion # on Linux
+# download the Script folder from git repository
+svn export https://github.com/a3609640/eIF4F.analysis/trunk/Script
+```
 
 Run `Download.sh` from `Script` folder of our GitHub repository.
 
 ``` bash
-bash ~/github/eIF4F.analysis/Script/Download.sh
+bash ~/Script/Download.sh
 ```
 
 `Download.sh` is a bash script to download all needed datasets (TCGA,
