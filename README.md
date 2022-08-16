@@ -123,7 +123,7 @@ Download `Script` folder of our GitHub repository. `Script` folder
 contains two scripts: `Download.sh` and `Analysis.R`.
 
 ``` bash
-# if Subversion is not install, install it with the following command line
+# if subversion is not install, install it with the following command line
 sudo apt install subversion # on Linux
 # download the Script folder from git repository
 svn export https://github.com/a3609640/eIF4F.analysis/trunk/Script
