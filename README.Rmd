@@ -120,19 +120,18 @@ library(eIF4F.analysis)
 
 ## Download datasets and analysis script
 
-Download `Script` folder of our GitHub repository. `Script` folder contains two scripts: `Download.sh` and `Analysis.R`.
+Download `Script` folder of our GitHub repository. 
+
+Clone (download) eIF4.analysis repository on GitHub.
 
 ```{bash, eval = FALSE}
-# if subversion is not install, install it with the following command line
-sudo apt install subversion # on Linux
-# download the Script folder from git repository
-svn export https://github.com/a3609640/eIF4F.analysis/trunk/Script
+git clone https://github.com/a3609640/eIF4F.analysis.git
 ```
 
-Run `Download.sh` from `Script` folder downloaded from our GitHub repository.
+Two script files are stored in the `Script` folder downloaded from our GitHub repository: `Download.sh` and `Analysis.R`. Run `Download.sh` from `Script` folder. 
 
 ```{bash Download datasets, eval = FALSE}
-bash ~/Script/Download.sh
+bash ~/github/eIF4F.analysis/Script/Download.sh
 ```
 
 `Download.sh` is a bash script to download all needed datasets (TCGA, GTEx, CPTAC, CCLE and etc) from URLs and unzip them. `Download.sh` will create the `~/Downloads/EIF_data` directory to store all downloaded datasets.
