@@ -14,18 +14,28 @@ CPTAC LUAD.
 Side effects:
 
 (1) \code{CCLE_RNAseq}: the RNAseq data of CCLE from the download dataset
-\code{CCLE_expression_full.csv}
+\code{CCLE_expression_full.csv}.
+It is stored as \code{CCLE_RNAseq.csv} in
+\verb{~/Documents/EIF_output/ProcessedData} folder.
 
-(2) \code{CCLE_Anno}: the annotation data of CCLE from \code{sample_info.csv}
+(2) \code{CCLE_Anno}: the annotation data of CCLE from \code{sample_info.csv}.
+It is stored as \code{CCLE_Anno.csv} in
+\verb{~/Documents/EIF_output/ProcessedData} folder.
 
 (3) \code{CCLE_Proteomics}: the proteomics data of CCLE from
-\code{protein_quant_current_normalized.csv}
+\code{protein_quant_current_normalized.csv}.
+It is stored as \code{CCLE_Proteomics.csv} in
+\verb{~/Documents/EIF_output/ProcessedData} folder.
 
 (4) \code{CPTAC_LUAD_Proteomics}: the proteomics data with annotation of CPTAC
-LUAD study from the download data file \code{Protein.xlsx}
+LUAD study from the download data file \code{Protein.xlsx}.
+It is stored as \code{CPTAC_LUAD_Proteomics.csv} in
+\verb{~/Documents/EIF_output/ProcessedData} folder.
 
 (5) \code{CPTAC_LUAD_RNAseq}: the RNAseq data of CPTAC LUAD samples from
-the download data file \code{RNA.xlsx}
+the download data file \code{RNA.xlsx}.
+It is stored as \code{CPTAC_LUAD_RNAseq.csv} in
+\verb{~/Documents/EIF_output/ProcessedData} folder.
 }
 \examples{
 \dontrun{

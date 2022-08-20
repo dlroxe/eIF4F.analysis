@@ -8,7 +8,8 @@ initialize_survival_data()
 }
 \description{
 A wrapper function to read RNA-seq and survival datasets from TCGA.
-
+}
+\details{
 Side effects:
 
 (1) \code{TCGA_RNAseq_OS_sampletype} a merged dataset from
@@ -29,6 +30,9 @@ that annotates cancer types for each sample.
 
 Only malignant tissue (Solid normal tissues are excluded) are selected for
 survival analysis
+
+\code{TCGA_RNAseq_OS_sampletype} was stored as \code{TCGA_RNAseq_OS_sampletype.csv} in
+\verb{~/Documents/EIF_output/ProcessedData} folder.
 }
 \examples{
 \dontrun{

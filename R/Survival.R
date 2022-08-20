@@ -24,6 +24,8 @@ TCGA_RNAseq_OS_sampletype <- NULL
 #'
 #' A wrapper function to read RNA-seq and survival datasets from TCGA.
 #'
+#' @details
+#'
 #' Side effects:
 #'
 #' (1) `TCGA_RNAseq_OS_sampletype` a merged dataset from
@@ -45,6 +47,9 @@ TCGA_RNAseq_OS_sampletype <- NULL
 #'
 #' Only malignant tissue (Solid normal tissues are excluded) are selected for
 #'  survival analysis
+#'
+#' `TCGA_RNAseq_OS_sampletype` was stored as `TCGA_RNAseq_OS_sampletype.csv` in
+#'  `~/Documents/EIF_output/ProcessedData` folder.
 #'
 #' @family wrapper function for data initialization
 #'
@@ -99,6 +104,10 @@ initialize_survival_data <- function() {
     tibble::remove_rownames() %>%
     tibble::column_to_rownames(var = "rn") %>%
     dplyr::filter(.data$sample.type != "Solid Tissue Normal")
+
+  readr::write_csv(TCGA_RNAseq_OS_sampletype,
+                   file.path(output_directory, "ProcessedData",
+                             "TCGA_RNAseq_OS_sampletype.csv"))
 
   return(NULL)
 }

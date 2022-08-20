@@ -14,7 +14,7 @@ from CPTAC LUAD.
 Side effects:
 
 (1) \code{CPTAC_LUAD_Phos}: the phosphoproteomics data of CPTAC LUAD from the
-download data \code{Phos.xlsx}
+download data \code{Phos.xlsx}.
 
 (2) \code{CPTAC_LUAD_Clinic_Sampletype}: a merged dataset from two data frames.
 It provides the annotation data about sample types (tumor or healthy tissues)
@@ -25,6 +25,10 @@ and tumors stages of each sample
 \item \code{.CPTAC_LUAD_sampletype}, the CPTAC annotation data from the download
 dataset \code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx}
 }
+
+\code{CPTAC_LUAD_Phos} and \code{CPTAC_LUAD_Clinic_Sampletype} are
+stored as \code{CPTAC_LUAD_Phos.csv} and \code{CPTAC_LUAD_Clinic_Sampletype.csv} in
+\verb{~/Documents/EIF_output/ProcessedData} folder.
 }
 \examples{
 \dontrun{

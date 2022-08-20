@@ -29,18 +29,28 @@ CPTAC_LUAD_RNAseq <- NULL
 #' @details Side effects:
 #'
 #' (1) `CCLE_RNAseq`: the RNAseq data of CCLE from the download dataset
-#'  `CCLE_expression_full.csv`
+#'  `CCLE_expression_full.csv`.
+#'  It is stored as `CCLE_RNAseq.csv` in
+#'  `~/Documents/EIF_output/ProcessedData` folder.
 #'
-#' (2) `CCLE_Anno`: the annotation data of CCLE from `sample_info.csv`
+#' (2) `CCLE_Anno`: the annotation data of CCLE from `sample_info.csv`.
+#'  It is stored as `CCLE_Anno.csv` in
+#'  `~/Documents/EIF_output/ProcessedData` folder.
 #'
 #' (3) `CCLE_Proteomics`: the proteomics data of CCLE from
-#'  `protein_quant_current_normalized.csv`
+#'  `protein_quant_current_normalized.csv`.
+#'  It is stored as `CCLE_Proteomics.csv` in
+#'  `~/Documents/EIF_output/ProcessedData` folder.
 #'
 #' (4) `CPTAC_LUAD_Proteomics`: the proteomics data with annotation of CPTAC
-#'  LUAD study from the download data file `Protein.xlsx`
+#'  LUAD study from the download data file `Protein.xlsx`.
+#'  It is stored as `CPTAC_LUAD_Proteomics.csv` in
+#'  `~/Documents/EIF_output/ProcessedData` folder.
 #'
 #' (5) `CPTAC_LUAD_RNAseq`: the RNAseq data of CPTAC LUAD samples from
-#'  the download data file `RNA.xlsx`
+#'  the download data file `RNA.xlsx`.
+#'  It is stored as `CPTAC_LUAD_RNAseq.csv` in
+#'  `~/Documents/EIF_output/ProcessedData` folder.
 #'
 #' @family wrapper function for data initialization
 #'
@@ -63,6 +73,10 @@ initialize_proteomics_data <- function() {
          ),
          envir = parent.env(environment()))
 
+  readr::write_csv(CCLE_RNAseq, file.path(output_directory,
+                                          "ProcessedData",
+                                          "CCLE_RNAseq.csv"))
+
   assign("CCLE_Anno",
          fread(
            file.path(
@@ -73,6 +87,10 @@ initialize_proteomics_data <- function() {
          ) %>% dplyr::select(1, 2),
          envir = parent.env(environment()))
 
+  readr::write_csv(CCLE_Anno, file.path(output_directory,
+                                        "ProcessedData",
+                                        "CCLE_Anno.csv"))
+
   assign("CCLE_Proteomics",
          fread(
            file.path(
@@ -82,6 +100,10 @@ initialize_proteomics_data <- function() {
            data.table = FALSE
          ),
          envir = parent.env(environment()))
+
+  readr::write_csv(CCLE_Proteomics, file.path(output_directory,
+                                              "ProcessedData",
+                                              "CCLE_Proteomics.csv"))
 
   assign("CPTAC_LUAD_Proteomics",
          readxl::read_excel(
@@ -98,6 +120,10 @@ initialize_proteomics_data <- function() {
                             ~ suppressWarnings(as.numeric(.))),
          envir = parent.env(environment()))
 
+  readr::write_csv(CPTAC_LUAD_Proteomics, file.path(output_directory,
+                                                    "ProcessedData",
+                                                    "CPTAC_LUAD_Proteomics.csv"))
+
   assign("CPTAC_LUAD_RNAseq",
          readxl::read_excel(
            file.path(data_file_directory, "RNA.xlsx"),
@@ -113,6 +139,9 @@ initialize_proteomics_data <- function() {
                             ~ suppressWarnings(as.numeric(.))),
          envir = parent.env(environment()))
 
+  readr::write_csv(CPTAC_LUAD_RNAseq, file.path(output_directory,
+                                                "ProcessedData",
+                                                "CPTAC_LUAD_RNAseq.csv"))
 }
 
 

@@ -27,7 +27,7 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' @details Side effects:
 #'
 #' (1) `CPTAC_LUAD_Phos`: the phosphoproteomics data of CPTAC LUAD from the
-#'  download data `Phos.xlsx`
+#'  download data `Phos.xlsx`.
 #'
 #' (2) `CPTAC_LUAD_Clinic_Sampletype`: a merged dataset from two data frames.
 #'  It provides the annotation data about sample types (tumor or healthy tissues)
@@ -36,6 +36,10 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #'   `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx`
 #'   * `.CPTAC_LUAD_sampletype`, the CPTAC annotation data from the download
 #'   dataset `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`
+#'
+#' `CPTAC_LUAD_Phos` and `CPTAC_LUAD_Clinic_Sampletype` are
+#' stored as `CPTAC_LUAD_Phos.csv` and `CPTAC_LUAD_Clinic_Sampletype.csv` in
+#' `~/Documents/EIF_output/ProcessedData` folder.
 #'
 #' @family wrapper function for data initialization
 #'
@@ -56,6 +60,10 @@ initialize_phosphoproteomics_data <- function() {
                             col_names = FALSE
          ),
          envir = parent.env(environment()))
+
+  readr::write_csv(CPTAC_LUAD_Phos, file.path(output_directory,
+                                              "ProcessedData",
+                                              "CPTAC_LUAD_Phos.csv"))
 
   .CPTAC_LUAD_Clinic <- readxl::read_excel(file.path(
     data_file_directory,
@@ -98,6 +106,9 @@ initialize_phosphoproteomics_data <- function() {
            )),
          envir = parent.env(environment()))
 
+  readr::write_csv(CPTAC_LUAD_Clinic_Sampletype,
+                   file.path(output_directory,"ProcessedData",
+                             "CPTAC_LUAD_Clinic_Sampletype.csv"))
 }
 
 

@@ -23,6 +23,9 @@ TCGA_GTEX_RNAseq_sampletype <- NULL
 #' @description
 #'
 #' A wrapper function reads RNA-seq related datasets from TCGA and GTEx.
+#'
+#' @details
+#'
 #' Its side effects is the global variable `TCGA_GTEX_RNAseq_sampletype`, which
 #'  was merged from two internal data frames:
 #'
@@ -42,6 +45,9 @@ TCGA_GTEX_RNAseq_sampletype <- NULL
 #'   * `primary.disease` column that annotates cancer types for each sample
 #'   * `primary.site` column that annotates the tissue types
 #'   * `study` column that annotates the cohort “TCGA” or “GTEx”
+#'
+#' `TCGA_GTEX_RNAseq_sampletype` was stored as `TCGA_GTEX_RNAseq_sampletype.csv` in
+#'  `~/Documents/EIF_output/ProcessedData` folder.
 #'
 #' @family wrapper function for data initialization
 #'
@@ -98,6 +104,10 @@ initialize_RNAseq_data <- function() {
            tibble::remove_rownames() %>%
            tibble::column_to_rownames(var = "Row.names"),
          envir = parent.env(environment()))
+
+  readr::write_csv(TCGA_GTEX_RNAseq_sampletype,
+                   file.path(output_directory, "ProcessedData",
+                             "TCGA_GTEX_RNAseq_sampletype.csv"))
 
   return(NULL)
 }

@@ -8,6 +8,8 @@ initialize_RNAseq_data()
 }
 \description{
 A wrapper function reads RNA-seq related datasets from TCGA and GTEx.
+}
+\details{
 Its side effects is the global variable \code{TCGA_GTEX_RNAseq_sampletype}, which
 was merged from two internal data frames:
 
@@ -28,6 +30,9 @@ out of \code{TcgaTargetGTEX_phenotype.txt} to construct \code{.TCGA_GTEX_samplet
 \item \code{primary.site} column that annotates the tissue types
 \item \code{study} column that annotates the cohort “TCGA” or “GTEx”
 }
+
+\code{TCGA_GTEX_RNAseq_sampletype} was stored as \code{TCGA_GTEX_RNAseq_sampletype.csv} in
+\verb{~/Documents/EIF_output/ProcessedData} folder.
 }
 \examples{
 \dontrun{
