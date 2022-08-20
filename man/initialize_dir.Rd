@@ -54,6 +54,12 @@ their differential expression
 \item \verb{~/Documents/EIF_output/Proteomics/COEXP}
 \item \verb{~/Documents/EIF_output/Proteomics/DIFFEXP}
 }
+
+(8) output directory for processed datasets used as global variables
+their differential expression
+\itemize{
+\item \verb{~/Documents/EIF_output/ProcessedData}
+}
 }
 \examples{
 \dontrun{
