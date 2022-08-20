@@ -40,6 +40,10 @@ output_directory <- "~/Documents/EIF_output"
 #'  * `~/Documents/EIF_output/Proteomics/COEXP`
 #'  * `~/Documents/EIF_output/Proteomics/DIFFEXP`
 #'
+#' (8) output directory for processed datasets used as global variables
+#'  their differential expression
+#'  * `~/Documents/EIF_output/ProcessedData`
+#'
 #' @export
 #'
 #' @examples \dontrun{
@@ -75,59 +79,80 @@ initialize_dir <- function() {
              showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(output_directory, "Proteomics","DIFFEXP"),
              showWarnings = FALSE, recursive = TRUE)
+  dir.create(file.path(output_directory, "ProcessedData"),
+             showWarnings = FALSE, recursive = TRUE)
 }
 
 
 ## Wrapper function for data initialization ====================================
 #' @title A wrapper function reads datasets from the download data files
 #'
-#' @description A wrapper function runs the five data initialization functions
-#'  to load the download data files.
+#' @description A wrapper function for data initialization loads the download
+#' data files.
 #'
+#' @details
+#' [initialize_data()] runs five data initialization functions
+#' to load the relevant data files.
 #' * [initialize_cnv_data()]
 #' * [initialize_RNAseq_data()]
 #' * [initialize_survival_data()]
 #' * [initialize_proteomics_data()]
 #' * [initialize_phosphoproteomics_data()]
 #'
-#' @details Side effects:
+#' data initialization functions read datasets and generates global variable
+#' available to functions in the package. They are not accessible to the user
+#' and will not show at the users' workspace. This package has saved them as
+#' csv files under `~/Documents/EIF_output/ProcessedData` in case that
+#' users would like to access the data frames for their own analyses.
+#'
+#' Side effects:
 #'
 #' (1) `TCGA_CNV_value`imports the download dataset
-#'  `Gistic2_CopyNumber_Gistic2_all_data_by_genes`
+#'  `Gistic2_CopyNumber_Gistic2_all_data_by_genes`. It is stored
+#'  as `TCGA_CNV_value.csv`
 #'
 #' (2) `TCGA_CNV_sampletype` imports and merges datasets from
 #'  `Gistic2_CopyNumber_Gistic2_all_thresholded.by_genes` and
-#'  `TCGA_phenotype_denseDataOnlyDownload.tsv`
+#'  `TCGA_phenotype_denseDataOnlyDownload.tsv`. It is stored
+#'  as `TCGA_CNV_sampletype.csv`
 #'
 #' (3) `TCGA_CNVratio_sampletype` imports and merges datasets from
-#' `broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena` and
-#'  `TCGA_phenotype_denseDataOnlyDownload.tsv`
+#'  `broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena` and
+#'  `TCGA_phenotype_denseDataOnlyDownload.tsv`. It is stored
+#'  as `TCGA_CNVratio_sampletype.csv`
 #'
 #' (4) `TCGA_GTEX_RNAseq_sampletype` imports and merges datasets from
-#'  `TcgaTargetGtex_RSEM_Hugo_norm_count` and `TcgaTargetGTEX_phenotype.txt`
+#'  `TcgaTargetGtex_RSEM_Hugo_norm_count` and `TcgaTargetGTEX_phenotype.txt`.
+#'  It is stored as `TCGA_GTEX_RNAseq_sampletype.csv`.
 #'
 #' (5) `TCGA_RNAseq_OS_sampletype` imports and merges datasets from
 #'  `EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena`,
 #'  `Survival_SupplementalTable_S1_20171025_xena_sp` and
-#'  `TCGA_phenotype_denseDataOnlyDownload.tsv`
+#'  `TCGA_phenotype_denseDataOnlyDownload.tsv`.
+#'  It is stored as `TCGA_GTEX_RNAseq_sampletype.csv`.
 #'
 #' (6) `CCLE_RNAseq` imports the download dataset
-#'  `CCLE_expression_full.csv`
+#'  `CCLE_expression_full.csv`. It is stored as `CCLE_RNAseq.csv`.
 #'
-#' (7) `CCLE_Anno`imports the download dataset `sample_info.csv`
+#' (7) `CCLE_Anno`imports the download dataset `sample_info.csv`. It is stored
+#'  as `CCLE_Anno.csv`.
 #'
 #' (8) `CCLE_Proteomics` imports the download dataset
-#'  `protein_quant_current_normalized.csv`
+#'  `protein_quant_current_normalized.csv`. It is stored as `CCLE_Proteomics.csv`.
 #'
-#' (9) `CPTAC_LUAD_Proteomics` imports the download dataset `Protein.xlsx`
+#' (9) `CPTAC_LUAD_Proteomics` imports the download dataset `Protein.xlsx`.
+#'  It is stored as `CPTAC_LUAD_Proteomics.csv`.
 #'
-#' (10) `CPTAC_LUAD_RNAseq`imports the download dataset `RNA.xlsx`
+#' (10) `CPTAC_LUAD_RNAseq`imports the download dataset `RNA.xlsx`.
+#'  It is stored as `CPTAC_LUAD_RNAseq.csv`.
 #'
-#' (11) `CPTAC_LUAD_Phos`imports the download dataset `Phos.xlsx`
+#' (11) `CPTAC_LUAD_Phos`imports the download dataset `Phos.xlsx`.
+#'  It is stored as `CPTAC_LUAD_Phos.csv`.
 #'
 #' (12) `CPTAC_LUAD_Clinic_Sampletype` imports and merges datasets from
 #'   `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx` and
-#'   `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`
+#'   `S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx`.
+#'   It is stored as `CPTAC_LUAD_Clinic_Sampletype.csv`.
 #'
 #' @family wrapper function for data initialization
 #'

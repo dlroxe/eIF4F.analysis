@@ -7,8 +7,12 @@
 initialize_data()
 }
 \description{
-A wrapper function runs the five data initialization functions
-to load the download data files.
+A wrapper function for data initialization loads the download
+data files.
+}
+\details{
+\code{\link[=initialize_data]{initialize_data()}} runs five data initialization functions
+to load the relevant data files.
 \itemize{
 \item \code{\link[=initialize_cnv_data]{initialize_cnv_data()}}
 \item \code{\link[=initialize_RNAseq_data]{initialize_RNAseq_data()}}
@@ -16,46 +20,61 @@ to load the download data files.
 \item \code{\link[=initialize_proteomics_data]{initialize_proteomics_data()}}
 \item \code{\link[=initialize_phosphoproteomics_data]{initialize_phosphoproteomics_data()}}
 }
-}
-\details{
+
+data initialization functions read datasets and generates global variable
+available to functions in the package. They are not accessible to the user
+and will not show at the users' workspace. This package has saved them as
+csv files under \verb{~/Documents/EIF_output/ProcessedData} in case that
+users would like to access the data frames for their own analyses.
+
 Side effects:
 
 (1) \code{TCGA_CNV_value}imports the download dataset
-\code{Gistic2_CopyNumber_Gistic2_all_data_by_genes}
+\code{Gistic2_CopyNumber_Gistic2_all_data_by_genes}. It is stored
+as \code{TCGA_CNV_value.csv}
 
 (2) \code{TCGA_CNV_sampletype} imports and merges datasets from
 \code{Gistic2_CopyNumber_Gistic2_all_thresholded.by_genes} and
-\code{TCGA_phenotype_denseDataOnlyDownload.tsv}
+\code{TCGA_phenotype_denseDataOnlyDownload.tsv}. It is stored
+as \code{TCGA_CNV_sampletype.csv}
 
 (3) \code{TCGA_CNVratio_sampletype} imports and merges datasets from
 \code{broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena} and
-\code{TCGA_phenotype_denseDataOnlyDownload.tsv}
+\code{TCGA_phenotype_denseDataOnlyDownload.tsv}. It is stored
+as \code{TCGA_CNVratio_sampletype.csv}
 
 (4) \code{TCGA_GTEX_RNAseq_sampletype} imports and merges datasets from
-\code{TcgaTargetGtex_RSEM_Hugo_norm_count} and \code{TcgaTargetGTEX_phenotype.txt}
+\code{TcgaTargetGtex_RSEM_Hugo_norm_count} and \code{TcgaTargetGTEX_phenotype.txt}.
+It is stored as \code{TCGA_GTEX_RNAseq_sampletype.csv}.
 
 (5) \code{TCGA_RNAseq_OS_sampletype} imports and merges datasets from
 \code{EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena},
 \code{Survival_SupplementalTable_S1_20171025_xena_sp} and
-\code{TCGA_phenotype_denseDataOnlyDownload.tsv}
+\code{TCGA_phenotype_denseDataOnlyDownload.tsv}.
+It is stored as \code{TCGA_GTEX_RNAseq_sampletype.csv}.
 
 (6) \code{CCLE_RNAseq} imports the download dataset
-\code{CCLE_expression_full.csv}
+\code{CCLE_expression_full.csv}. It is stored as \code{CCLE_RNAseq.csv}.
 
-(7) \code{CCLE_Anno}imports the download dataset \code{sample_info.csv}
+(7) \code{CCLE_Anno}imports the download dataset \code{sample_info.csv}. It is stored
+as \code{CCLE_Anno.csv}.
 
 (8) \code{CCLE_Proteomics} imports the download dataset
-\code{protein_quant_current_normalized.csv}
+\code{protein_quant_current_normalized.csv}. It is stored as \code{CCLE_Proteomics.csv}.
 
-(9) \code{CPTAC_LUAD_Proteomics} imports the download dataset \code{Protein.xlsx}
+(9) \code{CPTAC_LUAD_Proteomics} imports the download dataset \code{Protein.xlsx}.
+It is stored as \code{CPTAC_LUAD_Proteomics.csv}.
 
-(10) \code{CPTAC_LUAD_RNAseq}imports the download dataset \code{RNA.xlsx}
+(10) \code{CPTAC_LUAD_RNAseq}imports the download dataset \code{RNA.xlsx}.
+It is stored as \code{CPTAC_LUAD_RNAseq.csv}.
 
-(11) \code{CPTAC_LUAD_Phos}imports the download dataset \code{Phos.xlsx}
+(11) \code{CPTAC_LUAD_Phos}imports the download dataset \code{Phos.xlsx}.
+It is stored as \code{CPTAC_LUAD_Phos.csv}.
 
 (12) \code{CPTAC_LUAD_Clinic_Sampletype} imports and merges datasets from
 \code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx} and
-\code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx}
+\code{S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx}.
+It is stored as \code{CPTAC_LUAD_Clinic_Sampletype.csv}.
 }
 \examples{
 \dontrun{

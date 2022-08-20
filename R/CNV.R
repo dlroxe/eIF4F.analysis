@@ -60,6 +60,8 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #' @importFrom dplyr distinct filter select select_if mutate mutate_at
 #'  summarise rename group_by
 #'
+#' @importFrom readr write_csv
+#'
 #' @importFrom stats na.omit
 #'
 #' @importFrom tibble remove_rownames column_to_rownames
@@ -75,7 +77,7 @@ initialize_cnv_data <- function() {
          .get_TCGA_CNV_value(),
          envir = parent.env(environment()))
 
-  write.csv(TCGA_CNV_value, file.path(output_directory,
+  readr::write_csv(TCGA_CNV_value, file.path(output_directory,
                                       "ProcessedData",
                                       "TCGA_CNV_value.csv"))
 
@@ -109,7 +111,7 @@ initialize_cnv_data <- function() {
            tibble::column_to_rownames(var = "Row.names"),
          envir = parent.env(environment()))
 
-  write.csv(TCGA_CNV_sampletype, file.path(output_directory,
+  readr::write_csv(TCGA_CNV_sampletype, file.path(output_directory,
                                            "ProcessedData",
                                            "TCGA_CNV_sampletype.csv"))
 
@@ -123,7 +125,7 @@ initialize_cnv_data <- function() {
            tibble::column_to_rownames(var = "Row.names"),
          envir = parent.env(environment()))
 
-  write.csv(TCGA_CNVratio_sampletype, file.path(output_directory,
+  readr::write_csv(TCGA_CNVratio_sampletype, file.path(output_directory,
                                                 "ProcessedData",
                                                 "TCGA_CNVratio_sampletype.csv"))
 
