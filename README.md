@@ -34,9 +34,9 @@ script](#download-datasets-and-analysis-script)
 
 [File directories](#file-directories)
 
-[Session information](#session-information)
-
 [Tutorials](#tutorials)
+
+[Session information](#session-information)
 
 ## System requirements
 
@@ -119,26 +119,24 @@ library(eIF4F.analysis)
 
 ## Download datasets and analysis script
 
-Download `Script` folder of our GitHub repository.
-
 Clone (download) eIF4.analysis repository on GitHub.
 
 ``` bash
 git clone https://github.com/a3609640/eIF4F.analysis.git
 ```
 
-Two script files are stored in the `Script` folder downloaded from our
-GitHub repository: `Download.sh` and `Analysis.R`. Run `Download.sh`
-from `Script` folder.
+Two script files are stored in the `Script` folder from our GitHub
+repository: `Download.sh` and `Analysis.R`. Run `Download.sh` from
+`Script` folder.
 
 ``` bash
 bash ~/github/eIF4F.analysis/Script/Download.sh
 ```
 
-`Download.sh` is a bash script to download all needed datasets (TCGA,
-GTEx, CPTAC, CCLE and etc) from URLs and unzip them. `Download.sh` will
-create the `~/Downloads/EIF_data` directory to store all downloaded
-datasets.
+`Download.sh` is the following bash script that downloads all needed
+datasets (TCGA, GTEx, CPTAC, CCLE and etc) from URLs and unzip them.
+`Download.sh` will create the `~/Downloads/EIF_data` directory to store
+all downloaded datasets.
 
 ``` bash
 #!/bin/sh
@@ -146,7 +144,7 @@ datasets.
 ## download all datasets from the following weblinks
 
 ### create the directory to store all downloaded datasets
-readonly DATA_FILE_DIRECTORY="${HOME}/Downloads/EIF_data"
+readonly DATA_FILE_DIRECTORY="${HOME}/Downloads/EIF_data" ## default directory for data download
 mkdir -p "${DATA_FILE_DIRECTORY}"
 
 
@@ -166,7 +164,7 @@ wget https://tcga-pancan-atlas-hub.s3.us-east-1.amazonaws.com/download/EB%2B%2BA
 #### TCGA sample type annotation
 wget https://pancanatlas.xenahubs.net/download/TCGA_phenotype_denseDataOnlyDownload.tsv.gz -P "${DATA_FILE_DIRECTORY}"
 
-#### TCGA OS data
+#### TCGA OS data ##
 wget https://tcga-pancan-atlas-hub.s3.us-east-1.amazonaws.com/download/Survival_SupplementalTable_S1_20171025_xena_sp -P "${DATA_FILE_DIRECTORY}"
 
 #### TCGA and GTEX RNA-Seq dataset
@@ -175,32 +173,36 @@ wget https://toil.xenahubs.net/download/TcgaTargetGtex_RSEM_Hugo_norm_count.gz -
 #### TCGA and GTEX sample type annotation
 wget https://toil.xenahubs.net/download/TcgaTargetGTEX_phenotype.txt.gz -P "${DATA_FILE_DIRECTORY}"
 
-
 ### CPTAC DATA
+
 #### CPTAC LUAD RNA-Seq data (Gillette et al., 2020)
 wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/RNA.xlsx -P "${DATA_FILE_DIRECTORY}"
 
 #### CPTAC LUAD Proteomics (Gillette et al., 2020)
 wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Protein.xlsx -P "${DATA_FILE_DIRECTORY}"
 
-#### CPTAC LUAD Proteomics
-wget https://cptc-xfer.uis.georgetown.edu/publicData/Phase_III_Data/CPTAC_LUAD_S046/CPTAC_LUAD_Proteome_CDAP_Protein_Report.r1/CPTAC3_Lung_Adeno_Carcinoma_Proteome.tmt10.tsv -P "${DATA_FILE_DIRECTORY}"
+#### CPTAC LUAD Proteomics: CPTAC3_Lung_Adeno_Carcinoma_Proteome.tmt10.tsv from PDC Study ID: PDC000153 
+#  CPTAC3_Lung_Adeno_Carcinoma_Proteome.tmt10.tsv from PDC Study ID: PDC000153 
 
 #### CPTAC LUAD Phosproteomics (Gillette et al., 2020)
 wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Phos.xlsx -P "${DATA_FILE_DIRECTORY}"
 
-#### CPTAC LUAD Sample Annotation
-wget https://cptc-xfer.uis.georgetown.edu/publicData/Phase_III_Data/CPTAC_LUAD_S046/CPTAC_LUAD_metadata/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
+#### CPTAC LUAD Sample Annotation: S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx from PDC Study ID: PDC000153 
+# S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx from PDC Study ID: PDC000153 
 
-#### CPTAC Clinical Data
-wget https://cptc-xfer.uis.georgetown.edu/publicData/Phase_III_Data/CPTAC_LUAD_S046/CPTAC_LUAD_metadata/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
-
+#### CPTAC Clinical Data: S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx from PDC Study ID: PDC000153 
+# S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx from PDC Study ID: PDC000153 
 
 ### CCLE DATA
+
 #### CCLE RNA-Seq data from DepMap Public 20Q4 20Q3
+#wget -O CCLE_expression_full.csv https://ndownloader.figshare.com/files/#27902097 -P "${DATA_FILE_DIRECTORY}" #DepMap Public 21Q2
+
 wget https://ndownloader.figshare.com/files/24613349 -O "${DATA_FILE_DIRECTORY}/CCLE_expression_full.csv" #DepMap Public 20Q3
 
 #### CCLE annotation data
+#wget -O sample_info.csv https://ndownloader.figshare.com/files/27902376 -P #"${DATA_FILE_DIRECTORY}" #DepMap Public 21Q2
+
 wget https://ndownloader.figshare.com/files/24613394 -O "${DATA_FILE_DIRECTORY}/sample_info.csv" #DepMap Public 20Q3
 
 #### CCLE proteomics data
@@ -214,19 +216,42 @@ gunzip ${DATA_FILE_DIRECTORY}/*.gz
 suit, they may be adjusted trivially in these lines near the top of the
 `Download.sh` script.
 
+``` bash
+### change the directory to store all downloaded datasets in `Download.sh` script
+readonly DATA_FILE_DIRECTORY="${HOME}/your_data_folder"
+```
+
 ## File directories
 
 Confirm the directories for input and output files. The directories for
 input and output files are defined in the `Load.R` as following.
 
 ``` r
+# default directory for data download and output storage
 data_file_directory <- "~/Downloads/EIF_data" 
 output_directory <- "~/Documents/EIF_output"
 ```
 
 **CRITICAL**: If the root directory paths `~/Download/EIF_data` and
 `~/Documents/EIF_output` do not suit, they may be adjusted trivially in
-these lines near the top of the `Download.sh` and `Load.R` scripts.
+these lines near the top of the `Download.sh` and `Load.R` scripts. Make
+sure the directory names are consistent within `Download.sh` and
+`Load.R`
+
+``` r
+# change the directories for data download and output storage in Load.R script
+data_file_directory <- "~/Downloads/your_data_folder" 
+output_directory <- "~/Documents/your_output_folder"
+```
+
+## Tutorials
+
+Open the `Analysis.R` from `Script` folder from our GitHub repository.
+This script contains the command lines to execute all analyses.
+
+``` r
+source("~/github/eIF4F.analysis/Script/Analysis.R")
+```
 
 ## Session information
 
@@ -437,8 +462,3 @@ developing this package is the following.
  P ── Loaded and on-disk path mismatch.
 ────────────────────────────────────────────────────────────────────────────────
 ```
-
-## Tutorials
-
-Open the `Analysis.R` from `Script` folder from our GitHub repository.
-This script contains the command lines to execute all analyses.
