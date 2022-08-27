@@ -60,11 +60,7 @@
     </div>
 
     <table class="ref-index"><colgroup><col class="alias"><col class="title"></colgroup><tbody><tr><th colspan="2">
-          <h2 id="initialization">Initialization <a href="#initialization" class="anchor" aria-hidden="true"></a></h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="directory-initialization">Directory initialization <a href="#directory-initialization" class="anchor" aria-hidden="true"></a></h3>
+          <h2 id="directory-initialization">Directory initialization <a href="#directory-initialization" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -72,7 +68,7 @@
         </td>
         <td><p>Set output directories</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="format-initialization">Format initialization <a href="#format-initialization" class="anchor" aria-hidden="true"></a></h3>
+          <h2 id="format-initialization">Format initialization <a href="#format-initialization" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -80,8 +76,12 @@
         </td>
         <td><p>Set format for font and color of plots</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="data-initialization">Data initialization <a href="#data-initialization" class="anchor" aria-hidden="true"></a></h3>
+          <h2 id="data-initialization">Data initialization <a href="#data-initialization" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>reads datasets from the download data files</p>
+        </th>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="exported-function">Exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
           <p><code><a href="initialize_data.html">initialize_data()</a></code> </p>
@@ -107,6 +107,38 @@
           <p><code><a href="initialize_phosphoproteomics_data.html">initialize_phosphoproteomics_data()</a></code> </p>
         </td>
         <td><p>Read all phosphoproteomics related datasets from CPTAC LUAD</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-processing-cnv-related-datasets">Internal functions for processing CNV related datasets <a href="#internal-functions-for-processing-cnv-related-datasets" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-get_TCGA_CNV.html">.get_TCGA_CNV()</a></code> </p>
+        </td>
+        <td><p>Read CNV threshold dataset from TCGA</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-get_TCGA_CNV_value.html">.get_TCGA_CNV_value()</a></code> </p>
+        </td>
+        <td><p>Read CNV value dataset from TCGA</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-get_TCGA_CNV_ratio.html">.get_TCGA_CNV_ratio()</a></code> </p>
+        </td>
+        <td><p>Read CNV ratio dataset from TCGA</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-processing-deg-related-datasets">Internal functions for processing DEG related datasets <a href="#internal-functions-for-processing-deg-related-datasets" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-get_TCGA_GTEX_RNAseq.html">.get_TCGA_GTEX_RNAseq()</a></code> </p>
+        </td>
+        <td><p>Read recomputed RNAseq data from both TCGA and GTEx</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-for-processing-survival-related-datasets">Internal functions for processing survival related datasets <a href="#internal-functions-for-processing-survival-related-datasets" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-get_TCGA_RNAseq.html">.get_TCGA_RNAseq()</a></code> </p>
+        </td>
+        <td><p>Read the RNAseq data from TCGA</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="cnv-analysis">CNV analysis <a href="#cnv-analysis" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>CNV analyses of EIF genes in TCGA data</p>
@@ -144,18 +176,22 @@
         </td>
         <td><p>Calculates the frequency of CNV status in all TCGA cancer types combined</p></td>
       </tr><tr><td>
-          <p><code><a href="dot-CNV_sum_barplot.html">.CNV_sum_barplot()</a></code> </p>
-        </td>
-        <td><p>Stacked bar plots of the CNV status summary</p></td>
-      </tr><tr><td>
           <p><code><a href="dot-CNV_ind_cancer.html">.CNV_ind_cancer()</a></code> </p>
         </td>
         <td><p>Calculates the frequency of CNV status in individual TCGA cancer types</p></td>
+      </tr><tr><td>
+          <p><code><a href="dot-CNVratio_tumor.html">.CNVratio_tumor()</a></code> </p>
+        </td>
+        <td><p>Calculates the frequency of CNV status in all TCGA cancer types combined</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="internal-functions-for-plotting">Internal functions for plotting <a href="#internal-functions-for-plotting" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-CNV_sum_barplot.html">.CNV_sum_barplot()</a></code> </p>
+        </td>
+        <td><p>Stacked bar plots of the CNV status summary</p></td>
+      </tr><tr><td>
           <p><code><a href="dot-CNV_barplot.html">.CNV_barplot()</a></code> </p>
         </td>
         <td><p>Stacked bar plots of the CNV status</p></td>
@@ -164,29 +200,9 @@
         </td>
         <td><p>Correlation matrix for gene pairs</p></td>
       </tr><tr><td>
-          <p><code><a href="dot-CNVratio_tumor.html">.CNVratio_tumor()</a></code> </p>
-        </td>
-        <td><p>Calculates the frequency of CNV status in all TCGA cancer types combined</p></td>
-      </tr><tr><td>
           <p><code><a href="dot-CNVratio_boxplot.html">.CNVratio_boxplot()</a></code> </p>
         </td>
         <td><p>Box plots of the CNV ratios in tumors vs adjacent normals</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="internal-functions-for-processing-cnv-related-datasets">Internal functions for processing CNV related datasets <a href="#internal-functions-for-processing-cnv-related-datasets" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="dot-get_TCGA_CNV.html">.get_TCGA_CNV()</a></code> </p>
-        </td>
-        <td><p>Read CNV threshold dataset from TCGA</p></td>
-      </tr><tr><td>
-          <p><code><a href="dot-get_TCGA_CNV_value.html">.get_TCGA_CNV_value()</a></code> </p>
-        </td>
-        <td><p>Read CNV value dataset from TCGA</p></td>
-      </tr><tr><td>
-          <p><code><a href="dot-get_TCGA_CNV_ratio.html">.get_TCGA_CNV_ratio()</a></code> </p>
-        </td>
-        <td><p>Read CNV ratio dataset from TCGA</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="deg-analysis">DEG analysis <a href="#deg-analysis" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Differential gene expression (ratio) analysis of EIF4F genes in TCGA</p>
@@ -264,19 +280,11 @@ metastatic tumors vs adjacent normal tissues</p></td>
         </td>
         <td><p>Box plots of differential RNA ratios across tumors</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="internal-functions-for-processing-deg-related-datasets">Internal functions for processing DEG related datasets <a href="#internal-functions-for-processing-deg-related-datasets" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="dot-get_TCGA_GTEX_RNAseq.html">.get_TCGA_GTEX_RNAseq()</a></code> </p>
-        </td>
-        <td><p>Read recomputed RNAseq data from both TCGA and GTEx</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="survival-analysis">Survival analysis <a href="#survival-analysis" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Survival analyses on EIF4F gene expression in TCGA tumors</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="exported-function">Exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -322,19 +330,11 @@ Cox-PH method</p></td>
         </td>
         <td><p>Forest plots of COX-PH results</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="internal-functions-for-processing-survival-related-datasets">Internal functions for processing survival related datasets <a href="#internal-functions-for-processing-survival-related-datasets" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="dot-get_TCGA_RNAseq.html">.get_TCGA_RNAseq()</a></code> </p>
-        </td>
-        <td><p>Read the RNAseq data from TCGA</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="pca-analysis">PCA analysis <a href="#pca-analysis" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>PCA on EIF4F expression in GTEx, or/and TCGA studies</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="exported-function">Exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -359,6 +359,14 @@ tissue</p></td>
         </td>
         <td><p>Perform PCA on proteomics data from CPATC LUADs and matched healthy
 lung tissues</p></td>
+      </tr></tbody><tbody><tr><th colspan="2">
+          <h3 id="internal-functions-to-select-rna-seq-data-from-specific-study-groups-for-pca">Internal functions to select RNA-seq data from specific study groups for PCA <a href="#internal-functions-to-select-rna-seq-data-from-specific-study-groups-for-pca" class="anchor" aria-hidden="true"></a></h3>
+          <p class="section-desc"></p>
+        </th>
+      </tr></tbody><tbody><tr><td>
+          <p><code><a href="dot-get_df_subset.html">.get_df_subset()</a></code> </p>
+        </td>
+        <td><p>Select RNAseq data based on the sample types</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h3 id="internal-functions-to-perform-pca-or-imputed-pca">Internal functions to perform PCA or imputed PCA <a href="#internal-functions-to-perform-pca-or-imputed-pca" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
@@ -387,14 +395,6 @@ lung tissues</p></td>
           <p><code><a href="dot-selected_biplot.html">.selected_biplot()</a></code> </p>
         </td>
         <td><p>Plot subgroups of PCA results as biplots</p></td>
-      </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="internal-functions-to-select-rna-seq-data-from-specific-study-groups-for-pca">Internal functions to select RNA-seq data from specific study groups for PCA <a href="#internal-functions-to-select-rna-seq-data-from-specific-study-groups-for-pca" class="anchor" aria-hidden="true"></a></h3>
-          <p class="section-desc"></p>
-        </th>
-      </tr></tbody><tbody><tr><td>
-          <p><code><a href="dot-get_df_subset.html">.get_df_subset()</a></code> </p>
-        </td>
-        <td><p>Select RNAseq data based on the sample types</p></td>
       </tr></tbody><tbody><tr><th colspan="2">
           <h2 id="cor-analysis">COR analysis <a href="#cor-analysis" class="anchor" aria-hidden="true"></a></h2>
           <p class="section-desc"></p><p>Analyses on EIF4F correlating genes (CORs)</p>
@@ -484,7 +484,7 @@ and reveal potential pattern</p></td>
           <p class="section-desc"></p><p>Correlation between RNA and protein levels for EIF4F</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="exported-function">Exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>
@@ -528,7 +528,7 @@ and reveal potential pattern</p></td>
           <p class="section-desc"></p><p>Co-expression and differential expression analysis of EIF4F subunits</p>
         </th>
       </tr></tbody><tbody><tr><th colspan="2">
-          <h3 id="exported-function">exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
+          <h3 id="exported-function">Exported function <a href="#exported-function" class="anchor" aria-hidden="true"></a></h3>
           <p class="section-desc"></p>
         </th>
       </tr></tbody><tbody><tr><td>

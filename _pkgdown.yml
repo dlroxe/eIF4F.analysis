@@ -17,13 +17,14 @@ navbar:
     - search
     - github
 reference:
-- title: Initialization
-- subtitle: Directory initialization
+- title: Directory initialization
   contents: initialize_dir
-- subtitle: Format initialization
+- title: Format initialization
   contents: initialize_format
-- subtitle: Data initialization
+
+- title: Data initialization
   desc: reads datasets from the download data files
+- subtitle: Exported function
   contents:
   - initialize_data
   - initialize_cnv_data
@@ -31,6 +32,17 @@ reference:
   - initialize_survival_data
   - initialize_proteomics_data
   - initialize_phosphoproteomics_data
+- subtitle: Internal functions for processing CNV related datasets
+  contents:
+  - .get_TCGA_CNV
+  - .get_TCGA_CNV_value
+  - .get_TCGA_CNV_ratio
+- subtitle: Internal functions for processing DEG related datasets
+  contents: .get_TCGA_GTEX_RNAseq
+- subtitle: Internal functions for processing survival related datasets
+  contents: .get_TCGA_RNAseq
+
+
 - title: CNV analysis
   desc: CNV analyses of EIF genes in TCGA data
 - subtitle: Exported function
@@ -43,19 +55,14 @@ reference:
 - subtitle: Internal functions for CNV data analysis
   contents:
   - .CNV_all_cancer
-  - .CNV_sum_barplot
   - .CNV_ind_cancer
+  - .CNVratio_tumor
 - subtitle: Internal functions for plotting
   contents:
+  - .CNV_sum_barplot
   - .CNV_barplot
   - .matrix_plot
-  - .CNVratio_tumor
   - .CNVratio_boxplot
-- subtitle: Internal functions for processing CNV related datasets
-  contents:
-  - .get_TCGA_CNV
-  - .get_TCGA_CNV_value
-  - .get_TCGA_CNV_ratio
 - title: DEG analysis
   desc: Differential gene expression (ratio) analysis of EIF4F genes in TCGA
 - subtitle: Exported function
@@ -78,11 +85,10 @@ reference:
   - .RNAseq_boxplot
   - .violinplot
   - .RNAratio_boxplot
-- subtitle: Internal functions for processing DEG related datasets
-  contents: .get_TCGA_GTEX_RNAseq
+
 - title: Survival analysis
   desc: Survival analyses on EIF4F gene expression in TCGA tumors
-- subtitle: exported function
+- subtitle: Exported function
   contents: EIF4F_Survival_analysis
 - subtitle: Internal composite functions to call survival analysis and plotting
   contents:
@@ -95,17 +101,19 @@ reference:
   - .multivariable_analysis
 - subtitle: Internal functions for survival analysis plotting
   contents: .forest_graph
-- subtitle: Internal functions for processing survival related datasets
-  contents: .get_TCGA_RNAseq
+
 - title: PCA analysis
   desc: PCA on EIF4F expression in GTEx, or/and TCGA studies
-- subtitle: exported function
+- subtitle: Exported function
   contents: EIF4F_PCA
 - subtitle: Internal composite functions to call call PCA and plot results
   contents:
   - .plot_PCA_TCGA_GTEX
   - .plot_PCA_TCGA_GTEX_tumor
   - .plot_PCA_CPTAC_LUAD
+- subtitle: Internal functions to select RNA-seq data from specific study groups for
+    PCA
+  contents: .get_df_subset
 - subtitle: Internal functions to perform PCA or imputed PCA
   contents:
   - .RNAseq_PCA
@@ -115,9 +123,7 @@ reference:
   contents:
   - .biplot
   - .selected_biplot
-- subtitle: Internal functions to select RNA-seq data from specific study groups for
-    PCA
-  contents: .get_df_subset
+
 - title: COR analysis
   desc: Analyses on EIF4F correlating genes (CORs)
 - subtitle: Exported function
@@ -141,9 +147,10 @@ reference:
   - .CORs_coeff_heatmap
   - .get_cluster_genes
   - .pathway_dotplot
+
 - title: RNA protein Correlation analysis
   desc: Correlation between RNA and protein levels for EIF4F
-- subtitle: exported function
+- subtitle: Exported function
   contents: EIF4F_RNA_pro_correlation
 - subtitle: Internal composite function to perform RNA protein correlation
   contents:
@@ -155,9 +162,10 @@ reference:
   - .get_CCLE_Proteomics_subset
 - subtitle: Internal functions to plot RNA protein correlation
   contents: .RNApro_scatterplot
+
 - title: Phoproteomics and phosphoproteomics analysis
   desc: Co-expression and differential expression analysis of EIF4F subunits
-- subtitle: exported function
+- subtitle: Exported function
   contents: EIF4F_Proteomics_analysis
 - subtitle: Internal composite function for coexpression and differential expression
     analysis
