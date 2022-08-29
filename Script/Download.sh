@@ -1,10 +1,9 @@
 #!/bin/sh
 
-
 ## download all datasets from the following weblinks
 
 ### create the directory to store all downloaded datasets
-readonly DATA_FILE_DIRECTORY="${HOME}/Downloads/EIF_data"
+readonly DATA_FILE_DIRECTORY="${HOME}/Downloads/EIF_data" ## default directory for data download
 mkdir -p "${DATA_FILE_DIRECTORY}"
 
 
@@ -41,17 +40,16 @@ wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/RNA.xlsx -P
 #### CPTAC LUAD Proteomics (Gillette et al., 2020)
 wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Protein.xlsx -P "${DATA_FILE_DIRECTORY}"
 
-#### CPTAC LUAD Proteomics
-wget https://cptc-xfer.uis.georgetown.edu/publicData/Phase_III_Data/CPTAC_LUAD_S046/CPTAC_LUAD_Proteome_CDAP_Protein_Report.r1/CPTAC3_Lung_Adeno_Carcinoma_Proteome.tmt10.tsv -P "${DATA_FILE_DIRECTORY}"
-
 #### CPTAC LUAD Phosproteomics (Gillette et al., 2020)
 wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Phos.xlsx -P "${DATA_FILE_DIRECTORY}"
 
 #### CPTAC LUAD Sample Annotation
-wget https://cptc-xfer.uis.georgetown.edu/publicData/Phase_III_Data/CPTAC_LUAD_S046/CPTAC_LUAD_metadata/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
+# S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx from PDC Study ID: PDC000153 
+wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
 
-#### CPTAC Clinical Data
-wget https://cptc-xfer.uis.georgetown.edu/publicData/Phase_III_Data/CPTAC_LUAD_S046/CPTAC_LUAD_metadata/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
+#### CPTAC LUAD Clinical Data
+# S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx from PDC Study ID: PDC000153 
+wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
 
 ### CCLE DATA
 
