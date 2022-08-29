@@ -178,17 +178,16 @@ wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/RNA.xlsx -P
 #### CPTAC LUAD Proteomics (Gillette et al., 2020)
 wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Protein.xlsx -P "${DATA_FILE_DIRECTORY}"
 
-#### CPTAC LUAD Proteomics: CPTAC3_Lung_Adeno_Carcinoma_Proteome.tmt10.tsv from PDC Study ID: PDC000153 
-#  CPTAC3_Lung_Adeno_Carcinoma_Proteome.tmt10.tsv from PDC Study ID: PDC000153 
-
 #### CPTAC LUAD Phosproteomics (Gillette et al., 2020)
 wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Phos.xlsx -P "${DATA_FILE_DIRECTORY}"
 
-#### CPTAC LUAD Sample Annotation: S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx from PDC Study ID: PDC000153 
+#### CPTAC LUAD Sample Annotation
 # S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx from PDC Study ID: PDC000153 
+wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
 
-#### CPTAC Clinical Data: S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx from PDC Study ID: PDC000153 
+#### CPTAC LUAD Clinical Data
 # S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx from PDC Study ID: PDC000153 
+wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
 
 ### CCLE DATA
 

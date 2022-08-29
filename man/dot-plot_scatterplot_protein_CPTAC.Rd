@@ -11,6 +11,10 @@ A composite function for coexpression and differential
 expression analysis
 }
 \details{
+This function uses data to calculate the correlation coefficients between
+protein and RNA levels, and plot the result with the function
+\code{\link[=.RNApro_scatterplot]{.RNApro_scatterplot()}}
+
 This function is not accessible to the user and will not show at the users'
 workspace. It can only be called by the exported \code{\link[=EIF4F_Proteomics_analysis]{EIF4F_Proteomics_analysis()}}
 function.
