@@ -448,8 +448,8 @@
 #' * generates subset biplots for PCA results of combined TCGA tumors and
 #'  GTEx healthy tissues with [.selected_biplot()] function
 #'
-#' This function should not be used directly, only inside [EIF4F_PCA()]
-#'  function.
+#' This function is not accessible to the user and will not show at the users'
+#'  workspace. It can only be called by the exported [EIF4F_PCA()] function.
 #'
 #' Side effects:
 #'
@@ -618,8 +618,8 @@
 #' * performs PCA on combined tumor and healthy samples by [.RNAseq_PCA()],
 #' * plots results as biplot, scree and matrix plots by [.biplot()]
 #'
-#' This function should not be used directly, only inside [EIF4F_PCA()]
-#'  function.
+#' This function is not accessible to the user and will not show at the users'
+#'  workspace. It can only be called by the exported [EIF4F_PCA()] function.
 #'
 #' Side effects:
 #'
@@ -712,8 +712,8 @@
 #'  matched healthy lung tissues, by [.protein_imputePCA()].
 #' * plots results as biplot, scree and matrix plots by [.biplot()]
 #'
-#' This function should not be used directly, only inside [EIF4F_PCA()]
-#'  function.
+#' This function is not accessible to the user and will not show at the users'
+#'  workspace. It can only be called by the exported [EIF4F_PCA()] function.
 #'
 #' Side effects:
 #'

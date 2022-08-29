@@ -27,8 +27,9 @@ and multivariable regression models with \code{\link[=.multivariable_analysis]{.
 \item plots the results as a forest graph with \code{\link[=.forest_graph]{.forest_graph()}}
 }
 
-This function should not be used directly, only inside
-\code{\link[=EIF4F_Survival_analysis]{EIF4F_Survival_analysis()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_Survival_analysis]{EIF4F_Survival_analysis()}}
+function.
 
 Side effects:
 

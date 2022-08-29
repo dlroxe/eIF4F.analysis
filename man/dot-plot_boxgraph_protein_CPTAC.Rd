@@ -25,10 +25,12 @@ from \code{\link[=.get_CPTAC_LUAD_Phosproteomics_subset]{.get_CPTAC_LUAD_Phospro
 tumor stages, and plot the results with the function \code{\link[=.protein_boxplot]{.protein_boxplot()}}
 }
 
-This function should not be used directly, only inside
-\code{\link[=EIF4F_Proteomics_analysis]{EIF4F_Proteomics_analysis()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_Proteomics_analysis]{EIF4F_Proteomics_analysis()}}
+function.
 
 Side effects:
+
 (1) boxplot to show the different expression of (phospho)protein
 across different clinical tumor stages
 }

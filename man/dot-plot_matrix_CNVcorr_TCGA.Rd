@@ -16,14 +16,15 @@ from all TCGA cancer type combined
 \details{
 This function
 \itemize{
-\item selects unthreshold CNV values from only EIF4F gene
-in the data frame \code{TCGA_CNV_value} prepared from \code{\link[=initialize_cnv_data]{initialize_cnv_data()}}.
+\item selects a subset of unthreshold CNV values of only EIF4F gene
+from the data frame \code{TCGA_CNV_value} - a global variable generated from \code{\link[=initialize_cnv_data]{initialize_cnv_data()}}.
 \item uses the subset data to calculate the correlation coefficients
 between every two genes and plot the correlation matrix with the function
 \code{\link[=.matrix_plot]{.matrix_plot()}}
 }
 
-It should not be used directly, only inside \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
 
 side effect: the correlation matrix plot on screen and as saved pdf files
 to show co-occurrence of \code{gene_list} CNV status in TCGA tumors

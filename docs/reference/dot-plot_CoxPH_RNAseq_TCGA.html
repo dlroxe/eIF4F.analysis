@@ -92,8 +92,9 @@ the dataset <code>TCGA_RNAseq_OS_sampletype</code> prepared from
 <li><p>makes univariable regression models with <code><a href="dot-univariable_analysis.html">.univariable_analysis()</a></code>
 and multivariable regression models with <code><a href="dot-multivariable_analysis.html">.multivariable_analysis()</a></code>.</p></li>
 <li><p>plots the results as a forest graph with <code><a href="dot-forest_graph.html">.forest_graph()</a></code></p></li>
-</ul><p>This function should not be used directly, only inside
-<code><a href="EIF4F_Survival_analysis.html">EIF4F_Survival_analysis()</a></code> function.</p>
+</ul><p>This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported <code><a href="EIF4F_Survival_analysis.html">EIF4F_Survival_analysis()</a></code>
+function.</p>
 <p>Side effects:</p>
 <p>(1) forest graphs on screen and as pdf file to show the relation between
 survival of TCGA patients and expression of <code>gene_list</code> in their tumors

@@ -49,14 +49,16 @@ This function
 \itemize{
 \item calculates RNA ratio across individual tumor types from all cancers with
 the function \code{\link[=.RNAratio_calculation]{.RNAratio_calculation()}},
-\item select the ratio data with \code{\link[=.RNAratio_selection]{.RNAratio_selection()}} and make boxplot with
+\item selects the ratio data with \code{\link[=.RNAratio_selection]{.RNAratio_selection()}} and make boxplot with
 \code{\link[=.RNAratio_boxplot]{.RNAratio_boxplot()}}.
 \item compares RNA ratio in primary, metastatic tumors vs adjacent
 normal tissues from all TCGA cancer types combined with the function
 \code{\link[=.RNAratio_tumortype]{.RNAratio_tumortype()}} and plots with \code{\link[=.violinplot]{.violinplot()}}.
 }
 
-It should not be used directly, only inside \code{\link[=EIF4F_DEG_analysis]{EIF4F_DEG_analysis()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_DEG_analysis]{EIF4F_DEG_analysis()}}
+function.
 
 Side effects:
 

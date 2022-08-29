@@ -21,7 +21,6 @@ reference:
   contents: initialize_dir
 - title: Format initialization
   contents: initialize_format
-
 - title: Data initialization
   desc: reads datasets from the download data files
 - subtitle: Exported function
@@ -41,8 +40,6 @@ reference:
   contents: .get_TCGA_GTEX_RNAseq
 - subtitle: Internal functions for processing survival related datasets
   contents: .get_TCGA_RNAseq
-
-
 - title: CNV analysis
   desc: CNV analyses of EIF genes in TCGA data
 - subtitle: Exported function
@@ -85,7 +82,6 @@ reference:
   - .RNAseq_boxplot
   - .violinplot
   - .RNAratio_boxplot
-
 - title: Survival analysis
   desc: Survival analyses on EIF4F gene expression in TCGA tumors
 - subtitle: Exported function
@@ -101,7 +97,6 @@ reference:
   - .multivariable_analysis
 - subtitle: Internal functions for survival analysis plotting
   contents: .forest_graph
-
 - title: PCA analysis
   desc: PCA on EIF4F expression in GTEx, or/and TCGA studies
 - subtitle: Exported function
@@ -123,7 +118,6 @@ reference:
   contents:
   - .biplot
   - .selected_biplot
-
 - title: COR analysis
   desc: Analyses on EIF4F correlating genes (CORs)
 - subtitle: Exported function
@@ -147,7 +141,6 @@ reference:
   - .CORs_coeff_heatmap
   - .get_cluster_genes
   - .pathway_dotplot
-
 - title: RNA protein Correlation analysis
   desc: Correlation between RNA and protein levels for EIF4F
 - subtitle: Exported function
@@ -162,7 +155,6 @@ reference:
   - .get_CCLE_Proteomics_subset
 - subtitle: Internal functions to plot RNA protein correlation
   contents: .RNApro_scatterplot
-
 - title: Phoproteomics and phosphoproteomics analysis
   desc: Co-expression and differential expression analysis of EIF4F subunits
 - subtitle: Exported function

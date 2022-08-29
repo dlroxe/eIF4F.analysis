@@ -25,8 +25,8 @@ a list output with four elements:
 \description{
 This function
 \itemize{
-\item takes the data frame
-\code{.TCGA_GTEX_RNAseq_sampletype_subset} and \code{sample_type} information
+\item takes the specific data frames
+\code{.TCGA_GTEX_RNAseq_sampletype_subset} and \code{sample_type} that are
 generated inside \code{\link[=.plot_Corr_RNAseq_TCGA_GTEX]{.plot_Corr_RNAseq_TCGA_GTEX()}}
 \item calculates the correlation coefficiency between each EIF4F gene
 and the rest of cellular mRNAs with \code{\link[=.correlation_coefficient]{.correlation_coefficient()}}

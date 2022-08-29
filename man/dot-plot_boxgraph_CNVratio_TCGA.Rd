@@ -16,16 +16,17 @@ from individual TCGA cancer types.
 \details{
 This function
 \itemize{
-\item selects CNV and sample type data
-from only EIF4F gene in the data frame \code{TCGA_CNVratio_sampletype}
-prepared from \code{\link[=initialize_cnv_data]{initialize_cnv_data()}}.
-\item uses the subset data \code{.TCGA_CNVratio_sampletype_subset}
-to perform CNV status analysis for each gene across
-all tumors types with the function \code{\link[=.CNVratio_tumor]{.CNVratio_tumor()}}
-and plots the CNV results and \code{\link[=.CNVratio_boxplot]{.CNVratio_boxplot()}}
+\item selects a subset of CNV and sample type data of only EIF4F gene from the
+data frame \code{TCGA_CNVratio_sampletype} - a global variable generated from
+\code{\link[=initialize_cnv_data]{initialize_cnv_data()}}.
+\item uses the subset data \code{.TCGA_CNVratio_sampletype_subset} to perform CNV
+status analysis for each gene across all tumors types with the internal
+function \code{\link[=.CNVratio_tumor]{.CNVratio_tumor()}} and plots the CNV results with the internal
+function \code{\link[=.CNVratio_boxplot]{.CNVratio_boxplot()}}.
 }
 
-It should not be used directly, only inside \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
 
 Side effects:
 

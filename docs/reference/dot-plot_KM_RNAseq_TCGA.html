@@ -95,8 +95,9 @@ the dataset <code>TCGA_RNAseq_OS_sampletype</code> prepared from
 <code><a href="initialize_survival_data.html">initialize_survival_data()</a></code>.</p></li>
 <li><p>compares the survival data from patients with top or bottom percents of
 gene expression, and plot the results as a KM curve plot by <code><a href="dot-KM_curve.html">.KM_curve()</a></code>.</p></li>
-</ul><p>This function should not be used directly, only inside
-<code><a href="EIF4F_Survival_analysis.html">EIF4F_Survival_analysis()</a></code> function.</p>
+</ul><p>This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported <code><a href="EIF4F_Survival_analysis.html">EIF4F_Survival_analysis()</a></code>
+function.</p>
 <p>Side effects:</p>
 <p>(1) KM curve plots on screen and as pdf files to correlate patient survival
 probability with expression of <code>gene_name</code> in their tumors</p>

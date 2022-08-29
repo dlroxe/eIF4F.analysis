@@ -600,8 +600,9 @@ initialize_survival_data <- function() {
 #'  * compares the survival data from patients with top or bottom percents of
 #'   gene expression, and plot the results as a KM curve plot by [.KM_curve()].
 #'
-#' This function should not be used directly, only inside
-#'  [EIF4F_Survival_analysis()] function.
+#' This function is not accessible to the user and will not show at the users'
+#'  workspace. It can only be called by the exported [EIF4F_Survival_analysis()]
+#'  function.
 #'
 #' Side effects:
 #'
@@ -671,8 +672,9 @@ initialize_survival_data <- function() {
 #'  and multivariable regression models with [.multivariable_analysis()].
 #' * plots the results as a forest graph with [.forest_graph()]
 #'
-#' This function should not be used directly, only inside
-#'  [EIF4F_Survival_analysis()] function.
+#' This function is not accessible to the user and will not show at the users'
+#'  workspace. It can only be called by the exported [EIF4F_Survival_analysis()]
+#'  function.
 #'
 #' Side effects:
 #'
@@ -792,12 +794,12 @@ initialize_survival_data <- function() {
 #'
 #' @details
 #'
-#' This function runs two composite functions together with inputs:
+#' This function runs two internal composite functions together with inputs:
 #'
 #' * [.plot_KM_RNAseq_TCGA()]
 #' * [.plot_CoxPH_RNAseq_TCGA()]
 #'
-#' side effects:
+#' Side effects:
 #'
 #' (1) KM curve plots on screen and as pdf files to correlate patient survival
 #'  probability with gene expression in their tumors

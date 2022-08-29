@@ -27,8 +27,8 @@ This function
 GTEx healthy tissues with \code{\link[=.selected_biplot]{.selected_biplot()}} function
 }
 
-This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}}
-function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_PCA]{EIF4F_PCA()}} function.
 
 Side effects:
 

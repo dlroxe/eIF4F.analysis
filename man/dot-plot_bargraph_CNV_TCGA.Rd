@@ -16,23 +16,25 @@ cancer types combined and in tumors from individual TCGA cancer types
 \details{
 This function
 \itemize{
-\item selects CNV and sample type data from only
-EIF4F gene in the data frame \code{TCGA_CNV_sampletype} prepared
-from \code{\link[=initialize_cnv_data]{initialize_cnv_data()}}.
+\item selects a subset of CNV and sample type data of only EIF4F gene from the
+data frame \code{TCGA_CNV_sampletype} - a global variable generated from
+\code{\link[=initialize_cnv_data]{initialize_cnv_data()}}.
 \item uses the subset data \code{.TCGA_CNV_sampletype_subset} to perform the
-CNV status analysis of all inquired genes with the functions
+CNV status analysis of all inquired genes with the internal functions
 \code{\link[=.CNV_all_cancer]{.CNV_all_cancer()}} and plot the results as a bar plot
-with \code{\link[=.CNV_sum_barplot]{.CNV_sum_barplot()}}
-\item uses the same subset data to perform CNV status analysis for each
-gene across all tumors types with the function \code{\link[=.CNV_ind_cancer]{.CNV_ind_cancer()}}
-and plots the CNV results and \code{\link[=.CNV_barplot]{.CNV_barplot()}}
+with the internal function \code{\link[=.CNV_sum_barplot]{.CNV_sum_barplot()}}.
+\item uses the same subset data \code{.TCGA_CNV_sampletype_subset} to perform CNV
+status analysis for each gene across all tumors types by the internal
+function \code{\link[=.CNV_ind_cancer]{.CNV_ind_cancer()}} and plots the CNV results by the internal
+function \code{\link[=.CNV_barplot]{.CNV_barplot()}}.
 }
 
-It should not be used directly, only inside \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_CNV_analysis]{EIF4F_CNV_analysis()}} function.
 
 Side effects:
 
-(1) the stacked bar plots on screen and as pdf file to show the summary
+(1) the stacked bar plots on screen and as pdf files to show the summary
 table of the CNV statuses of all \code{gene_list} in TCGA tumors
 
 (2) stacked bar plots on screen and as saved pdf files to show

@@ -11,7 +11,7 @@ A wrapper function to call two composite functions for protein
 coexpression and differential expression.
 }
 \details{
-This function run the composite functions \code{\link[=.plot_scatterplot_protein_CPTAC]{.plot_scatterplot_protein_CPTAC()}}
+This function run the internal composite functions \code{\link[=.plot_scatterplot_protein_CPTAC]{.plot_scatterplot_protein_CPTAC()}}
 and \code{\link[=.plot_boxgraph_protein_CPTAC]{.plot_boxgraph_protein_CPTAC()}} with EIF4F gene name as inputs.
 
 Side effects:

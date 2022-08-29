@@ -8,7 +8,7 @@ initialize_phosphoproteomics_data()
 }
 \description{
 A wrapper function reads all phosphoproteomics related datasets
-from CPTAC LUAD.
+from CPTAC LUAD and its side effects are two global variables.
 }
 \details{
 Side effects:

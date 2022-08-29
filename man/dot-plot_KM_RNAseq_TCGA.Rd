@@ -28,8 +28,9 @@ the dataset \code{TCGA_RNAseq_OS_sampletype} prepared from
 gene expression, and plot the results as a KM curve plot by \code{\link[=.KM_curve]{.KM_curve()}}.
 }
 
-This function should not be used directly, only inside
-\code{\link[=EIF4F_Survival_analysis]{EIF4F_Survival_analysis()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_Survival_analysis]{EIF4F_Survival_analysis()}}
+function.
 
 Side effects:
 

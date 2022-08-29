@@ -24,8 +24,9 @@ protein and RNA levels, and plot the result with the function
 \code{\link[=.RNApro_scatterplot]{.RNApro_scatterplot()}}
 }
 
-This function should not be used directly, only inside
-\code{\link[=EIF4F_RNA_pro_correlation]{EIF4F_RNA_pro_correlation()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_RNA_pro_correlation]{EIF4F_RNA_pro_correlation()}}
+function.
 
 Side effects:
 

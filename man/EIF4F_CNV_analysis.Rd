@@ -7,10 +7,11 @@
 EIF4F_CNV_analysis()
 }
 \description{
-A wrapper function to call all composite functions for CNV analysis with inputs
+A wrapper function to call all internal composite functions for CNV analysis with
+provided inputs
 }
 \details{
-This function run three composite functions together with inputs:
+This function run three internal composite functions together with inputs:
 \itemize{
 \item \code{\link[=.plot_bargraph_CNV_TCGA]{.plot_bargraph_CNV_TCGA()}}
 \item \code{\link[=.plot_matrix_CNVcorr_TCGA]{.plot_matrix_CNVcorr_TCGA()}}

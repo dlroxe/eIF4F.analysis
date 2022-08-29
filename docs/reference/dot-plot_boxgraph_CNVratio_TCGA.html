@@ -79,14 +79,15 @@ from individual TCGA cancer types.</p>
 </dl></div>
     <div id="details">
     <h2>Details</h2>
-    <p>This function</p><ul><li><p>selects CNV and sample type data
-from only EIF4F gene in the data frame <code>TCGA_CNVratio_sampletype</code>
-prepared from <code><a href="initialize_cnv_data.html">initialize_cnv_data()</a></code>.</p></li>
-<li><p>uses the subset data <code>.TCGA_CNVratio_sampletype_subset</code>
-to perform CNV status analysis for each gene across
-all tumors types with the function <code><a href="dot-CNVratio_tumor.html">.CNVratio_tumor()</a></code>
-and plots the CNV results and <code><a href="dot-CNVratio_boxplot.html">.CNVratio_boxplot()</a></code></p></li>
-</ul><p>It should not be used directly, only inside <code><a href="EIF4F_CNV_analysis.html">EIF4F_CNV_analysis()</a></code> function.</p>
+    <p>This function</p><ul><li><p>selects a subset of CNV and sample type data of only EIF4F gene from the
+data frame <code>TCGA_CNVratio_sampletype</code> - a global variable generated from
+<code><a href="initialize_cnv_data.html">initialize_cnv_data()</a></code>.</p></li>
+<li><p>uses the subset data <code>.TCGA_CNVratio_sampletype_subset</code> to perform CNV
+status analysis for each gene across all tumors types with the internal
+function <code><a href="dot-CNVratio_tumor.html">.CNVratio_tumor()</a></code> and plots the CNV results with the internal
+function <code><a href="dot-CNVratio_boxplot.html">.CNVratio_boxplot()</a></code>.</p></li>
+</ul><p>This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported <code><a href="EIF4F_CNV_analysis.html">EIF4F_CNV_analysis()</a></code> function.</p>
 <p>Side effects:</p>
 <p>(1) the box plots on screen and as saved pdf files to show CNV ratio of
 <code>gene_list</code> in TCGA tumors vs normals</p>

@@ -22,7 +22,7 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' @title Read all phosphoproteomics related datasets from CPTAC LUAD
 #'
 #' @description A wrapper function reads all phosphoproteomics related datasets
-#'  from CPTAC LUAD.
+#'  from CPTAC LUAD and its side effects are two global variables.
 #'
 #' @details Side effects:
 #'
@@ -394,8 +394,15 @@ initialize_phosphoproteomics_data <- function() {
 #' @description A composite function for coexpression and differential
 #'  expression analysis
 #'
-#' @details This function should not be used directly, only inside
-#'  [EIF4F_Proteomics_analysis()] function.
+#' @details
+#'
+#' This function uses data to calculate the correlation coefficients between
+#'  protein and RNA levels, and plot the result with the function
+#'  [.RNApro_scatterplot()]
+#'
+#' This function is not accessible to the user and will not show at the users'
+#' workspace. It can only be called by the exported [EIF4F_Proteomics_analysis()]
+#' function.
 #'
 #' Side effects:
 #'
@@ -496,10 +503,12 @@ initialize_phosphoproteomics_data <- function() {
 #' * uses the combined data to compare the abundance across different
 #'  tumor stages, and plot the results with the function [.protein_boxplot()]
 #'
-#' This function should not be used directly, only inside
-#'  [EIF4F_Proteomics_analysis()] function.
+#' This function is not accessible to the user and will not show at the users'
+#' workspace. It can only be called by the exported [EIF4F_Proteomics_analysis()]
+#' function.
 #'
 #' Side effects:
+#'
 #' (1) boxplot to show the different expression of (phospho)protein
 #'  across different clinical tumor stages
 #'
@@ -567,7 +576,7 @@ initialize_phosphoproteomics_data <- function() {
 #'
 #' @details
 #'
-#' This function run the composite functions [.plot_scatterplot_protein_CPTAC()]
+#' This function run the internal composite functions [.plot_scatterplot_protein_CPTAC()]
 #' and [.plot_boxgraph_protein_CPTAC()] with EIF4F gene name as inputs.
 #'
 #' Side effects:

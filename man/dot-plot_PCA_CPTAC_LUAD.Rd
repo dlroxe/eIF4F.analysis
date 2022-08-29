@@ -24,8 +24,8 @@ matched healthy lung tissues, by \code{\link[=.protein_imputePCA]{.protein_imput
 \item plots results as biplot, scree and matrix plots by \code{\link[=.biplot]{.biplot()}}
 }
 
-This function should not be used directly, only inside \code{\link[=EIF4F_PCA]{EIF4F_PCA()}}
-function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_PCA]{EIF4F_PCA()}} function.
 
 Side effects:
 

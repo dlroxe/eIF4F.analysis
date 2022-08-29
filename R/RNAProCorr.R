@@ -149,8 +149,9 @@ initialize_proteomics_data <- function() {
 
 #' @title Select subset of CCLE RNAseq data
 #'
-#' @description A helper function selects the CCLE RNAseq data of the input gene
-#'  `EIF`.
+#' @description An internal helper function selects the data of input gene
+#'  `EIF` from the data frame `CCLE_RNAseq` - a global variable generated from
+#'  [initialize_proteomics_data].
 #'
 #' @details The function should not be used directly, only inside
 #'  [.plot_scatter_RNApro_CCLE()] function.
@@ -177,8 +178,9 @@ initialize_proteomics_data <- function() {
 
 #' @title Select subset of CCLE proteomics data
 #'
-#' @description A helper function selects the CCLE proteomics data from the
-#'  input gene `gene_name`.
+#' @description A helper function selects the data of input gene `gene_name`.
+#' from the data frame `CCLE_Proteomics` - a global variable generated from
+#'  [initialize_proteomics_data].
 #'
 #' @details The function should not be used directly, only inside
 #'  [.plot_scatter_RNApro_CCLE()] function.
@@ -302,21 +304,23 @@ initialize_proteomics_data <- function() {
 #'
 #' @description
 #'
-#' A composite function generates correlation scatter plot for eIF4F RNAseq and
+#' An internal composite function generates correlation scatter plot for eIF4F RNAseq and
 #' proteomics data from CCLE.
 #'
 #' @details This function
 #'
-#' * merges the CCLE RNAseq values from EIF4F genes in the data frame
-#'  prepared from [.get_CCLE_RNAseq_subset()] and proteomics data of the same
-#'  protein in the data frame prepared from [.get_CCLE_Proteomics_subset()].
+#' * merges the CCLE RNAseq values of EIF4F genes in the data frame prepared
+#'  from [.get_CCLE_RNAseq_subset()], the annotation data of CCLE `CCLE_Anno`,
+#'  and proteomics data of the same EIF4F protein in the data frame prepared
+#'  from [.get_CCLE_Proteomics_subset()].
 #'
 #' * uses the combined data to calculate the correlation coefficients
 #'  between protein and RNA levels, and plot the result with the function
 #'  [.RNApro_scatterplot()]
 #'
-#' This function should not be used directly, only inside
-#' [EIF4F_RNA_pro_correlation()] function.
+#' This function is not accessible to the user and will not show at the users'
+#' workspace. It can only be called by the exported [EIF4F_RNA_pro_correlation()]
+#' function.
 #'
 #' Side effects:
 #'
@@ -366,8 +370,9 @@ initialize_proteomics_data <- function() {
 #'  protein and RNA levels, and plot the result with the function
 #'  [.RNApro_scatterplot()]
 #'
-#' This function should not be used directly, only inside
-#'  [EIF4F_RNA_pro_correlation()] function.
+#' This function is not accessible to the user and will not show at the users'
+#' workspace. It can only be called by the exported [EIF4F_RNA_pro_correlation()]
+#' function.
 #'
 #' Side effects:
 #'
@@ -417,7 +422,7 @@ initialize_proteomics_data <- function() {
 #'
 #' @details
 #'
-#' This function run the composite functions [.plot_scatter_RNApro_CCLE()] and
+#' This function run the internal composite functions [.plot_scatter_RNApro_CCLE()] and
 #'  [.plot_scatter_RNApro_LUAD()] with EIF4F gene name as inputs.
 #'
 #' Side effects:

@@ -988,7 +988,9 @@ initialize_RNAseq_data <- function() {
 #'  types combined with the function [.RNAseq_tumortype()] and plots with
 #'  [.violinplot()].
 #'
-#' It should not be used directly, only inside [EIF4F_DEG_analysis()] function.
+#' This function is not accessible to the user and will not show at the users'
+#'  workspace. It can only be called by the exported [EIF4F_DEG_analysis()]
+#'  function.
 #'
 #' Side effects:
 #'
@@ -1072,13 +1074,15 @@ initialize_RNAseq_data <- function() {
 #'
 #' * calculates RNA ratio across individual tumor types from all cancers with
 #'  the function [.RNAratio_calculation()],
-#' * select the ratio data with [.RNAratio_selection()] and make boxplot with
+#' * selects the ratio data with [.RNAratio_selection()] and make boxplot with
 #'  [.RNAratio_boxplot()].
 #' * compares RNA ratio in primary, metastatic tumors vs adjacent
 #'  normal tissues from all TCGA cancer types combined with the function
 #'  [.RNAratio_tumortype()] and plots with [.violinplot()].
 #'
-#' It should not be used directly, only inside [EIF4F_DEG_analysis()] function.
+#' This function is not accessible to the user and will not show at the users'
+#'  workspace. It can only be called by the exported [EIF4F_DEG_analysis()]
+#'  function.
 #'
 #' Side effects:
 #'

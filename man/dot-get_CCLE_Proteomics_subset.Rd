@@ -13,8 +13,9 @@
 a data frame of CCLE proteomics data from the input \code{gene_name}
 }
 \description{
-A helper function selects the CCLE proteomics data from the
-input gene \code{gene_name}.
+A helper function selects the data of input gene \code{gene_name}.
+from the data frame \code{CCLE_Proteomics} - a global variable generated from
+\link{initialize_proteomics_data}.
 }
 \details{
 The function should not be used directly, only inside

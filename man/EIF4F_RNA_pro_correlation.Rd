@@ -11,7 +11,7 @@ A wrapper function to call all composite functions for RNA and protein
 correlation with inputs.
 }
 \details{
-This function run the composite functions \code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} and
+This function run the internal composite functions \code{\link[=.plot_scatter_RNApro_CCLE]{.plot_scatter_RNApro_CCLE()}} and
 \code{\link[=.plot_scatter_RNApro_LUAD]{.plot_scatter_RNApro_LUAD()}} with EIF4F gene name as inputs.
 
 Side effects:

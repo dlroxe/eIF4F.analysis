@@ -13,8 +13,9 @@
 a data frame of CCLE RNAseq data from the input \code{gene_name} genes
 }
 \description{
-A helper function selects the CCLE RNAseq data of the input gene
-\code{EIF}.
+An internal helper function selects the data of input gene
+\code{EIF} from the data frame \code{CCLE_RNAseq} - a global variable generated from
+\link{initialize_proteomics_data}.
 }
 \details{
 The function should not be used directly, only inside

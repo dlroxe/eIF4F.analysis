@@ -9,7 +9,7 @@
 # (3) composite functions to execute a pipeline of functions to select related
 #  CNV data with supply of EIF4F gene names for analysis and plotting.
 #
-# (4) wrapper function to call all master functions with inputs
+# (4) wrapper function to call all composite functions with inputs
 #
 
 ## Internal function for data initialization of CNV related datasets ============
@@ -831,22 +831,24 @@ initialize_cnv_data <- function() {
 #'
 #' @details  This function
 #'
-#' * selects CNV and sample type data from only
-#'  EIF4F gene in the data frame `TCGA_CNV_sampletype` prepared
-#'  from [initialize_cnv_data()].
+#' * selects a subset of CNV and sample type data of only EIF4F gene from the
+#'  data frame `TCGA_CNV_sampletype` - a global variable generated from
+#'  [initialize_cnv_data()].
 #' * uses the subset data `.TCGA_CNV_sampletype_subset` to perform the
-#'  CNV status analysis of all inquired genes with the functions
+#'  CNV status analysis of all inquired genes with the internal functions
 #'  [.CNV_all_cancer()] and plot the results as a bar plot
-#'  with [.CNV_sum_barplot()]
-#' * uses the same subset data to perform CNV status analysis for each
-#'  gene across all tumors types with the function [.CNV_ind_cancer()]
-#'  and plots the CNV results and [.CNV_barplot()]
+#'  with the internal function [.CNV_sum_barplot()].
+#' * uses the same subset data `.TCGA_CNV_sampletype_subset` to perform CNV
+#'  status analysis for each gene across all tumors types by the internal
+#'  function [.CNV_ind_cancer()] and plots the CNV results by the internal
+#'  function [.CNV_barplot()].
 #'
-#' It should not be used directly, only inside [EIF4F_CNV_analysis()] function.
+#' This function is not accessible to the user and will not show at the users'
+#' workspace. It can only be called by the exported [EIF4F_CNV_analysis()] function.
 #'
 #' Side effects:
 #'
-#' (1) the stacked bar plots on screen and as pdf file to show the summary
+#' (1) the stacked bar plots on screen and as pdf files to show the summary
 #'  table of the CNV statuses of all `gene_list` in TCGA tumors
 #'
 #' (2) stacked bar plots on screen and as saved pdf files to show
@@ -897,13 +899,14 @@ initialize_cnv_data <- function() {
 #'
 #' @details This function
 #'
-#' * selects unthreshold CNV values from only EIF4F gene
-#' in the data frame `TCGA_CNV_value` prepared from [initialize_cnv_data()].
+#' * selects a subset of unthreshold CNV values of only EIF4F gene
+#' from the data frame `TCGA_CNV_value` - a global variable generated from [initialize_cnv_data()].
 #' * uses the subset data to calculate the correlation coefficients
 #' between every two genes and plot the correlation matrix with the function
 #' [.matrix_plot()]
 #'
-#' It should not be used directly, only inside [EIF4F_CNV_analysis()] function.
+#' This function is not accessible to the user and will not show at the users'
+#' workspace. It can only be called by the exported [EIF4F_CNV_analysis()] function.
 #'
 #' side effect: the correlation matrix plot on screen and as saved pdf files
 #'  to show co-occurrence of `gene_list` CNV status in TCGA tumors
@@ -936,15 +939,16 @@ initialize_cnv_data <- function() {
 #'
 #' @details This function
 #'
-#' * selects CNV and sample type data
-#' from only EIF4F gene in the data frame `TCGA_CNVratio_sampletype`
-#' prepared from [initialize_cnv_data()].
-#' * uses the subset data `.TCGA_CNVratio_sampletype_subset`
-#' to perform CNV status analysis for each gene across
-#' all tumors types with the function [.CNVratio_tumor()]
-#' and plots the CNV results and [.CNVratio_boxplot()]
+#' * selects a subset of CNV and sample type data of only EIF4F gene from the
+#'  data frame `TCGA_CNVratio_sampletype` - a global variable generated from
+#'  [initialize_cnv_data()].
+#' * uses the subset data `.TCGA_CNVratio_sampletype_subset` to perform CNV
+#'  status analysis for each gene across all tumors types with the internal
+#'  function [.CNVratio_tumor()] and plots the CNV results with the internal
+#'  function [.CNVratio_boxplot()].
 #'
-#' It should not be used directly, only inside [EIF4F_CNV_analysis()] function.
+#' This function is not accessible to the user and will not show at the users'
+#' workspace. It can only be called by the exported [EIF4F_CNV_analysis()] function.
 #'
 #' Side effects:
 #'
@@ -979,17 +983,18 @@ initialize_cnv_data <- function() {
 }
 
 
-## Wrapper function to call all composite functions with inputs ================
+## Wrapper function to call all internal composite functions with provided inputs =======
 
 #' @title Perform all CNV related analysis and generate plots
 #'
 #' @description
 #'
-#' A wrapper function to call all composite functions for CNV analysis with inputs
+#' A wrapper function to call all internal composite functions for CNV analysis with
+#' provided inputs
 #'
 #' @details
 #'
-#' This function run three composite functions together with inputs:
+#' This function run three internal composite functions together with inputs:
 #'
 #'  * [.plot_bargraph_CNV_TCGA()]
 #'  * [.plot_matrix_CNVcorr_TCGA()]

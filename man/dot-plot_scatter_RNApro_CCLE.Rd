@@ -10,22 +10,24 @@
 \item{gene_name}{gene name}
 }
 \description{
-A composite function generates correlation scatter plot for eIF4F RNAseq and
+An internal composite function generates correlation scatter plot for eIF4F RNAseq and
 proteomics data from CCLE.
 }
 \details{
 This function
 \itemize{
-\item merges the CCLE RNAseq values from EIF4F genes in the data frame
-prepared from \code{\link[=.get_CCLE_RNAseq_subset]{.get_CCLE_RNAseq_subset()}} and proteomics data of the same
-protein in the data frame prepared from \code{\link[=.get_CCLE_Proteomics_subset]{.get_CCLE_Proteomics_subset()}}.
+\item merges the CCLE RNAseq values of EIF4F genes in the data frame prepared
+from \code{\link[=.get_CCLE_RNAseq_subset]{.get_CCLE_RNAseq_subset()}}, the annotation data of CCLE \code{CCLE_Anno},
+and proteomics data of the same EIF4F protein in the data frame prepared
+from \code{\link[=.get_CCLE_Proteomics_subset]{.get_CCLE_Proteomics_subset()}}.
 \item uses the combined data to calculate the correlation coefficients
 between protein and RNA levels, and plot the result with the function
 \code{\link[=.RNApro_scatterplot]{.RNApro_scatterplot()}}
 }
 
-This function should not be used directly, only inside
-\code{\link[=EIF4F_RNA_pro_correlation]{EIF4F_RNA_pro_correlation()}} function.
+This function is not accessible to the user and will not show at the users'
+workspace. It can only be called by the exported \code{\link[=EIF4F_RNA_pro_correlation]{EIF4F_RNA_pro_correlation()}}
+function.
 
 Side effects:
 

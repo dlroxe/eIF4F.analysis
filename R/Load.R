@@ -99,11 +99,11 @@ initialize_dir <- function() {
 #' * [initialize_proteomics_data()]
 #' * [initialize_phosphoproteomics_data()]
 #'
-#' data initialization functions read datasets and generates global variable
-#' available to functions in the package. They are not accessible to the user
-#' and will not show at the users' workspace. This package has saved them as
-#' csv files under `~/Documents/EIF_output/ProcessedData` in case that
-#' users would like to access the data frames for their own analyses.
+#' data initialization functions read datasets and generate twelve global variables
+#' available to functions in the package. Although those global variables are not
+#' accessible to the user and will not show at the users' workspace, this package
+#' has saved them as csv files under `~/Documents/EIF_output/ProcessedData` in case
+#' that users would like to access the data frames for their own analyses.
 #'
 #' Side effects:
 #'

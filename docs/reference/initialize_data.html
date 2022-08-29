@@ -79,11 +79,11 @@ to load the relevant data files.</p><ul><li><p><code><a href="initialize_cnv_dat
 <li><p><code><a href="initialize_survival_data.html">initialize_survival_data()</a></code></p></li>
 <li><p><code><a href="initialize_proteomics_data.html">initialize_proteomics_data()</a></code></p></li>
 <li><p><code><a href="initialize_phosphoproteomics_data.html">initialize_phosphoproteomics_data()</a></code></p></li>
-</ul><p>data initialization functions read datasets and generates global variable
-available to functions in the package. They are not accessible to the user
-and will not show at the users' workspace. This package has saved them as
-csv files under <code>~/Documents/EIF_output/ProcessedData</code> in case that
-users would like to access the data frames for their own analyses.</p>
+</ul><p>data initialization functions read datasets and generate twelve global variables
+available to functions in the package. Although those global variables are not
+accessible to the user and will not show at the users' workspace, this package
+has saved them as csv files under <code>~/Documents/EIF_output/ProcessedData</code> in case
+that users would like to access the data frames for their own analyses.</p>
 <p>Side effects:</p>
 <p>(1) <code>TCGA_CNV_value</code>imports the download dataset
 <code>Gistic2_CopyNumber_Gistic2_all_data_by_genes</code>. It is stored
