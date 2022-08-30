@@ -37,7 +37,7 @@ jobs:
       - name: Install BiocManager dependencies
         run: |
           install.packages(c("BiocManager"))
-          BiocManager::install(version = "3.14")
+          BiocManager::install(version = "3.15")
           bio_pkgs <- c(
             "AnnotationDbi", "circlize",  "clusterProfiler", "ComplexHeatmap", "corrplot", 
             "data.table", "devtools", "dplyr", "EnvStats", "eulerr", "factoextra", 
