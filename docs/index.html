@@ -189,9 +189,9 @@
 <p>Open the terminal and run the following command line to clone our GitHub repository for eIF4F.analysis.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> git clone https://github.com/a3609640/eIF4F.analysis</span></code></pre></div>
 <p>The package files will be stored under <code>~/eIF4F.analysis</code>. The cloned repository contains the following files and folders.</p>
-<p><img src="images/eIF4F.analysis.png" width="240"></p>
+<p><img src="reference/figures/eIF4F.analysis.png" width="240"></p>
 <p>Under the <code>~/eIF4F.analysis/Script</code> folder, two R scripts <code>Download.R</code> and <code>Analysis.R</code> are stored for acquiring datasets and performing analysis.</p>
-<p><img src="images/eIF4F.analysis.script.png" width="224"></p>
+<p><img src="reference/figures/eIF4F.analysis.script.png" width="224"></p>
 <p>Open Download.R file in RStudio, verify the directories for input and output files as following.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># default directory for data download and output storage</span></span>
@@ -205,9 +205,9 @@
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"~/eIF4F.analysis/Script/Download.R"</span><span class="op">)</span></span></code></pre></div>
 <p><code>Download.R</code> will (unless modified) create <code>~/eIF4F.analysis/eIF4F_data</code>, where all needed datasets (TGCA, GTEx, CPTAC, CCLE etc.) will be stored and decompressed, and <code>~/eIF4F.analysis/eIF4F_output/</code>, where all the analyzed results will be stored.</p>
-<p><img src="images/eIF4F.analysis.dic.png" width="240"></p>
+<p><img src="reference/figures/eIF4F.analysis.dic.png" width="240"></p>
 <p>After the completion of the download and unzip steps, the <code>eIF4F_data</code> folder contains 16 data files, with a collective size of 15GB.</p>
-<p><img src="images/eIF4F.analysis.download.png" width="627"></p>
+<p><img src="reference/figures/eIF4F.analysis.download.png" width="627"></p>
 </div>
 <div class="section level2">
 <h2 id="perform-analyses">Perform Analyses<a class="anchor" aria-label="anchor" href="#perform-analyses"></a>
@@ -216,7 +216,7 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"~/eIF4F.analysis/Script/Analysis.R"</span><span class="op">)</span></span></code></pre></div>
 <p>Analysis results to be automatically stored under <code>~/eIF4F.analysis/eIF4F_data/</code> in eight sub-directories.</p>
-<p><img src="images/ouput.png" width="266"></p>
+<p><img src="reference/figures/ouput.png" width="266"></p>
 </div>
 <div class="section level2">
 <h2 id="tutorial">Tutorial<a class="anchor" aria-label="anchor" href="#tutorial"></a>

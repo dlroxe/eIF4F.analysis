@@ -132,13 +132,13 @@ $ git clone https://github.com/a3609640/eIF4F.analysis
 The package files will be stored under `~/eIF4F.analysis`. The cloned
 repository contains the following files and folders.
 
-<img src="images/eIF4F.analysis.png" width="240" />
+<img src="man/figures/eIF4F.analysis.png" width="240" />
 
 Under the `~/eIF4F.analysis/Script` folder, two R scripts `Download.R`
 and `Analysis.R` are stored for acquiring datasets and performing
 analysis.
 
-<img src="images/eIF4F.analysis.script.png" width="224" />
+<img src="man/figures/eIF4F.analysis.script.png" width="224" />
 
 Open Download.R file in RStudio, verify the directories for input and
 output files as following.
@@ -165,12 +165,12 @@ CPTAC, CCLE etc.) will be stored and decompressed, and
 `~/eIF4F.analysis/eIF4F_output/`, where all the analyzed results will be
 stored.
 
-<img src="images/eIF4F.analysis.dic.png" width="240" />
+<img src="man/figures/eIF4F.analysis.dic.png" width="240" />
 
 After the completion of the download and unzip steps, the `eIF4F_data`
 folder contains 16 data files, with a collective size of 15GB.
 
-<img src="images/eIF4F.analysis.download.png" width="627" />
+<img src="man/figures/eIF4F.analysis.download.png" width="627" />
 
 ## Perform Analyses
 
@@ -186,7 +186,7 @@ source("~/eIF4F.analysis/Script/Analysis.R")
 Analysis results to be automatically stored under
 `~/eIF4F.analysis/eIF4F_data/` in eight sub-directories.
 
-<img src="images/ouput.png" width="266" />
+<img src="man/figures/ouput.png" width="266" />
 
 ## Tutorial
 

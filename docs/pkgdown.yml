@@ -3,7 +3,7 @@ pkgdown: 2.0.5
 pkgdown_sha: ~
 articles:
   eIF4F_analysis: eIF4F_analysis.html
-last_built: 2022-09-02T19:12Z
+last_built: 2022-09-02T19:43Z
 urls:
   reference: https://a3609640.github.io/eIF4F.analysis/reference
   article: https://a3609640.github.io/eIF4F.analysis/articles
