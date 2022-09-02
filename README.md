@@ -7,6 +7,7 @@
 
 [![R-CMD-check](https://github.com/a3609640/eIF4F.analysis/workflows/R-CMD-check/badge.svg)](https://github.com/a3609640/eIF4F.analysis/actions)
 [![R](https://github.com/a3609640/eIF4F.analysis/actions/workflows/r.yml/badge.svg)](https://github.com/a3609640/eIF4F.analysis/actions/workflows/r.yml)
+
 <!-- badges: end -->
 
 eIF4F.analysis is an R-based computational pipeline to understand
@@ -23,7 +24,7 @@ package.
 
 [System requirements](#system-requirements)
 
-[Install RStudio/R](#install-rstudior)
+\[Install R/RStudio\]\[Studio\]
 
 [Install dependent libraries](#install-dependent-libraries)
 
@@ -71,7 +72,7 @@ project:
 Additional details of these environments are provided in the “Session
 Information” section below.
 
-## Install RStudio/R
+## Install R/RStudio
 
 1.  Download & install R 4.2.1, if not already installed.
 2.  Download & install RStudio, if not already installed.
@@ -79,8 +80,8 @@ Information” section below.
 
 ## Install dependent libraries
 
-The required packages will be automatically installed the first time you
-run eIF4F.analysis. The following commands are useful to install
+The required packages will be automatically installed at the first time
+you run eIF4F.analysis. The following commands are useful to install
 dependent R packages manually.
 
 ``` r
@@ -106,7 +107,7 @@ lapply(bio_pkgs, require, character.only = TRUE)
 
 ## Install eIF4F analysis package
 
-You can install the development version of `eIF4F.analysis` from
+Please install the development version of `eIF4F.analysis` from
 [GitHub](https://github.com/) and load it in the R console.
 
 ``` r
@@ -120,59 +121,75 @@ library(eIF4F.analysis)
 ## Set up file directories
 
 Open the terminal and run the following command line to clone our GitHub
-repository for eIF4F.analysis. The package files will be stored under
-home directory as `~/eIF4F.analysis`
+repository for eIF4F.analysis.
 
 ``` bash
 $ git clone https://github.com/a3609640/eIF4F.analysis
 ```
 
+The package files will be stored under `~/eIF4F.analysis`. The cloned
+repository contains the following files and folders.
+
+<img src="images/eIF4F.analysis.png" width="240" />
+
 Under the `~/eIF4F.analysis/Script` folder, two R scripts `Download.R`
-and `Analysis.R` are stored for acquiring dataset and performing
-analysis. Open `Download.R` file in RStudio. The directories for input
-and output files are defined in `Download.R` as the following.
+and `Analysis.R` are stored for acquiring datasets and performing
+analysis.
+
+<img src="images/eIF4F.analysis.script.png" width="283" />
+
+Open `Download.R` file in RStudio. The directories for input and output
+files are defined in `Download.R` as the following.
 
 ``` r
 # default directory for data download and output storage
-data_file_directory <- "~/Downloads/EIF_data/"
-output_directory <- "~/Documents/EIF_output/"
+data_file_directory <- "~/eIF4F.analysis/eIF4F_data/"
+output_directory <- "~/eIF4F.analysis/eIF4F_output/"
 ```
 
-If the root directory paths`~/Download/EIF_data` and
-`~/Documents/EIF_output` do not suit, they may be adjusted in these
-lines near the top of `Download.R`.  
+If the root directory paths `~/eIF4F.analysis/eIF4F_data/` and
+`~/eIF4F.analysis/eIF4F_output/` do not suit, they may be adjusted in
+these lines near the top of `Download.R`.  
 Change the folder names to your preferred folders like the following
 example and save the change.
 
 ``` r
 # change the directories for data download and output storage in Download.R script
-data_file_directory <- "~/Downloads/new_data_folder/"
-output_directory <- "~/Documents/new_output_folder/"
+data_file_directory <- "~/new_path/new_data_folder/"
+output_directory <- "~/new_path/new_output_folder/"
 ```
 
 ## Download datasets
 
 `Download.R` downloads all needed datasets (TGCA, GTEx, CPTAC, CCLE,
-etc.) from URLs and unzip them. To download datasets, run the
-`Download.R` file in RStudio with the following command line.
+etc.) from URLs and unzip them. To download generate data/ouput
+directories and download datasets, run the `Download.R` file in RStudio
+with the following command line.
 
 ``` r
 source("~/eIF4F.analysis/Script/Download.R")
 ```
 
-`Download.R` will (unless modified) create `~/Downloads/Test/EIF_data`,
-where all needed datasets (TGCA, GTEx, CPTAC, CCLE etc.) will be stored
-and uncompressed. After the completion of the download and unzip steps,
-the `EIF_data` folder contains 16 data files, with a collective size of
-15GB.
+`Download.R` will (unless modified) create
+`~/eIF4F.analysis/eIF4F_data`, where all needed datasets (TGCA, GTEx,
+CPTAC, CCLE etc.) will be stored and decompressed, and
+`~/eIF4F.analysis/eIF4F_output/`, where all the analyzed results will
+stored.
+
+<img src="images/eIF4F.analysis.dic.png" width="240" />
+
+After the completion of the download and unzip steps, the `eIF4F_data`
+folder contains 16 data files, with a collective size of 15GB.
+
+<img src="images/eIF4F.analysis.download.png" width="627" />
 
 ## Tutorials
 
 `Analysis.R` contains ten exported functions in the package to
 initialize package and execute all analyses presented in (Wu and Wagner,
 2021). The users can simply execute the following command in RStudio to
-get all analysis performed and results to be automatically stored under
-`~/Documents/EIF_output`.
+get all analyses performed and results to be automatically stored under
+`~/eIF4F.analysis/eIF4F_data/`.
 
 ``` r
 source("~/eIF4F.analysis/Script/Analysis.R")
