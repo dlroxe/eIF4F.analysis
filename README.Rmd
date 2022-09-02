@@ -37,7 +37,7 @@ Perform the following steps to ensure the proper operation of this package.
 
 [Install eIF4F analysis package]
 
-[Set up file directories]
+[Clone the repository files]
 
 [Download datasets]
 
@@ -118,7 +118,7 @@ devtools::install_github("a3609640/eIF4F.analysis")
 library(eIF4F.analysis)
 ```
 
-## Set up file directories
+## Clone the repository files
 
 Open the terminal and run the following command line to clone our GitHub repository for eIF4F.analysis.
 
@@ -132,9 +132,9 @@ The package files will be stored under `~/eIF4F.analysis`. The cloned repository
 
 Under the `~/eIF4F.analysis/Script` folder, two R scripts `Download.R` and `Analysis.R` are stored for acquiring datasets and performing analysis.
 
-![](images/eIF4F.analysis.script.png){width="283"}
+![](images/eIF4F.analysis.script.png){width="224"}
 
-Open `Download.R` file in RStudio. The directories for input and output files are defined in `Download.R` as the following.
+Open Download.R file in RStudio, verify the directories for input and output files as following.
 
 ``` r
 # default directory for data download and output storage
@@ -142,24 +142,15 @@ data_file_directory <- "~/eIF4F.analysis/eIF4F_data/"
 output_directory <- "~/eIF4F.analysis/eIF4F_output/"
 ```
 
-If the root directory paths `~/eIF4F.analysis/eIF4F_data/` and `~/eIF4F.analysis/eIF4F_output/` do not suit, they may be adjusted in these lines near the top of `Download.R`.\
-Change the folder names to your preferred folders like the following example and save the change.
-
-``` r
-# change the directories for data download and output storage in Download.R script
-data_file_directory <- "~/new_path/new_data_folder/"
-output_directory <- "~/new_path/new_output_folder/"
-```
-
 ## Download datasets
 
-`Download.R` downloads all needed datasets (TGCA, GTEx, CPTAC, CCLE, etc.) from URLs and unzip them. To download generate data/ouput directories and download datasets, run the `Download.R` file in RStudio with the following command line.
+`Download.R` downloads all needed datasets (TGCA, GTEx, CPTAC, CCLE, etc.) from URLs and decompresses them. To run the `Download.R` file in RStudio with the following command line.
 
 ``` r
 source("~/eIF4F.analysis/Script/Download.R")
 ```
 
-`Download.R` will (unless modified) create `~/eIF4F.analysis/eIF4F_data`, where all needed datasets (TGCA, GTEx, CPTAC, CCLE etc.) will be stored and decompressed, and `~/eIF4F.analysis/eIF4F_output/`, where all the analyzed results will stored.
+`Download.R` will (unless modified) create `~/eIF4F.analysis/eIF4F_data`, where all needed datasets (TGCA, GTEx, CPTAC, CCLE etc.) will be stored and decompressed, and `~/eIF4F.analysis/eIF4F_output/`, where all the analyzed results will be stored.
 
 ![](images/eIF4F.analysis.dic.png){width="240"}
 

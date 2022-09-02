@@ -51,11 +51,19 @@ Load all needed TCGA, GTEX, CPTAC and CCLE datasets download by `Download.sh` fo
 initialize_data()
 ```
 
+12 global variables will be saved at csv files under `~/eIF4F.analysis/eIF4F_output/ProcessedData`
+
+![](images/Processed.png){width="384"}
+
 ## Perform CNV analysis
 
 ```{r, eval = FALSE}
 EIF4F_CNV_analysis()
 ```
+
+Results will be saved as following
+
+![](images/CNV.png){width="335"}
 
 ## Perform differential gene expression/ratio analysis
 
@@ -63,11 +71,15 @@ EIF4F_CNV_analysis()
 EIF4F_DEG_analysis()
 ```
 
+![](images/DEG.png){width="342"}
+
 ## Perform gene expression and survival analysis
 
 ```{r, eval = FALSE}
 EIF4F_Survival_analysis()
 ```
+
+![](images/survival.png){width="537"}
 
 ## Perform PCA
 
@@ -75,11 +87,15 @@ EIF4F_Survival_analysis()
 EIF4F_PCA()
 ```
 
+![](images/PCA.png){width="552"}
+
 ## Perform correlating gene analysis
 
 ```{r, eval = FALSE}
 EIF4F_Corrgene_analysis()
 ```
+
+![](images/CORs.png){width="367"}
 
 ## Perform RNA protein expression correlation analysis
 
@@ -87,8 +103,12 @@ EIF4F_Corrgene_analysis()
 EIF4F_RNA_pro_correlation()
 ```
 
+![](images/RNApro.png){width="333"}
+
 ## Perform (phospho)proteomics analysis
 
 ```{r, eval = FALSE}
 EIF4F_Proteomics_analysis()
 ```
+
+![](images/Proteomics.png){width="544"}
