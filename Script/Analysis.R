@@ -1,5 +1,3 @@
-#devtools::load_all()
-
 library(eIF4F.analysis)
 
 initialize_dir()
