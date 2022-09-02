@@ -2,10 +2,8 @@
 #' @noRd
 #data_file_directory <- "~/Downloads/EIF_data"
 #output_directory <- "~/Documents/EIF_output"
-data_file_directory <- readRDS(
-  file = "~/eIF4F.analysis/Script/data_file_directory.Rdata")
-output_directory <- readRDS(
-  file = "~/eIF4F.analysis/Script/output_directory.Rdata")
+data_file_directory <- "~/eIF4F.analysis/eIF4F_data/"
+output_directory <- "~/eIF4F.analysis/eIF4F_output/"
 
 #' @title Set output directories
 #'

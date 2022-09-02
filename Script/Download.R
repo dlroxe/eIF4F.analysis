@@ -6,15 +6,6 @@ library(R.utils)
 data_file_directory <- "~/eIF4F.analysis/eIF4F_data/"
 output_directory <- "~/eIF4F.analysis/eIF4F_output/"
 
-dir.create(data_file_directory, showWarnings = FALSE)
-dir.create(output_directory, showWarnings = FALSE)
-
-saveRDS(data_file_directory,
-        file = "~/eIF4F.analysis/Script/data_file_directory.Rdata")
-saveRDS(output_directory,
-        file = "~/eIF4F.analysis/Script/output_directory.Rdata")
-
-
 ### set up download
 getOption('timeout')
 options(timeout = 200000)
