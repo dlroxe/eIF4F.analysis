@@ -24,7 +24,7 @@ package.
 
 [System requirements](#system-requirements)
 
-\[Install R/RStudio\]\[Studio\]
+[Install R/RStudio](#install-rrstudio)
 
 [Install dependent libraries](#install-dependent-libraries)
 
@@ -34,7 +34,9 @@ package.
 
 [Download datasets](#download-datasets)
 
-[Tutorials](#tutorials)
+[Perform Analyses](#perform-analyses)
+
+[Tutorial](#tutorial)
 
 [Session information](#session-information)
 
@@ -183,17 +185,29 @@ folder contains 16 data files, with a collective size of 15GB.
 
 <img src="images/eIF4F.analysis.download.png" width="627" />
 
-## Tutorials
+## Perform Analyses
 
 `Analysis.R` contains ten exported functions in the package to
 initialize package and execute all analyses presented in (Wu and Wagner,
 2021). The users can simply execute the following command in RStudio to
-get all analyses performed and results to be automatically stored under
-`~/eIF4F.analysis/eIF4F_data/`.
+get all analyses performed.
 
 ``` r
 source("~/eIF4F.analysis/Script/Analysis.R")
 ```
+
+Analysis results to be automatically stored under
+`~/eIF4F.analysis/eIF4F_data/` in eight sub-directories.
+
+<img src="images/ouput.png" width="266" />
+
+## Tutorial
+
+Tutorial of executing each function from `Analysis.R` is available at
+<https://a3609640.github.io/eIF4F.analysis/articles/eIF4F_analysis.html>
+
+Documentations for exported and internal function are available at
+<https://a3609640.github.io/eIF4F.analysis/reference/index.html>
 
 ## Session information
 
