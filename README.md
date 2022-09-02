@@ -29,10 +29,9 @@ package.
 
 [Install eIF4F analysis package](#install-eif4f-analysis-package)
 
-[Download datasets and analysis
-script](#download-datasets-and-analysis-script)
+[Set up file directories](#set-up-file-directories)
 
-[File directories](#file-directories)
+[Download datasets](#download-datasets)
 
 [Tutorials](#tutorials)
 
@@ -55,7 +54,7 @@ project:
     -   Intel i7-8700k CPU
     -   64GB RAM (DDR4-3000, non-ECC)
     -   Samsung NVMe Pro SSD
-    -   Pop!\_OS 20.04 LTS
+    -   Pop!\_OS 22.04 LTS
     -   RStudio
     -   R 4.2.1
 
@@ -80,8 +79,9 @@ Information” section below.
 
 ## Install dependent libraries
 
-The work here depends upon many R libraries. The following command may
-be a useful way to install them all.
+The required packages will be automatically installed the first time you
+run eIF4F.analysis. The following commands are useful to install
+dependent R packages manually.
 
 ``` r
 # use Bioconductor version 3.15 for package installation
@@ -117,139 +117,65 @@ devtools::install_github("a3609640/eIF4F.analysis")
 library(eIF4F.analysis)
 ```
 
-## Download datasets and analysis script
+## Set up file directories
 
-Clone (download) eIF4.analysis repository on GitHub.
-
-``` bash
-git clone https://github.com/a3609640/eIF4F.analysis.git
-```
-
-Two script files are stored in the `Script` folder from our GitHub
-repository: `Download.sh` and `Analysis.R`. Run `Download.sh` from
-`Script` folder.
+Open the terminal and run the following command line to clone our GitHub
+repository for eIF4F.analysis. The package files will be stored under
+home directory as `~/eIF4F.analysis`
 
 ``` bash
-bash ~/github/eIF4F.analysis/Script/Download.sh
+$ git clone https://github.com/a3609640/eIF4F.analysis
 ```
 
-`Download.sh` is the following bash script that downloads all needed
-datasets (TCGA, GTEx, CPTAC, CCLE and etc) from URLs and unzip them.
-`Download.sh` will create the `~/Downloads/EIF_data` directory to store
-all downloaded datasets.
-
-``` bash
-#!/bin/sh
-
-## download all datasets from the following weblinks
-
-### create the directory to store all downloaded datasets
-readonly DATA_FILE_DIRECTORY="${HOME}/Downloads/EIF_data" ## default directory for data download
-mkdir -p "${DATA_FILE_DIRECTORY}"
-
-
-### TCGA and GTEX DATA
-#### TCGA CNV dataset (thresholded)
-wget https://tcga.xenahubs.net/download/TCGA.PANCAN.sampleMap/Gistic2_CopyNumber_Gistic2_all_thresholded.by_genes.gz -P "${DATA_FILE_DIRECTORY}"
-
-#### TCGA CNV dataset
-wget https://tcga.xenahubs.net/download/TCGA.PANCAN.sampleMap/Gistic2_CopyNumber_Gistic2_all_data_by_genes.gz -P "${DATA_FILE_DIRECTORY}"
-
-#### TCGA CNV ratio dataset
-wget https://pancanatlas.xenahubs.net/download/broad.mit.edu_PANCAN_Genome_Wide_SNP_6_whitelisted.gene.xena.gz -P "${DATA_FILE_DIRECTORY}"
-
-#### TCGA RNA-Seq dataset
-wget https://tcga-pancan-atlas-hub.s3.us-east-1.amazonaws.com/download/EB%2B%2BAdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena.gz -P "${DATA_FILE_DIRECTORY}"
-
-#### TCGA sample type annotation
-wget https://pancanatlas.xenahubs.net/download/TCGA_phenotype_denseDataOnlyDownload.tsv.gz -P "${DATA_FILE_DIRECTORY}"
-
-#### TCGA OS data ##
-wget https://tcga-pancan-atlas-hub.s3.us-east-1.amazonaws.com/download/Survival_SupplementalTable_S1_20171025_xena_sp -P "${DATA_FILE_DIRECTORY}"
-
-#### TCGA and GTEX RNA-Seq dataset
-wget https://toil.xenahubs.net/download/TcgaTargetGtex_RSEM_Hugo_norm_count.gz -P "${DATA_FILE_DIRECTORY}"
-
-#### TCGA and GTEX sample type annotation
-wget https://toil.xenahubs.net/download/TcgaTargetGTEX_phenotype.txt.gz -P "${DATA_FILE_DIRECTORY}"
-
-### CPTAC DATA
-
-#### CPTAC LUAD RNA-Seq data (Gillette et al., 2020)
-wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/RNA.xlsx -P "${DATA_FILE_DIRECTORY}"
-
-#### CPTAC LUAD Proteomics (Gillette et al., 2020)
-wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Protein.xlsx -P "${DATA_FILE_DIRECTORY}"
-
-#### CPTAC LUAD Phosproteomics (Gillette et al., 2020)
-wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Phos.xlsx -P "${DATA_FILE_DIRECTORY}"
-
-#### CPTAC LUAD Sample Annotation
-# S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx from PDC Study ID: PDC000153 
-wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
-
-#### CPTAC LUAD Clinical Data
-# S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx from PDC Study ID: PDC000153 
-wget https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx -P "${DATA_FILE_DIRECTORY}"
-
-### CCLE DATA
-
-#### CCLE RNA-Seq data from DepMap Public 20Q4 20Q3
-#wget -O CCLE_expression_full.csv https://ndownloader.figshare.com/files/#27902097 -P "${DATA_FILE_DIRECTORY}" #DepMap Public 21Q2
-
-wget https://ndownloader.figshare.com/files/24613349 -O "${DATA_FILE_DIRECTORY}/CCLE_expression_full.csv" #DepMap Public 20Q3
-
-#### CCLE annotation data
-#wget -O sample_info.csv https://ndownloader.figshare.com/files/27902376 -P #"${DATA_FILE_DIRECTORY}" #DepMap Public 21Q2
-
-wget https://ndownloader.figshare.com/files/24613394 -O "${DATA_FILE_DIRECTORY}/sample_info.csv" #DepMap Public 20Q3
-
-#### CCLE proteomics data
-wget https://gygi.hms.harvard.edu/data/ccle/protein_quant_current_normalized.csv.gz -P "${DATA_FILE_DIRECTORY}"
-
-
-gunzip ${DATA_FILE_DIRECTORY}/*.gz
-```
-
-**CRITICAL**: If the root directory path `~/Downloads/EIF_data` does not
-suit, they may be adjusted trivially in these lines near the top of the
-`Download.sh` script.
-
-``` bash
-### change the directory to store all downloaded datasets in `Download.sh` script
-readonly DATA_FILE_DIRECTORY="${HOME}/your_data_folder"
-```
-
-## File directories
-
-Confirm the directories for input and output files. The directories for
-input and output files are defined in the `Load.R` as following.
+Under the `~/eIF4F.analysis/Script` folder, two R scripts `Download.R`
+and `Analysis.R` are stored for acquiring dataset and performing
+analysis. Open `Download.R` file in RStudio. The directories for input
+and output files are defined in `Download.R` as the following.
 
 ``` r
 # default directory for data download and output storage
-data_file_directory <- "~/Downloads/EIF_data" 
-output_directory <- "~/Documents/EIF_output"
+data_file_directory <- "~/Downloads/EIF_data/"
+output_directory <- "~/Documents/EIF_output/"
 ```
 
-**CRITICAL**: If the root directory paths `~/Download/EIF_data` and
-`~/Documents/EIF_output` do not suit, they may be adjusted trivially in
-these lines near the top of the `Download.sh` and `Load.R` scripts. Make
-sure the directory names are consistent within `Download.sh` and
-`Load.R`
+If the root directory paths`~/Download/EIF_data` and
+`~/Documents/EIF_output` do not suit, they may be adjusted in these
+lines near the top of `Download.R`.  
+Change the folder names to your preferred folders like the following
+example and save the change.
 
 ``` r
-# change the directories for data download and output storage in Load.R script
-data_file_directory <- "~/Downloads/your_data_folder" 
-output_directory <- "~/Documents/your_output_folder"
+# change the directories for data download and output storage in Download.R script
+data_file_directory <- "~/Downloads/new_data_folder/"
+output_directory <- "~/Documents/new_output_folder/"
 ```
+
+## Download datasets
+
+`Download.R` downloads all needed datasets (TGCA, GTEx, CPTAC, CCLE,
+etc.) from URLs and unzip them. To download datasets, run the
+`Download.R` file in RStudio with the following command line.
+
+``` r
+source("~/eIF4F.analysis/Script/Download.R")
+```
+
+`Download.R` will (unless modified) create `~/Downloads/Test/EIF_data`,
+where all needed datasets (TGCA, GTEx, CPTAC, CCLE etc.) will be stored
+and uncompressed. After the completion of the download and unzip steps,
+the `EIF_data` folder contains 16 data files, with a collective size of
+15GB.
 
 ## Tutorials
 
-Open the `Analysis.R` from `Script` folder from our GitHub repository.
-This script contains the command lines to execute all analyses.
+`Analysis.R` contains ten exported functions in the package to
+initialize package and execute all analyses presented in (Wu and Wagner,
+2021). The users can simply execute the following command in RStudio to
+get all analysis performed and results to be automatically stored under
+`~/Documents/EIF_output`.
 
 ``` r
-source("~/github/eIF4F.analysis/Script/Analysis.R")
+source("~/eIF4F.analysis/Script/Analysis.R")
 ```
 
 ## Session information
