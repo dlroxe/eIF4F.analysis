@@ -820,23 +820,23 @@
     theme_bw() +
     theme(
       plot.title = black_bold_16,
-      axis.title = black_bold_16,
-      axis.text.x = black_bold_16,
-      axis.text.y = black_bold_16,
-      axis.line.x = element_line(color = "black"),
-      axis.line.y = element_line(color = "black"),
+      axis.title = black_bold_12,
+      axis.text.x = black_bold_12, #black_bold_16
+      axis.text.y = black_bold_12, #black_bold_16
+      #axis.line.x = element_line(color = "black"),
+      #axis.line.y = element_line(color = "black"),
       panel.grid = element_blank(),
-      legend.title = black_bold_16,
-      legend.text = black_bold_16,
-      strip.text = black_bold_16
+      legend.title = black_bold_12,
+      legend.text = black_bold_12,
+      strip.text = black_bold_12
     )
   print(p1)
   ggplot2::ggsave(
     path = file.path(output_directory, "CORs"),
     filename = paste(tissue_type, " tumors enriched", pathway, ".pdf"),
     plot = p1,
-    width = 10,
-    height = 10,
+    width = 12, #10
+    height = 15, #10
     useDingbats = FALSE
   )
 
