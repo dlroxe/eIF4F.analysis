@@ -6,6 +6,9 @@ library(R.utils)
 data_file_directory <- "~/eIF4F.analysis/eIF4F_data/"
 output_directory <- "~/eIF4F.analysis/eIF4F_output/"
 
+dir.create(data_file_directory, showWarnings = FALSE)
+dir.create(output_directory, showWarnings = FALSE)
+
 ### set up download
 getOption('timeout')
 options(timeout = 200000)
