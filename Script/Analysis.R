@@ -6,6 +6,13 @@ initialize_format()
 
 initialize_data()
 
+##
+initialize_cnv_data()
+initialize_RNAseq_data()
+initialize_survival_data()
+initialize_proteomics_data()
+initialize_phosphoproteomics_data()
+
 EIF4F_CNV_analysis()
 
 EIF4F_DEG_analysis()
