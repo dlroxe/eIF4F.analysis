@@ -63,6 +63,9 @@ CPTAC_LUAD_RNAseq <- NULL
 #' }
 #'
 initialize_proteomics_data <- function() {
+
+  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
+
   assign("CCLE_RNAseq",
          fread(
            file.path(
@@ -142,6 +145,9 @@ initialize_proteomics_data <- function() {
   readr::write_csv(CPTAC_LUAD_RNAseq, file.path(output_directory,
                                                 "ProcessedData",
                                                 "CPTAC_LUAD_RNAseq.csv"))
+
+  rlang::env_binding_lock(parent.env(environment()), nms = NULL)
+
 }
 
 

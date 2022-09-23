@@ -72,6 +72,8 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 #'  }
 #'
 initialize_cnv_data <- function() {
+  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
+
   assign("TCGA_CNV_value",
          .get_TCGA_CNV_value(),
          envir = parent.env(environment()))
@@ -127,6 +129,7 @@ initialize_cnv_data <- function() {
   readr::write_csv(TCGA_CNVratio_sampletype, file.path(output_directory,
                                                 "ProcessedData",
                                                 "TCGA_CNVratio_sampletype.csv"))
+  rlang::env_binding_lock(parent.env(environment()), nms = NULL)
 
   return(NULL)
 }

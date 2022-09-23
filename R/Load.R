@@ -272,7 +272,7 @@ initialize_format <- function() {
          color(),
          envir = parent_env)
 
-  rlang::env_binding_lock(parent.env(environment()), nms = NULL)
+  rlang::env_binding_lock(parent_env, nms = NULL)
 }
 
 

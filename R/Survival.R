@@ -99,15 +99,27 @@ initialize_survival_data <- function() {
     )
 
   ## combine OS, sample type and RNAseq data ##
-  TCGA_RNAseq_OS_sampletype <<- list(TCGA_RNAseq, TCGA_OS, TCGA_sampletype) %>%
-    purrr::reduce(full_join, by = "rn") %>%
-    tibble::remove_rownames() %>%
-    tibble::column_to_rownames(var = "rn") %>%
-    dplyr::filter(.data$sample.type != "Solid Tissue Normal")
+  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
+  assign("TCGA_RNAseq_OS_sampletype",
+         list(TCGA_RNAseq, TCGA_OS, TCGA_sampletype) %>%
+           purrr::reduce(full_join, by = "rn") %>%
+           tibble::remove_rownames() %>%
+           tibble::column_to_rownames(var = "rn") %>%
+           dplyr::filter(.data$sample.type != "Solid Tissue Normal"),
+         envir = parent.env(environment()))
+
+
+  #TCGA_RNAseq_OS_sampletype <<- list(TCGA_RNAseq, TCGA_OS, TCGA_sampletype) %>%
+  #  purrr::reduce(full_join, by = "rn") %>%
+  #  tibble::remove_rownames() %>%
+  #  tibble::column_to_rownames(var = "rn") %>%
+  #  dplyr::filter(.data$sample.type != "Solid Tissue Normal")
 
   readr::write_csv(TCGA_RNAseq_OS_sampletype,
                    file.path(output_directory, "ProcessedData",
                              "TCGA_RNAseq_OS_sampletype.csv"))
+
+  rlang::env_binding_lock(parent.env(environment()), nms = NULL)
 
   return(NULL)
 }

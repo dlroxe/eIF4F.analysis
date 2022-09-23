@@ -54,6 +54,9 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' }
 #'
 initialize_phosphoproteomics_data <- function() {
+
+  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
+
   assign("CPTAC_LUAD_Phos",
          readxl::read_excel(file.path(data_file_directory,
                                       "Phos.xlsx"),
@@ -109,6 +112,9 @@ initialize_phosphoproteomics_data <- function() {
   readr::write_csv(CPTAC_LUAD_Clinic_Sampletype,
                    file.path(output_directory,"ProcessedData",
                              "CPTAC_LUAD_Clinic_Sampletype.csv"))
+
+  rlang::env_binding_lock(parent.env(environment()), nms = NULL)
+
 }
 
 

@@ -67,6 +67,8 @@ TCGA_GTEX_RNAseq_sampletype <- NULL
 #' }
 #'
 initialize_RNAseq_data <- function() {
+  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
+
   .TCGA_GTEX_RNAseq <- .get_TCGA_GTEX_RNAseq()
 
   .TCGA_GTEX_sampletype <- readr::read_tsv(
@@ -93,7 +95,6 @@ initialize_RNAseq_data <- function() {
       "primary.site" = "_primary_site",
       "study" = "_study"
     )
-  # }
 
   assign("TCGA_GTEX_RNAseq_sampletype",
          merge(.TCGA_GTEX_RNAseq,
@@ -108,6 +109,8 @@ initialize_RNAseq_data <- function() {
   readr::write_csv(TCGA_GTEX_RNAseq_sampletype,
                    file.path(output_directory, "ProcessedData",
                              "TCGA_GTEX_RNAseq_sampletype.csv"))
+
+  rlang::env_binding_lock(parent.env(environment()), nms = NULL)
 
   return(NULL)
 }
