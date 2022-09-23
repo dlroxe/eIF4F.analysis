@@ -55,7 +55,7 @@ VignetteBuilder:
     knitr
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.0
+RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
 URL: https://github.com/a3609640/eIF4F.analysis,
     https://a3609640.github.io/eIF4F.analysis/
