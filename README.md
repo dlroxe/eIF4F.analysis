@@ -218,7 +218,7 @@ developing this package is the following.
  pandoc   2.18 @ /usr/lib/rstudio/bin/quarto/bin/tools/ (via rmarkdown)
 
 ─ Packages ─────────────────────────────────────────────────────────────────────
-  package          * version  date (UTC) lib source
+ package          * version  date (UTC) lib source
  abind              1.4-5    2016-07-21 [1] CRAN (R 4.2.0)
  AnnotationDbi      1.58.0   2022-04-26 [1] Bioconductor
  ape                5.6-2    2022-03-02 [1] CRAN (R 4.2.0)
@@ -240,16 +240,16 @@ developing this package is the following.
  cellranger         1.1.0    2016-07-27 [1] CRAN (R 4.2.0)
  checkmate          2.1.0    2022-04-21 [1] CRAN (R 4.2.0)
  circlize           0.4.15   2022-05-10 [1] CRAN (R 4.2.0)
- cli                3.4.0    2022-09-08 [1] CRAN (R 4.2.1)
+ cli                3.4.1    2022-09-23 [1] CRAN (R 4.2.1)
  clue               0.3-61   2022-05-30 [1] CRAN (R 4.2.0)
  cluster            2.1.4    2022-08-22 [1] CRAN (R 4.2.1)
  clusterProfiler    4.4.4    2022-06-21 [1] Bioconductor
- codetools          0.2-18   2020-11-04 [4] CRAN (R 4.0.3)
+ codetools          0.2-18   2020-11-04 [4] CRAN (R 4.2.0)
  colorspace         2.0-3    2022-02-21 [1] CRAN (R 4.2.0)
  ComplexHeatmap     2.12.1   2022-08-09 [1] Bioconductor
  corrplot           0.92     2021-11-18 [1] CRAN (R 4.2.0)
  cowplot            1.1.1    2020-12-30 [1] CRAN (R 4.2.0)
- crayon             1.5.1    2022-03-26 [1] CRAN (R 4.2.0)
+ crayon             1.5.2    2022-09-29 [1] CRAN (R 4.2.1)
  data.table         1.14.2   2021-09-27 [1] CRAN (R 4.2.0)
  DBI                1.1.3    2022-06-18 [1] CRAN (R 4.2.0)
  digest             0.6.29   2021-12-01 [1] CRAN (R 4.2.0)
@@ -259,7 +259,7 @@ developing this package is the following.
  downloader         0.4      2015-07-09 [1] CRAN (R 4.2.0)
  dplyr              1.0.10   2022-09-01 [1] CRAN (R 4.2.1)
  DT                 0.25     2022-09-12 [1] CRAN (R 4.2.1)
- eIF4F.analysis   * 0.1.0    2022-09-05 [1] Github (a3609640/eIF4F.analysis@6c5445d)
+ eIF4F.analysis   * 0.1.0    2022-10-03 [1] Github (a3609640/eIF4F.analysis@831cbb1)
  ellipsis           0.3.2    2021-04-29 [1] CRAN (R 4.2.0)
  emmeans            1.8.1-1  2022-09-08 [1] CRAN (R 4.2.1)
  enrichplot         1.16.2   2022-08-30 [1] Bioconductor
@@ -276,7 +276,7 @@ developing this package is the following.
  flashClust         1.01-2   2012-08-21 [1] CRAN (R 4.2.0)
  forcats            0.5.2    2022-08-19 [1] CRAN (R 4.2.1)
  foreach            1.5.2    2022-02-02 [1] CRAN (R 4.2.0)
- forestplot         2.0.1    2021-09-03 [1] CRAN (R 4.2.0)
+ forestplot         3.0.0    2022-09-29 [1] CRAN (R 4.2.1)
  generics           0.1.3    2022-07-05 [1] CRAN (R 4.2.0)
  GenomeInfoDb       1.32.4   2022-09-06 [1] Bioconductor
  GenomeInfoDbData   1.2.8    2022-06-07 [1] Bioconductor
@@ -308,12 +308,12 @@ developing this package is the following.
  igraph             1.3.4    2022-07-19 [1] CRAN (R 4.2.1)
  IRanges            2.30.1   2022-08-18 [1] Bioconductor
  iterators          1.0.14   2022-02-05 [1] CRAN (R 4.2.0)
- jsonlite           1.8.0    2022-02-22 [1] CRAN (R 4.2.0)
+ jsonlite           1.8.2    2022-10-02 [1] CRAN (R 4.2.1)
  KEGGREST           1.36.3   2022-07-12 [1] Bioconductor
  km.ci              0.5-6    2022-04-06 [1] CRAN (R 4.2.0)
  KMsurv             0.1-5    2012-12-03 [1] CRAN (R 4.2.0)
  knitr              1.40     2022-08-24 [1] CRAN (R 4.2.1)
- lattice            0.20-45  2021-09-22 [4] CRAN (R 4.1.1)
+ lattice            0.20-45  2021-09-22 [4] CRAN (R 4.2.0)
  lazyeval           0.2.2    2019-03-15 [1] CRAN (R 4.2.0)
  leaps              3.1      2020-01-16 [1] CRAN (R 4.2.0)
  lifecycle          1.0.2    2022-09-09 [1] CRAN (R 4.2.1)
@@ -339,9 +339,9 @@ developing this package is the following.
  polyclip           1.10-0   2019-03-14 [1] CRAN (R 4.2.0)
  purrr              0.3.4    2020-04-17 [1] CRAN (R 4.2.0)
  qvalue             2.28.0   2022-04-26 [1] Bioconductor
- R.methodsS3      * 1.8.2    2022-06-13 [1] CRAN (R 4.2.0)
- R.oo             * 1.25.0   2022-06-12 [1] CRAN (R 4.2.0)
- R.utils          * 2.12.0   2022-06-28 [1] CRAN (R 4.2.0)
+ R.methodsS3        1.8.2    2022-06-13 [1] CRAN (R 4.2.0)
+ R.oo               1.25.0   2022-06-12 [1] CRAN (R 4.2.0)
+ R.utils            2.12.0   2022-06-28 [1] CRAN (R 4.2.1)
  R6                 2.5.1    2021-08-19 [1] CRAN (R 4.2.0)
  rappdirs           0.3.3    2021-01-31 [1] CRAN (R 4.2.0)
  RColorBrewer       1.1-3    2022-04-03 [1] CRAN (R 4.2.0)
@@ -349,11 +349,11 @@ developing this package is the following.
  RCurl              1.98-1.8 2022-07-30 [1] CRAN (R 4.2.1)
  reactome.db        1.81.0   2022-07-15 [1] Bioconductor
  ReactomePA         1.40.0   2022-04-26 [1] Bioconductor
- readr              2.1.2    2022-01-30 [1] CRAN (R 4.2.0)
+ readr              2.1.3    2022-10-01 [1] CRAN (R 4.2.1)
  readxl             1.4.1    2022-08-17 [1] CRAN (R 4.2.1)
  reshape2           1.4.4    2020-04-09 [1] CRAN (R 4.2.0)
  rjson              0.2.21   2022-01-09 [1] CRAN (R 4.2.0)
- rlang              1.0.5    2022-08-31 [1] CRAN (R 4.2.1)
+ rlang              1.0.6    2022-09-24 [1] CRAN (R 4.2.1)
  RSQLite            2.2.17   2022-09-10 [1] CRAN (R 4.2.1)
  rstatix            0.7.0    2021-02-13 [1] CRAN (R 4.2.0)
  rstudioapi         0.14     2022-08-22 [1] CRAN (R 4.2.1)
@@ -367,7 +367,7 @@ developing this package is the following.
  shape              1.4.6    2021-05-19 [1] CRAN (R 4.2.0)
  stringi            1.7.8    2022-07-11 [1] CRAN (R 4.2.0)
  stringr            1.4.1    2022-08-20 [1] CRAN (R 4.2.1)
- survival           3.3-1    2022-03-03 [4] CRAN (R 4.1.2)
+ survival           3.4-0    2022-08-09 [4] CRAN (R 4.2.1)
  survivalAnalysis   0.3.0    2022-02-11 [1] CRAN (R 4.2.0)
  survminer          0.4.9    2021-03-09 [1] CRAN (R 4.2.0)
  survMisc           0.5.6    2022-04-07 [1] CRAN (R 4.2.0)
@@ -382,7 +382,7 @@ developing this package is the following.
  tweenr             2.0.2    2022-09-06 [1] CRAN (R 4.2.1)
  tzdb               0.3.0    2022-03-28 [1] CRAN (R 4.2.0)
  utf8               1.2.2    2021-07-24 [1] CRAN (R 4.2.0)
- vctrs              0.4.1    2022-04-13 [1] CRAN (R 4.2.0)
+ vctrs              0.4.2    2022-09-29 [1] CRAN (R 4.2.1)
  viridis            0.6.2    2021-10-13 [1] CRAN (R 4.2.0)
  viridisLite        0.4.1    2022-08-22 [1] CRAN (R 4.2.1)
  withr              2.5.0    2022-03-03 [1] CRAN (R 4.2.0)
@@ -391,7 +391,7 @@ developing this package is the following.
  XVector            0.36.0   2022-04-26 [1] Bioconductor
  yulab.utils        0.0.5    2022-06-30 [1] CRAN (R 4.2.0)
  zlibbioc           1.42.0   2022-04-26 [1] Bioconductor
- zoo                1.8-10   2022-04-15 [1] CRAN (R 4.2.0)
+ zoo                1.8-11   2022-09-17 [1] CRAN (R 4.2.1)
 
  [1] /home/suwu/R/x86_64-pc-linux-gnu-library/4.2
  [2] /usr/local/lib/R/site-library
