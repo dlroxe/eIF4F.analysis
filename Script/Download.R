@@ -3,8 +3,8 @@ library(RCurl)
 library(R.utils)
 
 ### create the directory to store all downloaded datasets
-data_file_directory <- "~/eIF4F.analysis/eIF4F_data/"
-output_directory <- "~/eIF4F.analysis/eIF4F_output/"
+data_file_directory <- "~/eIF4F.analysis/eIF4F_data"
+output_directory <- "~/eIF4F.analysis/eIF4F_output"
 
 dir.create(data_file_directory, showWarnings = FALSE)
 dir.create(output_directory, showWarnings = FALSE)
