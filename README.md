@@ -145,8 +145,8 @@ output files as following.
 
 ``` r
 # default directory for data download and output storage
-data_file_directory <- "~/eIF4F.analysis/eIF4F_data/"
-output_directory <- "~/eIF4F.analysis/eIF4F_output/"
+data_file_directory <- "~/eIF4F.analysis/eIF4F_data"
+output_directory <- "~/eIF4F.analysis/eIF4F_output"
 ```
 
 ## Download datasets
@@ -162,7 +162,7 @@ source("~/eIF4F.analysis/Script/Download.R")
 `Download.R` will (unless modified) create
 `~/eIF4F.analysis/eIF4F_data`, where all needed datasets (TGCA, GTEx,
 CPTAC, CCLE etc.) will be stored and decompressed, and
-`~/eIF4F.analysis/eIF4F_output/`, where all the analyzed results will be
+`~/eIF4F.analysis/eIF4F_output`, where all the analyzed results will be
 stored.
 
 <img src="man/figures/eIF4F.analysis.dic.png" width="240" />
