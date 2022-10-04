@@ -69,19 +69,19 @@ utils::download.file("https://toil.xenahubs.net/download/TcgaTargetGTEX_phenotyp
 ### CPTAC DATA
 
 #### CPTAC LUAD RNA-Seq data (Gillette et al., 2020) 9
-utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/RNA.xlsx",
+utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/RNA.xlsx.gz",
   file.path(data_file_directory, "RNA.xlsx"),
   method = "libcurl"
 )
 
 #### CPTAC LUAD Proteomics (Gillette et al., 2020) 10
-utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Protein.xlsx",
+utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Protein.xlsx.gz",
   file.path(data_file_directory, "Protein.xlsx"),
   method = "libcurl"
 )
 
 #### CPTAC LUAD Phosproteomics (Gillette et al., 2020) 11
-utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Phos.xlsx",
+utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/Phos.xlsx.gz",
   file.path(data_file_directory, "Phos.xlsx"),
   method = "libcurl"
 )
@@ -89,14 +89,14 @@ utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%2
 #### CPTAC LUAD Sample Annotation 12
 # S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx from PDC Study ID: PDC000153
 utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx",
-  file.path(data_file_directory, "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"),
+  file.path(data_file_directory, "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx.gz"),
   method = "libcurl"
 )
 
 #### CPTAC LUAD Clinical Data 13
 # S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx from PDC Study ID: PDC000153
 utils::download.file("https://github.com/a3609640/EIF-analysis/raw/master/LUAD%20Data/S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx",
-  file.path(data_file_directory, "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"),
+  file.path(data_file_directory, "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx.gz"),
   method = "libcurl"
 )
 
