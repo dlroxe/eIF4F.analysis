@@ -123,7 +123,7 @@ library(eIF4F.analysis)
 ## Clone the repository files
 
 Open the terminal and run the following command line to clone our GitHub
-repository for eIF4F.analysis.
+repository for eIF4F.analysis under the home directory.
 
 ``` bash
 $ git clone https://github.com/a3609640/eIF4F.analysis
