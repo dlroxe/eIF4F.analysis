@@ -7,8 +7,8 @@ library(utils)
 data_file_directory <- "~/eIF4F.analysis/eIF4F_data"
 output_directory <- "~/eIF4F.analysis/eIF4F_output"
 
-dir.create(data_file_directory, showWarnings = FALSE)
-dir.create(output_directory, showWarnings = FALSE)
+dir.create(data_file_directory)
+dir.create(output_directory)
 
 ### set up download
 getOption('timeout')
