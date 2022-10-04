@@ -6,7 +6,7 @@ initialize_format()
 
 initialize_data()
 
-##
+## or the following individual data initiation functions
 initialize_cnv_data()
 initialize_RNAseq_data()
 initialize_survival_data()
