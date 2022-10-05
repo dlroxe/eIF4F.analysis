@@ -92,14 +92,16 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install(version = "3.15")
 
 # install required packages
-bio_pkgs <- c(
-  "AnnotationDbi", "circlize",  "clusterProfiler", "ComplexHeatmap", "corrplot", 
-  "data.table", "devtools", "dplyr", "EnvStats", "eulerr", "factoextra", 
-  "FactoMineR", "forcats", "forestplot", "ggfortify", "ggplot2", "ggpubr", 
-  "graphics", "grDevices", "grid", "limma", "missMDA", "org.Hs.eg.db", "purrr", 
-  "RColorBrewer", "ReactomePA", "RCurl","readr", "readxl", "reshape2", "R.utils", "scales", 
-  "stats", "stringr", "survival", "survivalAnalysis", "tibble", "tidyr", 
-  "tidyselect")
+bio_pkgs <- c("AnnotationDbi", "circlize",  "clusterProfiler",
+              "ComplexHeatmap", "corrplot", "data.table", "devtools",
+              "dplyr", "EnvStats", "eulerr", "factoextra",
+              "FactoMineR", "forcats", "forestplot", "ggfortify",
+              "ggplot2", "ggpubr", "graphics", "grDevices", "grid",
+              "limma", "missMDA", "org.Hs.eg.db", "purrr",
+              "RColorBrewer", "ReactomePA", "RCurl","readr", "readxl",
+              "reshape2", "R.utils", "scales", "stats", "stringr",
+              "survival", "survivalAnalysis", "tibble", "tidyr",
+              "tidyselect", "utils")
 BiocManager::install(bio_pkgs)
 
 # load required packages
