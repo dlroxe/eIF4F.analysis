@@ -63,91 +63,195 @@ CPTAC_LUAD_RNAseq <- NULL
 #' }
 #'
 initialize_proteomics_data <- function() {
-
   rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
 
-  assign("CCLE_RNAseq",
-         fread(
-           file.path(
-             data_file_directory,
-             "CCLE_expression_full.csv"
-           ),
-           data.table = FALSE
-         ),
-         envir = parent.env(environment()))
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "CCLE_RNAseq.csv"
+  ))) {
+    assign("CCLE_RNAseq",
+      fread(
+        file.path(
+          data_file_directory,
+          "CCLE_expression_full.csv"
+        ),
+        data.table = FALSE
+      ),
+      envir = parent.env(environment())
+    )
 
-  readr::write_csv(CCLE_RNAseq, file.path(output_directory,
-                                          "ProcessedData",
-                                          "CCLE_RNAseq.csv"))
+    data.table::fwrite(CCLE_RNAseq, file.path(
+      output_directory,
+      "ProcessedData",
+      "CCLE_RNAseq.csv"
+    ))
 
-  assign("CCLE_Anno",
-         fread(
-           file.path(
-             data_file_directory,
-             "sample_info.csv"
-           ),
-           data.table = FALSE
-         ) %>% dplyr::select(1, 2),
-         envir = parent.env(environment()))
+  } else {
 
-  readr::write_csv(CCLE_Anno, file.path(output_directory,
-                                        "ProcessedData",
-                                        "CCLE_Anno.csv"))
+    assign("CCLE_RNAseq",
+      data.table::fread(file.path(
+        output_directory,
+        "ProcessedData",
+        "CCLE_RNAseq.csv"),data.table = FALSE
+      ) %>%
+        tibble::as_tibble(),
+      envir = parent.env(environment())
+    )
+  }
 
-  assign("CCLE_Proteomics",
-         fread(
-           file.path(
-             data_file_directory,
-             "protein_quant_current_normalized.csv"
-           ),
-           data.table = FALSE
-         ),
-         envir = parent.env(environment()))
 
-  readr::write_csv(CCLE_Proteomics, file.path(output_directory,
-                                              "ProcessedData",
-                                              "CCLE_Proteomics.csv"))
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "CCLE_Anno.csv"
+  ))) {
+    assign("CCLE_Anno",
+      fread(
+        file.path(
+          data_file_directory,
+          "sample_info.csv"
+        ),
+        data.table = FALSE
+      ) %>% dplyr::select(1, 2),
+      envir = parent.env(environment())
+    )
 
-  assign("CPTAC_LUAD_Proteomics",
-         readxl::read_excel(
-           file.path(data_file_directory, "Protein.xlsx"),
-           col_names = FALSE
-         ) %>%
-           # as.data.frame(.) %>%
-           dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
-           tibble::column_to_rownames(var = "...1") %>%
-           t() %>%
-           tibble::as_tibble() %>%
-           dplyr::mutate_at(dplyr::vars(-.data$Type, -.data$Sample),
-                            # exclude two columns convert character to number
-                            ~ suppressWarnings(as.numeric(.))),
-         envir = parent.env(environment()))
+    data.table::fwrite(CCLE_Anno, file.path(
+      output_directory,
+      "ProcessedData",
+      "CCLE_Anno.csv"
+    ))
 
-  readr::write_csv(CPTAC_LUAD_Proteomics, file.path(output_directory,
-                                                    "ProcessedData",
-                                                    "CPTAC_LUAD_Proteomics.csv"))
+  } else {
 
-  assign("CPTAC_LUAD_RNAseq",
-         readxl::read_excel(
-           file.path(data_file_directory, "RNA.xlsx"),
-           col_names = FALSE
-         ) %>%
-           # as_tibble(.) %>%
-           dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
-           tibble::column_to_rownames(var = "...1") %>%
-           t() %>%
-           tibble::as_tibble() %>%
-           dplyr::mutate_at(dplyr::vars(-.data$Type, -.data$Sample),
-                            # exclude two columns convert character to number
-                            ~ suppressWarnings(as.numeric(.))),
-         envir = parent.env(environment()))
+    assign("CCLE_Anno",
+      data.table::fread(file.path(
+        output_directory,
+        "ProcessedData",
+        "CCLE_Anno.csv"),data.table = FALSE
+      ) %>%
+        tibble::as_tibble(),
+      envir = parent.env(environment())
+    )
+  }
 
-  readr::write_csv(CPTAC_LUAD_RNAseq, file.path(output_directory,
-                                                "ProcessedData",
-                                                "CPTAC_LUAD_RNAseq.csv"))
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "CCLE_Proteomics.csv"
+  ))) {
+    assign("CCLE_Proteomics",
+      fread(
+        file.path(
+          data_file_directory,
+          "protein_quant_current_normalized.csv"
+        ),
+        data.table = FALSE
+      ),
+      envir = parent.env(environment())
+    )
 
+    data.table::fwrite(CCLE_Proteomics, file.path(
+      output_directory,
+      "ProcessedData",
+      "CCLE_Proteomics.csv"
+    ))
+
+  } else {
+    assign("CCLE_Proteomics",
+      data.table::fread(file.path(
+        output_directory,
+        "ProcessedData",
+        "CCLE_Proteomics.csv"),data.table = FALSE
+      ) %>%
+        tibble::as_tibble(),
+      envir = parent.env(environment())
+    )
+  }
+
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "CPTAC_LUAD_Proteomics.csv"
+  ))) {
+    assign("CPTAC_LUAD_Proteomics",
+      readxl::read_excel(
+        file.path(data_file_directory, "Protein.xlsx"),
+        col_names = FALSE
+      ) %>%
+        # as.data.frame(.) %>%
+        dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
+        tibble::column_to_rownames(var = "...1") %>%
+        t() %>%
+        tibble::as_tibble() %>%
+        dplyr::mutate_at(
+          dplyr::vars(-.data$Type, -.data$Sample),
+          # exclude two columns convert character to number
+          ~ suppressWarnings(as.numeric(.))
+        ),
+      envir = parent.env(environment())
+    )
+
+    data.table::fwrite(CPTAC_LUAD_Proteomics, file.path(
+      output_directory,
+      "ProcessedData",
+      "CPTAC_LUAD_Proteomics.csv"
+    ))
+
+  } else {
+    assign("CPTAC_LUAD_Proteomics",
+      data.table::fread(file.path(
+        output_directory,
+        "ProcessedData",
+        "CPTAC_LUAD_Proteomics.csv"),data.table = FALSE
+      ) %>%
+        tibble::as_tibble(),
+      envir = parent.env(environment())
+    )
+  }
+
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "CPTAC_LUAD_RNAseq.csv"
+  ))) {
+    assign("CPTAC_LUAD_RNAseq",
+      readxl::read_excel(
+        file.path(data_file_directory, "RNA.xlsx"),
+        col_names = FALSE
+      ) %>%
+        # as_tibble(.) %>%
+        dplyr::mutate(...1 = make.unique(.data$...1)) %>% # relabel the duplicates
+        tibble::column_to_rownames(var = "...1") %>%
+        t() %>%
+        tibble::as_tibble() %>%
+        dplyr::mutate_at(
+          dplyr::vars(-.data$Type, -.data$Sample),
+          # exclude two columns convert character to number
+          ~ suppressWarnings(as.numeric(.))
+        ),
+      envir = parent.env(environment())
+    )
+
+    data.table::fwrite(CPTAC_LUAD_RNAseq, file.path(
+      output_directory,
+      "ProcessedData",
+      "CPTAC_LUAD_RNAseq.csv"
+    ))
+
+  } else {
+    assign("CPTAC_LUAD_RNAseq",
+      data.table::fread(file.path(
+        output_directory,
+        "ProcessedData",
+        "CPTAC_LUAD_RNAseq.csv"),data.table = FALSE
+      ) %>%
+        tibble::as_tibble() ,
+      envir = parent.env(environment())
+    )
+  }
   rlang::env_binding_lock(parent.env(environment()), nms = NULL)
-
 }
 
 

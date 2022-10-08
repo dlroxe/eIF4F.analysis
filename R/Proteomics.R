@@ -54,67 +54,109 @@ CPTAC_LUAD_Phos <- CPTAC_LUAD_Clinic_Sampletype <- NULL
 #' }
 #'
 initialize_phosphoproteomics_data <- function() {
-
   rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
 
-  assign("CPTAC_LUAD_Phos",
-         readxl::read_excel(file.path(data_file_directory,
-                                      "Phos.xlsx"),
-                            col_names = FALSE
-         ),
-         envir = parent.env(environment()))
-
-  readr::write_csv(CPTAC_LUAD_Phos, file.path(output_directory,
-                                              "ProcessedData",
-                                              "CPTAC_LUAD_Phos.csv"))
-
-  .CPTAC_LUAD_Clinic <- readxl::read_excel(file.path(
-    data_file_directory,
-    "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"
-  ),
-  sheet = 2
-  )
-
-  .CPTAC_LUAD_sampletype <- readxl::read_excel(
-    file.path(
-      data_file_directory,
-      "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "CPTAC_LUAD_Phos.csv"
+  ))) {
+    assign("CPTAC_LUAD_Phos",
+      readxl::read_excel(file.path(
+        data_file_directory,
+        "Phos.xlsx"
+      ),
+      col_names = FALSE
+      ),
+      envir = parent.env(environment())
     )
-  ) %>%
-    as.data.frame() %>%
-    dplyr::select("Aliquot (Specimen Label)", "Type",
-                  "Participant ID (case_id)") %>%
-    dplyr::distinct(.data$`Aliquot (Specimen Label)`, .keep_all = TRUE) # %>%
-  # remove_rownames() %>%
-  # column_to_rownames(var = "Aliquot (Specimen Label)")
 
-  assign("CPTAC_LUAD_Clinic_Sampletype",
-         merge(.CPTAC_LUAD_Clinic,
-               .CPTAC_LUAD_sampletype,
-               by.x = "case_id",
-               by.y = "Participant ID (case_id)"
-         ) %>%
-           dplyr::select("tumor_stage_pathological", "Aliquot (Specimen Label)",
-                         "Type") %>%
-           dplyr::rename("Sample" = "Aliquot (Specimen Label)") %>%
-           dplyr::mutate(tumor_stage_pathological = dplyr::case_when(
-             Type == "Normal" ~ "Normal",
-             tumor_stage_pathological %in% c("Stage I", "Stage IA", "Stage IB") ~
-               "Stage I",
-             tumor_stage_pathological %in% c("Stage II", "Stage IIA", "Stage IIB") ~
-               "Stage II",
-             tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~
-               "Stage III",
-             tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"
-           )),
-         envir = parent.env(environment()))
+    data.table::fwrite(CPTAC_LUAD_Phos, file.path(
+      output_directory,
+      "ProcessedData",
+      "CPTAC_LUAD_Phos.csv"
+    ))
 
-  readr::write_csv(CPTAC_LUAD_Clinic_Sampletype,
-                   file.path(output_directory,"ProcessedData",
-                             "CPTAC_LUAD_Clinic_Sampletype.csv"))
+  } else {
+    assign("CPTAC_LUAD_Phos",
+      data.table::fread(file.path(
+        output_directory,
+        "ProcessedData",
+        "CPTAC_LUAD_Phos.csv"), data.table = FALSE
+      ) %>%
+        tibble::as_tibble() ,
+      envir = parent.env(environment())
+    )
+  }
 
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "CPTAC_LUAD_Clinic_Sampletype.csv"
+  ))) {
+    .CPTAC_LUAD_Clinic <- readxl::read_excel(file.path(
+      data_file_directory,
+      "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Clinical_Data_r1_May2019.xlsx"
+    ),
+    sheet = 2
+    )
+
+    .CPTAC_LUAD_sampletype <- readxl::read_excel(
+      file.path(
+        data_file_directory,
+        "S046_BI_CPTAC3_LUAD_Discovery_Cohort_Samples_r1_May2019.xlsx"
+      )
+    ) %>%
+      as.data.frame() %>%
+      dplyr::select(
+        "Aliquot (Specimen Label)", "Type",
+        "Participant ID (case_id)"
+      ) %>%
+      dplyr::distinct(.data$`Aliquot (Specimen Label)`, .keep_all = TRUE) # %>%
+    # remove_rownames() %>%
+    # column_to_rownames(var = "Aliquot (Specimen Label)")
+
+    assign("CPTAC_LUAD_Clinic_Sampletype",
+      merge(.CPTAC_LUAD_Clinic,
+        .CPTAC_LUAD_sampletype,
+        by.x = "case_id",
+        by.y = "Participant ID (case_id)"
+      ) %>%
+        dplyr::select(
+          "tumor_stage_pathological", "Aliquot (Specimen Label)",
+          "Type"
+        ) %>%
+        dplyr::rename("Sample" = "Aliquot (Specimen Label)") %>%
+        dplyr::mutate(tumor_stage_pathological = dplyr::case_when(
+          Type == "Normal" ~ "Normal",
+          tumor_stage_pathological %in% c("Stage I", "Stage IA", "Stage IB") ~
+            "Stage I",
+          tumor_stage_pathological %in% c("Stage II", "Stage IIA", "Stage IIB") ~
+            "Stage II",
+          tumor_stage_pathological %in% c("Stage III", "Stage IIIA", "Stage IIIB") ~
+            "Stage III",
+          tumor_stage_pathological %in% c("Stage IV") ~ "Stage IV"
+        )),
+      envir = parent.env(environment())
+    )
+
+      data.table::fwrite(CPTAC_LUAD_Clinic_Sampletype, file.path(
+      output_directory,
+      "ProcessedData",
+      "CPTAC_LUAD_Clinic_Sampletype.csv"
+    ))
+  } else {
+    assign("CPTAC_LUAD_Clinic_Sampletype",
+      data.table::fread(file.path(
+        output_directory,
+        "ProcessedData",
+        "CPTAC_LUAD_Clinic_Sampletype.csv"),data.table = FALSE
+      ) %>%
+        tibble::as_tibble(),
+      envir = parent.env(environment())
+    )
+  }
   rlang::env_binding_lock(parent.env(environment()), nms = NULL)
-
 }
 
 

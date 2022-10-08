@@ -69,47 +69,65 @@ TCGA_GTEX_RNAseq_sampletype <- NULL
 initialize_RNAseq_data <- function() {
   rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
 
-  .TCGA_GTEX_RNAseq <- .get_TCGA_GTEX_RNAseq()
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "TCGA_GTEX_RNAseq_sampletype.csv"
+  ))) {
+    .TCGA_GTEX_RNAseq <- .get_TCGA_GTEX_RNAseq()
 
-  .TCGA_GTEX_sampletype <- readr::read_tsv(
-    file.path(
-      data_file_directory,
-      "TcgaTargetGTEX_phenotype.txt"
-    ),
-    show_col_types = FALSE
-  ) %>%
-    # {
-    tibble::as_tibble() %>%
-    dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-    tibble::remove_rownames() %>%
-    tibble::column_to_rownames(var = "sample") %>%
-    dplyr::select(
-      "_sample_type",
-      "primary disease or tissue",
-      "_primary_site",
-      "_study"
+    .TCGA_GTEX_sampletype <- readr::read_tsv(
+      file.path(
+        data_file_directory,
+        "TcgaTargetGTEX_phenotype.txt"
+      ),
+      show_col_types = FALSE
     ) %>%
-    dplyr::rename(
-      "sample.type" = "_sample_type",
-      "primary.disease" = "primary disease or tissue",
-      "primary.site" = "_primary_site",
-      "study" = "_study"
-    )
+      tibble::as_tibble() %>%
+      dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
+      tibble::remove_rownames() %>%
+      tibble::column_to_rownames(var = "sample") %>%
+      dplyr::select(
+        "_sample_type",
+        "primary disease or tissue",
+        "_primary_site",
+        "_study"
+      ) %>%
+      dplyr::rename(
+        "sample.type" = "_sample_type",
+        "primary.disease" = "primary disease or tissue",
+        "primary.site" = "_primary_site",
+        "study" = "_study"
+      )
 
-  assign("TCGA_GTEX_RNAseq_sampletype",
-         merge(.TCGA_GTEX_RNAseq,
-               .TCGA_GTEX_sampletype,
-               by    = "row.names",
-               all.x = TRUE
-         ) %>%
-           tibble::remove_rownames() %>%
-           tibble::column_to_rownames(var = "Row.names"),
-         envir = parent.env(environment()))
+    assign("TCGA_GTEX_RNAseq_sampletype",
+           merge(.TCGA_GTEX_RNAseq,
+                 .TCGA_GTEX_sampletype,
+                 by    = "row.names",
+                 all.x = TRUE
+           ) %>%
+             tibble::remove_rownames() %>%
+             tibble::column_to_rownames(var = "Row.names"),
+           envir = parent.env(environment()))
 
-  readr::write_csv(TCGA_GTEX_RNAseq_sampletype,
-                   file.path(output_directory, "ProcessedData",
-                             "TCGA_GTEX_RNAseq_sampletype.csv"))
+    data.table::fwrite(TCGA_GTEX_RNAseq_sampletype, file.path(
+      output_directory,
+      "ProcessedData",
+      "TCGA_GTEX_RNAseq_sampletype.csv"
+    ),row.names = TRUE)
 
+    } else {
+      assign("TCGA_GTEX_RNAseq_sampletype",
+             data.table::fread(file.path(
+               output_directory,
+               "ProcessedData",
+               "TCGA_GTEX_RNAseq_sampletype.csv"),data.table = FALSE
+             ) %>%
+               tibble::as_tibble() %>%
+               #tibble::remove_rownames() %>%
+               tibble::column_to_rownames(var = "V1"),
+             envir = parent.env(environment()))
+      }
   rlang::env_binding_lock(parent.env(environment()), nms = NULL)
 
   return(NULL)

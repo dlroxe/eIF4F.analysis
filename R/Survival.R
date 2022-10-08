@@ -62,63 +62,78 @@ TCGA_RNAseq_OS_sampletype <- NULL
 #' }
 #'
 initialize_survival_data <- function() {
-  TCGA_RNAseq <- .get_TCGA_RNAseq()
-  ## get OS data ##
-  TCGA_OS <- data.table::fread(
-    file.path(
-      data_file_directory,
-      "Survival_SupplementalTable_S1_20171025_xena_sp"
-    ),
-    data.table = FALSE
-  ) %>%
-    dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-    # remove_rownames() %>%
-    # column_to_rownames(var = 'sample') %>%
-    dplyr::select("sample", "OS", "OS.time") %>%
-    dplyr::rename(rn = .data$sample)
+  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
 
-  ## get sample type data ##
-  TCGA_sampletype <- readr::read_tsv(
-    file.path(
-      data_file_directory,
-      "TCGA_phenotype_denseDataOnlyDownload.tsv"
-    ),
-    show_col_types = FALSE
-  ) %>%
-    tibble::as_tibble() %>%
-    dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
-    dplyr::select(
-      "sample",
-      "sample_type",
-      "_primary_disease"
+  if (!file.exists(file.path(
+    output_directory,
+    "ProcessedData",
+    "TCGA_RNAseq_OS_sampletype.csv"
+  ))) {
+    TCGA_RNAseq <- .get_TCGA_RNAseq()
+    ## get OS data ##
+    TCGA_OS <- data.table::fread(
+      file.path(
+        data_file_directory,
+        "Survival_SupplementalTable_S1_20171025_xena_sp"
+      ),
+      data.table = FALSE
     ) %>%
-    dplyr::rename(
-      rn = .data$sample,
-      sample.type = .data$sample_type,
-      primary.disease = .data$`_primary_disease`
+      dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
+      # remove_rownames() %>%
+      # column_to_rownames(var = 'sample') %>%
+      dplyr::select("sample", "OS", "OS.time") %>%
+      dplyr::rename(rn = .data$sample)
+
+    ## get sample type data ##
+    TCGA_sampletype <- readr::read_tsv(
+      file.path(
+        data_file_directory,
+        "TCGA_phenotype_denseDataOnlyDownload.tsv"
+      ),
+      show_col_types = FALSE
+    ) %>%
+      tibble::as_tibble() %>%
+      dplyr::distinct(.data$sample, .keep_all = TRUE) %>%
+      dplyr::select(
+        "sample",
+        "sample_type",
+        "_primary_disease"
+      ) %>%
+      dplyr::rename(
+        rn = .data$sample,
+        sample.type = .data$sample_type,
+        primary.disease = .data$`_primary_disease`
+      )
+
+    ## combine OS, sample type and RNAseq data ##
+    assign("TCGA_RNAseq_OS_sampletype",
+      list(TCGA_RNAseq, TCGA_OS, TCGA_sampletype) %>%
+        purrr::reduce(full_join, by = "rn") %>%
+        tibble::remove_rownames() %>%
+        tibble::column_to_rownames(var = "rn") %>%
+        dplyr::filter(.data$sample.type != "Solid Tissue Normal"),
+      envir = parent.env(environment())
     )
 
-  ## combine OS, sample type and RNAseq data ##
-  rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
-  assign("TCGA_RNAseq_OS_sampletype",
-         list(TCGA_RNAseq, TCGA_OS, TCGA_sampletype) %>%
-           purrr::reduce(full_join, by = "rn") %>%
-           tibble::remove_rownames() %>%
-           tibble::column_to_rownames(var = "rn") %>%
-           dplyr::filter(.data$sample.type != "Solid Tissue Normal"),
-         envir = parent.env(environment()))
+    data.table::fwrite(TCGA_RNAseq_OS_sampletype, file.path(
+      output_directory,
+      "ProcessedData",
+      "TCGA_RNAseq_OS_sampletype.csv"
+    ),row.names = TRUE)
 
-
-  #TCGA_RNAseq_OS_sampletype <<- list(TCGA_RNAseq, TCGA_OS, TCGA_sampletype) %>%
-  #  purrr::reduce(full_join, by = "rn") %>%
-  #  tibble::remove_rownames() %>%
-  #  tibble::column_to_rownames(var = "rn") %>%
-  #  dplyr::filter(.data$sample.type != "Solid Tissue Normal")
-
-  readr::write_csv(TCGA_RNAseq_OS_sampletype,
-                   file.path(output_directory, "ProcessedData",
-                             "TCGA_RNAseq_OS_sampletype.csv"))
-
+  } else {
+    assign("TCGA_RNAseq_OS_sampletype",
+      data.table::fread(file.path(
+        output_directory,
+        "ProcessedData",
+        "TCGA_RNAseq_OS_sampletype.csv"),data.table = FALSE
+      ) %>%
+        tibble::as_tibble() %>%
+        #tibble::remove_rownames() %>%
+        tibble::column_to_rownames(var = "V1"),
+      envir = parent.env(environment())
+    )
+  }
   rlang::env_binding_lock(parent.env(environment()), nms = NULL)
 
   return(NULL)
