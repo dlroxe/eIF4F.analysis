@@ -1058,8 +1058,8 @@
 #' }
 #'
 EIF4F_Corrgene_analysis <- function() {
-  .plot_Corr_RNAseq_TCGA_GTEX(tissue_type = "All")
   .plot_Corr_RNAseq_TCGA_GTEX(tissue_type = "Lung")
+  .plot_Corr_RNAseq_TCGA_GTEX(tissue_type = "All")
 
   return(NULL)
 }
