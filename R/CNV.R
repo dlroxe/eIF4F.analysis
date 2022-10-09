@@ -74,35 +74,19 @@ TCGA_CNV_value <- TCGA_CNV_sampletype <- TCGA_CNVratio_sampletype <- NULL
 initialize_cnv_data <- function() {
   rlang::env_binding_unlock(parent.env(environment()), nms = NULL)
 
-  if (!file.exists(file.path(
-    output_directory,
-    "ProcessedData",
-    "TCGA_CNV_value.csv"
-  ))) {
-    assign("TCGA_CNV_value",
-      .get_TCGA_CNV_value(),
-      envir = parent.env(environment())
-    )
+  .path <- file.path(output_directory, "ProcessedData","TCGA_CNV_value.csv")
 
-    data.table::fwrite(TCGA_CNV_value, file.path(
-      output_directory,
-      "ProcessedData",
-      "TCGA_CNV_value.csv"
-    ), row.names = TRUE)
-
-  } else {
-    assign("TCGA_CNV_value",
-      data.table::fread(file.path(
-        output_directory,
-        "ProcessedData",
-        "TCGA_CNV_value.csv"),data.table = FALSE
-      ) %>%
-        tibble::as_tibble() %>%
-        #tibble::remove_rownames() %>%
-        tibble::column_to_rownames(var = "V1"),
-      envir = parent.env(environment())
-    )
+  if (!file.exists(.path)) {
+    data.table::fwrite(.get_TCGA_CNV_value(), .path, row.names = TRUE)
   }
+
+  assign("TCGA_CNV_value",
+         data.table::fread(.path ,data.table = FALSE) %>%
+           tibble::as_tibble() %>%
+           #tibble::remove_rownames() %>%
+           tibble::column_to_rownames(var = "V1"),
+         envir = parent.env(environment())
+  )
 
   .TCGA_sampletype <- readr::read_tsv(file.path(
     data_file_directory,
