@@ -1,5 +1,11 @@
 library(eIF4F.analysis)
 library(log4r)
+library(R.utils)
+
+require(ReactomePA)
+require(reactome.db)
+
+R.utils::setOption("clusterProfiler.download.method", "wget")
 
 my_logfile = "~/eIF4F.analysis.log.txt"
 
