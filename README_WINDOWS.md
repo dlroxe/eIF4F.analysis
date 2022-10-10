@@ -82,6 +82,15 @@ encountered the following difficulties:
     virtualization and/or the combination of applications I had open and/or
     my BIOS settings.)
 
+Furthermore, WSL is subject to a RAM limitation: It has access to at most 50%
+of system RAM.  Some web search results suggest "50% or 8GB, whichever is
+smaller", but at any rate I note that on System 3, which has 128G of RAM, WSL
+reports that it has 64G of RAM available.  To suggest WSL as a solution to the
+performance problem would be to suggest a minimum hardware requirement of 96G
+of RAM.  From my own research, most consumer-grade laptops accommodate at most
+64G, so this solution would restrict execution on Windows to desktop systems.
+
+
 Despite all that, I did observe a successful (and reasonably quick) package
 execution on Windows.  This is all to say:
 
