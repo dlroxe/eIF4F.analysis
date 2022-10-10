@@ -49,7 +49,8 @@ So:
 
   - The package worked on Windows 10 on System 2 in Nov 2020.
   - The package code and the versions of Windows, RStudio, R, and R packages
-    have all changed since then.
+    have all changed since then.  It should be noted, however, that the
+    body of .correlation_coefficient() [has not changed significantly](https://github.com/a3609640/EIF-analysis/blob/8ea7dada7e7d5ba732c6e10cb28215fdb6eb06e6/R/EIFanalysis.R#L5703).
   - Because the performance problem has been seen recently on Windows 10 and 11,
     it does not seem as though the Windows version is the culprit.
   - Likewise, because the problem has been seen with and without RStudio, it
