@@ -52,7 +52,7 @@ attainable in high-end consumer-grade systems.
 The following systems have been used to execute the R scripts in this
 project:
 
-1.  System76 “Serval” mobile workstation
+1.  (verified) System76 “Serval” mobile workstation
 
     -   Intel i7-8700k CPU
     -   64GB RAM (DDR4-3000, non-ECC)
@@ -61,7 +61,7 @@ project:
     -   RStudio
     -   R 4.2.1
 
-2.  PowerSpec G460 desktop computer
+2.  (verified) PowerSpec G460 desktop computer
 
     -   Intel i7-8700k CPU
     -   64GB RAM (DDR4-3200, non-ECC)
@@ -71,31 +71,8 @@ project:
     -   RStudio for Windows
     -   R 4.0.3
 
-3.  PowerSpec B748 desktop computer (with aftermarket upgrades)
-
-    - Intel i7-12700k CPU
-    - 128GB RAM (DDR4-3600, non-ECC)
-    - Sabrent SB-RKT4P-8TB NVMe (gen4) SSD (Pop!\_OS installation)
-    - Seagate FireCuda 530 ZP4000GM30023 NVMe (gen4) SSD (Windows installation)
-    - NVIDIA GeForce RTX 3090
-    - Pop!\_OS 22.04 LTS
-    - Windows 11 Pro build 22000.1042
-    - RStudio 2022.07.2+576 "Spotted Wakerobin" Release
-      - (e7373ef832b49b2a9b88162cfe7eac5f22c40b34, 2022-09-06) for Windows
-      - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
-      - QtWebEngine/5.12.8 Chrome/69.0.3497.128 Safari/537.36
-    - R-4.2.1 for Windows (Windows native)
-    - Git for Windows version 2.37.3.windows.1
-    - Windows Subsystem for Linux
-      - Ubuntu 22.04
-      - R-4.1.2
-
-System 1 is the reference system on which most development and
-testing were performed.  Additional details of System 1 are
-provided in the “Session Information” section below.
-
-See also README_WINDOWS.md for details regarding observed behavior
-on Windows.
+Additional details of these environments are provided in the “Session
+Information” section below.
 
 ## Install R/RStudio
 
@@ -121,7 +98,7 @@ bio_pkgs <- c("AnnotationDbi", "circlize",  "clusterProfiler",
               "dplyr", "EnvStats", "eulerr", "factoextra",
               "FactoMineR", "forcats", "forestplot", "ggfortify",
               "ggplot2", "ggpubr", "graphics", "grDevices", "grid",
-              "limma", "log4r", "missMDA", "org.Hs.eg.db", "purrr",
+              "limma", "missMDA", "org.Hs.eg.db", "purrr",
               "RColorBrewer", "ReactomePA", "RCurl","readr", "readxl",
               "reshape2", "R.utils", "scales", "stats", "stringr",
               "survival", "survivalAnalysis", "tibble", "tidyr",
@@ -245,13 +222,13 @@ developing this package is the following.
 ─ Packages ───────────────────────────────────────────────────────────
  package          * version  date (UTC) lib source
  abind              1.4-5    2016-07-21 [1] CRAN (R 4.2.0)
- AnnotationDbi      1.58.0   2022-04-26 [1] Bioconductor
+ AnnotationDbi    * 1.58.0   2022-04-26 [1] Bioconductor
  ape                5.6-2    2022-03-02 [1] CRAN (R 4.2.0)
  aplot              0.1.7    2022-09-06 [1] CRAN (R 4.2.1)
  assertthat         0.2.1    2019-03-21 [1] CRAN (R 4.2.0)
  backports          1.4.1    2021-12-13 [1] CRAN (R 4.2.0)
- Biobase            2.56.0   2022-04-26 [1] Bioconductor
- BiocGenerics       0.42.0   2022-04-26 [1] Bioconductor
+ Biobase          * 2.56.0   2022-04-26 [1] Bioconductor
+ BiocGenerics     * 0.42.0   2022-04-26 [1] Bioconductor
  BiocParallel       1.30.3   2022-06-05 [1] Bioconductor
  Biostrings         2.64.1   2022-08-18 [1] Bioconductor
  bit                4.0.4    2020-08-04 [1] CRAN (R 4.2.0)
@@ -260,7 +237,6 @@ developing this package is the following.
  blob               1.2.3    2022-04-10 [1] CRAN (R 4.2.0)
  broom              1.0.1    2022-08-29 [1] CRAN (R 4.2.1)
  cachem             1.0.6    2021-08-19 [1] CRAN (R 4.2.0)
- callr              3.7.2    2022-08-22 [1] CRAN (R 4.2.1)
  car                3.1-0    2022-06-15 [1] CRAN (R 4.2.0)
  carData            3.0-5    2022-01-06 [1] CRAN (R 4.2.0)
  cellranger         1.1.0    2016-07-27 [1] CRAN (R 4.2.0)
@@ -276,10 +252,8 @@ developing this package is the following.
  corrplot           0.92     2021-11-18 [1] CRAN (R 4.2.0)
  cowplot            1.1.1    2020-12-30 [1] CRAN (R 4.2.0)
  crayon             1.5.2    2022-09-29 [1] CRAN (R 4.2.1)
- curl               4.3.2    2021-06-23 [1] CRAN (R 4.2.0)
  data.table         1.14.2   2021-09-27 [1] CRAN (R 4.2.0)
  DBI                1.1.3    2022-06-18 [1] CRAN (R 4.2.0)
- devtools           2.4.4    2022-07-20 [1] CRAN (R 4.2.1)
  digest             0.6.29   2021-12-01 [1] CRAN (R 4.2.0)
  DO.db              2.9      2022-06-07 [1] Bioconductor
  doParallel         1.0.17   2022-02-07 [1] CRAN (R 4.2.0)
@@ -287,7 +261,7 @@ developing this package is the following.
  downloader         0.4      2015-07-09 [1] CRAN (R 4.2.0)
  dplyr              1.0.10   2022-09-01 [1] CRAN (R 4.2.1)
  DT                 0.25     2022-09-12 [1] CRAN (R 4.2.1)
- eIF4F.analysis   * 0.1.0    2022-10-04 [1] Github (a3609640/eIF4F.analysis@f4ea8b5)
+ eIF4F.analysis   * 0.1.0    2022-10-10 [1] local
  ellipsis           0.3.2    2021-04-29 [1] CRAN (R 4.2.0)
  emmeans            1.8.1-1  2022-09-08 [1] CRAN (R 4.2.1)
  enrichplot         1.16.2   2022-08-30 [1] Bioconductor
@@ -304,8 +278,7 @@ developing this package is the following.
  flashClust         1.01-2   2012-08-21 [1] CRAN (R 4.2.0)
  forcats            0.5.2    2022-08-19 [1] CRAN (R 4.2.1)
  foreach            1.5.2    2022-02-02 [1] CRAN (R 4.2.0)
- forestplot         3.0.0    2022-09-29 [1] CRAN (R 4.2.1)
- fs                 1.5.2    2021-12-08 [1] CRAN (R 4.2.0)
+ forestplot         3.1.0    2022-10-09 [1] CRAN (R 4.2.1)
  generics           0.1.3    2022-07-05 [1] CRAN (R 4.2.0)
  GenomeInfoDb       1.32.4   2022-09-06 [1] Bioconductor
  GenomeInfoDbData   1.2.8    2022-06-07 [1] Bioconductor
@@ -333,72 +306,65 @@ developing this package is the following.
  hms                1.1.2    2022-08-19 [1] CRAN (R 4.2.1)
  htmltools          0.5.3    2022-07-18 [1] CRAN (R 4.2.1)
  htmlwidgets        1.5.4    2021-09-08 [1] CRAN (R 4.2.0)
- httpuv             1.6.6    2022-09-08 [1] CRAN (R 4.2.1)
  httr               1.4.4    2022-08-17 [1] CRAN (R 4.2.1)
  igraph             1.3.5    2022-09-22 [1] CRAN (R 4.2.1)
- IRanges            2.30.1   2022-08-18 [1] Bioconductor
+ IRanges          * 2.30.1   2022-08-18 [1] Bioconductor
  iterators          1.0.14   2022-02-05 [1] CRAN (R 4.2.0)
  jsonlite           1.8.2    2022-10-02 [1] CRAN (R 4.2.1)
  KEGGREST           1.36.3   2022-07-12 [1] Bioconductor
  km.ci              0.5-6    2022-04-06 [1] CRAN (R 4.2.0)
  KMsurv             0.1-5    2012-12-03 [1] CRAN (R 4.2.0)
  knitr              1.40     2022-08-24 [1] CRAN (R 4.2.1)
- later              1.3.0    2021-08-18 [1] CRAN (R 4.2.0)
+ labeling           0.4.2    2020-10-20 [1] CRAN (R 4.2.0)
  lattice            0.20-45  2021-09-22 [4] CRAN (R 4.2.0)
  lazyeval           0.2.2    2019-03-15 [1] CRAN (R 4.2.0)
  leaps              3.1      2020-01-16 [1] CRAN (R 4.2.0)
- lifecycle          1.0.2    2022-09-09 [1] CRAN (R 4.2.1)
+ lifecycle          1.0.3    2022-10-07 [1] CRAN (R 4.2.1)
  limma              3.52.3   2022-09-11 [1] Bioconductor
+ log4r              0.4.2    2021-11-04 [1] CRAN (R 4.2.1)
  magrittr           2.0.3    2022-03-30 [1] CRAN (R 4.2.0)
  MASS               7.3-58.1 2022-08-03 [1] CRAN (R 4.2.1)
  Matrix             1.5-1    2022-09-13 [1] CRAN (R 4.2.1)
  matrixStats        0.62.0   2022-04-19 [1] CRAN (R 4.2.0)
  memoise            2.0.1    2021-11-26 [1] CRAN (R 4.2.0)
+ mgcv               1.8-40   2022-03-29 [4] CRAN (R 4.2.0)
  mice               3.14.0   2021-11-24 [1] CRAN (R 4.2.0)
- mime               0.12     2021-09-28 [1] CRAN (R 4.2.0)
- miniUI             0.1.1.1  2018-05-18 [1] CRAN (R 4.2.0)
  missMDA            1.18     2020-12-11 [1] CRAN (R 4.2.0)
  multcomp           1.4-20   2022-08-07 [1] CRAN (R 4.2.1)
  multcompView       0.1-8    2019-12-19 [1] CRAN (R 4.2.1)
  munsell            0.5.0    2018-06-12 [1] CRAN (R 4.2.0)
  mvtnorm            1.1-3    2021-10-08 [1] CRAN (R 4.2.0)
  nlme               3.1-159  2022-08-09 [1] CRAN (R 4.2.1)
- org.Hs.eg.db       3.15.0   2022-06-07 [1] Bioconductor
+ org.Hs.eg.db     * 3.15.0   2022-06-07 [1] Bioconductor
  patchwork          1.1.2    2022-08-19 [1] CRAN (R 4.2.1)
  pillar             1.8.1    2022-08-19 [1] CRAN (R 4.2.1)
- pkgbuild           1.3.1    2021-12-20 [1] CRAN (R 4.2.0)
  pkgconfig          2.0.3    2019-09-22 [1] CRAN (R 4.2.0)
- pkgload            1.3.0    2022-06-27 [1] CRAN (R 4.2.0)
  plyr               1.8.7    2022-03-24 [1] CRAN (R 4.2.0)
  png                0.1-7    2013-12-03 [1] CRAN (R 4.2.0)
  polyclip           1.10-0   2019-03-14 [1] CRAN (R 4.2.0)
- prettyunits        1.1.1    2020-01-24 [1] CRAN (R 4.2.0)
- processx           3.7.0    2022-07-07 [1] CRAN (R 4.2.0)
- profvis            0.3.7    2020-11-02 [1] CRAN (R 4.2.1)
- promises           1.2.0.1  2021-02-11 [1] CRAN (R 4.2.0)
- ps                 1.7.1    2022-06-18 [1] CRAN (R 4.2.0)
- purrr              0.3.4    2020-04-17 [1] CRAN (R 4.2.0)
+ polylabelr         0.2.0    2020-04-19 [1] CRAN (R 4.2.0)
+ purrr              0.3.5    2022-10-06 [1] CRAN (R 4.2.1)
  qvalue             2.28.0   2022-04-26 [1] Bioconductor
- R.methodsS3      * 1.8.2    2022-06-13 [1] CRAN (R 4.2.0)
- R.oo             * 1.25.0   2022-06-12 [1] CRAN (R 4.2.0)
- R.utils          * 2.12.0   2022-06-28 [1] CRAN (R 4.2.1)
+ R.methodsS3        1.8.2    2022-06-13 [1] CRAN (R 4.2.0)
+ R.oo               1.25.0   2022-06-12 [1] CRAN (R 4.2.0)
+ R.utils            2.12.0   2022-06-28 [1] CRAN (R 4.2.1)
  R6                 2.5.1    2021-08-19 [1] CRAN (R 4.2.0)
+ ragg               1.2.3    2022-09-29 [1] CRAN (R 4.2.1)
  rappdirs           0.3.3    2021-01-31 [1] CRAN (R 4.2.0)
  RColorBrewer       1.1-3    2022-04-03 [1] CRAN (R 4.2.0)
  Rcpp               1.0.9    2022-07-08 [1] CRAN (R 4.2.0)
- RCurl            * 1.98-1.9 2022-10-03 [1] CRAN (R 4.2.1)
+ RCurl              1.98-1.9 2022-10-03 [1] CRAN (R 4.2.1)
  reactome.db        1.81.0   2022-07-15 [1] Bioconductor
  ReactomePA         1.40.0   2022-04-26 [1] Bioconductor
  readr              2.1.3    2022-10-01 [1] CRAN (R 4.2.1)
  readxl             1.4.1    2022-08-17 [1] CRAN (R 4.2.1)
- remotes            2.4.2    2021-11-30 [1] CRAN (R 4.2.0)
  reshape2           1.4.4    2020-04-09 [1] CRAN (R 4.2.0)
  rjson              0.2.21   2022-01-09 [1] CRAN (R 4.2.0)
  rlang              1.0.6    2022-09-24 [1] CRAN (R 4.2.1)
  RSQLite            2.2.18   2022-10-04 [1] CRAN (R 4.2.1)
  rstatix            0.7.0    2021-02-13 [1] CRAN (R 4.2.0)
  rstudioapi         0.14     2022-08-22 [1] CRAN (R 4.2.1)
- S4Vectors          0.34.0   2022-04-26 [1] Bioconductor
+ S4Vectors        * 0.34.0   2022-04-26 [1] Bioconductor
  sandwich           3.0-2    2022-06-15 [1] CRAN (R 4.2.1)
  scales             1.2.1    2022-08-20 [1] CRAN (R 4.2.1)
  scatterpie         0.1.8    2022-09-03 [1] CRAN (R 4.2.1)
@@ -406,13 +372,14 @@ developing this package is the following.
  sessioninfo        1.2.2    2021-12-06 [1] CRAN (R 4.2.0)
  shadowtext         0.1.2    2022-04-22 [1] CRAN (R 4.2.0)
  shape              1.4.6    2021-05-19 [1] CRAN (R 4.2.0)
- shiny              1.7.2    2022-07-19 [1] CRAN (R 4.2.1)
  stringi            1.7.8    2022-07-11 [1] CRAN (R 4.2.0)
  stringr            1.4.1    2022-08-20 [1] CRAN (R 4.2.1)
  survival           3.4-0    2022-08-09 [4] CRAN (R 4.2.1)
  survivalAnalysis   0.3.0    2022-02-11 [1] CRAN (R 4.2.0)
  survminer          0.4.9    2021-03-09 [1] CRAN (R 4.2.0)
  survMisc           0.5.6    2022-04-07 [1] CRAN (R 4.2.0)
+ systemfonts        1.0.4    2022-02-11 [1] CRAN (R 4.2.0)
+ textshaping        0.3.6    2021-10-13 [1] CRAN (R 4.2.0)
  TH.data            1.1-1    2022-04-26 [1] CRAN (R 4.2.1)
  tibble             3.1.8    2022-07-22 [1] CRAN (R 4.2.1)
  tidygraph          1.2.2    2022-08-22 [1] CRAN (R 4.2.1)
@@ -423,12 +390,11 @@ developing this package is the following.
  treeio             1.20.2   2022-08-14 [1] Bioconductor
  tweenr             2.0.2    2022-09-06 [1] CRAN (R 4.2.1)
  tzdb               0.3.0    2022-03-28 [1] CRAN (R 4.2.0)
- urlchecker         1.0.1    2021-11-30 [1] CRAN (R 4.2.1)
- usethis            2.1.6    2022-05-25 [1] CRAN (R 4.2.0)
  utf8               1.2.2    2021-07-24 [1] CRAN (R 4.2.0)
  vctrs              0.4.2    2022-09-29 [1] CRAN (R 4.2.1)
  viridis            0.6.2    2021-10-13 [1] CRAN (R 4.2.0)
  viridisLite        0.4.1    2022-08-22 [1] CRAN (R 4.2.1)
+ vroom              1.6.0    2022-09-30 [1] CRAN (R 4.2.1)
  withr              2.5.0    2022-03-03 [1] CRAN (R 4.2.0)
  xfun               0.33     2022-09-12 [1] CRAN (R 4.2.1)
  xtable             1.8-4    2019-04-21 [1] CRAN (R 4.2.0)
