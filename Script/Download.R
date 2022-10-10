@@ -4,8 +4,10 @@ library(R.utils)
 library(utils)
 
 ### create the directory to store all downloaded datasets
-data_file_directory <- "~/eIF4F.analysis/eIF4F_data"
-output_directory <- "~/eIF4F.analysis/eIF4F_output"
+data_file_directory <-
+  Sys.getenv(c("DATA_FILE_DIRECTORY"), unset = "~/eIF4F.analysis/eIF4F_data")
+output_directory <-
+  Sys.getenv(c("OUTPUT_DIRECTORY"), unset = "~/eIF4F.analysis/eIF4F_output")
 
 dir.create(data_file_directory)
 dir.create(output_directory)

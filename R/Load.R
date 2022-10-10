@@ -1,7 +1,10 @@
 ## Wrapper function for directory initialization ===============================
 #' @noRd
-data_file_directory <- "~/eIF4F.analysis/eIF4F_data"
-output_directory <- "~/eIF4F.analysis/eIF4F_output"
+
+data_file_directory <-
+  Sys.getenv(c("DATA_FILE_DIRECTORY"), unset = "~/eIF4F.analysis/eIF4F_data")
+output_directory <-
+  Sys.getenv(c("OUTPUT_DIRECTORY"), unset = "~/eIF4F.analysis/eIF4F_output")
 
 #' @title Set output directories
 #'
