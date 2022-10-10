@@ -759,7 +759,7 @@
       as.data.frame(stringsAsFactors = FALSE) %>%
       stats::setNames("gene")
     # c1$V1 <- as.character(c1$V1)
-    c1$entrez <- AnnotationDbi::mapIds(org.Hs.eg.db,
+    c1$entrez <- AnnotationDbi::mapIds(org.Hs.eg.db::org.Hs.eg.db,
       keys = c1$gene,
       column = "ENTREZID",
       keytype = "SYMBOL",
