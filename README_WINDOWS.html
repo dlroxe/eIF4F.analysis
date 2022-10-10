@@ -73,7 +73,7 @@
 <p>Note that WSL executes a binary program exactly as it was compiled for Linux, rather than a binary compiled specifically for Windows.</p>
 <p>So:</p>
 <ul><li>The package worked on Windows 10 on System 2 in Nov 2020.</li>
-<li>The package code and the versions of Windows, RStudio, R, and R packages have all changed since then.</li>
+<li>The package code and the versions of Windows, RStudio, R, and R packages have all changed since then. It should be noted, however, that the body of .correlation_coefficient() <a href="https://github.com/a3609640/EIF-analysis/blob/8ea7dada7e7d5ba732c6e10cb28215fdb6eb06e6/R/EIFanalysis.R#L5703" class="external-link">has not changed significantly</a>.</li>
 <li>Because the performance problem has been seen recently on Windows 10 and 11, it does not seem as though the Windows version is the culprit.</li>
 <li>Likewise, because the problem has been seen with and without RStudio, it does not seem as though RStudio is the culprit.</li>
 <li>Possible remaining culprits would seem to be the following:<ul><li>The Windows-native binary may have a problem that the Linux-native binary does not have, even when both are executed on Windows.</li>
