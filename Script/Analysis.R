@@ -4,7 +4,12 @@
 # stable, and less thoroughly-documented).
 library(eIF4F.analysis)
 
+initialize_dir()
+initialize_format()
+
 initialize_data()
+
+
 EIF4F_CNV_analysis()
 EIF4F_DEG_analysis()
 EIF4F_Survival_analysis()
