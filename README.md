@@ -73,29 +73,48 @@ project:
 
 3.  PowerSpec B748 desktop computer (with aftermarket upgrades)
 
-    - Intel i7-12700k CPU
-    - 128GB RAM (DDR4-3600, non-ECC)
-    - Sabrent SB-RKT4P-8TB NVMe (gen4) SSD (Pop!\_OS installation)
-    - Seagate FireCuda 530 ZP4000GM30023 NVMe (gen4) SSD (Windows installation)
-    - NVIDIA GeForce RTX 3090
-    - Pop!\_OS 22.04 LTS
-    - Windows 11 Pro build 22000.1042
-    - RStudio 2022.07.2+576 "Spotted Wakerobin" Release
-      - (e7373ef832b49b2a9b88162cfe7eac5f22c40b34, 2022-09-06) for Windows
-      - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
-      - QtWebEngine/5.12.8 Chrome/69.0.3497.128 Safari/537.36
-    - R-4.2.1 for Windows (Windows native)
-    - Git for Windows version 2.37.3.windows.1
-    - Windows Subsystem for Linux
-      - Ubuntu 22.04
-      - R-4.1.2
+    -   Intel i7-12700k CPU
 
-System 1 is the reference system on which most development and
-testing were performed.  Additional details of System 1 are
-provided in the “Session Information” section below.
+    -   128GB RAM (DDR4-3600, non-ECC)
 
-See also README_WINDOWS.md for details regarding observed behavior
-on Windows.
+    -   Sabrent SB-RKT4P-8TB NVMe (gen4) SSD (Pop!\_OS installation)
+
+    -   Seagate FireCuda 530 ZP4000GM30023 NVMe (gen4) SSD (Windows
+        installation)
+
+    -   NVIDIA GeForce RTX 3090
+
+    -   Pop!\_OS 22.04 LTS
+
+    -   Windows 11 Pro build 22000.1042
+
+    -   RStudio 2022.07.2+576 “Spotted Wakerobin” Release
+
+        -   (e7373ef832b49b2a9b88162cfe7eac5f22c40b34, 2022-09-06) for
+            Windows
+
+        -   Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36
+            (KHTML, like Gecko)
+
+        -   QtWebEngine/5.12.8 Chrome/69.0.3497.128 Safari/537.36
+
+    -   R-4.2.1 for Windows (Windows native)
+
+    -   Git for Windows version 2.37.3.windows.1
+
+    -   Windows Subsystem for Linux
+
+        -   Ubuntu 22.04
+
+        -   R-4.1.2
+
+System 1 is the reference system on which most development and testing
+were performed. Additional details of System 1 are provided in the
+"Session Information" section below. **We recommend Linux OS to run the
+package.**
+
+See also README_WINDOWS.md for details regarding observed behavior on
+Windows.
 
 Additional details of these environments are provided in the “Session
 Information” section below.
@@ -124,7 +143,7 @@ bio_pkgs <- c("AnnotationDbi", "circlize",  "clusterProfiler",
               "dplyr", "EnvStats", "eulerr", "factoextra",
               "FactoMineR", "forcats", "forestplot", "ggfortify",
               "ggplot2", "ggpubr", "graphics", "grDevices", "grid",
-              "limma", "missMDA", "org.Hs.eg.db", "purrr",
+              "limma", "log4r","missMDA", "org.Hs.eg.db", "purrr",
               "RColorBrewer", "ReactomePA", "RCurl","readr", "readxl",
               "reshape2", "R.utils", "scales", "stats", "stringr",
               "survival", "survivalAnalysis", "tibble", "tidyr",
@@ -168,13 +187,16 @@ analysis.
 
 <img src="man/figures/eIF4F.analysis.script.png" width="224" />
 
-Open Download.R file in RStudio, verify the directories for input and
-output files as following.
+Open `Download.R` file in RStudio, verify the directories for input and
+output files as following. These two directory paths are also set inside
+the package (in `Load.R`), and the values must agree in both places. The
+descriptions of the steps that follow assume the use of the default
+`eIF4F_output` location. 
 
 ``` r
 # default directory for data download and output storage
-data_file_directory <- "~/eIF4F.analysis/eIF4F_data"
-output_directory <- "~/eIF4F.analysis/eIF4F_output"
+data_file_directory <- Sys.getenv(c("DATA_FILE_DIRECTORY"), unset = "~/eIF4F.analysis/eIF4F_data")
+output_directory <- Sys.getenv(c("OUTPUT_DIRECTORY"), unset = "~/eIF4F.analysis/eIF4F_output")
 ```
 
 ## Download datasets
