@@ -4,7 +4,6 @@ during package development by David Roxe, as a favor to the authors.  The
 following account includes some investigation regarding apparent differences
 in current behavior on Windows, compared to past behavior.
 
-
 On Nov 2. 2020, I submitted a descriptive change
 [here](https://github.com/a3609640/EIF-analysis/commit/26a1b84082450ca219319ec134c83c8b53437b67)
 to indicate that the package was observed to work on System 2.  In particular,
@@ -85,20 +84,20 @@ To summarize:
   - It is possible that the package works on Windows with versions R v4.0.3 and
     v4.1.2, but cannot work properly with Windows-native R at v4.2.1.  I did not
     evaluate behavior with a Windows-native R v4.1.2 binary.
-  - R package versions may also vary between R v4.0.3 an R v.4.1.2.  It may be
+  - R package versions may also vary between R v4.1.2 an R v.4.2.1.  It may be
     that these R package version differences are more blameworthy than R binary
     version differences.
   - It is possible that a difference between executable binaries for
     Windows-native R and Linux-native R is the culprit for poor performance
     on Windows-native R.
 
-That is, I *do* suspect that a current pecularity of Windows, R, and this package
-(and their manner of interaction) might explain the Windows performance
+That is, I *do* suspect that a current peculiarity of Windows, R, and this
+package (and their manner of interaction) might explain the Windows performance
 difficulty.  I *do not* suspect a code path within the R package itself.
 
 Regarding the possibility of executing this package on Windows using WSL, as a
 way to work-alike with Linux, that unfortunately does not seem to me like a
-promising approach.
+promising approach at the present time.
 
   - The installation procedure itself has many complexities beyond the existing
     procedure.  WSL installation itself is not yet entirely trivial.  After a
@@ -123,6 +122,6 @@ promising approach.
     PC laptops provide support for 64G or less.
 
 My own instinct is that the correlation analysis portion of the package may not
-be easily supportable on Linux at the present time.  I hasten to point out that
-I have often have seen the package code other than correlation analysis complete
-quickly.
+be easily supportable on Windows at the present time.  I hasten to point out that
+I have often have seen all package code other than correlation analysis complete
+quickly, with Windows-native R.
