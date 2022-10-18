@@ -15,7 +15,7 @@ complete its execution (specifically its correlation analysis) within expected
 time frames on Windows 10, even with powerful hardware.  The "expected time
 frames" were the times consistently observed on Linux using System 1. My
 observations on Windows 11 on System 3 matched the report on Windows 10.  I was
-able to see evert step complete fairly quickly, except for correlation analysis.
+able to see every step complete fairly quickly, except for correlation analysis.
 
 I used the "profiling" feature of RStudio to analyze the "lung"
 portion of the correlation analysis (because this is much more tractable than
